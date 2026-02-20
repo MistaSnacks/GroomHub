@@ -1,0 +1,75 @@
+# GroomHub
+
+> The Pacific Northwest's most comprehensive dog grooming directory. Find verified groomers in Washington and Oregon.
+
+## About
+
+GroomHub helps pet owners find trusted, verified dog groomers across the Pacific Northwest. We cover 262+ grooming businesses in 109 cities across Washington and Oregon.
+
+## Key Pages
+
+- Homepage: https://groomhub.com/
+- Browse All Cities: https://groomhub.com/dog-grooming
+- Washington Groomers: https://groomhub.com/dog-grooming/wa
+- Oregon Groomers: https://groomhub.com/dog-grooming/or
+- All Services: https://groomhub.com/services
+- All Specialties: https://groomhub.com/specialties
+- Cat Grooming: https://groomhub.com/cat-grooming
+- Mobile Grooming: https://groomhub.com/mobile-grooming
+
+## Services Offered by Listed Groomers
+
+- Full Groom (bath, haircut, nail trim, ear cleaning, styling)
+- Cat Grooming (lion cuts, sanitary trims, feline-specific)
+- Nail Care (trimming, grinding, pawdicure)
+- Dog Bath (bath & brush, premium shampoos, blow-dry)
+- Mobile Grooming (at-home, fully equipped vans)
+- Self-Wash (DIY stations with pro-grade equipment)
+- Teeth Cleaning (non-anesthetic dental care)
+- Deshedding (undercoat removal treatments)
+- Ear Cleaning (cleaning, hair removal)
+- Puppy Grooming (first groom, socialization)
+- Flea Treatment (medicated baths)
+- Hand Stripping (wire-coated breed technique)
+- Creative Grooming (pet-safe coloring, artistic styling)
+- Boarding & Daycare
+
+## Specialties
+
+- Doodle & Poodle Expert
+- Puppy Specialist
+- Fear-Free / Anxiety handling
+- Large Dogs
+- Cat Specialist
+- Small Dogs
+- Senior Pets
+- Eco-Friendly products
+- Double Coat Specialist
+- De-Matting Specialist
+- Breed-Specific Cuts
+- Skin Sensitive / Allergy care
+- Special Needs Pets
+- Reactive Dog Handling
+- Long Coat Expert
+
+## Major Cities Covered
+
+### Washington
+Seattle, Tacoma, Bellevue, Olympia, Spokane, Vancouver, Kent, Renton, Federal Way, Everett, Kirkland, Redmond, Auburn, Puyallup, Lakewood, Lynnwood, Bremerton, Kennewick, Richland, Yakima
+
+### Oregon
+Portland, Eugene, Salem, Bend, Medford, Beaverton, Hillsboro, Gresham, Lake Oswego, Tigard, Corvallis, Albany, Springfield
+
+## For Groomers
+
+Grooming businesses can list for free or upgrade to paid tiers for enhanced visibility, analytics, and booking integration.
+
+- Free listing: Basic business info
+- Standard ($39/mo): Photos, services display, analytics
+- Featured ($89/mo): Priority placement, booking widget, badges
+- Premium ($179/mo): #1 placement, homepage spotlight, lead notifications
+
+## Contact
+
+- Website: https://groomhub.com
+- Email: hello@groomhub.com

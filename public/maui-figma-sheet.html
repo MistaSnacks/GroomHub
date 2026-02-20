@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maui Character Sheet</title>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #FDF8F0;
+      font-family: 'Fredoka', sans-serif;
+      padding: 60px;
+      color: #38001d;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .header h1 {
+      font-size: 56px;
+      font-weight: 700;
+      color: #38001d;
+      margin-bottom: 8px;
+      letter-spacing: -1px;
+    }
+
+    .header p {
+      font-size: 22px;
+      color: #956A46;
+      font-weight: 500;
+    }
+
+    .color-palette {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 60px;
+    }
+
+    .color-swatch {
+      text-align: center;
+    }
+
+    .color-swatch .swatch {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin: 0 auto 8px;
+      border: 3px solid #38001d;
+    }
+
+    .color-swatch span {
+      font-size: 11px;
+      font-weight: 600;
+      color: #38001d;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 4px 24px rgba(56, 0, 29, 0.08);
+      border: 2px solid #F5E6D8;
+      text-align: center;
+      position: relative;
+    }
+
+    .card.hero {
+      grid-column: span 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      padding: 48px;
+      background: linear-gradient(135deg, #FFF8F0, #FFF0E6);
+    }
+
+    .card .illustration {
+      width: 320px;
+      height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .card .illustration img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .card .illustration svg {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    .card h3 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #38001d;
+      margin-top: 16px;
+      margin-bottom: 4px;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: #956A46;
+      font-weight: 500;
+    }
+
+    .badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #38001d;
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 100px;
+    }
+
+    .hero-text h2 {
+      font-size: 42px;
+      font-weight: 700;
+      color: #38001d;
+      margin-bottom: 12px;
+    }
+
+    .hero-text p {
+      font-size: 18px;
+      color: #956A46;
+      line-height: 1.6;
+      max-width: 400px;
+    }
+
+    .bandana-label {
+      position: absolute;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 9px;
+      color: white;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+      letter-spacing: 1px;
+      transform: rotate(-15deg);
+      pointer-events: none;
+    }
+
+    .section-title {
+      grid-column: span 3;
+      text-align: center;
+      padding: 20px 0 0;
+    }
+
+    .section-title h2 {
+      font-size: 36px;
+      font-weight: 700;
+      color: #38001d;
+    }
+
+    .section-title p {
+      font-size: 16px;
+      color: #956A46;
+      margin-top: 4px;
+    }
+
+    /* Cat costume Maui - custom SVG modifications */
+    .cat-ears {
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 140px;
+      z-index: 10;
+    }
+
+    .whiskers {
+      position: absolute;
+      top: 55%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200px;
+      z-index: 10;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 60px;
+      padding: 32px;
+      color: #956A46;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <h1>Meet Maui</h1>
+    <p>GroomHub Mascot - Character Sheet</p>
+  </div>
+
+  <!-- Color Palette -->
+  <div class="color-palette">
+    <div class="color-swatch">
+      <div class="swatch" style="background: #FEFCE6;"></div>
+      <span>Body<br>#FEFCE6</span>
+    </div>
+    <div class="color-swatch">
+      <div class="swatch" style="background: #E8D5BA;"></div>
+      <span>Shading<br>#E8D5BA</span>
+    </div>
+    <div class="color-swatch">
+      <div class="swatch" style="background: #420B20;"></div>
+      <span>Outline<br>#420B20</span>
+    </div>
+    <div class="color-swatch">
+      <div class="swatch" style="background: #C1272D;"></div>
+      <span>Bandana<br>#C1272D</span>
+    </div>
+    <div class="color-swatch">
+      <div class="swatch" style="background: #EA6852;"></div>
+      <span>Tongue<br>#EA6852</span>
+    </div>
+    <div class="color-swatch">
+      <div class="swatch" style="background: #F5A623;"></div>
+      <span>Brand Amber<br>#F5A623</span>
+    </div>
+    <div class="color-swatch">
+      <div class="swatch" style="background: #4ECDC4;"></div>
+      <span>Brand Teal<br>#4ECDC4</span>
+    </div>
+    <div class="color-swatch">
+      <div class="swatch" style="background: #38001d;"></div>
+      <span>Brand Maroon<br>#38001d</span>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- Hero: Maui Main -->
+    <div class="card hero">
+      <div class="illustration" style="width: 360px; height: 360px;">
+        <img src="/maui%20svgs/Maui%20Main.svg" alt="Maui Main" />
+      </div>
+      <div class="hero-text">
+        <h2>Maui Main</h2>
+        <p>The primary mascot pose. Friendly, approachable, with his signature red bandana that says "MAUI". Used for hero sections, navigation, and brand identity.</p>
+        <p style="margin-top: 16px; font-size: 14px;">
+          <strong>Specs:</strong> 200x200 SVG<br>
+          <strong>Style:</strong> Hand-drawn, warm, playful<br>
+          <strong>Bandana text:</strong> "MAUI"
+        </p>
+      </div>
+    </div>
+
+    <!-- Section: Grooming Services -->
+    <div class="section-title">
+      <h2>Grooming Service Illustrations</h2>
+      <p>Maui demonstrating each grooming service - bandana says "MAUI" on each</p>
+    </div>
+
+    <!-- Bathing 1 -->
+    <div class="card">
+      <span class="badge">Bathing</span>
+      <div class="illustration">
+        <img src="/maui%20svgs/Maui%20Bathing%201.svg" alt="Maui Bathing 1" />
+      </div>
+      <h3>Maui Getting a Bath</h3>
+      <p>Bubble bath pose with soap suds. Happy expression showing bath time is fun!</p>
+    </div>
+
+    <!-- Bathing 2 -->
+    <div class="card">
+      <span class="badge">Bathing Alt</span>
+      <div class="illustration">
+        <img src="/maui%20svgs/Maui%20bathing%202.svg" alt="Maui Bathing 2" />
+      </div>
+      <h3>Maui Bath Time</h3>
+      <p>Alternative bathing pose. Relaxed in the tub with bubbles and warm water.</p>
+    </div>
+
+    <!-- Ear Cleaning -->
+    <div class="card">
+      <span class="badge">Ear Cleaning</span>
+      <div class="illustration">
+        <img src="/maui%20svgs/Maui%20Ear%20Cleaning.svg" alt="Maui Ear Cleaning" />
+      </div>
+      <h3>Maui Ear Cleaning</h3>
+      <p>Getting those ears nice and clean! Patient and trusting expression.</p>
+    </div>
+
+    <!-- Nail Clip 1 -->
+    <div class="card">
+      <span class="badge">Nail Clip</span>
+      <div class="illustration">
+        <img src="/maui%20svgs/Maui%20Nail%20Clip.svg" alt="Maui Nail Clip" />
+      </div>
+      <h3>Maui Nail Clipping</h3>
+      <p>Paw out, getting a nail trim. Brave boy showing nail care is no big deal.</p>
+    </div>
+
+    <!-- Nail Clip 2 -->
+    <div class="card">
+      <span class="badge">Nail Clip Alt</span>
+      <div class="illustration">
+        <img src="/maui%20svgs/Maui%20Nail%20Clip%202%20.svg" alt="Maui Nail Clip 2" />
+      </div>
+      <h3>Maui Nail Trim</h3>
+      <p>Alternative nail clipping pose with grooming tools visible.</p>
+    </div>
+
+    <!-- Brushing 1 -->
+    <div class="card">
+      <span class="badge">Brushing</span>
+      <div class="illustration">
+        <img src="/maui%20svgs/Maui%20Brushing.svg" alt="Maui Brushing" />
+      </div>
+      <h3>Maui Hair Brushing</h3>
+      <p>Getting that fluffy coat brushed out! Enjoying the pampering session.</p>
+    </div>
+
+    <!-- Brushing 2 -->
+    <div class="card">
+      <span class="badge">Brushing Alt</span>
+      <div class="illustration">
+        <img src="/maui%20svgs/Maui%20Brushing%202.svg" alt="Maui Brushing 2" />
+      </div>
+      <h3>Maui Coat Care</h3>
+      <p>Alternative brushing pose showing the full grooming experience.</p>
+    </div>
+
+    <!-- Cat Costume Maui -->
+    <div class="card" style="background: linear-gradient(135deg, #F0FFF4, #E6FFF9);">
+      <span class="badge" style="background: #4ECDC4;">Cat Costume</span>
+      <div class="illustration" style="position: relative;">
+        <!-- Cat ears overlay on Maui Main -->
+        <svg class="cat-ears" viewBox="0 0 140 60" xmlns="http://www.w3.org/2000/svg">
+          <!-- Left ear -->
+          <path d="M 15,55 L 30,5 L 55,45 Z" fill="#FEFCE6" stroke="#420B20" stroke-width="3"/>
+          <path d="M 22,48 L 32,15 L 48,42 Z" fill="#FFB6C1"/>
+          <!-- Right ear -->
+          <path d="M 85,45 L 110,5 L 125,55 Z" fill="#FEFCE6" stroke="#420B20" stroke-width="3"/>
+          <path d="M 92,42 L 108,15 L 118,48 Z" fill="#FFB6C1"/>
+        </svg>
+        <img src="/maui%20svgs/Maui%20Main.svg" alt="Maui Cat Costume" />
+        <!-- Whiskers overlay -->
+        <svg class="whiskers" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+          <!-- Left whiskers -->
+          <line x1="20" y1="40" x2="75" y2="45" stroke="#420B20" stroke-width="2" stroke-linecap="round"/>
+          <line x1="15" y1="50" x2="73" y2="50" stroke="#420B20" stroke-width="2" stroke-linecap="round"/>
+          <line x1="20" y1="60" x2="75" y2="55" stroke="#420B20" stroke-width="2" stroke-linecap="round"/>
+          <!-- Right whiskers -->
+          <line x1="125" y1="45" x2="180" y2="40" stroke="#420B20" stroke-width="2" stroke-linecap="round"/>
+          <line x1="127" y1="50" x2="185" y2="50" stroke="#420B20" stroke-width="2" stroke-linecap="round"/>
+          <line x1="125" y1="55" x2="180" y2="60" stroke="#420B20" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <!-- Cat tail -->
+        <svg style="position: absolute; bottom: 10px; right: -20px; width: 80px; height: 120px; z-index: 10;" viewBox="0 0 80 120" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 10,120 C 10,80 5,60 20,40 C 35,20 50,15 60,5" fill="none" stroke="#420B20" stroke-width="4" stroke-linecap="round"/>
+          <path d="M 12,118 C 12,80 7,62 22,42 C 37,22 52,17 62,7" fill="none" stroke="#FEFCE6" stroke-width="8" stroke-linecap="round"/>
+          <path d="M 10,120 C 10,80 5,60 20,40 C 35,20 50,15 60,5" fill="none" stroke="#420B20" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="60" cy="5" r="6" fill="#FEFCE6" stroke="#420B20" stroke-width="2.5"/>
+        </svg>
+      </div>
+      <h3>Maui Dressed as a Cat!</h3>
+      <p>For the cat grooming section - Maui in an adorable cat costume with ears, whiskers & tail.</p>
+    </div>
+
+    <!-- Avatar Reference -->
+    <div class="card">
+      <span class="badge" style="background: #4ECDC4;">3D Avatar</span>
+      <div class="illustration">
+        <img src="/maui-avatar.png" alt="Maui 3D Avatar" style="border-radius: 16px;" />
+      </div>
+      <h3>Maui 3D Avatar</h3>
+      <p>3D rendered version for reference. White fluffy dog, blue bandana, friendly wave.</p>
+    </div>
+
+  </div>
+
+  <!-- Design Notes -->
+  <div class="footer">
+    <p><strong>Design Notes:</strong> All bandanas should display "MAUI" text. Maintain consistent line weight (#420B20 outlines). Body color: cream #FEFCE6 with #E8D5BA shading. Keep expressions warm and friendly.</p>
+  </div>
+
+</body>
+</html>

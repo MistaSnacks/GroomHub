@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maui Brand Guide - Groomingdale's</title>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #FDF8F0;
+      font-family: 'Inter', sans-serif;
+      color: #38001d;
+    }
+
+    /* ===================== PAGE 1: CHARACTER SHEET ===================== */
+    .page {
+      width: 1440px;
+      min-height: 900px;
+      margin: 0 auto;
+      padding: 64px;
+      position: relative;
+    }
+
+    .page-divider {
+      width: 1440px;
+      margin: 0 auto;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, #38001d 20%, #38001d 80%, transparent);
+      opacity: 0.15;
+    }
+
+    /* Header */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 48px;
+    }
+
+    .page-header h1 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: #38001d;
+      line-height: 1.1;
+    }
+
+    .page-header h1 span {
+      color: #F5A623;
+    }
+
+    .page-header .subtitle {
+      font-size: 16px;
+      color: #956A46;
+      font-weight: 500;
+      margin-top: 4px;
+      font-family: 'Fredoka', sans-serif;
+    }
+
+    .page-header .logo-mark {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #38001d;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 16px;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .page-header .logo-mark .paw {
+      font-size: 24px;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      display: flex;
+      align-items: center;
+      gap: 56px;
+      background: white;
+      border-radius: 32px;
+      padding: 48px 56px;
+      box-shadow: 0 4px 32px rgba(56, 0, 29, 0.06);
+      border: 2px solid #F5E6D8;
+      margin-bottom: 48px;
+    }
+
+    .hero-image {
+      flex-shrink: 0;
+      width: 360px;
+      height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .hero-info {
+      flex: 1;
+    }
+
+    .hero-info h2 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 40px;
+      font-weight: 700;
+      color: #38001d;
+      margin-bottom: 12px;
+    }
+
+    .hero-info .tagline {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 20px;
+      color: #F5A623;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .hero-info p {
+      font-size: 15px;
+      color: #6B4A3A;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .spec-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .spec-item {
+      background: #FDF8F0;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid #F0E0D0;
+    }
+
+    .spec-item .label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #956A46;
+      margin-bottom: 2px;
+    }
+
+    .spec-item .value {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #38001d;
+    }
+
+    /* ===================== PAGE 2: POSE GRID ===================== */
+    .grid-section-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .grid-section-header h2 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: #38001d;
+    }
+
+    .grid-section-header p {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 16px;
+      color: #956A46;
+      margin-top: 6px;
+    }
+
+    /* (pose grid styles removed - now using individual char-grid) */
+
+    /* Individual Character Grid */
+    .char-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-bottom: 48px;
+    }
+
+    .char-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(56, 0, 29, 0.06);
+      border: 2px solid #F5E6D8;
+      transition: transform 0.2s;
+    }
+
+    .char-card .char-img {
+      background: #FFFCF7;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      aspect-ratio: 1;
+    }
+
+    .char-card .char-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 12px;
+    }
+
+    .char-card .char-info {
+      padding: 16px 20px 20px;
+    }
+
+    .char-card .char-info h4 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #38001d;
+      margin-bottom: 4px;
+    }
+
+    .char-card .char-info p {
+      font-size: 12px;
+      color: #956A46;
+      line-height: 1.5;
+    }
+
+    .char-card .char-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .char-tag {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-family: 'Fredoka', sans-serif;
+    }
+
+    .char-tag.bandana { background: #C1272D; color: white; }
+    .char-tag.no-bandana { background: #F5E6D8; color: #6B4A3A; }
+    .char-tag.service { background: #4ECDC4; color: white; }
+    .char-tag.special { background: #F5A623; color: white; }
+    .char-tag.alt { background: #E8D5BA; color: #38001d; }
+
+    .set-divider {
+      grid-column: span 3;
+      text-align: center;
+      padding: 12px 0;
+    }
+
+    .set-divider h3 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #38001d;
+    }
+
+    .set-divider p {
+      font-size: 14px;
+      color: #956A46;
+      font-family: 'Fredoka', sans-serif;
+      margin-top: 4px;
+    }
+
+    /* ===================== PAGE 3: BRAND GUIDE ===================== */
+    .brand-section {
+      margin-bottom: 48px;
+    }
+
+    .brand-section h3 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #38001d;
+      margin-bottom: 20px;
+    }
+
+    /* Color Palette */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+
+    .color-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 2px solid #F0E0D0;
+    }
+
+    .color-card .swatch {
+      height: 80px;
+      width: 100%;
+    }
+
+    .color-card .color-info {
+      padding: 12px 14px;
+    }
+
+    .color-card .color-name {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #38001d;
+    }
+
+    .color-card .color-hex {
+      font-size: 12px;
+      color: #956A46;
+      font-family: 'Inter', monospace;
+      margin-top: 2px;
+    }
+
+    /* Typography */
+    .type-samples {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .type-card {
+      background: white;
+      border-radius: 20px;
+      padding: 32px;
+      border: 2px solid #F0E0D0;
+    }
+
+    .type-card .font-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #956A46;
+      margin-bottom: 12px;
+    }
+
+    .type-card .font-sample {
+      font-size: 36px;
+      font-weight: 700;
+      color: #38001d;
+      margin-bottom: 8px;
+    }
+
+    .type-card .font-weights {
+      font-size: 13px;
+      color: #6B4A3A;
+      line-height: 1.8;
+    }
+
+    /* Groomingdale's Product Section */
+    .product-section {
+      margin-bottom: 48px;
+    }
+
+    .product-section-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .product-section-header h2 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 40px;
+      font-weight: 700;
+      color: #38001d;
+    }
+
+    .product-section-header h2 span {
+      color: #F5A623;
+    }
+
+    .product-section-header p {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 16px;
+      color: #956A46;
+      margin-top: 6px;
+    }
+
+    /* Full lineup banner */
+    .lineup-banner {
+      background: white;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(56, 0, 29, 0.06);
+      border: 2px solid #F5E6D8;
+      margin-bottom: 40px;
+    }
+
+    .lineup-banner img {
+      width: 100%;
+      display: block;
+    }
+
+    .lineup-banner .lineup-caption {
+      padding: 20px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .lineup-banner .lineup-caption h3 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #38001d;
+    }
+
+    .lineup-banner .lineup-caption .price-badge {
+      background: #F5A623;
+      color: white;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 8px 20px;
+      border-radius: 50px;
+    }
+
+    /* Individual product image grid */
+    .product-img-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-bottom: 40px;
+    }
+
+    .product-img-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(56, 0, 29, 0.06);
+      border: 2px solid #F5E6D8;
+    }
+
+    .product-img-card img {
+      width: 100%;
+      display: block;
+    }
+
+    .product-img-card .product-img-info {
+      padding: 16px 20px 20px;
+    }
+
+    .product-img-card .product-img-info h4 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #38001d;
+      margin-bottom: 4px;
+    }
+
+    .product-img-card .product-img-info p {
+      font-size: 12px;
+      color: #956A46;
+      line-height: 1.5;
+    }
+
+    .product-img-card .product-img-info .product-color-dot {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 6px;
+      vertical-align: middle;
+      border: 1.5px solid rgba(56, 0, 29, 0.15);
+    }
+
+    .product-img-card .product-img-info .product-price-tag {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    /* Flagship product hero card */
+    .flagship-hero {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      background: white;
+      border-radius: 28px;
+      padding: 40px 48px;
+      box-shadow: 0 4px 32px rgba(56, 0, 29, 0.06);
+      border: 2px solid #F5A623;
+      margin-bottom: 32px;
+    }
+
+    .flagship-hero .flagship-img {
+      flex-shrink: 0;
+      width: 340px;
+    }
+
+    .flagship-hero .flagship-img img {
+      width: 100%;
+      border-radius: 16px;
+    }
+
+    .flagship-hero .flagship-info {
+      flex: 1;
+    }
+
+    .flagship-hero .flagship-info .flagship-badge {
+      display: inline-block;
+      background: #38001d;
+      color: #F5A623;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 6px 16px;
+      border-radius: 50px;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+
+    .flagship-hero .flagship-info h3 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 34px;
+      font-weight: 700;
+      color: #38001d;
+      margin-bottom: 8px;
+    }
+
+    .flagship-hero .flagship-info .flagship-tagline {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 18px;
+      color: #F5A623;
+      font-weight: 600;
+      font-style: italic;
+      margin-bottom: 16px;
+    }
+
+    .flagship-hero .flagship-info p {
+      font-size: 14px;
+      color: #6B4A3A;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .flagship-hero .flagship-specs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .flagship-hero .flagship-spec {
+      background: #FDF8F0;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid #F0E0D0;
+    }
+
+    .flagship-hero .flagship-spec .fs-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #956A46;
+      margin-bottom: 2px;
+    }
+
+    .flagship-hero .flagship-spec .fs-value {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #38001d;
+    }
+
+    /* Product line color palette - light version */
+    .product-colors-light {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 16px;
+      background: white;
+      border-radius: 20px;
+      padding: 28px;
+      border: 2px solid #F0E0D0;
+      margin-bottom: 40px;
+    }
+
+    .product-colors-light h4 {
+      grid-column: span 6;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #38001d;
+      margin-bottom: 8px;
+    }
+
+    .pcl-item {
+      text-align: center;
+    }
+
+    .pcl-item .pcl-swatch {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      margin: 0 auto 8px;
+      border: 3px solid #F0E0D0;
+    }
+
+    .pcl-item .pcl-name {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: #38001d;
+    }
+
+    .pcl-item .pcl-hex {
+      font-size: 10px;
+      color: #956A46;
+      font-family: 'Inter', monospace;
+    }
+
+    /* Usage Guidelines */
+    .usage-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .usage-card {
+      background: white;
+      border-radius: 20px;
+      padding: 28px;
+      border: 2px solid #F0E0D0;
+    }
+
+    .usage-card.do { border-color: #4ECDC4; }
+    .usage-card.dont { border-color: #C1272D; }
+
+    .usage-card .usage-tag {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .usage-card.do .usage-tag { color: #4ECDC4; }
+    .usage-card.dont .usage-tag { color: #C1272D; }
+
+    .usage-card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .usage-card ul li {
+      font-size: 13px;
+      color: #6B4A3A;
+      line-height: 1.8;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .usage-card.do ul li::before { content: "\2713"; position: absolute; left: 0; color: #4ECDC4; font-weight: 700; }
+    .usage-card.dont ul li::before { content: "\2717"; position: absolute; left: 0; color: #C1272D; font-weight: 700; }
+
+    /* Footer */
+    .page-footer {
+      text-align: center;
+      padding: 32px;
+      font-size: 13px;
+      color: #956A46;
+      font-family: 'Fredoka', sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== PAGE 1: MEET MAUI ==================== -->
+  <div class="page">
+    <div class="page-header">
+      <div>
+        <h1>Meet <span>Maui</span></h1>
+        <div class="subtitle">Groomingdale's Directory Mascot &amp; Brand Character</div>
+      </div>
+      <div class="logo-mark">
+        <span class="paw">&#128062;</span>
+        Groomingdale's
+      </div>
+    </div>
+
+    <!-- Hero: Main Maui -->
+    <div class="hero-section">
+      <div class="hero-image">
+        <img src="/maui%20pngs/Main-Maui.jpg" alt="Main Maui" />
+      </div>
+      <div class="hero-info">
+        <h2>Maui Main</h2>
+        <div class="tagline">"Hi!" - Your friendly neighborhood grooming guide</div>
+        <p>Maui is a small white/cream fluffy Maltese-type pup. He's the face of Groomingdale's - warm, approachable, and always happy to help pet parents find the perfect groomer. His signature red bandana says "MAUI" with a paw print.</p>
+        <p>This is the primary mascot pose used for hero sections, navigation, empty states, and all brand touchpoints. He's waving hello with a speech bubble.</p>
+        <div class="spec-grid">
+          <div class="spec-item">
+            <div class="label">Style</div>
+            <div class="value">Hand-drawn, thick maroon outlines</div>
+          </div>
+          <div class="spec-item">
+            <div class="label">Bandana</div>
+            <div class="value">Red #C1272D with "MAUI" + paw</div>
+          </div>
+          <div class="spec-item">
+            <div class="label">Outline</div>
+            <div class="value">Dark Maroon #38001D</div>
+          </div>
+          <div class="spec-item">
+            <div class="label">Body</div>
+            <div class="value">Cream #FEFCE6 / Tan #E8D5BA</div>
+          </div>
+          <div class="spec-item">
+            <div class="label">Expression</div>
+            <div class="value">Happy, waving, tongue out</div>
+          </div>
+          <div class="spec-item">
+            <div class="label">Bandana Font</div>
+            <div class="value">Fredoka Bold, white, rounded</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-divider"></div>
+
+  <!-- ==================== PAGE 2: INDIVIDUAL CHARACTERS ==================== -->
+  <div class="page">
+    <div class="grid-section-header">
+      <h2>Maui Character Library</h2>
+      <p>18 individual grooming poses &amp; special illustrations</p>
+    </div>
+
+    <div class="char-grid">
+
+      <!-- SET 1 HEADER -->
+      <div class="set-divider">
+        <h3>Set 1 - Core Poses</h3>
+        <p>Primary illustrations for each grooming service</p>
+      </div>
+
+      <!-- 01 - Bath -->
+      <div class="char-card">
+        <div class="char-img">
+          <img src="/maui-characters/01-maui-bath.png" alt="Maui Bath Time" />
+        </div>
+        <div class="char-info">
+          <h4>Bath Time</h4>
+          <p>Bubble bath pose with soap suds. Happy in the tub!</p>
+          <div class="char-tags">
+            <span class="char-tag no-bandana">No Bandana</span>
+            <span class="char-tag service">Bathing</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 02 - Ear Cleaning -->
+      <div class="char-card">
+        <div class="char-img">
+          <img src="/maui-characters/02-maui-ear-cleaning.png" alt="Maui Ear Cleaning" />
+        </div>
+        <div class="char-info">
+          <h4>Ear Cleaning</h4>
+          <p>Head tilted, getting ears cleaned with a pad.</p>
+          <div class="char-tags">
+            <span class="char-tag bandana">Bandana</span>
+            <span class="char-tag service">Ear Care</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 03 - Nail Clip -->
+      <div class="char-card">
+        <div class="char-img">
+          <img src="/maui-characters/03-maui-nail-clip.png" alt="Maui Nail Clipping" />
+        </div>
+        <div class="char-info">
+          <h4>Nail Clipping</h4>
+          <p>Paw out, clippers visible. Brave boy!</p>
+          <div class="char-tags">
+            <span class="char-tag bandana">Bandana</span>
+            <span class="char-tag service">Nail Care</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 04 - Nail Trim Table -->
+      <div class="char-card">
+        <div class="char-img">
+          <img src="/maui-characters/04-maui-nail-trim-table.png" alt="Maui Nail Trim on Table" />
+        </div>
+        <div class="char-info">
+          <h4>Nail Trim (Table)</h4>
+          <p>On grooming table getting a professional nail trim.</p>
+          <div class="char-tags">
+            <span class="char-tag bandana">Bandana</span>
+            <span class="char-tag service">Nail Care</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 05 - Sitting Pretty / Brushing -->
+      <div class="char-card">
+        <div class="char-img">
+          <img src="/maui-characters/05-maui-sitting-pretty.png" alt="Maui Sitting Pretty" />
+        </div>
+        <div class="char-info">
+          <h4>Hair Brushing</h4>
+          <p>Getting that fluffy coat brushed out. Content and relaxed.</p>
+          <div class="char-tags">
+            <span class="char-tag bandana">Bandana</span>
+            <span class="char-tag service">Brushing</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 06 - Towel Head Standing -->
+      <div class="char-card">
+        <div class="char-img">
+          <img src="/maui-characters/06-maui-towel-head-standing.png" alt="Maui Towel Head Spa" />
+        </div>
+        <div class="char-info">
+          <h4>Towel Head Spa</h4>
+          <p>Fresh out of the bath with a towel turban. Spa vibes!</p>
+          <div class="char-tags">
+            <span class="char-tag no-bandana">No Bandana</span>
+            <span class="char-tag service">Bathing</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 07 - Blow Dry -->
+      <div class="char-card">
+        <div class="char-img">
+          <img src="/maui-characters/07-maui-blow-dry.png" alt="Maui Blow Dry" />
+        </div>
+        <div class="char-info">
+          <h4>Blow Dry</h4>
+          <p>Fur windswept, dryer visible. Fluffy and fabulous!</p>
+          <div class="char-tags">
+            <span class="char-tag no-bandana">No Bandana</span>
+            <span class="char-tag service">Drying</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 08 - Playing Ball -->
+      <div class="char-card">
+        <div class="char-img">
+          <img src="/maui-characters/08-maui-playing-ball.png" alt="Maui Playing with Ball" />
+        </div>
+        <div class="char-info">
+          <h4>Playing with Ball</h4>
+          <p>Play bow with amber ball. Fun between grooming!</p>
+          <div class="char-tags">
+            <span class="char-tag bandana">Bandana</span>
+            <span class="char-tag special">Fun Pose</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 09 - Cat Costume -->
+      <div class="char-card">
+        <div class="char-img">
+          <img src="/maui-characters/09-maui-cat-costume.png" alt="Maui Cat Costume" />
+        </div>
+        <div class="char-info">
+          <h4>Cat Costume</h4>
+          <p>Maui in an adorable cat costume for the cat grooming section.</p>
+          <div class="char-tags">
+            <span class="char-tag special">Special</span>
+            <span class="char-tag service">Cat Section</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SET 2 HEADER -->
+      <div class="set-divider">
+        <h3>Set 2 - Alternate Poses</h3>
+        <p>Alternate expressions and angles for variety</p>
+      </div>
+
+      <!-- 10 - Bath Alt -->
+      <div class="char-card">
+        <div class="char-img">
+          <img src="/maui-characters/10-maui-bath-alt.png" alt="Maui Bath Alt" />
+        </div>
+        <div class="char-info">
+          <h4>Bath Time (Alt)</h4>
+          <p>Alternative bathing pose with warm water and bubbles.</p>
+          <div class="char-tags">
+            <span class="char-tag no-bandana">No Bandana</span>
+            <span class="char-tag alt">Alternate</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 - Ear Cleaning Alt -->
+      <div class="char-card">
+        <div class="char-img">
+          <img src="/maui-characters/11-maui-ear-cleaning-alt.png" alt="Maui Ear Cleaning Alt" />
+        </div>
+        <div class="char-info">
+          <h4>Ear Cleaning (Alt)</h4>
+          <p>Alternative ear cleaning angle. Patient and trusting.</p>
+          <div class="char-tags">
+            <span class="char-tag bandana">Bandana</span>
+            <span class="char-tag alt">Alternate</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12 - Nail Clip Alt -->
+      <div class="char-card">
+        <div class="char-img">
+          <img src="/maui-characters/12-maui-nail-clip-alt.png" alt="Maui Nail Clip Alt" />
+        </div>
+        <div class="char-info">
+          <h4>Nail Clipping (Alt)</h4>
+          <p>Alternative nail clipping with grooming tools visible.</p>
+          <div class="char-tags">
+            <span class="char-tag bandana">Bandana</span>
+            <span class="char-tag alt">Alternate</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13 - Nail Trim Alt -->
+      <div class="char-card">
+        <div class="char-img">
+          <img src="/maui-characters/13-maui-nail-trim-table-alt.png" alt="Maui Nail Trim Alt" />
+        </div>
+        <div class="char-info">
+          <h4>Nail Trim Table (Alt)</h4>
+          <p>Alternative grooming table nail trim pose.</p>
+          <div class="char-tags">
+            <span class="char-tag bandana">Bandana</span>
+            <span class="char-tag alt">Alternate</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 14 - Sitting Pretty Alt -->
+      <div class="char-card">
+        <div class="char-img">
+          <img src="/maui-characters/14-maui-sitting-pretty-alt.png" alt="Maui Sitting Pretty Alt" />
+        </div>
+        <div class="char-info">
+          <h4>Hair Brushing (Alt)</h4>
+          <p>Alternative brushing pose showing full coat care.</p>
+          <div class="char-tags">
+            <span class="char-tag bandana">Bandana</span>
+            <span class="char-tag alt">Alternate</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 15 - Towel Head Alt -->
+      <div class="char-card">
+        <div class="char-img">
+          <img src="/maui-characters/15-maui-towel-head-standing-alt.png" alt="Maui Towel Head Alt" />
+        </div>
+        <div class="char-info">
+          <h4>Towel Head Spa (Alt)</h4>
+          <p>Alternative towel turban pose, relaxed and refreshed.</p>
+          <div class="char-tags">
+            <span class="char-tag no-bandana">No Bandana</span>
+            <span class="char-tag alt">Alternate</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 16 - Towel Head Hearts -->
+      <div class="char-card">
+        <div class="char-img">
+          <img src="/maui-characters/16-maui-towel-head-hearts.png" alt="Maui Towel Head with Hearts" />
+        </div>
+        <div class="char-info">
+          <h4>Towel Head + Hearts</h4>
+          <p>Towel turban with floating hearts. Feeling pampered!</p>
+          <div class="char-tags">
+            <span class="char-tag no-bandana">No Bandana</span>
+            <span class="char-tag special">Special</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 17 - Playing Ball Alt -->
+      <div class="char-card">
+        <div class="char-img">
+          <img src="/maui-characters/17-maui-playing-ball-alt.png" alt="Maui Playing Ball Alt" />
+        </div>
+        <div class="char-info">
+          <h4>Playing with Ball (Alt)</h4>
+          <p>Alternative ball play pose with different expression.</p>
+          <div class="char-tags">
+            <span class="char-tag bandana">Bandana</span>
+            <span class="char-tag alt">Alternate</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 18 - Fresh Bath Waving -->
+      <div class="char-card">
+        <div class="char-img">
+          <img src="/maui-characters/18-maui-fresh-bath-waving.png" alt="Maui Fresh Bath Waving" />
+        </div>
+        <div class="char-info">
+          <h4>Fresh Bath Waving</h4>
+          <p>Just out of the bath, waving hello! Clean and happy.</p>
+          <div class="char-tags">
+            <span class="char-tag no-bandana">No Bandana</span>
+            <span class="char-tag special">Special</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="page-divider"></div>
+
+  <!-- ==================== PAGE 3: BRAND GUIDE + GROOMINGDALE'S ==================== -->
+  <div class="page">
+    <div class="page-header">
+      <div>
+        <h1>Brand <span>Guide</span></h1>
+        <div class="subtitle">Colors, Typography &amp; Groomingdale's Maui Wowie Collection</div>
+      </div>
+    </div>
+
+    <!-- Color Palette -->
+    <div class="brand-section">
+      <h3>Core Color Palette</h3>
+      <div class="color-grid">
+        <div class="color-card">
+          <div class="swatch" style="background: #38001d;"></div>
+          <div class="color-info">
+            <div class="color-name">Brand Maroon</div>
+            <div class="color-hex">#38001D</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="swatch" style="background: #F5A623;"></div>
+          <div class="color-info">
+            <div class="color-name">Brand Amber</div>
+            <div class="color-hex">#F5A623</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="swatch" style="background: #4ECDC4;"></div>
+          <div class="color-info">
+            <div class="color-name">Brand Teal</div>
+            <div class="color-hex">#4ECDC4</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="swatch" style="background: #C1272D;"></div>
+          <div class="color-info">
+            <div class="color-name">Bandana Red</div>
+            <div class="color-hex">#C1272D</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="swatch" style="background: #FEFCE6;"></div>
+          <div class="color-info">
+            <div class="color-name">Maui Body</div>
+            <div class="color-hex">#FEFCE6</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="swatch" style="background: #E8D5BA;"></div>
+          <div class="color-info">
+            <div class="color-name">Maui Shading</div>
+            <div class="color-hex">#E8D5BA</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="swatch" style="background: #EA6852;"></div>
+          <div class="color-info">
+            <div class="color-name">Tongue / Accent</div>
+            <div class="color-hex">#EA6852</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="swatch" style="background: #956A46;"></div>
+          <div class="color-info">
+            <div class="color-name">Warm Brown</div>
+            <div class="color-hex">#956A46</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="swatch" style="background: #FDF8F0;"></div>
+          <div class="color-info">
+            <div class="color-name">Background Cream</div>
+            <div class="color-hex">#FDF8F0</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="swatch" style="background: #420B20;"></div>
+          <div class="color-info">
+            <div class="color-name">Deep Outline</div>
+            <div class="color-hex">#420B20</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Typography -->
+    <div class="brand-section">
+      <h3>Typography</h3>
+      <div class="type-samples">
+        <div class="type-card">
+          <div class="font-label">Headings</div>
+          <div class="font-sample" style="font-family: 'Fredoka', sans-serif;">Fredoka</div>
+          <div class="font-weights" style="font-family: 'Fredoka', sans-serif;">
+            <span style="font-weight: 300;">Light 300</span> &bull;
+            <span style="font-weight: 400;">Regular 400</span> &bull;
+            <span style="font-weight: 500;">Medium 500</span><br>
+            <span style="font-weight: 600;">SemiBold 600</span> &bull;
+            <span style="font-weight: 700;">Bold 700</span>
+          </div>
+          <p style="margin-top: 12px; font-size: 12px; color: #956A46;">Used for all headings, bandana text, badges, buttons, and display type.</p>
+        </div>
+        <div class="type-card">
+          <div class="font-label">Body</div>
+          <div class="font-sample" style="font-family: 'Inter', sans-serif;">Inter</div>
+          <div class="font-weights" style="font-family: 'Inter', sans-serif;">
+            <span style="font-weight: 400;">Regular 400</span> &bull;
+            <span style="font-weight: 500;">Medium 500</span> &bull;
+            <span style="font-weight: 600;">SemiBold 600</span>
+          </div>
+          <p style="margin-top: 12px; font-size: 12px; color: #956A46;">Used for body text, descriptions, metadata, and UI labels.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Groomingdale's Maui Wowie Product Line -->
+    <div class="product-section">
+      <div class="product-section-header">
+        <h2>Groomingdale's <span>Maui Wowie</span></h2>
+        <p>Premium Pet Shampoo &amp; Grooming Product Line - 7 Formulas</p>
+      </div>
+
+      <!-- Full Lineup Banner -->
+      <div class="lineup-banner">
+        <img src="/maui-products/00-full-lineup.png" alt="Maui Wowie Full Product Lineup" />
+        <div class="lineup-caption">
+          <h3>The Full Lineup</h3>
+          <span class="price-badge">$10.99 - $16.99</span>
+        </div>
+      </div>
+
+      <!-- Flagship Hero Product -->
+      <div class="flagship-hero">
+        <div class="flagship-img">
+          <img src="/maui-products/00-aloha-signature.png" alt="Aloha Signature - Flagship Product" />
+        </div>
+        <div class="flagship-info">
+          <span class="flagship-badge">FLAGSHIP FORMULA</span>
+          <h3>Aloha Signature</h3>
+          <div class="flagship-tagline">"The one that started it all"</div>
+          <p>Our premium all-in-one formula. Kukui nut oil, plumeria, and shea butter work together for the ultimate clean, condition, and shine in a single wash. The signature burgundy bottle features Maui himself and a gold pump — because your pup deserves the best.</p>
+          <div class="flagship-specs">
+            <div class="flagship-spec">
+              <div class="fs-label">Bottle Color</div>
+              <div class="fs-value">Signature Burgundy #38001D</div>
+            </div>
+            <div class="flagship-spec">
+              <div class="fs-label">Price</div>
+              <div class="fs-value">$16.99 / 16 fl oz</div>
+            </div>
+            <div class="flagship-spec">
+              <div class="fs-label">Key Ingredients</div>
+              <div class="fs-value">Kukui Nut Oil, Plumeria, Shea Butter</div>
+            </div>
+            <div class="flagship-spec">
+              <div class="fs-label">Type</div>
+              <div class="fs-value">All-in-One Shampoo &amp; Conditioner</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Individual Product Cards -->
+      <div class="product-img-grid">
+
+        <div class="product-img-card">
+          <img src="/maui-products/01-ocean-breeze.png" alt="Ocean Breeze Shampoo" />
+          <div class="product-img-info">
+            <h4><span class="product-color-dot" style="background: #45B7D1;"></span>Ocean Breeze</h4>
+            <p>Gentle cleansing shampoo with coconut oil &amp; sea minerals</p>
+            <div class="product-price-tag" style="color: #45B7D1;">$12.99 - 16 fl oz</div>
+          </div>
+        </div>
+
+        <div class="product-img-card">
+          <img src="/maui-products/02-tropical-detangle.png" alt="Tropical Detangle" />
+          <div class="product-img-info">
+            <h4><span class="product-color-dot" style="background: #F5A623;"></span>Tropical Detangle</h4>
+            <p>Deep conditioning detangler with mango butter &amp; vitamin E</p>
+            <div class="product-price-tag" style="color: #d98f1b;">$14.99 - 16 fl oz</div>
+          </div>
+        </div>
+
+        <div class="product-img-card">
+          <img src="/maui-products/03-lavender-calm.png" alt="Lavender Calm Wash" />
+          <div class="product-img-info">
+            <h4><span class="product-color-dot" style="background: #9B59B6;"></span>Lavender Calm</h4>
+            <p>Calming shampoo with lavender &amp; chamomile. Vet recommended.</p>
+            <div class="product-price-tag" style="color: #9B59B6;">$13.99 - 16 fl oz</div>
+          </div>
+        </div>
+
+        <div class="product-img-card">
+          <img src="/maui-products/04-pawfect-fresh.png" alt="Pawfect Fresh Spritz" />
+          <div class="product-img-info">
+            <h4><span class="product-color-dot" style="background: #4ECDC4;"></span>Pawfect Fresh</h4>
+            <p>Leave-in spray deodorizer with eucalyptus &amp; green tea</p>
+            <div class="product-price-tag" style="color: #3fb5ad;">$10.99 - 8 fl oz</div>
+          </div>
+        </div>
+
+        <div class="product-img-card">
+          <img src="/maui-products/05-sunset-glow.png" alt="Sunset Glow Conditioner" />
+          <div class="product-img-info">
+            <h4><span class="product-color-dot" style="background: #FF6B6B;"></span>Sunset Glow</h4>
+            <p>Color-enhancing conditioner with argan oil &amp; honey</p>
+            <div class="product-price-tag" style="color: #e05555;">$14.99 - 16 fl oz</div>
+          </div>
+        </div>
+
+        <div class="product-img-card">
+          <img src="/maui-products/06-sensitive-pup.png" alt="Sensitive Pup Formula" />
+          <div class="product-img-info">
+            <h4><span class="product-color-dot" style="background: #87CEEB;"></span>Sensitive Pup</h4>
+            <p>Hypoallergenic, fragrance-free formula. Tear-free &amp; pH balanced.</p>
+            <div class="product-price-tag" style="color: #6bb8d9;">$13.99 - 16 fl oz</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Product Line Colors -->
+      <div class="product-colors-light" style="grid-template-columns: repeat(7, 1fr);">
+        <h4 style="grid-column: span 7;">Product Line Color Palette</h4>
+        <div class="pcl-item">
+          <div class="pcl-swatch" style="background: linear-gradient(135deg, #38001d, #5C1035); border-color: #F5A623;"></div>
+          <div class="pcl-name">Aloha Signature</div>
+          <div class="pcl-hex">#38001D</div>
+        </div>
+        <div class="pcl-item">
+          <div class="pcl-swatch" style="background: #45B7D1;"></div>
+          <div class="pcl-name">Ocean Breeze</div>
+          <div class="pcl-hex">#45B7D1</div>
+        </div>
+        <div class="pcl-item">
+          <div class="pcl-swatch" style="background: #F5A623;"></div>
+          <div class="pcl-name">Tropical Gold</div>
+          <div class="pcl-hex">#F5A623</div>
+        </div>
+        <div class="pcl-item">
+          <div class="pcl-swatch" style="background: #9B59B6;"></div>
+          <div class="pcl-name">Lavender Calm</div>
+          <div class="pcl-hex">#9B59B6</div>
+        </div>
+        <div class="pcl-item">
+          <div class="pcl-swatch" style="background: #4ECDC4;"></div>
+          <div class="pcl-name">Pawfect Fresh</div>
+          <div class="pcl-hex">#4ECDC4</div>
+        </div>
+        <div class="pcl-item">
+          <div class="pcl-swatch" style="background: #FF6B6B;"></div>
+          <div class="pcl-name">Sunset Glow</div>
+          <div class="pcl-hex">#FF6B6B</div>
+        </div>
+        <div class="pcl-item">
+          <div class="pcl-swatch" style="background: #87CEEB;"></div>
+          <div class="pcl-name">Sensitive Blue</div>
+          <div class="pcl-hex">#87CEEB</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Usage Guidelines -->
+    <div class="brand-section">
+      <h3>Maui Usage Guidelines</h3>
+      <div class="usage-grid">
+        <div class="usage-card do">
+          <div class="usage-tag">DO</div>
+          <ul>
+            <li>Always include "MAUI" text on the bandana in Fredoka Bold</li>
+            <li>Remove bandana for water-related poses (bath, blow dry, towel)</li>
+            <li>Keep thick maroon #38001D outlines consistent</li>
+            <li>Use cream body with tan shading for depth</li>
+            <li>Maintain warm, friendly expressions in every pose</li>
+            <li>Include paw print icon on bandana next to text</li>
+            <li>Use Maui at appropriate sizes (min 64px, hero 160px+)</li>
+          </ul>
+        </div>
+        <div class="usage-card dont">
+          <div class="usage-tag">DON'T</div>
+          <ul>
+            <li>Don't change Maui's breed or proportions</li>
+            <li>Don't use thin outlines - thick maroon only</li>
+            <li>Don't make the nose oversized or brown (small, dark, round)</li>
+            <li>Don't put Maui on groomer listing/hero cards</li>
+            <li>Don't stretch, skew, or apply filters to the illustrations</li>
+            <li>Don't change bandana color from red #C1272D</li>
+            <li>Don't use Maui in a way that feels like a SaaS product mascot</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      Groomingdale's Directory &bull; Maui Brand Guide v3.0 &bull; Groomingdale's Maui Wowie Collection &bull; February 2026
+    </div>
+  </div>
+
+</body>
+</html>

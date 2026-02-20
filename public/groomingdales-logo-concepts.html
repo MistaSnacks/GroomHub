@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Groomingdale's Logo Concepts</title>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #FDF8F0;
+      font-family: 'Inter', sans-serif;
+      color: #38001d;
+      padding: 60px;
+    }
+
+    .page-title {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    .page-title h1 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: #38001d;
+    }
+    .page-title p {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 16px;
+      color: #956A46;
+      margin-top: 6px;
+    }
+
+    .concept-row {
+      display: flex;
+      gap: 48px;
+      margin-bottom: 64px;
+      align-items: flex-start;
+    }
+
+    .concept {
+      flex: 1;
+      text-align: center;
+    }
+
+    .concept-label {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #956A46;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 32px;
+      border-radius: 24px;
+      margin-bottom: 20px;
+    }
+    .logo-container.light {
+      background: white;
+      border: 2px solid #F0E0D0;
+    }
+    .logo-container.dark {
+      background: #38001d;
+    }
+    .logo-container.cream {
+      background: #FDF8F0;
+      border: 2px solid #F0E0D0;
+    }
+
+    .section-divider {
+      text-align: center;
+      margin: 20px 0 48px;
+      position: relative;
+    }
+    .section-divider::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #F0E0D0;
+    }
+    .section-divider span {
+      position: relative;
+      background: #FDF8F0;
+      padding: 0 24px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #38001d;
+    }
+
+    /* ========== LOGO STYLES ========== */
+
+    /* Concept 1: Classic Wordmark with Paw Dot */
+    .logo-1 {
+      display: inline-flex;
+      align-items: baseline;
+    }
+    .logo-1 .word-grooming {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 52px;
+      color: #38001d;
+      letter-spacing: -1px;
+    }
+    .logo-1 .word-dales {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 52px;
+      color: #F5A623;
+      letter-spacing: -1px;
+    }
+    .logo-1 .apostrophe {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 52px;
+      color: #F5A623;
+    }
+    .logo-1.on-dark .word-grooming { color: white; }
+    .logo-1.on-dark .word-dales { color: #F5A623; }
+
+    /* Concept 2: Stacked with Maui Mascot */
+    .logo-2 {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .logo-2 .mascot-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid #F5A623;
+      flex-shrink: 0;
+    }
+    .logo-2 .mascot-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .logo-2 .text-stack {
+      text-align: left;
+    }
+    .logo-2 .text-stack .name {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 42px;
+      color: #38001d;
+      line-height: 1;
+      letter-spacing: -0.5px;
+    }
+    .logo-2 .text-stack .name .highlight { color: #F5A623; }
+    .logo-2 .text-stack .tagline {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #956A46;
+      margin-top: 4px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .logo-2.on-dark .text-stack .name { color: white; }
+    .logo-2.on-dark .text-stack .tagline { color: #D4A07A; }
+
+    /* Concept 3: Paw-G Monogram + Wordmark */
+    .logo-3 {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .logo-3 .monogram {
+      width: 72px;
+      height: 72px;
+      background: #38001d;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .logo-3 .monogram .g-letter {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 44px;
+      color: white;
+      line-height: 1;
+    }
+    .logo-3 .monogram .paw-accent {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 24px;
+      height: 24px;
+      background: #F5A623;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+    .logo-3 .wordmark {
+      text-align: left;
+    }
+    .logo-3 .wordmark .name {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 38px;
+      color: #38001d;
+      line-height: 1.05;
+      letter-spacing: -0.5px;
+    }
+    .logo-3 .wordmark .name .highlight { color: #F5A623; }
+    .logo-3 .wordmark .sub {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #956A46;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+    .logo-3.on-dark .monogram { background: #F5A623; }
+    .logo-3.on-dark .monogram .g-letter { color: #38001d; }
+    .logo-3.on-dark .wordmark .name { color: white; }
+    .logo-3.on-dark .wordmark .sub { color: #D4A07A; }
+
+    /* Concept 4: Badge / Seal Style */
+    .logo-4 {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    .logo-4 .badge {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      border: 4px solid #38001d;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: white;
+    }
+    .logo-4 .badge .inner-ring {
+      position: absolute;
+      inset: 6px;
+      border-radius: 50%;
+      border: 2px solid #F5A623;
+    }
+    .logo-4 .badge .mascot-img {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 4px;
+    }
+    .logo-4 .badge .badge-name {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      color: #38001d;
+      line-height: 1;
+    }
+    .logo-4 .badge .badge-name .highlight { color: #F5A623; }
+    .logo-4 .badge .badge-est {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 9px;
+      font-weight: 600;
+      color: #956A46;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+    .logo-4.on-dark .badge { background: #38001d; border-color: #F5A623; }
+    .logo-4.on-dark .badge .inner-ring { border-color: rgba(245,166,35,0.3); }
+    .logo-4.on-dark .badge .badge-name { color: white; }
+    .logo-4.on-dark .badge .badge-est { color: #D4A07A; }
+
+    /* Concept 5: Horizontal Lockup - Clean Modern */
+    .logo-5 {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .logo-5 .icon-wrap {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, #38001d, #5C1035);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .logo-5 .icon-wrap img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .logo-5 .icon-wrap .corner-paw {
+      position: absolute;
+      bottom: -4px;
+      right: -4px;
+      width: 20px;
+      height: 20px;
+      background: #F5A623;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      border: 2px solid white;
+    }
+    .logo-5 .text-block .line1 {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 32px;
+      color: #38001d;
+      line-height: 1;
+      letter-spacing: -0.5px;
+    }
+    .logo-5 .text-block .line1 .highlight { color: #F5A623; }
+    .logo-5 .text-block .line2 {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 500;
+      font-size: 11px;
+      color: #4ECDC4;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+    .logo-5.on-dark .icon-wrap { background: linear-gradient(135deg, #F5A623, #d4900e); }
+    .logo-5.on-dark .text-block .line1 { color: white; }
+    .logo-5.on-dark .text-block .line2 { color: #4ECDC4; }
+
+    /* Concept 6: Script-Inspired Premium */
+    .logo-6 {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .logo-6 .top-flourish {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #F5A623;
+      margin-bottom: 6px;
+    }
+    .logo-6 .main-name {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 56px;
+      color: #38001d;
+      line-height: 1;
+      letter-spacing: -1.5px;
+      position: relative;
+    }
+    .logo-6 .main-name .highlight { color: #F5A623; }
+    .logo-6 .bottom-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .logo-6 .bottom-line .line {
+      width: 40px;
+      height: 2px;
+      background: #E8D5BA;
+    }
+    .logo-6 .bottom-line .paw-icon {
+      font-size: 16px;
+    }
+    .logo-6 .bottom-line .est-text {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      color: #956A46;
+      letter-spacing: 2px;
+    }
+    .logo-6.on-dark .main-name { color: white; }
+    .logo-6.on-dark .bottom-line .line { background: rgba(255,255,255,0.2); }
+    .logo-6.on-dark .bottom-line .est-text { color: #D4A07A; }
+
+    /* Small versions */
+    .small-logos {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .small-logo-item {
+      text-align: center;
+    }
+    .small-logo-item .sl-label {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      color: #956A46;
+      margin-bottom: 12px;
+    }
+    .small-logo-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      border-radius: 16px;
+    }
+
+    /* Favicon / App Icon */
+    .favicon-grid {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      align-items: flex-end;
+    }
+    .favicon-item {
+      text-align: center;
+    }
+    .favicon-item .fav-label {
+      font-size: 10px;
+      color: #956A46;
+      margin-top: 8px;
+      font-family: 'Inter', sans-serif;
+    }
+    .favicon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #38001d;
+      color: white;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+    }
+    .favicon.s128 { width: 128px; height: 128px; border-radius: 28px; font-size: 64px; }
+    .favicon.s64 { width: 64px; height: 64px; border-radius: 14px; font-size: 32px; }
+    .favicon.s32 { width: 32px; height: 32px; border-radius: 8px; font-size: 16px; }
+    .favicon.s16 { width: 16px; height: 16px; border-radius: 4px; font-size: 8px; }
+    .favicon .fav-g { color: #F5A623; }
+
+    .notes {
+      background: white;
+      border: 2px solid #F0E0D0;
+      border-radius: 20px;
+      padding: 28px 32px;
+      margin-top: 48px;
+    }
+    .notes h4 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #38001d;
+      margin-bottom: 12px;
+    }
+    .notes ul {
+      list-style: none;
+      padding: 0;
+    }
+    .notes ul li {
+      font-size: 13px;
+      color: #6B4A3A;
+      line-height: 1.8;
+      padding-left: 20px;
+      position: relative;
+    }
+    .notes ul li::before {
+      content: "\2022";
+      position: absolute;
+      left: 0;
+      color: #F5A623;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-title">
+    <h1>Groomingdale's Logo Concepts</h1>
+    <p>Brand identity explorations using Fredoka, brand maroon #38001D, and amber #F5A623</p>
+  </div>
+
+  <!-- ===== CONCEPT 1: Classic Wordmark ===== -->
+  <div class="section-divider"><span>Concept 1 — Classic Wordmark</span></div>
+  <div class="concept-row">
+    <div class="concept">
+      <div class="concept-label">On Light</div>
+      <div class="logo-container light">
+        <div class="logo-1">
+          <span class="word-grooming">Grooming</span><span class="word-dales">dale's</span>
+        </div>
+      </div>
+    </div>
+    <div class="concept">
+      <div class="concept-label">On Dark</div>
+      <div class="logo-container dark">
+        <div class="logo-1 on-dark">
+          <span class="word-grooming">Grooming</span><span class="word-dales">dale's</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CONCEPT 2: Mascot Lockup ===== -->
+  <div class="section-divider"><span>Concept 2 — Mascot Lockup</span></div>
+  <div class="concept-row">
+    <div class="concept">
+      <div class="concept-label">On Light</div>
+      <div class="logo-container light">
+        <div class="logo-2">
+          <div class="mascot-circle">
+            <img src="/maui%20pngs/Main-Maui.jpg" alt="Maui" />
+          </div>
+          <div class="text-stack">
+            <div class="name">Grooming<span class="highlight">dale's</span></div>
+            <div class="tagline">Pet Grooming Directory</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="concept">
+      <div class="concept-label">On Dark</div>
+      <div class="logo-container dark">
+        <div class="logo-2 on-dark">
+          <div class="mascot-circle">
+            <img src="/maui%20pngs/Main-Maui.jpg" alt="Maui" />
+          </div>
+          <div class="text-stack">
+            <div class="name">Grooming<span class="highlight">dale's</span></div>
+            <div class="tagline">Pet Grooming Directory</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CONCEPT 3: Monogram + Wordmark ===== -->
+  <div class="section-divider"><span>Concept 3 — Monogram + Wordmark</span></div>
+  <div class="concept-row">
+    <div class="concept">
+      <div class="concept-label">On Light</div>
+      <div class="logo-container light">
+        <div class="logo-3">
+          <div class="monogram">
+            <span class="g-letter">G</span>
+            <span class="paw-accent">&#128062;</span>
+          </div>
+          <div class="wordmark">
+            <div class="name">Grooming<span class="highlight">dale's</span></div>
+            <div class="sub">Pet Grooming Directory</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="concept">
+      <div class="concept-label">On Dark</div>
+      <div class="logo-container dark">
+        <div class="logo-3 on-dark">
+          <div class="monogram">
+            <span class="g-letter">G</span>
+            <span class="paw-accent">&#128062;</span>
+          </div>
+          <div class="wordmark">
+            <div class="name">Grooming<span class="highlight">dale's</span></div>
+            <div class="sub">Pet Grooming Directory</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CONCEPT 4: Badge / Seal ===== -->
+  <div class="section-divider"><span>Concept 4 — Badge Seal</span></div>
+  <div class="concept-row">
+    <div class="concept">
+      <div class="concept-label">On Light</div>
+      <div class="logo-container light">
+        <div class="logo-4">
+          <div class="badge">
+            <div class="inner-ring"></div>
+            <img src="/maui%20pngs/Main-Maui.jpg" alt="Maui" class="mascot-img" />
+            <div class="badge-name">Grooming<span class="highlight">dale's</span></div>
+            <div class="badge-est">Pet Grooming Directory</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="concept">
+      <div class="concept-label">On Dark</div>
+      <div class="logo-container dark">
+        <div class="logo-4 on-dark">
+          <div class="badge">
+            <div class="inner-ring"></div>
+            <img src="/maui%20pngs/Main-Maui.jpg" alt="Maui" class="mascot-img" />
+            <div class="badge-name">Grooming<span class="highlight">dale's</span></div>
+            <div class="badge-est">Pet Grooming Directory</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CONCEPT 5: Modern Horizontal ===== -->
+  <div class="section-divider"><span>Concept 5 — Modern Horizontal</span></div>
+  <div class="concept-row">
+    <div class="concept">
+      <div class="concept-label">On Light</div>
+      <div class="logo-container light">
+        <div class="logo-5">
+          <div class="icon-wrap">
+            <img src="/maui%20pngs/Main-Maui.jpg" alt="Maui" />
+            <span class="corner-paw">&#128062;</span>
+          </div>
+          <div class="text-block">
+            <div class="line1">Grooming<span class="highlight">dale's</span></div>
+            <div class="line2">Pet Grooming Directory</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="concept">
+      <div class="concept-label">On Dark</div>
+      <div class="logo-container dark">
+        <div class="logo-5 on-dark">
+          <div class="icon-wrap">
+            <img src="/maui%20pngs/Main-Maui.jpg" alt="Maui" />
+            <span class="corner-paw">&#128062;</span>
+          </div>
+          <div class="text-block">
+            <div class="line1">Grooming<span class="highlight">dale's</span></div>
+            <div class="line2">Pet Grooming Directory</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CONCEPT 6: Premium Centered ===== -->
+  <div class="section-divider"><span>Concept 6 — Premium Centered</span></div>
+  <div class="concept-row">
+    <div class="concept">
+      <div class="concept-label">On Light</div>
+      <div class="logo-container light">
+        <div class="logo-6">
+          <div class="top-flourish">Est. 2026 &bull; Pacific Northwest</div>
+          <div class="main-name">Grooming<span class="highlight">dale's</span></div>
+          <div class="bottom-line">
+            <div class="line"></div>
+            <span class="paw-icon">&#128062;</span>
+            <span class="est-text">Pet Grooming Directory</span>
+            <span class="paw-icon">&#128062;</span>
+            <div class="line"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="concept">
+      <div class="concept-label">On Dark</div>
+      <div class="logo-container dark">
+        <div class="logo-6 on-dark">
+          <div class="top-flourish">Est. 2026 &bull; Pacific Northwest</div>
+          <div class="main-name">Grooming<span class="highlight">dale's</span></div>
+          <div class="bottom-line">
+            <div class="line"></div>
+            <span class="paw-icon">&#128062;</span>
+            <span class="est-text">Pet Grooming Directory</span>
+            <span class="paw-icon">&#128062;</span>
+            <div class="line"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FAVICON / APP ICON ===== -->
+  <div class="section-divider"><span>Favicon &amp; App Icon</span></div>
+  <div class="favicon-grid">
+    <div class="favicon-item">
+      <div class="favicon s128"><span class="fav-g">G</span></div>
+      <div class="fav-label">128px</div>
+    </div>
+    <div class="favicon-item">
+      <div class="favicon s64"><span class="fav-g">G</span></div>
+      <div class="fav-label">64px</div>
+    </div>
+    <div class="favicon-item">
+      <div class="favicon s32"><span class="fav-g">G</span></div>
+      <div class="fav-label">32px</div>
+    </div>
+    <div class="favicon-item">
+      <div class="favicon s16"><span class="fav-g">G</span></div>
+      <div class="fav-label">16px</div>
+    </div>
+  </div>
+
+  <!-- Notes -->
+  <div class="notes">
+    <h4>Design System Notes</h4>
+    <ul>
+      <li><strong>Font:</strong> Fredoka Bold 700 — consistent with all brand headings and Maui's bandana</li>
+      <li><strong>Color split:</strong> "Grooming" in brand maroon #38001D, "dale's" in brand amber #F5A623</li>
+      <li><strong>On dark:</strong> "Grooming" flips to white, amber stays for contrast</li>
+      <li><strong>Mascot integration:</strong> Concepts 2, 4, 5 include Maui directly in the logo</li>
+      <li><strong>Favicon:</strong> Gold "G" on maroon — recognizable at all sizes, uses the amber accent</li>
+      <li><strong>Teal accent:</strong> Concept 5 uses brand teal #4ECDC4 for the tagline as a secondary color pop</li>
+      <li><strong>Directory feel:</strong> All concepts prioritize warm, approachable over corporate/SaaS</li>
+    </ul>
+  </div>
+
+</body>
+</html>
