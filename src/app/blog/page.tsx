@@ -35,7 +35,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <div className="inline-flex items-center gap-2 bg-brand-accent/15 border border-brand-accent/30 rounded-full px-4 py-1.5 text-sm text-brand-accent font-semibold mb-6">
             <BookOpen weight="fill" className="w-4 h-4 text-brand-secondary" />
-            The GroomHub Blog
+            The GroomLocal Blog
           </div>
           <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4 text-brand-primary">
             Tips, Trends & <span className="text-brand-secondary">Tail Wags</span>

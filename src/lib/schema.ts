@@ -6,7 +6,7 @@ export function localBusinessSchema(listing: NormalizedListing) {
   return {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "@id": `https://groomhub.com/groomer/${listing.slug}`,
+    "@id": `https://groomlocal.com/groomer/${listing.slug}`,
     name: listing.name,
     description: listing.short_description || listing.description,
     address: {
@@ -59,7 +59,7 @@ export function breadcrumbSchema(
       "@type": "ListItem",
       position: i + 1,
       name: item.name,
-      item: `https://groomhub.com${item.href}`,
+      item: `https://groomlocal.com${item.href}`,
     })),
   };
 }
@@ -113,7 +113,7 @@ export function itemListSchema(
       item: {
         "@type": "LocalBusiness",
         name: listing.name,
-        url: `https://groomhub.com/groomer/${listing.slug}`,
+        url: `https://groomlocal.com/groomer/${listing.slug}`,
         ...(listing.rating > 0 && {
           aggregateRating: {
             "@type": "AggregateRating",
@@ -139,12 +139,12 @@ export function blogPostSchema(post: BlogPostFull) {
     },
     publisher: {
       "@type": "Organization",
-      name: "GroomHub",
-      url: "https://groomhub.com",
+      name: "GroomLocal",
+      url: "https://groomlocal.com",
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://groomhub.com/blog/${post.slug}`,
+      "@id": `https://groomlocal.com/blog/${post.slug}`,
     },
     ...(post.image && { image: post.image }),
   };

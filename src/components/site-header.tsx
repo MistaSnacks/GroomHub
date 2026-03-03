@@ -67,11 +67,11 @@ export function SiteHeader() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="flex h-10 w-10 items-center justify-center rounded-full overflow-hidden border-[2.5px] border-brand-secondary flex-shrink-0 transition-transform group-hover:scale-105">
-              <Image src="/maui-logo.svg" alt="GroomHub mascot Maui" width={40} height={40} className="h-full w-full object-cover" />
+              <Image src="/maui-logo.svg" alt="GroomLocal mascot Maui" width={40} height={40} className="h-full w-full object-cover" />
             </div>
             <div className="flex flex-col">
               <span className="font-heading text-xl font-bold text-brand-primary leading-tight" style={{ letterSpacing: "-0.02em" }}>
-                GroomHub
+                GroomLocal
               </span>
               <span className="text-[9px] leading-none tracking-[2px] uppercase font-medium" style={{ color: "#956A46" }}>
                 Pet Grooming Directory

@@ -19,7 +19,7 @@ export default async function AccountPage() {
         <h1 className="font-heading text-3xl font-bold text-brand-primary mb-2">
           Account
         </h1>
-        <p className="text-text-muted">Manage your GroomHub account settings.</p>
+        <p className="text-text-muted">Manage your GroomLocal account settings.</p>
       </div>
 
       <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden max-w-2xl">

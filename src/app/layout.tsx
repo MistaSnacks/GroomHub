@@ -17,10 +17,10 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://groomhub.com"),
+  metadataBase: new URL("https://groomlocal.com"),
   title: {
-    default: "GroomHub | Find Dog Groomers in the PNW",
-    template: "%s | GroomHub",
+    default: "GroomLocal | Find Dog Groomers in the PNW",
+    template: "%s | GroomLocal",
   },
   description:
     "Find the pawfect dog groomer in Seattle, Tacoma, Portland & the Pacific Northwest. Verified listings, real reviews, and instant booking.",
@@ -34,17 +34,17 @@ export const metadata: Metadata = {
     "PNW pet services",
   ],
   openGraph: {
-    title: "GroomHub | Find Dog Groomers in the PNW",
+    title: "GroomLocal | Find Dog Groomers in the PNW",
     description:
       "Find the pawfect dog groomer in Seattle, Tacoma, Portland & the Pacific Northwest.",
     type: "website",
     locale: "en_US",
-    siteName: "GroomHub",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "GroomHub" }],
+    siteName: "GroomLocal",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "GroomLocal" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "GroomHub | Find Dog Groomers in the PNW",
+    title: "GroomLocal | Find Dog Groomers in the PNW",
     description:
       "Find the pawfect dog groomer in Seattle, Tacoma, Portland & the Pacific Northwest.",
     images: ["/og-image.png"],

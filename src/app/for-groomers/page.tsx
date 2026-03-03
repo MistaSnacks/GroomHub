@@ -139,7 +139,7 @@ export default function ForGroomersPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <p className="text-xs font-semibold uppercase tracking-widest text-brand-accent mb-2">
-              Why GroomHub
+              Why GroomLocal
             </p>
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-brand-primary mb-2">
               Everything you need to grow

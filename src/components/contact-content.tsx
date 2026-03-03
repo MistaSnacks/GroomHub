@@ -106,8 +106,8 @@ export function ContactContent() {
                   </div>
                   <h3 className="font-heading font-bold text-brand-primary">Email Us</h3>
                 </div>
-                <a href="mailto:hello@groomhub.com" className="text-sm text-brand-accent hover:underline">
-                  hello@groomhub.com
+                <a href="mailto:hello@groomlocal.com" className="text-sm text-brand-accent hover:underline">
+                  hello@groomlocal.com
                 </a>
               </div>
 

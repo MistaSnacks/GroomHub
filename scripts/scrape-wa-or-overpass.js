@@ -109,7 +109,7 @@ function postOverpass(query, endpointUrl) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "Content-Length": Buffer.byteLength(body),
-        "User-Agent": "GroomHubScraper/1.0",
+        "User-Agent": "GroomLocalScraper/1.0",
       },
     };
 

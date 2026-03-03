@@ -3,9 +3,9 @@ import Link from "next/link";
 import { WaveDivider } from "@/components/wave-divider";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | GroomHub Directory",
+  title: "Terms of Service | GroomLocal Directory",
   description:
-    "Review the terms and conditions for using the GroomHub pet grooming directory.",
+    "Review the terms and conditions for using the GroomLocal pet grooming directory.",
 };
 
 export default function TermsPage() {
@@ -22,7 +22,7 @@ export default function TermsPage() {
               Terms of Service
             </h1>
             <p className="text-lg md:text-xl text-text-muted">
-              The rules of the road for using GroomHub.
+              The rules of the road for using GroomLocal.
             </p>
           </div>
         </div>
@@ -45,7 +45,7 @@ export default function TermsPage() {
                 1. Acceptance of Terms
               </h2>
               <p className="text-text-muted leading-relaxed">
-                By accessing or using GroomHub (&ldquo;the Site&rdquo;), you
+                By accessing or using GroomLocal (&ldquo;the Site&rdquo;), you
                 agree to be bound by these Terms of Service. If you do not agree
                 with any part of these terms, you may not use the Site. We
                 reserve the right to update these terms at any time, and your
@@ -58,10 +58,10 @@ export default function TermsPage() {
                 2. Description of Service
               </h2>
               <p className="text-text-muted leading-relaxed">
-                GroomHub is a pet grooming directory serving the Pacific
+                GroomLocal is a pet grooming directory serving the Pacific
                 Northwest. We provide a platform for pet parents to discover and
                 compare grooming businesses, and for grooming businesses to
-                manage their public profiles. GroomHub does not directly provide
+                manage their public profiles. GroomLocal does not directly provide
                 grooming services and is not a party to any transaction between
                 pet parents and groomers.
               </p>
@@ -111,7 +111,7 @@ export default function TermsPage() {
                 </li>
               </ul>
               <p className="text-text-muted leading-relaxed mt-3">
-                GroomHub reserves the right to verify ownership claims and
+                GroomLocal reserves the right to verify ownership claims and
                 remove or suspend listings that violate these terms.
               </p>
             </div>
@@ -149,13 +149,13 @@ export default function TermsPage() {
                 6. Content &amp; Intellectual Property
               </h2>
               <p className="text-text-muted leading-relaxed mb-3">
-                All original content on GroomHub &mdash; including text, design,
+                All original content on GroomLocal &mdash; including text, design,
                 graphics, logos, and the Maui mascot &mdash; is owned by
-                GroomHub and protected by applicable intellectual property laws.
+                GroomLocal and protected by applicable intellectual property laws.
               </p>
               <p className="text-text-muted leading-relaxed">
                 Business owners retain ownership of content they submit
-                (photos, descriptions, etc.) but grant GroomHub a non-exclusive,
+                (photos, descriptions, etc.) but grant GroomLocal a non-exclusive,
                 royalty-free license to display that content on the Site for the
                 purpose of operating the directory.
               </p>
@@ -166,7 +166,7 @@ export default function TermsPage() {
                 7. Paid Plans &amp; Subscriptions
               </h2>
               <p className="text-text-muted leading-relaxed">
-                GroomHub may offer paid subscription tiers for enhanced business
+                GroomLocal may offer paid subscription tiers for enhanced business
                 listings. If you purchase a paid plan, you agree to the pricing
                 and billing terms presented at the time of purchase. All fees
                 are non-refundable unless otherwise stated. We reserve the right
@@ -179,7 +179,7 @@ export default function TermsPage() {
                 8. Disclaimer of Warranties
               </h2>
               <p className="text-text-muted leading-relaxed">
-                GroomHub is provided &ldquo;as is&rdquo; and &ldquo;as
+                GroomLocal is provided &ldquo;as is&rdquo; and &ldquo;as
                 available&rdquo; without warranties of any kind, express or
                 implied. We do not guarantee the accuracy, completeness, or
                 reliability of any listing information. We are not responsible
@@ -194,7 +194,7 @@ export default function TermsPage() {
                 9. Limitation of Liability
               </h2>
               <p className="text-text-muted leading-relaxed">
-                To the fullest extent permitted by law, GroomHub and its
+                To the fullest extent permitted by law, GroomLocal and its
                 operators shall not be liable for any indirect, incidental,
                 special, consequential, or punitive damages arising from your
                 use of the Site, any interactions with businesses found through
@@ -236,10 +236,10 @@ export default function TermsPage() {
               <p className="text-text-muted leading-relaxed mt-2">
                 Email:{" "}
                 <a
-                  href="mailto:hello@groomhub.com"
+                  href="mailto:hello@groomlocal.com"
                   className="text-brand-accent hover:underline"
                 >
-                  hello@groomhub.com
+                  hello@groomlocal.com
                 </a>
                 <br />
                 Or visit our{" "}

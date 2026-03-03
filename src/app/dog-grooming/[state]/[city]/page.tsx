@@ -113,7 +113,7 @@ export default async function CityPage({ params }: CityPageProps) {
             </h2>
             <p className="text-text-muted text-sm leading-relaxed">
               Finding a reliable, skilled dog groomer in {cityName} doesn&apos;t have to be stressful.
-              GroomHub has verified and reviewed all listings in our directory so you can book with confidence.
+              GroomLocal has verified and reviewed all listings in our directory so you can book with confidence.
               Whether you&apos;re looking for a quick nail trim, a full breed-specific haircut, or a mobile groomer
               who comes to your door, we have options for every need and budget in the {cityName}, {stateName} area.
             </p>

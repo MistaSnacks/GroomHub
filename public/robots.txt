@@ -1,4 +1,4 @@
-# GroomHub - robots.txt
+# GroomLocal - robots.txt
 
 User-agent: *
 Allow: /
@@ -18,4 +18,4 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-Sitemap: https://groomhub.com/sitemap.xml
+Sitemap: https://groomlocal.com/sitemap.xml

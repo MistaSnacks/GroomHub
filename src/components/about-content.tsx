@@ -43,7 +43,7 @@ export function AboutContent() {
               <span className="text-brand-secondary italic">for pet parents.</span>
             </motion.h1>
             <motion.p variants={itemVariants} className="text-lg md:text-xl text-text-muted">
-              We started GroomHub with a simple mission: make finding a great groomer in the Pacific Northwest as easy as a belly rub.
+              We started GroomLocal with a simple mission: make finding a great groomer in the Pacific Northwest as easy as a belly rub.
             </motion.p>
           </motion.div>
         </div>
@@ -76,7 +76,7 @@ export function AboutContent() {
                 After one too many mismatched grooming experiences, we realized the PNW needed a better way to find and compare pet groomers. Not another generic directory &mdash; a curated, pet-first resource built by people who actually care.
               </p>
               <p className="text-text-muted text-lg leading-relaxed mb-8">
-                Today, GroomHub helps thousands of pet parents across Washington and Oregon discover verified groomers who truly love what they do.
+                Today, GroomLocal helps thousands of pet parents across Washington and Oregon discover verified groomers who truly love what they do.
               </p>
 
               {/* Stats */}

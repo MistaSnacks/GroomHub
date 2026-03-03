@@ -1,21 +1,21 @@
-# GroomHub
+# GroomLocal
 
 > The Pacific Northwest's most comprehensive dog grooming directory. Find verified groomers in Washington and Oregon.
 
 ## About
 
-GroomHub helps pet owners find trusted, verified dog groomers across the Pacific Northwest. We cover 1,000+ grooming businesses in 109 cities across Washington and Oregon.
+GroomLocal helps pet owners find trusted, verified dog groomers across the Pacific Northwest. We cover 1,000+ grooming businesses in 109 cities across Washington and Oregon.
 
 ## Key Pages
 
-- Homepage: https://groomhub.com/
-- Browse All Cities: https://groomhub.com/dog-grooming
-- Washington Groomers: https://groomhub.com/dog-grooming/wa
-- Oregon Groomers: https://groomhub.com/dog-grooming/or
-- All Services: https://groomhub.com/services
-- All Specialties: https://groomhub.com/specialties
-- Cat Grooming: https://groomhub.com/cat-grooming
-- Mobile Grooming: https://groomhub.com/mobile-grooming
+- Homepage: https://groomlocal.com/
+- Browse All Cities: https://groomlocal.com/dog-grooming
+- Washington Groomers: https://groomlocal.com/dog-grooming/wa
+- Oregon Groomers: https://groomlocal.com/dog-grooming/or
+- All Services: https://groomlocal.com/services
+- All Specialties: https://groomlocal.com/specialties
+- Cat Grooming: https://groomlocal.com/cat-grooming
+- Mobile Grooming: https://groomlocal.com/mobile-grooming
 
 ## Services Offered by Listed Groomers
 
@@ -71,5 +71,5 @@ Grooming businesses can list for free or upgrade to paid tiers for enhanced visi
 
 ## Contact
 
-- Website: https://groomhub.com
-- Email: hello@groomhub.com
+- Website: https://groomlocal.com
+- Email: hello@groomlocal.com

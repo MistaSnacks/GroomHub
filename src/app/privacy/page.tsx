@@ -3,9 +3,9 @@ import Link from "next/link";
 import { WaveDivider } from "@/components/wave-divider";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | GroomHub Directory",
+  title: "Privacy Policy | GroomLocal Directory",
   description:
-    "Learn how GroomHub collects, uses, and protects your personal information.",
+    "Learn how GroomLocal collects, uses, and protects your personal information.",
 };
 
 export default function PrivacyPage() {
@@ -46,7 +46,7 @@ export default function PrivacyPage() {
                 1. Information We Collect
               </h2>
               <p className="text-text-muted leading-relaxed mb-3">
-                We collect information you provide directly when using GroomHub,
+                We collect information you provide directly when using GroomLocal,
                 including:
               </p>
               <ul className="list-disc pl-6 space-y-2 text-text-muted">
@@ -174,10 +174,10 @@ export default function PrivacyPage() {
               <p className="text-text-muted leading-relaxed mt-3">
                 To exercise any of these rights, please contact us at{" "}
                 <a
-                  href="mailto:hello@groomhub.com"
+                  href="mailto:hello@groomlocal.com"
                   className="text-brand-accent hover:underline"
                 >
-                  hello@groomhub.com
+                  hello@groomlocal.com
                 </a>
                 .
               </p>
@@ -200,7 +200,7 @@ export default function PrivacyPage() {
                 8. Children&apos;s Privacy
               </h2>
               <p className="text-text-muted leading-relaxed">
-                GroomHub is not directed at children under the age of 13. We do
+                GroomLocal is not directed at children under the age of 13. We do
                 not knowingly collect personal information from children. If you
                 believe a child has provided us with personal information, please
                 contact us and we will promptly remove it.
@@ -214,7 +214,7 @@ export default function PrivacyPage() {
               <p className="text-text-muted leading-relaxed">
                 We may update this Privacy Policy from time to time. Changes
                 will be posted on this page with an updated effective date. Your
-                continued use of GroomHub after changes constitutes acceptance of
+                continued use of GroomLocal after changes constitutes acceptance of
                 the revised policy.
               </p>
             </div>
@@ -230,10 +230,10 @@ export default function PrivacyPage() {
               <p className="text-text-muted leading-relaxed mt-2">
                 Email:{" "}
                 <a
-                  href="mailto:hello@groomhub.com"
+                  href="mailto:hello@groomlocal.com"
                   className="text-brand-accent hover:underline"
                 >
-                  hello@groomhub.com
+                  hello@groomlocal.com
                 </a>
                 <br />
                 Or visit our{" "}

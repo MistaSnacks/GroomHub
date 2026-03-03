@@ -3,7 +3,7 @@ import { getCities, getAllListings } from "@/lib/supabase/queries";
 import { SERVICE_TAGS, SPECIALTY_TAGS } from "@/lib/tags";
 import { STATES, stateSlugFromAbbr } from "@/lib/geography";
 
-const BASE_URL = "https://groomhub.com";
+const BASE_URL = "https://groomlocal.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [cities, listings] = await Promise.all([getCities(), getAllListings()]);

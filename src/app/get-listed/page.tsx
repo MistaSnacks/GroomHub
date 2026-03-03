@@ -6,7 +6,7 @@ import { WaveDivider } from "@/components/wave-divider";
 export const metadata: Metadata = {
   title: "Get Listed — Add Your Grooming Business",
   description:
-    "Not in our directory yet? Submit your grooming business to GroomHub and start connecting with local pet parents across the PNW.",
+    "Not in our directory yet? Submit your grooming business to GroomLocal and start connecting with local pet parents across the PNW.",
 };
 
 export default function GetListedPage() {
@@ -46,7 +46,7 @@ export default function GetListedPage() {
                 Submit your business
               </h2>
               <form
-                action="mailto:hello@groomhub.com"
+                action="mailto:hello@groomlocal.com"
                 method="GET"
                 className="space-y-5"
               >
@@ -137,8 +137,8 @@ export default function GetListedPage() {
                 <p className="text-sm text-text-muted mb-2">
                   Reach us anytime at:
                 </p>
-                <a href="mailto:hello@groomhub.com" className="text-sm text-brand-accent hover:underline">
-                  hello@groomhub.com
+                <a href="mailto:hello@groomlocal.com" className="text-sm text-brand-accent hover:underline">
+                  hello@groomlocal.com
                 </a>
               </div>
 
