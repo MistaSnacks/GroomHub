@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fredoka, Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -63,6 +64,7 @@ export default function RootLayout({
         <SiteHeader />
         <main className="flex-1 flex flex-col">{children}</main>
         <SiteFooter />
+        <Analytics />
       </body>
     </html>
   );
