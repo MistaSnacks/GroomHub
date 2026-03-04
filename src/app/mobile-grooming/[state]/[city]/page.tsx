@@ -13,13 +13,25 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { state, city } = await params;
-  const cityData = await getCityBySlug(city);
+  const cityData = await getCityBySlug(city, stateAbbrFromSlug(state));
   const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
+
+  const ogImage = `/api/og/city?city=${encodeURIComponent(city)}&state=${encodeURIComponent(state)}&service=mobile`;
 
   return {
     title: `Mobile Dog Groomers in ${cityName}, ${stateAbbrFromSlug(state)}`,
     description: `Find mobile dog groomers in ${cityName}. Convenient at-home grooming with fully equipped vans.`,
     alternates: { canonical: `/mobile-grooming/${state}/${city}` },
+    openGraph: {
+      title: `Mobile Dog Groomers in ${cityName}, ${stateAbbrFromSlug(state)}`,
+      description: `Find mobile dog groomers in ${cityName}. Convenient at-home grooming with fully equipped vans.`,
+      images: [{ url: ogImage, width: 1200, height: 630, alt: `Mobile groomers in ${cityName}` }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Mobile Dog Groomers in ${cityName}, ${stateAbbrFromSlug(state)}`,
+      images: [ogImage],
+    },
   };
 }
 
@@ -28,7 +40,7 @@ export default async function MobileGroomingCityPage({ params }: Props) {
   const stateAbbr = stateAbbrFromSlug(state);
   const [listings, cityData] = await Promise.all([
     getListingsByServiceTag("mobile-grooming", city, stateAbbr),
-    getCityBySlug(city),
+    getCityBySlug(city, stateAbbr),
   ]);
   const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
 

@@ -2,8 +2,16 @@
 
 import { motion, Variants } from "framer-motion";
 import { MauiMascot } from "./maui-mascot";
-import { PawPrint, Heart, Star, Leaf, Users } from "@phosphor-icons/react";
+import { Heart, Star, Leaf, Users } from "@phosphor-icons/react";
 import { WaveDivider } from "./wave-divider";
+
+interface AboutContentProps {
+  metrics: {
+    totalGroomers: number;
+    citiesCovered: number;
+    statesCovered: number;
+  };
+}
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -22,7 +30,7 @@ const itemVariants: Variants = {
   },
 };
 
-export function AboutContent() {
+export function AboutContent({ metrics }: AboutContentProps) {
   return (
     <div className="min-h-screen text-brand-primary overflow-hidden">
 
@@ -82,15 +90,21 @@ export function AboutContent() {
               {/* Stats */}
               <div className="grid grid-cols-3 gap-4">
                 <div className="text-center">
-                  <p className="font-heading text-3xl md:text-4xl font-bold text-brand-primary">262+</p>
+                  <p className="font-heading text-3xl md:text-4xl font-bold text-brand-primary">
+                    {metrics.totalGroomers.toLocaleString()}+
+                  </p>
                   <p className="text-sm text-text-muted">Groomers Listed</p>
                 </div>
                 <div className="text-center">
-                  <p className="font-heading text-3xl md:text-4xl font-bold text-brand-primary">109</p>
+                  <p className="font-heading text-3xl md:text-4xl font-bold text-brand-primary">
+                    {metrics.citiesCovered.toLocaleString()}
+                  </p>
                   <p className="text-sm text-text-muted">Cities Covered</p>
                 </div>
                 <div className="text-center">
-                  <p className="font-heading text-3xl md:text-4xl font-bold text-brand-primary">2</p>
+                  <p className="font-heading text-3xl md:text-4xl font-bold text-brand-primary">
+                    {metrics.statesCovered}
+                  </p>
                   <p className="text-sm text-text-muted">States</p>
                 </div>
               </div>

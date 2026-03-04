@@ -1,5 +1,13 @@
 const fs = require('fs');
 
+function plainSlug(slug) {
+    return String(slug).replace(/-(wa|or)$/i, '');
+}
+
+function stateAwareCitySlug(citySlug, state) {
+    return `${plainSlug(citySlug)}-${String(state).toLowerCase()}`;
+}
+
 async function generateSqls() {
     const dataRaw = fs.readFileSync('./data/groomers_enriched.json', 'utf8');
     const records = JSON.parse(dataRaw);
@@ -10,8 +18,9 @@ async function generateSqls() {
         if (!record.city) continue;
         const citySlug = record.city_slug || record.city.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
         const state = record.state || 'WA';
-        uniqueCitiesMap.set(citySlug, {
-            slug: citySlug, name: record.city, state: state, state_abbr: state, groomer_count: 0, image: '', description: ''
+        const cityRecordSlug = stateAwareCitySlug(citySlug, state);
+        uniqueCitiesMap.set(cityRecordSlug, {
+            slug: cityRecordSlug, name: record.city, state: state, state_abbr: state, groomer_count: 0, image: '', description: ''
         });
         record.city_slug = citySlug;
     }

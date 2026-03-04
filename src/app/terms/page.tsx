@@ -3,7 +3,7 @@ import Link from "next/link";
 import { WaveDivider } from "@/components/wave-divider";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | GroomLocal Directory",
+  title: "Terms of Service",
   description:
     "Review the terms and conditions for using the GroomLocal pet grooming directory.",
 };

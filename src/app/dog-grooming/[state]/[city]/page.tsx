@@ -13,14 +13,33 @@ interface CityPageProps {
 
 export async function generateMetadata({ params }: CityPageProps): Promise<Metadata> {
   const { state, city } = await params;
-  const cityData = await getCityBySlug(city);
+  const stateAbbr = stateAbbrFromSlug(state);
+  const cityData = await getCityBySlug(city, stateAbbr);
   const stateName = stateNameFromSlug(state);
   const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
 
+  const title = `Dog Groomers in ${cityName}, ${stateAbbr} — Best Local Groomers`;
+  const description = `Find the best dog groomers in ${cityName}, ${stateName}. Browse ${cityData?.groomer_count ? cityData.groomer_count + " " : ""}verified groomers with reviews, pricing, and services.`;
+  const ogImage = `/api/og/city?city=${encodeURIComponent(city)}&state=${encodeURIComponent(state)}`;
+
   return {
-    title: `Dog Groomers in ${cityName}, ${stateAbbrFromSlug(state)} — Best Local Groomers`,
-    description: `Find the best dog groomers in ${cityName}, ${stateName}. Browse ${cityData?.groomer_count ? cityData.groomer_count + " " : ""}verified groomers with reviews, pricing, and services.`,
+    title,
+    description,
     alternates: { canonical: `/dog-grooming/${state}/${city}` },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `/dog-grooming/${state}/${city}`,
+      siteName: "GroomLocal",
+      images: [{ url: ogImage, width: 1200, height: 630, alt: `Dog Grooming in ${cityName}, ${stateAbbr}` }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
+    },
   };
 }
 
@@ -30,8 +49,8 @@ export default async function CityPage({ params }: CityPageProps) {
   const stateName = stateNameFromSlug(state);
 
   const [listings, cityData, relatedCities] = await Promise.all([
-    getListingsByCity(city),
-    getCityBySlug(city),
+    getListingsByCity(city, stateAbbr),
+    getCityBySlug(city, stateAbbr),
     getCitiesByState(stateAbbr),
   ]);
 

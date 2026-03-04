@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { MDXRemote } from "next-mdx-remote/rsc";
 import { CaretRight, CalendarBlank, Clock, Tag } from "@phosphor-icons/react/dist/ssr";
 import {
   getBlogPostBySlug,
@@ -14,6 +15,7 @@ import { AuthorBio } from "@/components/author-bio";
 import { AdSlot } from "@/components/ad-slot";
 import { WaveDivider } from "@/components/wave-divider";
 import { AnimatedSection, AnimatedItem } from "@/components/animated-section";
+import { mdxComponents } from "@/components/mdx-components";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -28,9 +30,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = getBlogPostBySlug(slug);
   if (!post) return {};
 
+  const ogImage = post.image || "/og-image.png";
+
   return {
     title: post.title,
     description: post.excerpt,
+    alternates: {
+      canonical: `/blog/${post.slug}`,
+    },
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      type: "article",
+      publishedTime: post.date,
+      authors: [post.author.name],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: post.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+      images: [ogImage],
+    },
   };
 }
 
@@ -66,82 +87,69 @@ export default async function BlogArticlePage({ params }: Props) {
       />
 
       {/* Hero */}
-      <section className="bg-brand-secondary py-12 md:py-16 relative overflow-hidden">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 relative z-10">
-          <nav className="flex flex-wrap items-center gap-1.5 text-xs text-slate-700 mb-5 font-semibold tracking-wide">
-            <Link href="/" className="hover:text-slate-900 transition-colors">Home</Link>
-            <CaretRight weight="bold" className="w-3 h-3 text-slate-500" />
-            <Link href="/blog" className="hover:text-slate-900 transition-colors">Blog</Link>
-            <CaretRight weight="bold" className="w-3 h-3 text-slate-500" />
-            <span className="text-slate-900 truncate max-w-[200px]">{post.title}</span>
-          </nav>
+      <section className="bg-brand-secondary py-12 md:py-16 md:pb-0 relative overflow-hidden">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            {/* Text Content */}
+            <div className="md:pb-16">
+              <nav className="flex flex-wrap items-center gap-1.5 text-xs text-slate-700 mb-5 font-semibold tracking-wide">
+                <Link href="/" className="hover:text-slate-900 transition-colors">Home</Link>
+                <CaretRight weight="bold" className="w-3 h-3 text-slate-500" />
+                <Link href="/blog" className="hover:text-slate-900 transition-colors">Blog</Link>
+                <CaretRight weight="bold" className="w-3 h-3 text-slate-500" />
+                <span className="text-slate-900 truncate max-w-[200px]">{post.title}</span>
+              </nav>
 
-          <span className="inline-block text-xs font-semibold text-slate-800 bg-white/20 rounded-full px-3 py-1 mb-4">
-            {categoryLabel}
-          </span>
+              <span className="inline-block text-xs font-semibold text-slate-800 bg-white/20 rounded-full px-3 py-1 mb-4">
+                {categoryLabel}
+              </span>
 
-          <h1 className="font-heading text-3xl md:text-5xl font-bold !text-slate-900 mb-4 leading-tight">
-            {post.title}
-          </h1>
+              <h1 className="font-heading text-3xl md:text-5xl font-bold !text-slate-900 mb-4 leading-tight">
+                {post.title}
+              </h1>
 
-          <div className="flex flex-wrap items-center gap-4 text-sm text-slate-600">
-            <span className="flex items-center gap-1.5">
-              <CalendarBlank weight="bold" className="w-4 h-4" />
-              {new Date(post.date).toLocaleDateString("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })}
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Clock weight="bold" className="w-4 h-4" />
-              {post.readTime}
-            </span>
-            <span className="text-slate-800 font-medium">
-              By {post.author.name}
-            </span>
+              <div className="flex flex-wrap items-center gap-4 text-sm text-slate-600">
+                <span className="flex items-center gap-1.5">
+                  <CalendarBlank weight="bold" className="w-4 h-4" />
+                  {new Date(post.date).toLocaleDateString("en-US", {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Clock weight="bold" className="w-4 h-4" />
+                  {post.readTime}
+                </span>
+                <span className="text-slate-800 font-medium">
+                  By {post.author.name}
+                </span>
+              </div>
+            </div>
+
+            {/* Image Content */}
+            {post.image && (
+              <div className="flex justify-center md:justify-end items-end h-full relative" style={{ minHeight: '300px' }}>
+                <img
+                  src={post.image}
+                  alt={post.title}
+                  className="w-[280px] sm:w-[350px] md:w-[450px] object-contain drop-shadow-xl z-20 absolute bottom-0 right-0 transform translate-y-[20px] md:translate-y-[40px]"
+                />
+              </div>
+            )}
           </div>
         </div>
       </section>
 
-      <WaveDivider variant="gentle" fromColor="#4ECDC4" toColor="#FFFFFF" />
+      <div className="relative z-0">
+        <WaveDivider variant="gentle" fromColor="#4ECDC4" toColor="#FFFFFF" />
+      </div>
 
       {/* Article Body */}
       <article className="bg-white py-10 flex-1">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="prose-custom space-y-6">
-            {post.content.map((block, i) => {
-              if (block.type === "heading") {
-                return (
-                  <h2
-                    key={i}
-                    className="font-heading text-xl md:text-2xl font-bold text-brand-primary mt-8 mb-3"
-                  >
-                    {block.text}
-                  </h2>
-                );
-              }
-              if (block.type === "callout") {
-                return (
-                  <div
-                    key={i}
-                    className="rounded-2xl bg-brand-accent/5 border border-brand-accent/20 p-5 md:p-6"
-                  >
-                    <p className="text-sm text-brand-primary leading-relaxed font-medium">
-                      {block.text}
-                    </p>
-                  </div>
-                );
-              }
-              return (
-                <p
-                  key={i}
-                  className="text-text-muted leading-relaxed"
-                >
-                  {block.text}
-                </p>
-              );
-            })}
+            <MDXRemote source={post.content} components={mdxComponents} />
           </div>
 
           {/* Tags */}

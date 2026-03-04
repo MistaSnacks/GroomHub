@@ -4,7 +4,8 @@ import React, { useState, useMemo, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { ListingCard } from "./listing-card";
 import { TagFilterBar } from "./tag-filter-bar";
-import { PawPrint } from "@phosphor-icons/react/dist/ssr";
+import { PawPrint, ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
 import { AdSlot } from "./ad-slot";
 import type { NormalizedListing } from "@/lib/types";
 import type { PriceTag } from "@/lib/tags";
@@ -192,6 +193,30 @@ export function CityListingsClient({
             />
             <p className="font-heading text-lg">No groomers match your filters</p>
             <p className="text-sm mt-1">Try adjusting your filters above</p>
+
+            <div className="mt-8 pt-8 border-t border-border max-w-md mx-auto">
+              <p className="font-heading text-base font-semibold text-brand-primary mb-1">
+                Are you a groomer in this area?
+              </p>
+              <p className="text-sm text-text-muted mb-4">
+                Get your business listed for free and start connecting with local pet parents.
+              </p>
+              <div className="flex items-center justify-center gap-3">
+                <Link
+                  href="/get-listed"
+                  className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-brand-primary text-white text-sm font-semibold hover:bg-brand-primary/90 transition-colors"
+                >
+                  Get Listed Free
+                  <ArrowRight weight="bold" className="w-3.5 h-3.5" />
+                </Link>
+                <Link
+                  href="/for-groomers"
+                  className="inline-flex items-center px-5 py-2.5 rounded-full border border-border text-sm font-semibold text-brand-primary hover:bg-surface transition-colors"
+                >
+                  Learn More
+                </Link>
+              </div>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

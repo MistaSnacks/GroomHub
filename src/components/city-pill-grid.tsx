@@ -14,6 +14,7 @@ interface CityPillGridProps {
   cardBg: string;
   badgeBg: string;
   totalGroomers: number;
+  uncategorizedGroomers?: number;
   initialLimit?: number;
   showSearch?: boolean;
   highlightSlugs?: string[];
@@ -29,6 +30,7 @@ export function CityPillGrid({
   cardBg,
   badgeBg,
   totalGroomers,
+  uncategorizedGroomers = 0,
   initialLimit = 20,
   showSearch = true,
   highlightSlugs,
@@ -47,7 +49,6 @@ export function CityPillGrid({
   const isSearching = query.trim().length > 0;
   const displayCities = isSearching || expanded ? filtered : filtered.slice(0, initialLimit);
   const hasMore = !isSearching && !expanded && filtered.length > initialLimit;
-  const remaining = filtered.length - initialLimit;
 
   return (
     <div className={`${cardBg} rounded-2xl p-6 md:p-8`}>
@@ -64,6 +65,7 @@ export function CityPillGrid({
           </h3>
           <p className="text-sm text-text-muted">
             {cities.length} cities &middot; {totalGroomers} groomers
+            {uncategorizedGroomers > 0 && ` · ${uncategorizedGroomers} unassigned`}
           </p>
         </div>
       </div>

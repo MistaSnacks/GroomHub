@@ -49,7 +49,7 @@ export default function PricingPage() {
           <nav className="flex items-center gap-1.5 text-xs text-brand-accent mb-5 font-semibold tracking-wide">
             <Link href="/" className="hover:text-brand-primary transition-colors">Home</Link>
             <CaretRight weight="bold" className="w-3 h-3 text-text-muted" />
-            <Link href="/for-groomers" className="hover:text-brand-primary transition-colors">For Groomers</Link>
+            <Link href="/get-listed" className="hover:text-brand-primary transition-colors">For Groomers</Link>
             <CaretRight weight="bold" className="w-3 h-3 text-text-muted" />
             <span className="text-brand-primary">Pricing</span>
           </nav>
@@ -171,7 +171,7 @@ export default function PricingPage() {
                     </ul>
 
                     <Link
-                      href="/for-groomers"
+                      href="/get-listed"
                       className={`block text-center rounded-full py-3 px-6 text-sm font-bold transition-all ${ctaBg}`}
                     >
                       {tier.ctaText}
@@ -229,7 +229,7 @@ export default function PricingPage() {
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
-              href="/for-groomers"
+              href="/get-listed"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-brand-primary text-white font-bold text-lg hover:bg-brand-primary/90 transition-all"
             >
               Start Free Today

@@ -22,7 +22,7 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
           <img
             src={post.image}
             alt={post.title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain p-4"
             loading="lazy"
           />
         ) : (

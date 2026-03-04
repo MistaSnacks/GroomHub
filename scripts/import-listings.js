@@ -43,6 +43,14 @@ const BLOCKED_NAME_PATTERNS = [
 // Max slug length (URLs get ugly beyond this)
 const MAX_SLUG_LENGTH = 80;
 
+function plainSlug(slug) {
+  return String(slug).replace(/-(wa|or)$/i, '');
+}
+
+function stateAwareCitySlug(citySlug, state) {
+  return `${plainSlug(citySlug)}-${String(state).toLowerCase()}`;
+}
+
 // ── SQL Parser ──────────────────────────────────────────────────────────
 
 function parseSqlFile(filePath) {
@@ -309,9 +317,13 @@ async function upsertCities(listings) {
   // Gather unique cities from listings
   const cityMap = new Map();
   for (const r of listings) {
-    if (!cityMap.has(r.city_slug)) {
-      cityMap.set(r.city_slug, {
-        slug: r.city_slug,
+    if (!r.city || r.city === 'Unknown' || !r.city_slug || r.city_slug === 'unknown') {
+      continue;
+    }
+    const cityRecordSlug = stateAwareCitySlug(r.city_slug, r.state);
+    if (!cityMap.has(cityRecordSlug)) {
+      cityMap.set(cityRecordSlug, {
+        slug: cityRecordSlug,
         name: r.city,
         state: r.state === 'WA' ? 'Washington' : r.state === 'OR' ? 'Oregon' : r.state,
         state_abbr: r.state,
@@ -346,7 +358,7 @@ async function upsertCities(listings) {
 
 async function upsertListings(listings) {
   // Check existing by slug to avoid true dupes
-  const existing = await getExisting('business_listings', 'slug,phone', `&state=eq.${listings[0]?.state || 'WA'}`);
+  const existing = await getExisting('business_listings', 'slug,phone,state');
   const existingSlugs = new Set(existing.map(r => r.slug));
   const existingPhones = new Set(existing.map(r => r.phone).filter(Boolean));
 

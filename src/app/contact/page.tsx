@@ -2,8 +2,8 @@ import { Metadata } from 'next';
 import { ContactContent } from '@/components/contact-content';
 
 export const metadata: Metadata = {
-    title: 'Contact Us | GroomLocal Directory',
-    description: 'Get in touch with GroomLocal support. We\'d love to hear from you!',
+    title: 'Contact Us',
+    description: 'Have a question about GroomLocal or need help with your listing? Reach out to our team — we\'re here to help pet parents and groomers across the PNW.',
 };
 
 export default function ContactPage() {

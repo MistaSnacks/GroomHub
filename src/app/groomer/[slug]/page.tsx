@@ -39,10 +39,28 @@ export async function generateMetadata({
   if (!listing) return { title: "Groomer Not Found" };
 
   const description = listing.short_description || listing.description;
+  const truncatedDesc = description.length > 155 ? description.slice(0, 152) + "..." : description;
+  const title = `${listing.name} — Dog Grooming in ${listing.city}, ${listing.state}`;
+  const ogImage = `/api/og/groomer?slug=${encodeURIComponent(slug)}`;
+
   return {
-    title: `${listing.name} — Dog Grooming in ${listing.city}, ${listing.state}`,
-    description: description.length > 155 ? description.slice(0, 152) + "..." : description,
+    title,
+    description: truncatedDesc,
     alternates: { canonical: `/groomer/${slug}` },
+    openGraph: {
+      title,
+      description: truncatedDesc,
+      type: "website",
+      url: `/groomer/${slug}`,
+      siteName: "GroomLocal",
+      images: [{ url: ogImage, width: 1200, height: 630, alt: listing.name }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: truncatedDesc,
+      images: [ogImage],
+    },
   };
 }
 
@@ -54,7 +72,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
     notFound();
   }
 
-  const similarListings = await getListingsByCity(listing.city_slug);
+  const similarListings = await getListingsByCity(listing.city_slug, listing.state);
   const similar = similarListings.filter((l) => l.slug !== listing.slug).slice(0, 2);
   const stateSlug = stateSlugFromAbbr(listing.state);
   const stateName = stateNameFromAbbr(listing.state);
@@ -142,13 +160,18 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                   <MapPin weight="fill" className="h-4 w-4" />
                   {listing.address}, {listing.city}, {listing.state} {listing.zip}
                 </span>
-                {listing.phone && (
+                {listing.phone ? (
                   <a href={`tel:${listing.phone}`} className="flex items-center gap-1.5 hover:text-brand-primary transition-colors">
                     <Phone weight="fill" className="h-4 w-4" />
                     {listing.phone}
                   </a>
+                ) : (
+                  <span className="flex items-center gap-1.5 text-text-muted/50">
+                    <Phone weight="fill" className="h-4 w-4" />
+                    Phone not listed
+                  </span>
                 )}
-                {listing.website && (
+                {listing.website ? (
                   <a
                     href={listing.website}
                     target="_blank"
@@ -159,17 +182,29 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                     Website
                     <ArrowSquareOut weight="bold" className="h-3 w-3" />
                   </a>
+                ) : (
+                  <span className="flex items-center gap-1.5 text-text-muted/50">
+                    <Globe weight="bold" className="h-4 w-4" />
+                    Website not available
+                  </span>
                 )}
               </div>
 
-              {/* Claim CTA */}
-              <Link
-                href={`/claim/${listing.slug}`}
-                className="inline-flex items-center gap-1.5 text-xs text-text-muted hover:text-brand-primary transition-colors"
-              >
-                <ShieldCheck weight="duotone" className="w-3.5 h-3.5" />
-                Is this your business? Claim this listing
-              </Link>
+              {/* Claim CTA — only show if unclaimed */}
+              {!listing.owner_id ? (
+                <Link
+                  href={`/claim/${listing.slug}`}
+                  className="inline-flex items-center gap-1.5 text-xs text-text-muted hover:text-brand-primary transition-colors"
+                >
+                  <ShieldCheck weight="duotone" className="w-3.5 h-3.5" />
+                  Is this your business? Claim this listing
+                </Link>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 text-xs text-brand-secondary font-medium">
+                  <ShieldCheck weight="fill" className="w-3.5 h-3.5" />
+                  Verified owner
+                </span>
+              )}
             </div>
 
             {/* Gallery */}
@@ -359,18 +394,28 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                     <MapPin weight="fill" className="w-4 h-4 shrink-0 mt-0.5 text-brand-secondary" />
                     {listing.address}<br />{listing.city}, {listing.state} {listing.zip}
                   </p>
-                  {listing.phone && (
+                  {listing.phone ? (
                     <p className="flex items-center gap-2">
                       <Phone weight="fill" className="w-4 h-4 shrink-0" />
                       <a href={`tel:${listing.phone}`} className="hover:text-brand-primary transition-colors">{listing.phone}</a>
                     </p>
+                  ) : (
+                    <p className="flex items-center gap-2 text-text-muted/50">
+                      <Phone weight="fill" className="w-4 h-4 shrink-0" />
+                      Phone not listed
+                    </p>
                   )}
-                  {listing.website && (
+                  {listing.website ? (
                     <p className="flex items-center gap-2">
                       <Globe weight="bold" className="w-4 h-4 shrink-0" />
                       <a href={listing.website} target="_blank" rel="noopener noreferrer" className="text-brand-accent hover:underline truncate">
                         {listing.website.replace(/https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
                       </a>
+                    </p>
+                  ) : (
+                    <p className="flex items-center gap-2 text-text-muted/50">
+                      <Globe weight="bold" className="w-4 h-4 shrink-0" />
+                      Website not available
                     </p>
                   )}
                 </div>
@@ -460,21 +505,23 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                 </ul>
               </div>
 
-              {/* Claim CTA Card */}
-              <div className="rounded-2xl bg-brand-secondary p-5">
-                <h3 className="font-heading text-base font-bold text-brand-primary mb-2">
-                  Is this your business?
-                </h3>
-                <p className="text-sm text-brand-primary/70 mb-4">
-                  Claim your free listing to manage your profile and connect with more pet parents.
-                </p>
-                <Link
-                  href={`/claim/${listing.slug}`}
-                  className="inline-flex items-center justify-center w-full px-4 py-2.5 rounded-full bg-brand-primary text-white font-semibold text-sm hover:bg-brand-primary/90 transition-colors"
-                >
-                  Claim Listing
-                </Link>
-              </div>
+              {/* Claim CTA Card — only show if unclaimed */}
+              {!listing.owner_id && (
+                <div className="rounded-2xl bg-brand-secondary p-5">
+                  <h3 className="font-heading text-base font-bold text-brand-primary mb-2">
+                    Is this your business?
+                  </h3>
+                  <p className="text-sm text-brand-primary/70 mb-4">
+                    Claim your free listing to manage your profile and connect with more pet parents.
+                  </p>
+                  <Link
+                    href={`/claim/${listing.slug}`}
+                    className="inline-flex items-center justify-center w-full px-4 py-2.5 rounded-full bg-brand-primary text-white font-semibold text-sm hover:bg-brand-primary/90 transition-colors"
+                  >
+                    Claim Listing
+                  </Link>
+                </div>
+              )}
 
               {/* Sidebar Ad */}
               <AdSlot slot="groomer-sidebar" format="sidebar" />

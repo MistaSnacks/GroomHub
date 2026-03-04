@@ -146,6 +146,6 @@ export function blogPostSchema(post: BlogPostFull) {
       "@type": "WebPage",
       "@id": `https://groomlocal.com/blog/${post.slug}`,
     },
-    ...(post.image && { image: post.image }),
+    image: post.image || "https://groomlocal.com/og-image.png",
   };
 }

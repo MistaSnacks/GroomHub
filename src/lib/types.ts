@@ -43,6 +43,7 @@ export interface BusinessListing {
   booking_url?: string;
   owner_id?: string;
   subscription_tier?: "free" | "standard" | "featured" | "premium";
+  claimed_at?: string;
 }
 
 /** Listing with normalized tag arrays (post-migration) */

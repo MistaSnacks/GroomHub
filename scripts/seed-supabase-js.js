@@ -12,6 +12,14 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+function plainSlug(slug) {
+    return String(slug).replace(/-(wa|or)$/i, '');
+}
+
+function stateAwareCitySlug(citySlug, state) {
+    return `${plainSlug(citySlug)}-${String(state).toLowerCase()}`;
+}
+
 async function seedListings() {
     const dataRaw = fs.readFileSync('./data/groomers_enriched.json', 'utf8');
     const records = JSON.parse(dataRaw);
@@ -19,12 +27,18 @@ async function seedListings() {
 
     // Prepare cities
     const uniqueCitiesMap = new Map();
+    const unknownCityListings = [];
     for (const record of records) {
-        let cityRaw = record.city || 'Unknown';
-        let citySlug = record.city_slug || cityRaw.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
         const state = record.state || 'WA';
-        uniqueCitiesMap.set(citySlug, {
-            slug: citySlug,
+        if (!record.city || record.city === 'Unknown') {
+            unknownCityListings.push(record.slug || record.name || 'unknown-record');
+            continue;
+        }
+        let cityRaw = record.city;
+        let citySlug = record.city_slug || cityRaw.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        const cityRecordSlug = stateAwareCitySlug(citySlug, state);
+        uniqueCitiesMap.set(cityRecordSlug, {
+            slug: cityRecordSlug,
             name: cityRaw,
             state: state,
             state_abbr: state,
@@ -32,6 +46,10 @@ async function seedListings() {
             image: '',
             description: ''
         });
+    }
+
+    if (unknownCityListings.length > 0) {
+        console.warn(`Skipping ${unknownCityListings.length} city upserts with missing city data.`);
     }
 
     const citiesArray = Array.from(uniqueCitiesMap.values());

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { WaveDivider } from "@/components/wave-divider";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | GroomLocal Directory",
+  title: "Privacy Policy",
   description:
     "Learn how GroomLocal collects, uses, and protects your personal information.",
 };

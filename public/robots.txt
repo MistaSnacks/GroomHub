@@ -4,18 +4,33 @@ User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /claim/
+Disallow: /dashboard/
+Disallow: /login
+Disallow: /signup
 
 # AI Crawlers
 User-agent: GPTBot
 Allow: /
+Disallow: /api/
+Disallow: /claim/
+Disallow: /dashboard/
 
 User-agent: ClaudeBot
 Allow: /
+Disallow: /api/
+Disallow: /claim/
+Disallow: /dashboard/
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /api/
+Disallow: /claim/
+Disallow: /dashboard/
 
 User-agent: Google-Extended
 Allow: /
+Disallow: /api/
+Disallow: /claim/
+Disallow: /dashboard/
 
 Sitemap: https://groomlocal.com/sitemap.xml

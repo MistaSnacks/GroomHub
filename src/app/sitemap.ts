@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { getCities, getAllListings } from "@/lib/supabase/queries";
 import { SERVICE_TAGS, SPECIALTY_TAGS } from "@/lib/tags";
 import { STATES, stateSlugFromAbbr } from "@/lib/geography";
+import { getBlogPosts } from "@/lib/blog";
 
 const BASE_URL = "https://groomlocal.com";
 
@@ -81,6 +82,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
+  // Blog posts
+  const blogPages: MetadataRoute.Sitemap = getBlogPosts().map((post) => ({
+    url: `${BASE_URL}/blog/${post.slug}`,
+    lastModified: new Date(post.date),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
   return [
     ...staticPages,
     ...statePages,
@@ -90,5 +99,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...servicePages,
     ...specialtyPages,
     ...groomerPages,
+    ...blogPages,
   ];
 }

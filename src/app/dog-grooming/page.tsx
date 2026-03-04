@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { CaretRight } from "@phosphor-icons/react/dist/ssr";
-import { getAllCitiesWithCounts, getTotalListingCount } from "@/lib/supabase/queries";
+import { getCityBrowseSummary, getTotalListingCount } from "@/lib/supabase/queries";
 import { stateSlugFromAbbr, buildServicePath, buildSpecialtyPath } from "@/lib/geography";
 import { isValidServiceSlug, isValidSpecialtySlug } from "@/lib/tags";
 import { WaveDivider } from "@/components/wave-divider";
@@ -28,15 +28,15 @@ export default async function DogGroomingHub({ searchParams }: HubProps) {
     redirect(buildSpecialtyPath(sp.specialty));
   }
 
-  const [allCities, totalCount] = await Promise.all([
-    getAllCitiesWithCounts(),
+  const [waSummary, orSummary, totalCount] = await Promise.all([
+    getCityBrowseSummary("WA"),
+    getCityBrowseSummary("OR"),
     getTotalListingCount(),
   ]);
 
-  const waCities = allCities.filter((c) => c.state_abbr === "WA");
-  const orCities = allCities.filter((c) => c.state_abbr === "OR");
-  const waTotal = waCities.reduce((sum, c) => sum + c.groomer_count, 0);
-  const orTotal = orCities.reduce((sum, c) => sum + c.groomer_count, 0);
+  const waCities = waSummary.cities;
+  const orCities = orSummary.cities;
+  const cityCount = waCities.length + orCities.length;
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -56,7 +56,7 @@ export default async function DogGroomingHub({ searchParams }: HubProps) {
             Dog Groomers in the <span className="text-brand-secondary">PNW</span>
           </h1>
           <p className="text-text-muted text-lg">
-            {totalCount} groomers across {allCities.length} cities in Washington & Oregon
+            {totalCount} groomers across {cityCount} cities in Washington & Oregon
           </p>
         </div>
       </section>
@@ -73,11 +73,12 @@ export default async function DogGroomingHub({ searchParams }: HubProps) {
             stateName="Washington"
             cardBg="bg-brand-secondary/10"
             badgeBg="bg-brand-primary text-white"
-            totalGroomers={waTotal}
+            totalGroomers={waSummary.totalListings}
+            uncategorizedGroomers={waSummary.uncategorizedListings}
             initialLimit={20}
             showSearch={true}
             ctaHref="/dog-grooming/wa"
-            ctaLabel={`View all ${waTotal} Washington groomers`}
+            ctaLabel={`View all ${waSummary.totalListings} Washington groomers`}
           />
 
           <CityPillGrid
@@ -87,11 +88,12 @@ export default async function DogGroomingHub({ searchParams }: HubProps) {
             stateName="Oregon"
             cardBg="bg-brand-accent/10"
             badgeBg="bg-brand-accent text-white"
-            totalGroomers={orTotal}
+            totalGroomers={orSummary.totalListings}
+            uncategorizedGroomers={orSummary.uncategorizedListings}
             initialLimit={20}
             showSearch={true}
             ctaHref="/dog-grooming/or"
-            ctaLabel={`View all ${orTotal} Oregon groomers`}
+            ctaLabel={`View all ${orSummary.totalListings} Oregon groomers`}
           />
         </div>
       </section>

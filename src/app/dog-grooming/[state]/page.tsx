@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect, notFound } from "next/navigation";
 import { CaretRight, MapPin } from "@phosphor-icons/react/dist/ssr";
-import { getCitiesByState, getListingsByState } from "@/lib/supabase/queries";
+import { getCityBrowseSummary } from "@/lib/supabase/queries";
 import { isValidStateSlug, stateNameFromSlug, stateAbbrFromSlug, stateSlugFromAbbr } from "@/lib/geography";
 import { supabase } from "@/lib/supabase/client";
 import { WaveDivider } from "@/components/wave-divider";
@@ -39,10 +39,8 @@ export default async function StatePage({ params }: StatePageProps) {
   const stateAbbr = stateAbbrFromSlug(state);
   const stateName = stateNameFromSlug(state);
 
-  const [cities, listings] = await Promise.all([
-    getCitiesByState(stateAbbr),
-    getListingsByState(stateAbbr),
-  ]);
+  const summary = await getCityBrowseSummary(stateAbbr);
+  const { cities } = summary;
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -62,8 +60,13 @@ export default async function StatePage({ params }: StatePageProps) {
           </h1>
           <p className="text-text-muted flex items-center gap-1.5 text-lg">
             <MapPin weight="fill" className="w-5 h-5 text-brand-secondary" />
-            {listings.length} groomers across {cities.length} cities
+            {summary.totalListings} groomers across {cities.length} cities
           </p>
+          {summary.uncategorizedListings > 0 && (
+            <p className="mt-2 text-sm text-text-muted">
+              {summary.uncategorizedListings} listing{summary.uncategorizedListings === 1 ? "" : "s"} need city cleanup and are not included in the city pills yet.
+            </p>
+          )}
         </div>
       </section>
 
@@ -84,7 +87,8 @@ export default async function StatePage({ params }: StatePageProps) {
               stateName={stateName}
               cardBg="bg-white"
               badgeBg="bg-brand-primary text-white"
-              totalGroomers={listings.length}
+              totalGroomers={summary.totalListings}
+              uncategorizedGroomers={summary.uncategorizedListings}
               initialLimit={20}
               showSearch={true}
               highlightSlugs={TOP_CITIES}

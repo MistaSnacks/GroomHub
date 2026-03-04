@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Storefront, EnvelopeSimple, CheckCircle, ArrowRight, CaretRight } from "@phosphor-icons/react/dist/ssr";
+import { Storefront, EnvelopeSimple, CheckCircle, CaretRight } from "@phosphor-icons/react/dist/ssr";
 import { WaveDivider } from "@/components/wave-divider";
+import { GetListedForm } from "./get-listed-form";
+import { ListingSearch } from "./listing-search";
 
 export const metadata: Metadata = {
   title: "Get Listed — Add Your Grooming Business",
@@ -40,65 +42,10 @@ export default function GetListedPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
 
-            {/* Form */}
-            <div className="lg:col-span-3 bg-white rounded-2xl border border-border p-6 md:p-8">
-              <h2 className="font-heading text-2xl font-bold text-brand-primary mb-6">
-                Submit your business
-              </h2>
-              <form
-                action="mailto:hello@groomlocal.com"
-                method="GET"
-                className="space-y-5"
-              >
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-brand-primary mb-1.5">Business name *</label>
-                    <input type="text" name="subject" required className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" placeholder="e.g. Pawfect Grooming" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-brand-primary mb-1.5">Your name</label>
-                    <input type="text" className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" placeholder="First and last" />
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-brand-primary mb-1.5">City *</label>
-                    <input type="text" required className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" placeholder="e.g. Seattle" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-brand-primary mb-1.5">State *</label>
-                    <select required className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent bg-white">
-                      <option value="">Select state</option>
-                      <option value="WA">Washington</option>
-                      <option value="OR">Oregon</option>
-                    </select>
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-brand-primary mb-1.5">Email *</label>
-                  <input type="email" required className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" placeholder="you@yourbusiness.com" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-brand-primary mb-1.5">Phone</label>
-                  <input type="tel" className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" placeholder="(555) 123-4567" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-brand-primary mb-1.5">Website</label>
-                  <input type="url" className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" placeholder="https://yourbusiness.com" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-brand-primary mb-1.5">Anything else?</label>
-                  <textarea rows={3} className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent resize-none" placeholder="Services offered, hours, anything we should know..." />
-                </div>
-                <button
-                  type="submit"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full bg-brand-primary font-semibold hover:bg-brand-primary/90 transition-colors"
-                  style={{ color: "#FFFFFF" }}
-                >
-                  Submit My Business
-                  <ArrowRight weight="bold" className="w-4 h-4" />
-                </button>
-              </form>
+            {/* Search + Form */}
+            <div className="lg:col-span-3 space-y-6">
+              <ListingSearch />
+              <GetListedForm />
             </div>
 
             {/* Info sidebar */}

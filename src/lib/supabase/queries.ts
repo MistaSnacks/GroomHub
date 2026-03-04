@@ -40,6 +40,12 @@ function slugVariants(slug: string): string[] {
   return [plain, `${plain}-wa`, `${plain}-or`];
 }
 
+function citySlugVariants(slug: string, stateAbbr?: string): string[] {
+  const plain = plainSlug(slug);
+  if (!stateAbbr) return slugVariants(slug);
+  return [plain, `${plain}-${stateAbbr.toLowerCase()}`];
+}
+
 /** Deduplicate listings that appear under multiple city_slug variants */
 function dedupeBySlug(listings: NormalizedListing[]): NormalizedListing[] {
   const seen = new Set<string>();
@@ -72,14 +78,19 @@ function applyHierarchy(listings: NormalizedListing[]): NormalizedListing[] {
 // ─── Listing Queries ────────────────────────────────────
 
 export async function getListingsByCity(
-  citySlug: string
+  citySlug: string,
+  stateAbbr?: string
 ): Promise<NormalizedListing[]> {
-  // Query for all slug variants to merge split data
-  const variants = slugVariants(citySlug);
-  const { data, error } = await supabase
+  let query = supabase
     .from("business_listings")
     .select("*")
-    .in("city_slug", variants);
+    .in("city_slug", citySlugVariants(citySlug, stateAbbr));
+
+  if (stateAbbr) {
+    query = query.eq("state", stateAbbr.toUpperCase());
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     console.error("getListingsByCity error:", error.message);
@@ -226,16 +237,37 @@ export async function getFeaturedListings(
 }
 
 export async function getAllListings(): Promise<NormalizedListing[]> {
-  const { data, error } = await supabase
-    .from("business_listings")
-    .select("*")
-    .order("rating", { ascending: false });
+  const allListings: BusinessListing[] = [];
+  const pageSize = 1000;
+  let page = 0;
+  let hasMore = true;
 
-  if (error) {
-    console.error("getAllListings error:", error.message);
-    return [];
+  while (hasMore) {
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+
+    const { data, error } = await supabase
+      .from("business_listings")
+      .select("*")
+      .order("rating", { ascending: false })
+      .range(from, to);
+
+    if (error) {
+      console.error("getAllListings error:", error.message);
+      return [];
+    }
+
+    if (data) {
+      allListings.push(...(data as BusinessListing[]));
+      hasMore = data.length === pageSize;
+    } else {
+      hasMore = false;
+    }
+
+    page++;
   }
-  return withTagsAll((data ?? []) as BusinessListing[]);
+
+  return withTagsAll(allListings);
 }
 
 // ─── City Queries (derived from business_listings) ──────
@@ -248,19 +280,21 @@ function aggregateCities(rows: CityRow[]): CityWithCount[] {
   const map = new Map<string, { name: string; state: string; count: number }>();
 
   for (const row of rows) {
-    if (!row.city || row.city === "Unknown") continue;
+    if (!row.city || row.city === "Unknown" || !row.city_slug) continue;
+
     const slug = plainSlug(row.city_slug);
-    const existing = map.get(slug);
+    const key = `${row.state}:${slug}`;
+    const existing = map.get(key);
     if (existing) {
       existing.count++;
     } else {
-      map.set(slug, { name: row.city, state: row.state, count: 1 });
+      map.set(key, { name: row.city, state: row.state, count: 1 });
     }
   }
 
   return Array.from(map.entries())
-    .map(([slug, { name, state, count }]) => ({
-      slug,
+    .map(([key, { name, state, count }]) => ({
+      slug: key.split(":")[1] ?? "",
       name,
       state,
       state_abbr: state,
@@ -269,31 +303,71 @@ function aggregateCities(rows: CityRow[]): CityWithCount[] {
     .sort((a, b) => b.groomer_count - a.groomer_count);
 }
 
-export async function getCities(): Promise<CityWithCount[]> {
-  const { data, error } = await supabase
-    .from("business_listings")
-    .select("city_slug, city, state");
+async function getCityRows(stateAbbr?: string): Promise<CityRow[]> {
+  const allCities: CityRow[] = [];
+  const pageSize = 1000;
+  let page = 0;
+  let hasMore = true;
 
-  if (error) {
-    console.error("getCities error:", error.message);
-    return [];
+  while (hasMore) {
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+
+    let query = supabase
+      .from("business_listings")
+      .select("city_slug, city, state")
+      .range(from, to);
+
+    if (stateAbbr) {
+      query = query.eq("state", stateAbbr.toUpperCase());
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      console.error("getCityRows error:", error.message);
+      return [];
+    }
+
+    if (data) {
+      allCities.push(...(data as CityRow[]));
+      hasMore = data.length === pageSize;
+    } else {
+      hasMore = false;
+    }
+
+    page++;
   }
-  return aggregateCities((data ?? []) as CityRow[]);
+
+  return allCities;
+}
+
+export async function getCityBrowseSummary(
+  stateAbbr: string
+): Promise<{
+  cities: CityWithCount[];
+  totalListings: number;
+  uncategorizedListings: number;
+}> {
+  const rows = await getCityRows(stateAbbr);
+  const cities = aggregateCities(rows);
+  const categorizedListings = cities.reduce((sum, city) => sum + city.groomer_count, 0);
+
+  return {
+    cities,
+    totalListings: rows.length,
+    uncategorizedListings: rows.length - categorizedListings,
+  };
+}
+
+export async function getCities(): Promise<CityWithCount[]> {
+  return aggregateCities(await getCityRows());
 }
 
 export async function getCitiesByState(
   stateAbbr: string
 ): Promise<CityWithCount[]> {
-  const { data, error } = await supabase
-    .from("business_listings")
-    .select("city_slug, city, state")
-    .eq("state", stateAbbr.toUpperCase());
-
-  if (error) {
-    console.error("getCitiesByState error:", error.message);
-    return [];
-  }
-  return aggregateCities((data ?? []) as CityRow[]);
+  return aggregateCities(await getCityRows(stateAbbr));
 }
 
 export async function getAllCitiesWithCounts(): Promise<CityWithCount[]> {
@@ -301,14 +375,19 @@ export async function getAllCitiesWithCounts(): Promise<CityWithCount[]> {
 }
 
 export async function getCityBySlug(
-  slug: string
+  slug: string,
+  stateAbbr?: string
 ): Promise<CityWithCount | null> {
-  // Derive city info from listings with this slug
-  const variants = slugVariants(slug);
-  const { data, error } = await supabase
+  let query = supabase
     .from("business_listings")
     .select("city_slug, city, state")
-    .in("city_slug", variants);
+    .in("city_slug", citySlugVariants(slug, stateAbbr));
+
+  if (stateAbbr) {
+    query = query.eq("state", stateAbbr.toUpperCase());
+  }
+
+  const { data, error } = await query;
 
   if (error || !data || data.length === 0) return null;
 
@@ -328,13 +407,19 @@ export async function getTotalListingCount(): Promise<number> {
 }
 
 export async function getListingCountByCity(
-  citySlug: string
+  citySlug: string,
+  stateAbbr?: string
 ): Promise<number> {
-  const variants = slugVariants(citySlug);
-  const { count, error } = await supabase
+  let query = supabase
     .from("business_listings")
     .select("*", { count: "exact", head: true })
-    .in("city_slug", variants);
+    .in("city_slug", citySlugVariants(citySlug, stateAbbr));
+
+  if (stateAbbr) {
+    query = query.eq("state", stateAbbr.toUpperCase());
+  }
+
+  const { count, error } = await query;
 
   if (error) return 0;
   return count ?? 0;
@@ -348,18 +433,38 @@ export async function searchListings(
   const q = query.toLowerCase().trim();
   if (!q) return [];
 
-  const { data, error } = await supabase
-    .from("business_listings")
-    .select("*")
-    .order("is_featured", { ascending: false })
-    .order("rating", { ascending: false });
+  const allListings: BusinessListing[] = [];
+  const pageSize = 1000;
+  let page = 0;
+  let hasMore = true;
 
-  if (error) {
-    console.error("searchListings error:", error.message);
-    return [];
+  while (hasMore) {
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+
+    const { data, error } = await supabase
+      .from("business_listings")
+      .select("*")
+      .order("is_featured", { ascending: false })
+      .order("rating", { ascending: false })
+      .range(from, to);
+
+    if (error) {
+      console.error("searchListings error:", error.message);
+      return [];
+    }
+
+    if (data) {
+      allListings.push(...(data as BusinessListing[]));
+      hasMore = data.length === pageSize;
+    } else {
+      hasMore = false;
+    }
+
+    page++;
   }
 
-  const all = withTagsAll((data ?? []) as BusinessListing[]);
+  const all = withTagsAll(allListings);
 
   // Split the query into distinct terms for multi-intent searching
   // e.g. "Seattle Mobile" -> ["seattle", "mobile"]

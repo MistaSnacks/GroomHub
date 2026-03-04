@@ -106,7 +106,7 @@ export default function ForGroomersPage() {
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                 <Link
-                  href="/pricing"
+                  href="/get-listed"
                   className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-brand-primary text-white font-bold text-lg hover:bg-brand-primary/90 transition-all w-full sm:w-auto"
                 >
                   Claim Your Free Listing
@@ -259,7 +259,7 @@ export default function ForGroomersPage() {
                 Join the PNW&apos;s best pet grooming directory today. Start free, upgrade when you&apos;re ready.
               </p>
               <Link
-                href="/pricing"
+                href="/get-listed"
                 className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-brand-primary text-white font-bold text-lg hover:bg-brand-primary/90 transition-all"
               >
                 Claim Your Free Listing

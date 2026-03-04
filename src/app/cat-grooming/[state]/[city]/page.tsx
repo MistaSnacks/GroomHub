@@ -4,7 +4,7 @@ import Link from "next/link";
 import { CaretRight, MapPin, Cat } from "@phosphor-icons/react/dist/ssr";
 import { CityListingsClient } from "@/components/city-listings-client";
 import { getListingsByServiceTag, getCityBySlug } from "@/lib/supabase/queries";
-import { stateNameFromSlug, stateAbbrFromSlug } from "@/lib/geography";
+import { stateAbbrFromSlug } from "@/lib/geography";
 import { WaveDivider } from "@/components/wave-divider";
 
 interface Props {
@@ -13,13 +13,25 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { state, city } = await params;
-  const cityData = await getCityBySlug(city);
+  const cityData = await getCityBySlug(city, stateAbbrFromSlug(state));
   const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
+
+  const ogImage = `/api/og/city?city=${encodeURIComponent(city)}&state=${encodeURIComponent(state)}&service=cat`;
 
   return {
     title: `Cat Groomers in ${cityName}, ${stateAbbrFromSlug(state)}`,
     description: `Find cat groomers in ${cityName}. Feline-friendly salons with gentle handling and dedicated cat suites.`,
     alternates: { canonical: `/cat-grooming/${state}/${city}` },
+    openGraph: {
+      title: `Cat Groomers in ${cityName}, ${stateAbbrFromSlug(state)}`,
+      description: `Find cat groomers in ${cityName}. Feline-friendly salons with gentle handling and dedicated cat suites.`,
+      images: [{ url: ogImage, width: 1200, height: 630, alt: `Cat groomers in ${cityName}` }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Cat Groomers in ${cityName}, ${stateAbbrFromSlug(state)}`,
+      images: [ogImage],
+    },
   };
 }
 
@@ -28,7 +40,7 @@ export default async function CatGroomingCityPage({ params }: Props) {
   const stateAbbr = stateAbbrFromSlug(state);
   const [listings, cityData] = await Promise.all([
     getListingsByServiceTag("cat-grooming", city, stateAbbr),
-    getCityBySlug(city),
+    getCityBySlug(city, stateAbbr),
   ]);
   const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
 

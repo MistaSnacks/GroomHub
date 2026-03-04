@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { CheckCircle, ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { WaveDivider } from "@/components/wave-divider";
 import { getListingBySlug } from "@/lib/supabase/queries";
+import { createClient } from "@/lib/supabase/server";
 
 export default async function ClaimSuccessPage({
     params,
@@ -9,7 +11,16 @@ export default async function ClaimSuccessPage({
     params: Promise<{ slug: string }>;
 }) {
     const { slug } = await params;
+
+    // Ownership check: only the claiming user should see this page
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
     const listing = await getListingBySlug(slug);
+
+    if (!listing || !user || listing.owner_id !== user.id) {
+        redirect(`/groomer/${slug}`);
+    }
 
     return (
         <div className="flex flex-col flex-1 bg-bg">
@@ -30,7 +41,7 @@ export default async function ClaimSuccessPage({
                         Listing Claimed!
                     </h1>
                     <p className="text-lg text-text-muted mb-8">
-                        Welcome to the PNW Grooming Directory. You now have full control over <strong className="text-brand-primary">{listing?.name || 'your business'}</strong>.
+                        Welcome to the PNW Grooming Directory. You now have full control over <strong className="text-brand-primary">{listing.name}</strong>.
                     </p>
 
                     <div className="bg-white rounded-2xl border border-border p-6 shadow-sm mb-8 text-left max-w-sm mx-auto">
