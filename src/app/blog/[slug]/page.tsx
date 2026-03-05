@@ -129,11 +129,11 @@ export default async function BlogArticlePage({ params }: Props) {
 
             {/* Image Content */}
             {post.image && (
-              <div className="flex justify-center md:justify-end items-end h-full relative" style={{ minHeight: '300px' }}>
+              <div className="flex justify-center md:justify-end items-end h-full w-full mt-8 md:mt-0">
                 <img
                   src={post.image}
                   alt={post.title}
-                  className="w-[280px] sm:w-[350px] md:w-[450px] object-contain drop-shadow-xl z-20 absolute bottom-0 right-0 transform translate-y-[20px] md:translate-y-[40px]"
+                  className="w-[220px] sm:w-[280px] md:w-[350px] object-contain drop-shadow-xl z-20 relative"
                 />
               </div>
             )}

@@ -59,9 +59,12 @@ function readAllPosts(): BlogPostFull[] {
   });
 }
 
-// Cache posts in module scope (re-reads on dev server restart)
+// Cache posts in module scope (re-reads on dev server restart in prod)
 let _cache: BlogPostFull[] | null = null;
 function getPosts(): BlogPostFull[] {
+  if (process.env.NODE_ENV === "development") {
+    return readAllPosts();
+  }
   if (!_cache) {
     _cache = readAllPosts();
   }
