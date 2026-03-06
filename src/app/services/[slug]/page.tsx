@@ -73,7 +73,7 @@ export default async function ServiceLandingPage({ params }: Props) {
     <div className="flex flex-col min-h-screen">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify([schema.breadcrumb, schema.itemList]) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
 
       {/* Hero */}

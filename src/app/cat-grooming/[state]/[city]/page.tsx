@@ -20,11 +20,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `Cat Groomers in ${cityName}, ${stateAbbrFromSlug(state)}`,
-    description: `Find cat groomers in ${cityName}. Feline-friendly salons with gentle handling and dedicated cat suites.`,
+    description: `Find the best cat groomers in ${cityName}, ${stateAbbrFromSlug(state)}. Browse feline-friendly salons with gentle handling, dedicated cat suites, and stress-free grooming for your kitty.`,
     alternates: { canonical: `/cat-grooming/${state}/${city}` },
     openGraph: {
       title: `Cat Groomers in ${cityName}, ${stateAbbrFromSlug(state)}`,
-      description: `Find cat groomers in ${cityName}. Feline-friendly salons with gentle handling and dedicated cat suites.`,
+      description: `Find the best cat groomers in ${cityName}, ${stateAbbrFromSlug(state)}. Browse feline-friendly salons with gentle handling, dedicated cat suites, and stress-free grooming for your kitty.`,
       images: [{ url: ogImage, width: 1200, height: 630, alt: `Cat groomers in ${cityName}` }],
     },
     twitter: {

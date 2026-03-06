@@ -20,11 +20,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `Mobile Dog Groomers in ${cityName}, ${stateAbbrFromSlug(state)}`,
-    description: `Find mobile dog groomers in ${cityName}. Convenient at-home grooming with fully equipped vans.`,
+    description: `Find the best mobile dog groomers in ${cityName}, ${stateAbbrFromSlug(state)}. Convenient at-home grooming with fully equipped vans — no car ride stress for your pup.`,
     alternates: { canonical: `/mobile-grooming/${state}/${city}` },
     openGraph: {
       title: `Mobile Dog Groomers in ${cityName}, ${stateAbbrFromSlug(state)}`,
-      description: `Find mobile dog groomers in ${cityName}. Convenient at-home grooming with fully equipped vans.`,
+      description: `Find the best mobile dog groomers in ${cityName}, ${stateAbbrFromSlug(state)}. Convenient at-home grooming with fully equipped vans — no car ride stress for your pup.`,
       images: [{ url: ogImage, width: 1200, height: 630, alt: `Mobile groomers in ${cityName}` }],
     },
     twitter: {

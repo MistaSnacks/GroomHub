@@ -219,7 +219,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                     .map((img, i) => (
                       <div key={i} className="aspect-square rounded-xl overflow-hidden bg-surface">
                         <img
-                          src={img}
+                          src={img.startsWith("http://") ? img.replace("http://", "https://") : img}
                           alt={`${listing.name} photo ${i + 1}`}
                           className="w-full h-full object-cover"
                           loading="lazy"
