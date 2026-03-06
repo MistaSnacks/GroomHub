@@ -30,10 +30,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const tag = getServiceTag(slug);
   if (!tag) return {};
 
+  const title = `${tag.label} Groomers in the PNW`;
+  const description = `Browse dog groomers offering ${tag.label.toLowerCase()} across Washington and Oregon. Compare ratings, read reviews, and book online.`;
+
   return {
-    title: `${tag.label} — Find ${tag.label} Groomers in the PNW`,
-    description: `Browse dog groomers offering ${tag.label.toLowerCase()} across Washington and Oregon. Compare ratings, read reviews, and book online.`,
+    title,
+    description,
     alternates: { canonical: `/services/${slug}` },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `/services/${slug}`,
+      siteName: "GroomLocal",
+      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: `${tag.label} groomers` }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/og-image.png"],
+    },
   };
 }
 

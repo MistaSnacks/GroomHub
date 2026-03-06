@@ -22,10 +22,27 @@ export async function generateMetadata({ params }: StatePageProps): Promise<Meta
   }
 
   const stateName = stateNameFromSlug(state);
+  const title = `Dog Groomers in ${stateName} — Browse by City`;
+  const description = `Browse dog groomers across ${stateName}. Find verified groomers in every city with real reviews and transparent pricing.`;
+
   return {
-    title: `Dog Groomers in ${stateName} — Browse by City`,
-    description: `Browse dog groomers across ${stateName}. Find verified groomers in every city with real reviews and transparent pricing.`,
+    title,
+    description,
     alternates: { canonical: `/dog-grooming/${state}` },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `/dog-grooming/${state}`,
+      siteName: "GroomLocal",
+      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: `Dog groomers in ${stateName}` }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/og-image.png"],
+    },
   };
 }
 

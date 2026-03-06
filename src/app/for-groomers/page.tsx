@@ -16,6 +16,15 @@ export const metadata: Metadata = {
   title: "For Groomers — List Your Business",
   description:
     "Get your grooming business in front of thousands of pet owners in the PNW. Free to list, powerful tools to grow. Join the pack today.",
+  openGraph: {
+    title: "For Groomers — List Your Business",
+    description: "Get your grooming business in front of thousands of pet owners in the PNW. Free to list, powerful tools to grow.",
+    type: "website",
+    url: "/for-groomers",
+    siteName: "GroomLocal",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "List your grooming business on GroomLocal" }],
+  },
+  twitter: { card: "summary_large_image", images: ["/og-image.png"] },
 };
 
 const features = [

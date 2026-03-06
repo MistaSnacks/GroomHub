@@ -6,6 +6,15 @@ export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
     "Learn how GroomLocal collects, uses, and protects your personal information.",
+  openGraph: {
+    title: "Privacy Policy",
+    description: "Learn how GroomLocal collects, uses, and protects your personal information.",
+    type: "website",
+    url: "/privacy",
+    siteName: "GroomLocal",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "GroomLocal" }],
+  },
+  twitter: { card: "summary_large_image", images: ["/og-image.png"] },
 };
 
 export default function PrivacyPage() {

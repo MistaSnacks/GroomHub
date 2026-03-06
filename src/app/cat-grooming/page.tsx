@@ -8,6 +8,15 @@ import { WaveDivider } from "@/components/wave-divider";
 export const metadata: Metadata = {
   title: "Cat Groomers — Find Cat Grooming Near You",
   description: "Find verified cat groomers across Washington and Oregon. Feline-friendly salons with dedicated suites and gentle handling.",
+  openGraph: {
+    title: "Cat Groomers — Find Cat Grooming Near You",
+    description: "Find verified cat groomers across Washington and Oregon. Feline-friendly salons with dedicated suites and gentle handling.",
+    type: "website",
+    url: "/cat-grooming",
+    siteName: "GroomLocal",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Cat groomers in the PNW" }],
+  },
+  twitter: { card: "summary_large_image", images: ["/og-image.png"] },
 };
 
 export default async function CatGroomingHub() {

@@ -16,6 +16,7 @@ import {
   CaretRight,
 } from "@phosphor-icons/react/dist/ssr";
 import { BadgePill } from "@/components/badge-pill";
+import { GalleryImage } from "@/components/gallery-image";
 import { ListingCard } from "@/components/listing-card";
 import { FeaturedListingBanner } from "@/components/featured-listing-banner";
 import { AdSlot } from "@/components/ad-slot";
@@ -39,8 +40,10 @@ export async function generateMetadata({
   if (!listing) return { title: "Groomer Not Found" };
 
   const description = listing.short_description || listing.description;
-  const truncatedDesc = description.length > 155 ? description.slice(0, 152) + "..." : description;
-  const title = `${listing.name} — Dog Grooming in ${listing.city}, ${listing.state}`;
+  const truncatedDesc = description.length > 160 ? description.slice(0, 157) + "..." : description.length < 120
+    ? `${description} Find reviews, services, and contact info for ${listing.name} in ${listing.city}, ${listing.state}.`.slice(0, 160)
+    : description;
+  const title = `${listing.name} — ${listing.city}, ${listing.state} Groomer`;
   const ogImage = `/api/og/groomer?slug=${encodeURIComponent(slug)}`;
 
   return {
@@ -218,11 +221,9 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                     .filter((img) => !img.includes("unsplash.com") && !img.includes("pexels.com") && !img.includes("placehold.co") && !img.includes("placeholder"))
                     .map((img, i) => (
                       <div key={i} className="aspect-square rounded-xl overflow-hidden bg-surface">
-                        <img
-                          src={img.startsWith("http://") ? img.replace("http://", "https://") : img}
+                        <GalleryImage
+                          src={img}
                           alt={`${listing.name} photo ${i + 1}`}
-                          className="w-full h-full object-cover"
-                          loading="lazy"
                         />
                       </div>
                     ))

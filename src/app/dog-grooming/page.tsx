@@ -12,6 +12,19 @@ export const metadata: Metadata = {
   title: "Dog Groomers — Browse All Cities",
   description: "Browse dog groomers across Washington and Oregon. Find verified groomers in every PNW city.",
   alternates: { canonical: "/dog-grooming" },
+  openGraph: {
+    title: "Dog Groomers — Browse All Cities",
+    description: "Browse dog groomers across Washington and Oregon. Find verified groomers in every PNW city.",
+    type: "website",
+    url: "/dog-grooming",
+    siteName: "GroomLocal",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Dog groomers in the PNW" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Dog Groomers — Browse All Cities",
+    images: ["/og-image.png"],
+  },
 };
 
 interface HubProps {

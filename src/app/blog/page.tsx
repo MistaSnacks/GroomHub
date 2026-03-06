@@ -13,6 +13,15 @@ export const metadata: Metadata = {
   title: "Blog — Grooming Tips, Guides & Pet Care",
   description:
     "Expert grooming tips, seasonal care guides, and pet care advice from PNW groomers. Keep your furry friend looking and feeling their best.",
+  openGraph: {
+    title: "Blog — Grooming Tips, Guides & Pet Care",
+    description: "Expert grooming tips, seasonal care guides, and pet care advice from PNW groomers.",
+    type: "website",
+    url: "/blog",
+    siteName: "GroomLocal",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "GroomLocal Blog" }],
+  },
+  twitter: { card: "summary_large_image", images: ["/og-image.png"] },
 };
 
 interface BlogPageProps {

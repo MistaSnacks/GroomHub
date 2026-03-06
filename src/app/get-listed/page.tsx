@@ -9,6 +9,15 @@ export const metadata: Metadata = {
   title: "Get Listed — Add Your Grooming Business",
   description:
     "Not in our directory yet? Submit your grooming business to GroomLocal and start connecting with local pet parents across the PNW.",
+  openGraph: {
+    title: "Get Listed — Add Your Grooming Business",
+    description: "Submit your grooming business to GroomLocal and start connecting with local pet parents across the PNW.",
+    type: "website",
+    url: "/get-listed",
+    siteName: "GroomLocal",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Get listed on GroomLocal" }],
+  },
+  twitter: { card: "summary_large_image", images: ["/og-image.png"] },
 };
 
 export default function GetListedPage() {

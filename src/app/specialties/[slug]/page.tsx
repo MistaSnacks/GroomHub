@@ -30,10 +30,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const tag = getSpecialtyTag(slug);
   if (!tag) return {};
 
+  const title = `${tag.label} Groomers — PNW Specialists`;
+  const description = `Find groomers specializing in ${tag.label.toLowerCase()} across Washington and Oregon. Compare ratings, reviews, and book with confidence.`;
+
   return {
-    title: `${tag.label} Groomers — Specialists in the PNW`,
-    description: `Find groomers specializing in ${tag.label.toLowerCase()} across Washington and Oregon. Compare ratings, reviews, and book with confidence.`,
+    title,
+    description,
     alternates: { canonical: `/specialties/${slug}` },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `/specialties/${slug}`,
+      siteName: "GroomLocal",
+      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: `${tag.label} groomers` }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/og-image.png"],
+    },
   };
 }
 

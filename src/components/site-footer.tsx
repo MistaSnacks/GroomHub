@@ -80,6 +80,7 @@ export function SiteFooter() {
               <li><Link href="/contact" className="text-sm text-slate-700 hover:text-slate-900 transition-colors">Contact</Link></li>
               <li><Link href="/for-groomers" className="text-sm text-slate-700 hover:text-slate-900 transition-colors">For Groomers</Link></li>
               <li><Link href="/get-listed" className="text-sm text-slate-700 hover:text-slate-900 transition-colors">Get Listed</Link></li>
+              <li><Link href="/get-quotes" className="text-sm text-slate-700 hover:text-slate-900 transition-colors">Get Quotes</Link></li>
               <li><Link href="/blog" className="text-sm text-slate-700 hover:text-slate-900 transition-colors">Blog</Link></li>
               <li><Link href="/privacy" className="text-sm text-slate-700 hover:text-slate-900 transition-colors">Privacy</Link></li>
               <li><Link href="/terms" className="text-sm text-slate-700 hover:text-slate-900 transition-colors">Terms</Link></li>
