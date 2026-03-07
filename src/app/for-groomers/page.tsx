@@ -251,25 +251,25 @@ export default function ForGroomersPage() {
         </div>
       </section>
 
-      {/* Final CTA — Teal */}
-      <WaveDivider variant="steep" fromColor="#FFFFFF" toColor="#4ECDC4" />
+      {/* Final CTA — Coral */}
+      <WaveDivider variant="steep" fromColor="#FFFFFF" toColor="#FA8072" />
 
-      <section className="bg-brand-secondary py-16 md:py-20 relative overflow-hidden">
+      <section className="bg-brand-accent py-16 md:py-20 relative overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col md:flex-row items-center gap-12">
-            <div className="flex-1 flex justify-center">
-              <MauiMascot src="/maui-assets/19-maui-towel-head-hearts-new.png" size={240} animation="float" />
+            <div className="flex-1 flex justify-center -mb-8">
+              <MauiMascot src="/maui-assets/14-maui-sitting-pretty-alt.png" size={320} animation="float" />
             </div>
-            <div className="flex-[1.5] text-center md:text-left">
-              <h2 className="font-heading text-3xl md:text-4xl font-bold text-brand-primary mb-4">
+            <div className="flex-[1.5] text-center md:text-left text-white">
+              <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4">
                 Ready to get more clients?
               </h2>
-              <p className="text-lg text-brand-primary/70 mb-8 max-w-xl mx-auto md:mx-0">
+              <p className="text-lg text-white/90 mb-8 max-w-xl mx-auto md:mx-0">
                 Join the PNW&apos;s best pet grooming directory today. Start free, upgrade when you&apos;re ready.
               </p>
               <Link
                 href="/get-listed"
-                className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-brand-primary text-white font-bold text-lg hover:bg-brand-primary/90 transition-all"
+                className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-white text-brand-accent font-bold text-lg hover:bg-surface transition-all"
               >
                 Claim Your Free Listing
               </Link>
@@ -278,7 +278,7 @@ export default function ForGroomersPage() {
         </div>
       </section>
 
-      <WaveDivider variant="footer" fromColor="#4ECDC4" toColor="#4ECDC4" />
+      <WaveDivider variant="footer" fromColor="#FA8072" toColor="#FA8072" />
     </>
   );
 }
