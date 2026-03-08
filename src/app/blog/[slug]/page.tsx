@@ -16,6 +16,7 @@ import { AdSlot } from "@/components/ad-slot";
 import { WaveDivider } from "@/components/wave-divider";
 import { AnimatedSection, AnimatedItem } from "@/components/animated-section";
 import { mdxComponents } from "@/components/mdx-components";
+import remarkGfm from "remark-gfm";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -149,7 +150,11 @@ export default async function BlogArticlePage({ params }: Props) {
       <article className="bg-white py-10 flex-1">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="prose-custom space-y-6">
-            <MDXRemote source={post.content} components={mdxComponents} />
+            <MDXRemote
+              source={post.content}
+              components={mdxComponents}
+              options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
+            />
           </div>
 
           {/* Tags */}
