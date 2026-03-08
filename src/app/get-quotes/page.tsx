@@ -37,7 +37,7 @@ export default function GetQuotesPage() {
           {[
             { icon: "🛡️", title: 'Verified groomers only', desc: 'Every groomer who responds has been vetted.' },
             { icon: "⏱️", title: 'Hear back in 24 hours', desc: 'Most responses arrive within a few hours.' },
-            { icon: "⭐", title: 'Compare and choose', desc: 'Pick the best offer — no pressure, no obligation.' },
+            { icon: "⭐", title: 'Compare and choose', desc: 'Pick the best offer. No pressure, no obligation.' },
           ].map(({ icon, title, desc }) => (
             <div key={title} className="flex items-center gap-3">
               <span className="text-xl">{icon}</span>

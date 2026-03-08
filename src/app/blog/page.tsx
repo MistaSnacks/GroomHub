@@ -10,11 +10,11 @@ import { WaveDivider } from "@/components/wave-divider";
 import { AnimatedSection, AnimatedItem } from "@/components/animated-section";
 
 export const metadata: Metadata = {
-  title: "Blog — Grooming Tips, Guides & Pet Care",
+  title: "Blog | Grooming Tips, Guides & Pet Care",
   description:
-    "Expert grooming tips, seasonal care guides, and pet care advice from PNW groomers. Keep your furry friend looking and feeling their best.",
+    "Expert grooming tips, seasonal care guides, and pet care advice from PNW groomers. Keep your dog looking and feeling their best.",
   openGraph: {
-    title: "Blog — Grooming Tips, Guides & Pet Care",
+    title: "Blog | Grooming Tips, Guides & Pet Care",
     description: "Expert grooming tips, seasonal care guides, and pet care advice from PNW groomers.",
     type: "website",
     url: "/blog",

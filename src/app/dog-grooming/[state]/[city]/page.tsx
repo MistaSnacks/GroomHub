@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
-import { CaretRight, MapPin, PawPrint, Park, MapTrifold, Storefront } from "@phosphor-icons/react/dist/ssr";
+import { CaretRight, MapPin, PawPrint, Park, MapTrifold, Storefront, TreeStructure } from "@phosphor-icons/react/dist/ssr";
 import { CityListingsClient } from "@/components/city-listings-client";
 import { getListingsByCity, getCitiesByState, getCityBySlug } from "@/lib/supabase/queries";
 import { stateNameFromSlug, stateAbbrFromSlug, buildCityPath } from "@/lib/geography";
-import { getCityContent } from "@/lib/city-data";
+import { getEnrichedCityContent } from "@/lib/city-content";
+import { cityPageSchema } from "@/lib/schema";
 import { WaveDivider } from "@/components/wave-divider";
 import { AdSlot } from "@/components/ad-slot";
 
@@ -19,12 +20,13 @@ export async function generateMetadata({ params }: CityPageProps): Promise<Metad
   const cityData = await getCityBySlug(city, stateAbbr);
   const stateName = stateNameFromSlug(state);
   const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
-  const content = getCityContent(stateAbbr, city);
+  const content = getEnrichedCityContent(stateAbbr, city);
 
   const title = `Best Dog Groomers in ${cityName}, ${stateAbbr}`;
-  const description = content
-    ? `Find the best dog groomers in ${cityName}, ${stateName}. Browse ${cityData?.groomer_count ? cityData.groomer_count + " " : ""}verified groomers, plus dog parks, neighborhoods, and dog-friendly spots.`
-    : `Find the best dog groomers in ${cityName}, ${stateName}. Browse ${cityData?.groomer_count ? cityData.groomer_count + " " : ""}verified groomers with reviews, pricing, and services.`;
+  const groomerText = cityData?.groomer_count
+    ? `${cityData.groomer_count} verified groomer${cityData.groomer_count !== 1 ? "s" : ""}`
+    : "verified groomers";
+  const description = `Find the best dog groomers in ${cityName}, ${stateName}. Browse ${groomerText}, plus dog parks, neighborhoods, and dog-friendly spots.`;
   const ogImage = `/api/og/city?city=${encodeURIComponent(city)}&state=${encodeURIComponent(state)}`;
 
   return {
@@ -61,7 +63,7 @@ export default async function CityPage({ params }: CityPageProps) {
 
   const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
   const nearby = relatedCities.filter((c) => c.slug !== city).slice(0, 6);
-  const content = getCityContent(stateAbbr, city);
+  const content = getEnrichedCityContent(stateAbbr, city);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -96,7 +98,7 @@ export default async function CityPage({ params }: CityPageProps) {
 
       <WaveDivider variant="gentle" fromColor="#FDF8F0" toColor="#FDF8F0" />
 
-      {/* Main content — Listings */}
+      {/* Main content - Listings */}
       <section className="bg-bg flex-1">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 w-full">
           <Suspense fallback={<div className="py-8 text-center text-text-muted">Loading filters...</div>}>
@@ -197,6 +199,35 @@ export default async function CityPage({ params }: CityPageProps) {
             </section>
           )}
 
+          {/* Trails */}
+          {content.trails && content.trails.length > 0 && (
+            <section className="bg-white pt-2 pb-10">
+              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div className="flex items-center gap-2 mb-6">
+                  <TreeStructure weight="duotone" className="w-6 h-6 text-brand-secondary" />
+                  <h2 className="font-heading text-2xl font-semibold text-brand-primary">
+                    Trails and Parks Near {cityName}
+                  </h2>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {content.trails.map((trail) => (
+                    <div key={trail.name} className="rounded-xl border border-border bg-bg/50 p-5">
+                      <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-brand-secondary mb-2">
+                        {trail.type}
+                      </span>
+                      <h3 className="font-heading text-sm font-semibold text-brand-primary mb-1">
+                        {trail.name}
+                      </h3>
+                      {trail.description && (
+                        <p className="text-xs text-text-muted leading-relaxed">{trail.description}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+
           {/* Dog-Friendly Spots */}
           {content.dogFriendlySpots.length > 0 && (
             <section className="bg-white pt-2 pb-10">
@@ -219,9 +250,18 @@ export default async function CityPage({ params }: CityPageProps) {
                       <h3 className="font-heading text-sm font-semibold text-brand-primary mb-1">
                         {spot.name}
                       </h3>
-                      <p className="text-xs text-text-muted leading-relaxed">
+                      <p className="text-xs text-text-muted leading-relaxed line-clamp-3">
                         {spot.description}
                       </p>
+                      {spot.rating && (
+                        <div className="mt-2 flex items-center gap-1">
+                          <span className="text-xs font-semibold text-brand-primary">{spot.rating}</span>
+                          <span className="text-xs text-text-muted">/ 5</span>
+                          {spot.reviewCount && (
+                            <span className="text-xs text-text-muted">({spot.reviewCount} reviews)</span>
+                          )}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -273,16 +313,25 @@ export default async function CityPage({ params }: CityPageProps) {
               Dog Grooming in {cityName}, {stateAbbr}
             </h2>
             <p className="text-text-muted text-sm leading-relaxed">
-              Finding a reliable, skilled dog groomer in {cityName} doesn&apos;t have to be stressful.
-              GroomLocal has verified and reviewed all listings in our directory so you can book with confidence.
-              Whether you&apos;re looking for a quick nail trim, a full breed-specific haircut, or a mobile groomer
-              who comes to your door, we have options for every need and budget in the {cityName}, {stateName} area.
+              {cityName} has {listings.length} dog groomer{listings.length !== 1 ? "s" : ""} listed on GroomLocal,
+              {" "}serving pet owners across {stateAbbr === "WA" ? "Washington" : "Oregon"}.
+              {content && content.dogParks.length > 0 && (
+                <> The area is home to {content.dogParks.length} dog park{content.dogParks.length !== 1 ? "s" : ""}, making it easy to exercise your dog before or after a grooming appointment.</>
+              )}
+              {" "}All listings in our directory include service details and contact information so you can compare options and find the right fit.
             </p>
           </div>
         </div>
       </section>
 
       <WaveDivider variant="footer" fromColor="#FDF8F0" toColor="#4ECDC4" />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(cityPageSchema(listings, cityName, stateAbbr, state, city)),
+        }}
+      />
     </div>
   );
 }

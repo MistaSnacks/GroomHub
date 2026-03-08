@@ -24,7 +24,7 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
 
         const supabase = createClient();
 
-        // Strategy for seamless claiming: 
+        // Strategy for smooth claiming: 
         // 1. Try to log them in with the provided credentials
         // 2. If it fails, try to sign them up.
         let authError = null;

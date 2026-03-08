@@ -132,7 +132,7 @@ export default async function ServiceLandingPage({ params }: Props) {
           return (
             <div key={abbr}>
               <h2 className="font-heading text-xl font-semibold text-brand-primary mb-4">
-                {name} — {cities.reduce((sum, c) => sum + c.count, 0)} groomers
+                {name} · {cities.reduce((sum, c) => sum + c.count, 0)} groomers
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                 {cities.map((city) => (

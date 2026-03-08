@@ -213,7 +213,7 @@ export function QuoteWizard() {
             What does {form.petName || "your pup"} need?
           </h3>
           <p className="text-sm text-text-muted">
-            Select all that apply — groomers will customize their quotes.
+            Select all that apply. Groomers will customize their quotes.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {serviceOptions.map((service) => (

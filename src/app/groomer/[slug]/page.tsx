@@ -43,7 +43,7 @@ export async function generateMetadata({
   const truncatedDesc = description.length > 160 ? description.slice(0, 157) + "..." : description.length < 120
     ? `${description} Find reviews, services, and contact info for ${listing.name} in ${listing.city}, ${listing.state}.`.slice(0, 160)
     : description;
-  const title = `${listing.name} — ${listing.city}, ${listing.state} Groomer`;
+  const title = `${listing.name} | ${listing.city}, ${listing.state} Groomer`;
   const ogImage = `/api/og/groomer?slug=${encodeURIComponent(slug)}`;
 
   return {
@@ -193,7 +193,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                 )}
               </div>
 
-              {/* Claim CTA — only show if unclaimed */}
+              {/* Claim CTA - only show if unclaimed */}
               {!listing.owner_id ? (
                 <Link
                   href={`/claim/${listing.slug}`}
@@ -339,7 +339,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                     <div key={h.day} className="flex items-center justify-between py-2.5">
                       <span className="text-sm font-medium text-text">{h.day}</span>
                       <span className={`text-sm ${h.closed ? "text-fun-pop" : "text-text-muted"}`}>
-                        {h.closed ? "Closed" : `${h.open} — ${h.close}`}
+                        {h.closed ? "Closed" : `${h.open} - ${h.close}`}
                       </span>
                     </div>
                   ))}
@@ -506,7 +506,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                 </ul>
               </div>
 
-              {/* Claim CTA Card — only show if unclaimed */}
+              {/* Claim CTA Card - only show if unclaimed */}
               {!listing.owner_id && (
                 <div className="rounded-2xl bg-brand-secondary p-5">
                   <h3 className="font-heading text-base font-bold text-brand-primary mb-2">

@@ -115,7 +115,7 @@ export function AboutContent({ metrics }: AboutContentProps) {
 
       <WaveDivider variant="asymmetric" fromColor="#FFFFFF" toColor="#FDF8F0" />
 
-      {/* Values — Bento Grid */}
+      {/* Values - Bento Grid */}
       <section className="py-20 md:py-28 bg-bg relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -134,7 +134,7 @@ export function AboutContent({ metrics }: AboutContentProps) {
             variants={containerVariants}
             className="grid grid-cols-1 md:grid-cols-3 gap-6"
           >
-            {/* Large card — spans 2 rows */}
+            {/* Large card - spans 2 rows */}
             <motion.div variants={itemVariants} className="md:row-span-2 bg-white rounded-2xl border border-border p-8 flex flex-col">
               <div className="flex items-center justify-center w-14 h-14 rounded-xl bg-brand-secondary/15 text-brand-secondary mb-6">
                 <Heart weight="fill" className="w-7 h-7" />
@@ -156,7 +156,7 @@ export function AboutContent({ metrics }: AboutContentProps) {
               </p>
             </motion.div>
 
-            {/* Free Forever — teal bg */}
+            {/* Free Forever - teal bg */}
             <motion.div variants={itemVariants} className="bg-brand-accent text-white rounded-2xl p-6">
               <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/20 mb-4">
                 <Leaf weight="fill" className="w-6 h-6" />
@@ -167,7 +167,7 @@ export function AboutContent({ metrics }: AboutContentProps) {
               </p>
             </motion.div>
 
-            {/* Community — cream bg */}
+            {/* Community - cream bg */}
             <motion.div variants={itemVariants} className="md:col-span-2 bg-brand-secondary/10 rounded-2xl p-6">
               <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-brand-primary/10 text-brand-primary mb-4">
                 <Users weight="fill" className="w-6 h-6" />

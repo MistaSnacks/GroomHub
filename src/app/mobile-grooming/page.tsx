@@ -6,10 +6,10 @@ import { stateSlugFromAbbr } from "@/lib/geography";
 import { WaveDivider } from "@/components/wave-divider";
 
 export const metadata: Metadata = {
-  title: "Mobile Dog Groomers — Grooming at Your Door",
+  title: "Mobile Dog Groomers | Grooming at Your Door",
   description: "Find mobile dog groomers across Washington and Oregon. Convenient grooming that comes to your home.",
   openGraph: {
-    title: "Mobile Dog Groomers — Grooming at Your Door",
+    title: "Mobile Dog Groomers | Grooming at Your Door",
     description: "Find mobile dog groomers across Washington and Oregon. Convenient grooming that comes to your home.",
     type: "website",
     url: "/mobile-grooming",

@@ -272,7 +272,7 @@ export async function getAllListings(): Promise<NormalizedListing[]> {
 
 // ─── City Queries (derived from business_listings) ──────
 // These aggregate city data directly from listings, so every city
-// with at least one listing is always included — no sync issues.
+// with at least one listing is always included, no sync issues.
 
 type CityRow = Pick<BusinessListing, "city_slug" | "city" | "state">;
 

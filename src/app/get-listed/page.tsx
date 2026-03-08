@@ -6,11 +6,11 @@ import { GetListedForm } from "./get-listed-form";
 import { ListingSearch } from "./listing-search";
 
 export const metadata: Metadata = {
-  title: "Get Listed — Add Your Grooming Business",
+  title: "Get Listed | Add Your Grooming Business",
   description:
     "Not in our directory yet? Submit your grooming business to GroomLocal and start connecting with local pet parents across the PNW.",
   openGraph: {
-    title: "Get Listed — Add Your Grooming Business",
+    title: "Get Listed | Add Your Grooming Business",
     description: "Submit your grooming business to GroomLocal and start connecting with local pet parents across the PNW.",
     type: "website",
     url: "/get-listed",

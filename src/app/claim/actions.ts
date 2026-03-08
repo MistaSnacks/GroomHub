@@ -36,7 +36,7 @@ export async function processClaim(formData: FormData) {
         ? plan
         : "free";
 
-    // Claim it — apply selected tier directly (no Stripe integration yet)
+    // Claim it - apply selected tier directly (no Stripe integration yet)
     const { error: updateError } = await supabase
         .from("business_listings")
         .update({

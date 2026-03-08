@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Brand palette — GroomLocal */
+  /* Brand palette - GroomLocal */
   --brand-primary: #1E293B;
   /* Deep Slate */
   --brand-secondary: #4ECDC4;
@@ -279,7 +279,7 @@ html {
   background: var(--text-muted);
 }
 
-/* Dark section variant — used on coral (#FF7E67) backgrounds */
+/* Dark section variant - used on coral (#FF7E67) backgrounds */
 .section-dark {
   color: rgba(255, 255, 255, 0.85);
 }

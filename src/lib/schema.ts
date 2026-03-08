@@ -12,6 +12,16 @@ function safeImageUrl(url: string | undefined): string | undefined {
   return url;
 }
 
+function sanitizeDescription(text: string | null | undefined): string | undefined {
+  if (!text) return undefined;
+  let clean = text.replace(/https?:\/\/\S+/g, "").trim();
+  clean = clean.replace(/<[^>]*>/g, "").trim();
+  clean = clean.replace(/\s+/g, " ").trim();
+  if (clean.length < 20) return undefined;
+  if (clean.length > 300) clean = clean.substring(0, 297) + "...";
+  return clean;
+}
+
 export function localBusinessSchema(listing: NormalizedListing) {
   const image = safeImageUrl(listing.images?.[0]);
   const hours = listing.hours?.filter((h) => !h.closed);
@@ -21,7 +31,7 @@ export function localBusinessSchema(listing: NormalizedListing) {
     "@type": "LocalBusiness",
     "@id": `${BASE_URL}/groomer/${listing.slug}`,
     name: listing.name,
-    description: listing.short_description || listing.description,
+    description: sanitizeDescription(listing.short_description) || sanitizeDescription(listing.description),
     address: {
       "@type": "PostalAddress",
       streetAddress: listing.address,
@@ -49,7 +59,7 @@ export function localBusinessSchema(listing: NormalizedListing) {
         longitude: listing.lng,
       },
     }),
-    priceRange: listing.price_range || "$$",
+    ...(listing.price_range && (listing.price_range as string) !== "N/A" && { priceRange: listing.price_range }),
     ...(image && { image }),
     ...(hours && hours.length > 0 && {
       openingHoursSpecification: hours.map((h) => ({
@@ -77,20 +87,67 @@ export function breadcrumbSchema(
   };
 }
 
-export function faqSchema(
-  faqs: { question: string; answer: string }[]
-) {
+export function websiteSchema() {
   return {
     "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((faq) => ({
-      "@type": "Question",
-      name: faq.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: faq.answer,
-      },
-    })),
+    "@type": "WebSite",
+    name: "GroomLocal",
+    url: BASE_URL,
+    description: "Find the best dog groomers in Seattle, Tacoma, Portland, and across the Pacific Northwest.",
+  };
+}
+
+export function organizationSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "GroomLocal",
+    url: BASE_URL,
+    logo: `${BASE_URL}/icon.svg`,
+    description: "The Pacific Northwest's most trusted pet grooming directory.",
+    areaServed: [
+      { "@type": "State", name: "Washington" },
+      { "@type": "State", name: "Oregon" },
+    ],
+  };
+}
+
+export function cityPageSchema(
+  listings: NormalizedListing[],
+  cityName: string,
+  stateAbbr: string,
+  statePath: string,
+  citySlug: string
+) {
+  const breadcrumb = breadcrumbSchema([
+    { name: "Home", href: "/" },
+    { name: "Dog Grooming", href: "/dog-grooming" },
+    { name: stateAbbr === "WA" ? "Washington" : "Oregon", href: `/dog-grooming/${statePath}` },
+    { name: cityName, href: `/dog-grooming/${statePath}/${citySlug}` },
+  ]);
+  const itemList = itemListSchema(listings, `Dog Groomers in ${cityName}, ${stateAbbr}`);
+
+  const { "@context": _bc, ...breadcrumbBody } = breadcrumb;
+  const { "@context": _il, ...itemListBody } = itemList;
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [breadcrumbBody, itemListBody],
+  };
+}
+
+export function statePageSchema(stateName: string, statePath: string) {
+  const breadcrumb = breadcrumbSchema([
+    { name: "Home", href: "/" },
+    { name: "Dog Grooming", href: "/dog-grooming" },
+    { name: stateName, href: `/dog-grooming/${statePath}` },
+  ]);
+
+  const { "@context": _bc, ...breadcrumbBody } = breadcrumb;
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [breadcrumbBody],
   };
 }
 

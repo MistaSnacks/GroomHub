@@ -13,11 +13,11 @@ import { WaveDivider } from "@/components/wave-divider";
 import { AnimatedSection, AnimatedItem } from "@/components/animated-section";
 
 export const metadata: Metadata = {
-  title: "For Groomers — List Your Business",
+  title: "For Groomers | List Your Business",
   description:
     "Get your grooming business in front of thousands of pet owners in the PNW. Free to list, powerful tools to grow. Join the pack today.",
   openGraph: {
-    title: "For Groomers — List Your Business",
+    title: "For Groomers | List Your Business",
     description: "Get your grooming business in front of thousands of pet owners in the PNW. Free to list, powerful tools to grow.",
     type: "website",
     url: "/for-groomers",
@@ -143,7 +143,7 @@ export default function ForGroomersPage() {
 
       <WaveDivider variant="gentle" fromColor="#FDF8F0" toColor="#FFFFFF" />
 
-      {/* Features — 2x2 grid with colored accents */}
+      {/* Features - 2x2 grid with colored accents */}
       <section className="bg-white py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -184,7 +184,7 @@ export default function ForGroomersPage() {
 
       <WaveDivider variant="asymmetric" fromColor="#FFFFFF" toColor="#FDF8F0" />
 
-      {/* How It Works — 3 steps */}
+      {/* How It Works - 3 steps */}
       <section className="bg-bg py-16 md:py-24">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -251,7 +251,7 @@ export default function ForGroomersPage() {
         </div>
       </section>
 
-      {/* Final CTA — Coral */}
+      {/* Final CTA - Coral */}
       <WaveDivider variant="steep" fromColor="#FFFFFF" toColor="#FA8072" />
 
       <section className="bg-brand-accent py-16 md:py-20 relative overflow-hidden">

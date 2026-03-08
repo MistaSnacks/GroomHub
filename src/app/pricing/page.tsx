@@ -10,7 +10,7 @@ import { pricingTiers } from "@/lib/pricing";
 const faqs = [
   {
     q: "Can I start for free?",
-    a: "Absolutely! Our Free tier gets your business listed with name, address, phone, and one photo. Upgrade anytime to unlock more features — no pressure, no leash attached.",
+    a: "Absolutely! Our Free tier gets your business listed with name, address, phone, and one photo. Upgrade anytime to unlock more features. No pressure, no leash attached.",
   },
   {
     q: "Why should I claim my listing if my business is already shown?",
@@ -26,7 +26,7 @@ const faqs = [
   },
   {
     q: "Can I cancel anytime?",
-    a: "Yes — no contracts, no cancellation fees. You can downgrade or cancel at any time. Your listing stays active on the Free tier even after cancelling a paid plan.",
+    a: "Yes! No contracts, no cancellation fees. You can downgrade or cancel at any time. Your listing stays active on the Free tier even after cancelling a paid plan.",
   },
   {
     q: "What is the direct booking integration?",

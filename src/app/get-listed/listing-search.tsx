@@ -56,7 +56,7 @@ export function ListingSearch() {
         Already in our directory?
       </h3>
       <p className="text-sm text-text-muted mb-4">
-        Search for your business first — if we have it, you can claim it right away.
+        Search for your business first. If we have it, you can claim it right away.
       </p>
 
       <div className="relative">
@@ -110,7 +110,7 @@ export function ListingSearch() {
 
       {searched && results.length === 0 && query.length >= 2 && (
         <p className="mt-3 text-sm text-text-muted">
-          No matching businesses found — fill out the form below to get listed.
+          No matching businesses found. Fill out the form below to get listed.
         </p>
       )}
     </div>

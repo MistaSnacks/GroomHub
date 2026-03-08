@@ -5,6 +5,7 @@ import { CaretRight, MapPin } from "@phosphor-icons/react/dist/ssr";
 import { getCityBrowseSummary } from "@/lib/supabase/queries";
 import { isValidStateSlug, stateNameFromSlug, stateAbbrFromSlug, stateSlugFromAbbr } from "@/lib/geography";
 import { supabase } from "@/lib/supabase/client";
+import { statePageSchema } from "@/lib/schema";
 import { WaveDivider } from "@/components/wave-divider";
 import { CityPillGrid } from "@/components/city-pill-grid";
 
@@ -22,7 +23,7 @@ export async function generateMetadata({ params }: StatePageProps): Promise<Meta
   }
 
   const stateName = stateNameFromSlug(state);
-  const title = `Dog Groomers in ${stateName} — Browse by City`;
+  const title = `Dog Groomers in ${stateName} | Browse by City`;
   const description = `Browse dog groomers across ${stateName}. Find verified groomers in every city with real reviews and transparent pricing.`;
 
   return {
@@ -120,6 +121,13 @@ export default async function StatePage({ params }: StatePageProps) {
       </section>
 
       <WaveDivider variant="footer" fromColor="#FFFFFF" toColor="#4ECDC4" />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(statePageSchema(stateName, state)),
+        }}
+      />
     </div>
   );
 }

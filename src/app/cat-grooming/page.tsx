@@ -6,10 +6,10 @@ import { stateSlugFromAbbr } from "@/lib/geography";
 import { WaveDivider } from "@/components/wave-divider";
 
 export const metadata: Metadata = {
-  title: "Cat Groomers — Find Cat Grooming Near You",
+  title: "Cat Groomers | Find Cat Grooming Near You",
   description: "Find verified cat groomers across Washington and Oregon. Feline-friendly salons with dedicated suites and gentle handling.",
   openGraph: {
-    title: "Cat Groomers — Find Cat Grooming Near You",
+    title: "Cat Groomers | Find Cat Grooming Near You",
     description: "Find verified cat groomers across Washington and Oregon. Feline-friendly salons with dedicated suites and gentle handling.",
     type: "website",
     url: "/cat-grooming",

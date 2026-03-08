@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { websiteSchema, organizationSchema } from "@/lib/schema";
 import { BrowseByServiceSection } from "@/components/browse-by-service-section";
 import { BrowseBySpecialtySection } from "@/components/browse-by-specialty-section";
 import { BrowseByCitySection } from "@/components/browse-by-city-section";
@@ -9,6 +11,10 @@ import { PromoFindGroomers } from "@/components/promo-find-groomers";
 import { PromoClaimListing } from "@/components/promo-claim-listing";
 import { AdSlot } from "@/components/ad-slot";
 import { WaveDivider } from "@/components/wave-divider";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "https://groomlocal.com" },
+};
 
 export default async function HomePage() {
   const [waCities, orCities, totalCount, featuredListings] = await Promise.all([
@@ -87,6 +93,19 @@ export default async function HomePage() {
       </section>
 
       <WaveDivider variant="footer" fromColor="#FFFFFF" toColor="#4ECDC4" />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              { "@type": "WebSite", name: "GroomLocal", url: "https://groomlocal.com", description: "Find the best dog groomers in Seattle, Tacoma, Portland, and across the Pacific Northwest." },
+              { "@type": "Organization", name: "GroomLocal", url: "https://groomlocal.com", logo: "https://groomlocal.com/icon.svg", description: "The Pacific Northwest's most trusted pet grooming directory.", areaServed: [{ "@type": "State", name: "Washington" }, { "@type": "State", name: "Oregon" }] },
+            ],
+          }),
+        }}
+      />
     </div>
   );
 }

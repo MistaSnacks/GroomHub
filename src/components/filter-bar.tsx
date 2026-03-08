@@ -47,7 +47,7 @@ export function FilterBar({ resultCount, cityName, activeFilters, setActiveFilte
             Best Dog Groomers in {cityName}
           </h2>
           <p className="text-sm text-text-muted mt-0.5">
-            {resultCount} groomers found — sniffing out the best for you
+            {resultCount} groomers found - sniffing out the best for you
           </p>
         </div>
         <div className="flex items-center gap-2">

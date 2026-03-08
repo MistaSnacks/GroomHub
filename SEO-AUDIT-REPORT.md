@@ -294,9 +294,19 @@ robots.txt correctly allows GPTBot, ClaudeBot, PerplexityBot, and Google-Extende
    - Request indexing of homepage and key pages
    - This is THE most important action - nothing else matters until Google can find you
 
-2. **Fix schema bugs**
+2. **Fix missing canonical on homepage**
+   - Homepage is missing `<link rel="canonical">` and `og:url`
+   - Add to layout.tsx metadata or homepage metadata export
+   - Also fix `/blog` page canonical (only in RSC payload, not initial HTML)
+
+3. **Fix schema bugs**
    - Empty openingHoursSpecification in `src/lib/schema.ts`
    - numberOfItems mismatch in service ItemList
+
+4. **Enable ISR caching on city/state pages**
+   - Currently SSR on every request (TTFB 300-500ms, `private, no-cache`)
+   - Add `export const revalidate = 300` to city/state page files
+   - Will drop TTFB to <100ms for cached pages and reduce Supabase load
 
 ### HIGH (Fix Within 2 Weeks)
 

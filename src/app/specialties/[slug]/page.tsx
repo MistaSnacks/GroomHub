@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const tag = getSpecialtyTag(slug);
   if (!tag) return {};
 
-  const title = `${tag.label} Groomers — PNW Specialists`;
+  const title = `${tag.label} Groomers | PNW Specialists`;
   const description = `Find groomers specializing in ${tag.label.toLowerCase()} across Washington and Oregon. Compare ratings, reviews, and book with confidence.`;
 
   return {
@@ -135,7 +135,7 @@ export default async function SpecialtyLandingPage({ params }: Props) {
             return (
               <div key={abbr}>
                 <h2 className="font-heading text-xl font-semibold text-brand-primary mb-4">
-                  {name} — {cities.reduce((sum, c) => sum + c.count, 0)} groomers
+                  {name} · {cities.reduce((sum, c) => sum + c.count, 0)} groomers
                 </h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                   {cities.map((city) => (

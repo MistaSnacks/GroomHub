@@ -22,7 +22,7 @@ export const pricingTiers: PricingTier[] = [
       { text: "Priority search placement", included: false },
     ],
     isPopular: false,
-    ctaText: "Join the Pack — Free",
+    ctaText: "Join the Pack - Free",
   },
   {
     name: "Standard",
@@ -88,7 +88,7 @@ export const pricingTiers: PricingTier[] = [
       { text: "Custom branding options", included: true },
     ],
     isPopular: false,
-    ctaText: "Unleash Full Power",
+    ctaText: "Go All In",
   },
 ];
 

@@ -24,9 +24,9 @@ export function SiteFooter() {
 
           {/* Washington */}
           <div>
-            <h4 className="font-heading text-sm font-semibold uppercase tracking-widest mb-4 text-slate-900">
+            <p className="font-heading text-sm font-semibold uppercase tracking-widest mb-4 text-slate-900">
               Washington
-            </h4>
+            </p>
             <ul className="space-y-2">
               {[
                 { name: "Seattle", slug: "seattle" },
@@ -48,9 +48,9 @@ export function SiteFooter() {
 
           {/* Oregon */}
           <div>
-            <h4 className="font-heading text-sm font-semibold uppercase tracking-widest mb-4 text-slate-900">
+            <p className="font-heading text-sm font-semibold uppercase tracking-widest mb-4 text-slate-900">
               Oregon
-            </h4>
+            </p>
             <ul className="space-y-2">
               {[
                 { name: "Portland", slug: "portland" },
@@ -72,9 +72,9 @@ export function SiteFooter() {
 
           {/* Company */}
           <div>
-            <h4 className="font-heading text-sm font-semibold uppercase tracking-widest mb-4 text-slate-900">
+            <p className="font-heading text-sm font-semibold uppercase tracking-widest mb-4 text-slate-900">
               Company
-            </h4>
+            </p>
             <ul className="space-y-2">
               <li><Link href="/about" className="text-sm text-slate-700 hover:text-slate-900 transition-colors">About</Link></li>
               <li><Link href="/contact" className="text-sm text-slate-700 hover:text-slate-900 transition-colors">Contact</Link></li>

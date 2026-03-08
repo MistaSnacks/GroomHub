@@ -44,7 +44,8 @@ next-env.d.ts
 .venv*/
 
 # data pipeline (raw scrapes, SQL seeds, enrichment output)
-data/
+/data/
+!src/data/
 
 # temp/scratch files
 lint-results*.txt
