@@ -4,6 +4,7 @@ import { CheckCircle, ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { WaveDivider } from "@/components/wave-divider";
 import { getListingBySlug } from "@/lib/supabase/queries";
 import { createClient } from "@/lib/supabase/server";
+import { CopyBadge } from "@/components/copy-badge";
 
 export default async function ClaimSuccessPage({
     params,
@@ -77,6 +78,29 @@ export default async function ClaimSuccessPage({
                         >
                             View public profile
                         </Link>
+                    </div>
+                </div>
+            </section>
+
+            {/* Growth & Marketing Section: High Value Local Link Building */}
+            <section className="bg-white py-16 border-t border-border mt-8">
+                <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+                    <div className="flex flex-col md:flex-row items-center gap-10">
+                        <div className="flex-1">
+                            <h2 className="font-heading text-2xl font-bold text-brand-primary mb-3">
+                                Show off your verified status
+                            </h2>
+                            <p className="text-text-muted mb-6">
+                                Did you know that verified listings rank higher in local search results? Add the GroomLocal Verified Badge to your website to build trust with pet parents and improve your SEO.
+                            </p>
+                            <CopyBadge listingSlug={slug} />
+                        </div>
+                        <div className="w-full md:w-1/3 flex justify-center order-first md:order-last">
+                            <div className="relative w-48 h-48 bg-bg rounded-full flex items-center justify-center border-4 border-white shadow-lg">
+                                {/* Using a placeholder or existing Maui image here to make it friendly */}
+                                <img src="/maui-assets/14-maui-sitting-pretty-alt.png" alt="Maui the Mascot" className="w-36 h-36 object-contain" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
