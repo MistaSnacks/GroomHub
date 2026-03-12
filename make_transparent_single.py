@@ -1,4 +1,5 @@
 import os
+import sys
 
 try:
     from rembg import remove
@@ -7,8 +8,12 @@ except ImportError:
     print("Please install rembg and Pillow: pip install rembg Pillow")
     exit(1)
 
-input_path = '/Users/admin/.gemini/antigravity/brain/533ed358-d0b4-4c1a-b974-2ebd41266a5a/winter_maui_blue_pompom_1772658595650.png'
-output_path = 'public/maui-assets/maui-winter-grooming-blog.png'
+if len(sys.argv) != 3:
+    print("Usage: python make_transparent_single.py <input_path> <output_path>")
+    exit(1)
+
+input_path = sys.argv[1]
+output_path = sys.argv[2]
 
 print(f"Removing background for {input_path}...")
 try:
