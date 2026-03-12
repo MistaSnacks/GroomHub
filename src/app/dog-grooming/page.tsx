@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { CaretRight } from "@phosphor-icons/react/dist/ssr";
 import { getCityBrowseSummary, getTotalListingCount } from "@/lib/supabase/queries";
+
+export const revalidate = 300;
 import { stateSlugFromAbbr, buildServicePath, buildSpecialtyPath } from "@/lib/geography";
 import { isValidServiceSlug, isValidSpecialtySlug } from "@/lib/tags";
 import { WaveDivider } from "@/components/wave-divider";

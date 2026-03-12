@@ -3,6 +3,8 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { CaretRight, MapPin, Cat } from "@phosphor-icons/react/dist/ssr";
 import { CityListingsClient } from "@/components/city-listings-client";
+
+export const revalidate = 300;
 import { getListingsByServiceTag, getCityBySlug } from "@/lib/supabase/queries";
 import { stateAbbrFromSlug } from "@/lib/geography";
 import { WaveDivider } from "@/components/wave-divider";

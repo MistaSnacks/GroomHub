@@ -3,6 +3,8 @@ import Link from "next/link";
 import { redirect, notFound } from "next/navigation";
 import { CaretRight, MapPin } from "@phosphor-icons/react/dist/ssr";
 import { getCityBrowseSummary } from "@/lib/supabase/queries";
+
+export const revalidate = 300;
 import { isValidStateSlug, stateNameFromSlug, stateAbbrFromSlug, stateSlugFromAbbr } from "@/lib/geography";
 import { supabase } from "@/lib/supabase/client";
 import { statePageSchema } from "@/lib/schema";

@@ -1,14 +1,42 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
-import { CaretRight, MapPin, PawPrint, Park, MapTrifold, Storefront, TreeStructure } from "@phosphor-icons/react/dist/ssr";
+import { CaretRight, MapPin, PawPrint, Park, MapTrifold, Storefront, TreeStructure, Question } from "@phosphor-icons/react/dist/ssr";
 import { CityListingsClient } from "@/components/city-listings-client";
+
+export const revalidate = 300;
 import { getListingsByCity, getCitiesByState, getCityBySlug } from "@/lib/supabase/queries";
 import { stateNameFromSlug, stateAbbrFromSlug, buildCityPath } from "@/lib/geography";
 import { getEnrichedCityContent } from "@/lib/city-content";
-import { cityPageSchema } from "@/lib/schema";
+import { cityPageSchema, cityFaqSchema } from "@/lib/schema";
 import { WaveDivider } from "@/components/wave-divider";
 import { AdSlot } from "@/components/ad-slot";
+
+function buildCityFaqs(cityName: string, stateAbbr: string, groomerCount: number, parkCount: number) {
+  const stateName = stateAbbr === "WA" ? "Washington" : "Oregon";
+  return [
+    {
+      question: `How much does dog grooming cost in ${cityName}?`,
+      answer: `Dog grooming in ${cityName}, ${stateName} typically costs $40 to $90 for a standard bath and haircut, depending on your dog's size, breed, and coat condition. Prices may be higher for large breeds or dogs with matted fur. Compare ${groomerCount} groomers on GroomLocal to find the best value.`,
+    },
+    {
+      question: "How often should I groom my dog?",
+      answer: "Most dogs should be professionally groomed every 4 to 8 weeks. Dogs with longer coats (Poodles, Shih Tzus, Goldendoodles) need grooming every 4 to 6 weeks. Short-haired breeds can go 8 to 12 weeks between appointments. Regular brushing at home between visits helps prevent matting.",
+    },
+    {
+      question: `What should I look for in a dog groomer in ${cityName}?`,
+      answer: `Look for groomers with positive reviews, proper certifications, and a clean facility. Ask about their experience with your dog's breed. A good groomer will discuss your preferences before starting and handle your dog with patience. ${cityName} has ${groomerCount} groomers listed on GroomLocal, each with service details and contact information.`,
+    },
+    {
+      question: `Are there mobile dog groomers in ${cityName}?`,
+      answer: `Yes, several groomers in ${cityName}, ${stateAbbr} offer mobile grooming services. Mobile groomers come to your home in a fully equipped van, which is convenient for busy pet owners or dogs that get anxious at salons. Check individual listings on GroomLocal for mobile availability.`,
+    },
+    {
+      question: "What grooming services do most groomers offer?",
+      answer: "Most professional groomers offer bath and blow-dry, haircut and styling, nail trimming, ear cleaning, teeth brushing, and de-shedding treatments. Many also provide add-on services like flea treatments, medicated baths, and anal gland expression. Breed-specific cuts are available at salons with experienced stylists.",
+    },
+  ];
+}
 
 interface CityPageProps {
   params: Promise<{ state: string; city: string }>;
@@ -22,11 +50,16 @@ export async function generateMetadata({ params }: CityPageProps): Promise<Metad
   const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
   const content = getEnrichedCityContent(stateAbbr, city);
 
-  const title = `Best Dog Groomers in ${cityName}, ${stateAbbr}`;
-  const groomerText = cityData?.groomer_count
-    ? `${cityData.groomer_count} verified groomer${cityData.groomer_count !== 1 ? "s" : ""}`
+  const groomerCount = cityData?.groomer_count ?? 0;
+  const groomerText = groomerCount
+    ? `${groomerCount} verified groomer${groomerCount !== 1 ? "s" : ""}`
     : "verified groomers";
-  const description = `Find the best dog groomers in ${cityName}, ${stateName}. Browse ${groomerText}, plus dog parks, neighborhoods, and dog-friendly spots.`;
+  const title = groomerCount
+    ? `${groomerCount} Best Dog Groomers in ${cityName}, ${stateAbbr} (2026)`
+    : `Best Dog Groomers in ${cityName}, ${stateAbbr} (2026)`;
+  const parkCount = content?.dogParks?.length ?? 0;
+  const parkMention = parkCount > 0 ? ` Plus ${parkCount} local dog parks.` : "";
+  const description = `Compare ${groomerText} in ${cityName}, ${stateName} with prices, reviews, and services.${parkMention} Find your next groomer on GroomLocal.`;
   const ogImage = `/api/og/city?city=${encodeURIComponent(city)}&state=${encodeURIComponent(state)}`;
 
   return {
@@ -64,6 +97,8 @@ export default async function CityPage({ params }: CityPageProps) {
   const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
   const nearby = relatedCities.filter((c) => c.slug !== city).slice(0, 6);
   const content = getEnrichedCityContent(stateAbbr, city);
+
+  const faqs = buildCityFaqs(cityName, stateAbbr, listings.length, content?.dogParks?.length ?? 0);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -278,6 +313,34 @@ export default async function CityPage({ params }: CityPageProps) {
         </>
       )}
 
+      {/* FAQ Section */}
+      <section className="bg-white py-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-2 mb-6">
+            <Question weight="duotone" className="w-6 h-6 text-brand-secondary" />
+            <h2 className="font-heading text-2xl font-semibold text-brand-primary">
+              Frequently Asked Questions About Dog Grooming in {cityName}
+            </h2>
+          </div>
+          <div className="space-y-4">
+            {faqs.map((faq) => (
+              <details
+                key={faq.question}
+                className="group rounded-xl border border-border bg-bg/50 overflow-hidden"
+              >
+                <summary className="flex items-center justify-between cursor-pointer p-5 text-brand-primary font-medium text-sm hover:bg-bg transition-colors">
+                  <span>{faq.question}</span>
+                  <CaretRight weight="bold" className="w-4 h-4 text-text-muted group-open:rotate-90 transition-transform" />
+                </summary>
+                <div className="px-5 pb-5 text-sm text-text-muted leading-relaxed">
+                  {faq.answer}
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Related Cities */}
       {nearby.length > 0 && (
         <>
@@ -310,7 +373,7 @@ export default async function CityPage({ params }: CityPageProps) {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
           <div className="bg-white rounded-2xl border border-border p-6 md:p-8">
             <h2 className="font-heading text-xl font-semibold text-brand-primary mb-3">
-              Dog Grooming in {cityName}, {stateAbbr}
+              Find a Dog Groomer in {cityName}, {stateAbbr}
             </h2>
             <p className="text-text-muted text-sm leading-relaxed">
               {cityName} has {listings.length} dog groomer{listings.length !== 1 ? "s" : ""} listed on GroomLocal,
@@ -319,6 +382,22 @@ export default async function CityPage({ params }: CityPageProps) {
                 <> The area is home to {content.dogParks.length} dog park{content.dogParks.length !== 1 ? "s" : ""}, making it easy to exercise your dog before or after a grooming appointment.</>
               )}
               {" "}All listings in our directory include service details and contact information so you can compare options and find the right fit.
+            </p>
+            <p className="text-text-muted text-sm leading-relaxed mt-3">
+              Not sure where to start? Read our guide on{" "}
+              <Link href="/blog/choosing-the-right-groomer-for-your-pet" className="text-brand-accent underline hover:text-brand-primary">
+                how to choose a dog groomer
+              </Link>, or check{" "}
+              <Link href="/blog/how-often-should-you-groom-your-dog" className="text-brand-accent underline hover:text-brand-primary">
+                how often you should groom your dog
+              </Link>{" "}based on breed and coat type.
+              {stateAbbr === "WA" || stateAbbr === "OR" ? (
+                <> For local pricing, see our{" "}
+                  <Link href="/blog/dog-grooming-cost-seattle-portland-2026" className="text-brand-accent underline hover:text-brand-primary">
+                    Seattle and Portland grooming cost guide
+                  </Link>.
+                </>
+              ) : null}
             </p>
           </div>
         </div>
@@ -329,7 +408,7 @@ export default async function CityPage({ params }: CityPageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(cityPageSchema(listings, cityName, stateAbbr, state, city)),
+          __html: JSON.stringify(cityPageSchema(listings, cityName, stateAbbr, state, city, faqs)),
         }}
       />
     </div>

@@ -17,6 +17,8 @@ import { WaveDivider } from "@/components/wave-divider";
 import { AnimatedSection, AnimatedItem } from "@/components/animated-section";
 import type { NormalizedListing } from "@/lib/types";
 
+export const revalidate = 300;
+
 interface Props {
   params: Promise<{ slug: string }>;
 }

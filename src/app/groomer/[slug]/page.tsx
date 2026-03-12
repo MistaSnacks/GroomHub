@@ -27,6 +27,8 @@ import { getServiceLabel, getSpecialtyLabel } from "@/lib/tags";
 import { localBusinessSchema, breadcrumbSchema } from "@/lib/schema";
 import { stateSlugFromAbbr, stateNameFromAbbr } from "@/lib/geography";
 
+export const revalidate = 300;
+
 interface GroomerPageProps {
   params: Promise<{ slug: string }>;
 }

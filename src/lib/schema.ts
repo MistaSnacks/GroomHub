@@ -24,7 +24,7 @@ function sanitizeDescription(text: string | null | undefined): string | undefine
 
 export function localBusinessSchema(listing: NormalizedListing) {
   const image = safeImageUrl(listing.images?.[0]);
-  const hours = listing.hours?.filter((h) => !h.closed);
+  const hours = listing.hours?.filter((h) => !h.closed && h.open && h.close);
 
   return {
     "@context": "https://schema.org",
@@ -117,7 +117,8 @@ export function cityPageSchema(
   cityName: string,
   stateAbbr: string,
   statePath: string,
-  citySlug: string
+  citySlug: string,
+  faqs?: Array<{ question: string; answer: string }>
 ) {
   const breadcrumb = breadcrumbSchema([
     { name: "Home", href: "/" },
@@ -130,9 +131,17 @@ export function cityPageSchema(
   const { "@context": _bc, ...breadcrumbBody } = breadcrumb;
   const { "@context": _il, ...itemListBody } = itemList;
 
+  const graph: Record<string, unknown>[] = [breadcrumbBody, itemListBody];
+
+  if (faqs && faqs.length > 0) {
+    const faqSchema = cityFaqSchema(faqs);
+    const { "@context": _fq, ...faqBody } = faqSchema;
+    graph.push(faqBody);
+  }
+
   return {
     "@context": "https://schema.org",
-    "@graph": [breadcrumbBody, itemListBody],
+    "@graph": graph,
   };
 }
 
@@ -183,7 +192,7 @@ export function itemListSchema(
     "@context": "https://schema.org",
     "@type": "ItemList",
     name,
-    numberOfItems: listings.length,
+    numberOfItems: Math.min(listings.length, 20),
     itemListElement: listings.slice(0, 20).map((listing, i) => ({
       "@type": "ListItem",
       position: i + 1,
@@ -191,6 +200,15 @@ export function itemListSchema(
         "@type": "LocalBusiness",
         name: listing.name,
         url: `${BASE_URL}/groomer/${listing.slug}`,
+        ...(listing.address && {
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: listing.address,
+            addressLocality: listing.city,
+            addressRegion: listing.state,
+            addressCountry: "US",
+          },
+        }),
         ...(listing.rating > 0 && listing.review_count > 0 && {
           aggregateRating: {
             "@type": "AggregateRating",
@@ -200,6 +218,23 @@ export function itemListSchema(
             worstRating: 1,
           },
         }),
+      },
+    })),
+  };
+}
+
+export function cityFaqSchema(
+  faqs: Array<{ question: string; answer: string }>
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
       },
     })),
   };

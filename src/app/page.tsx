@@ -12,6 +12,8 @@ import { PromoClaimListing } from "@/components/promo-claim-listing";
 import { AdSlot } from "@/components/ad-slot";
 import { WaveDivider } from "@/components/wave-divider";
 
+export const revalidate = 300;
+
 export const metadata: Metadata = {
   alternates: { canonical: "https://groomlocal.com" },
 };
