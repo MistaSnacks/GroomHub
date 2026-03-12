@@ -12,7 +12,8 @@ import {
     Image as ImageIcon,
     EnvelopeSimpleOpen,
     Storefront,
-    User
+    User,
+    GearSix
 } from "@phosphor-icons/react/dist/ssr";
 
 export default async function DashboardLayout({
@@ -33,6 +34,7 @@ export default async function DashboardLayout({
         { name: "Photos", href: "/dashboard/photos", icon: ImageIcon },
         { name: "Lead Inbox", href: "/dashboard/inbox", icon: EnvelopeSimpleOpen },
         { name: "Account", href: "/dashboard/account", icon: User },
+        { name: "Settings", href: "/dashboard/settings", icon: GearSix },
     ];
 
     return (

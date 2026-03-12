@@ -270,6 +270,22 @@ export async function getAllListings(): Promise<NormalizedListing[]> {
   return withTagsAll(allListings);
 }
 
+// ─── Owner Queries ──────────────────────────────────────
+
+export async function getListingsByOwner(userId: string): Promise<NormalizedListing[]> {
+  const { data, error } = await supabase
+    .from("business_listings")
+    .select("*")
+    .eq("owner_id", userId)
+    .order("claimed_at", { ascending: false });
+
+  if (error) {
+    console.error("getListingsByOwner error:", error.message);
+    return [];
+  }
+  return withTagsAll((data ?? []) as BusinessListing[]);
+}
+
 // ─── City Queries (derived from business_listings) ──────
 // These aggregate city data directly from listings, so every city
 // with at least one listing is always included, no sync issues.
