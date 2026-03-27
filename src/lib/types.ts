@@ -41,6 +41,7 @@ export interface BusinessListing {
   lat: number;
   lng: number;
   booking_url?: string;
+  logo_url?: string;
   owner_id?: string;
   subscription_tier?: "free" | "standard" | "featured" | "premium";
   claimed_at?: string;

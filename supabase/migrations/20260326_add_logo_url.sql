@@ -1,0 +1,1 @@
+ALTER TABLE business_listings ADD COLUMN IF NOT EXISTS logo_url TEXT DEFAULT NULL;
