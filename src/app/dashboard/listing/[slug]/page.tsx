@@ -69,6 +69,7 @@ export default async function EditListingPage({ params, searchParams }: EditList
         zip={listing.zip}
         services={listing.services}
         specialties={listing.specialties}
+        hours={listing.hours || []}
       />
     </div>
   );

@@ -1,9 +1,11 @@
 import Link from "next/link";
-import { Star, MapPin, ArrowRight, CheckCircle, ImageSquare } from "@phosphor-icons/react/dist/ssr";
+import Image from "next/image";
+import { MapPin, ArrowRight, CheckCircle, ImageSquare } from "@phosphor-icons/react/dist/ssr";
 import { BadgePill } from "./badge-pill";
 import { ListingImage } from "./listing-image";
 import { getServiceLabel, getSpecialtyLabel } from "@/lib/tags";
 import type { BusinessListing, NormalizedListing, Badge } from "@/lib/types";
+import { logClickAction } from "@/lib/analytics";
 
 interface ListingCardProps {
   listing: BusinessListing | NormalizedListing;
@@ -51,14 +53,21 @@ export function ListingCard({ listing, index = 0, compact = false, variant = "ve
       <div className="rounded-xl overflow-hidden flex flex-col h-full border-t-[6px] border border-border border-t-brand-accent">
 
         {/* Image or placeholder */}
-        {hasImage ? (
-          <ListingImage src={listing.images[0]} alt={listing.name} compact={compact} />
-        ) : (
-          <div className={`relative w-full flex flex-col items-center justify-center bg-gradient-to-br from-surface to-brand-secondary/5 border-b border-border/50 ${compact ? 'h-40' : 'h-48'}`}>
-            <ImageSquare weight="duotone" className="w-12 h-12 text-text-muted/25 mb-2" />
-            <span className="text-xs font-medium text-text-muted/40">Photo coming soon</span>
-          </div>
-        )}
+        <div className="relative">
+          {hasImage ? (
+            <ListingImage src={listing.images[0]} alt={listing.name} compact={compact} />
+          ) : (
+            <div className={`relative w-full flex flex-col items-center justify-center bg-gradient-to-br from-surface to-brand-secondary/5 border-b border-border/50 ${compact ? 'h-40' : 'h-48'}`}>
+              <ImageSquare weight="duotone" className="w-12 h-12 text-text-muted/25 mb-2" />
+              <span className="text-xs font-medium text-text-muted/40">Photo coming soon</span>
+            </div>
+          )}
+          {listing.logo_url && (
+            <div className="absolute top-2 left-2 z-10 w-9 h-9 rounded-lg overflow-hidden border-2 border-white shadow-sm bg-white">
+              <Image src={listing.logo_url} alt="" fill className="object-cover" sizes="36px" />
+            </div>
+          )}
+        </div>
 
         <div className={compact ? "p-4" : "p-5"}>
           {/* Header */}
@@ -78,7 +87,7 @@ export function ListingCard({ listing, index = 0, compact = false, variant = "ve
               ) : (
                 <div className="text-sm font-semibold text-text">{listing.price_range || "$$"}</div>
               )}
-              {(listing.is_paw_verified || listing.subscription_tier === 'premium' || listing.subscription_tier === 'featured') && (
+              {listing.owner_id && (
                 <div className="flex items-center gap-0.5 text-brand-accent text-xs mt-0.5 justify-end">
                   <CheckCircle weight="fill" className="w-3 h-3" />
                   <span>Verified</span>
@@ -86,28 +95,6 @@ export function ListingCard({ listing, index = 0, compact = false, variant = "ve
               )}
             </div>
           </div>
-
-          {/* Rating */}
-          {listing.rating > 0 && (
-            <div className="flex items-center gap-2 mb-3">
-              <div className="flex items-center gap-0.5">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star
-                    key={star}
-                    weight="fill"
-                    className={`w-3.5 h-3.5 shrink-0 ${star <= Math.round(listing.rating)
-                      ? "text-[#FBC02D]"
-                      : "text-text-muted/30"
-                      }`}
-                  />
-                ))}
-              </div>
-              <span className="font-semibold text-sm text-text">{listing.rating}</span>
-              {listing.review_count > 0 && (
-                <span className="text-text-muted text-xs">({listing.review_count} reviews)</span>
-              )}
-            </div>
-          )}
 
           {/* Badges */}
           {displayBadges.length > 0 && (
@@ -184,11 +171,12 @@ export function ListingCard({ listing, index = 0, compact = false, variant = "ve
               View Profile
               <ArrowRight weight="bold" className="w-3 h-3 ml-1" />
             </Link>
-            {listing.website && (
+            {listing.website && listing.owner_id && (
               <a
                 href={listing.website}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => logClickAction(listing.id, "website_click")}
                 className="flex flex-1 items-center justify-center cta-gradient text-brand-primary font-semibold text-xs rounded-xl hover:opacity-90 border-0 h-9"
               >
                 Visit Website
@@ -224,7 +212,7 @@ function HorizontalCard({
     >
       <Link href={`/groomer/${listing.slug}`} className="flex flex-col sm:flex-row h-full">
         {/* Image */}
-        <div className="sm:w-40 md:w-48 shrink-0">
+        <div className="sm:w-40 md:w-48 shrink-0 relative">
           {hasImage ? (
             <div className="relative w-full h-40 sm:h-full overflow-hidden rounded-t-xl sm:rounded-t-none sm:rounded-l-xl">
               <ListingImage src={listing.images[0]} alt={listing.name} compact fill />
@@ -233,6 +221,11 @@ function HorizontalCard({
             <div className="relative w-full h-40 sm:h-full flex flex-col items-center justify-center bg-gradient-to-br from-surface to-brand-secondary/5 rounded-t-xl sm:rounded-t-none sm:rounded-l-xl">
               <ImageSquare weight="duotone" className="w-10 h-10 text-text-muted/25 mb-1" />
               <span className="text-xs font-medium text-text-muted/40">Photo coming soon</span>
+            </div>
+          )}
+          {listing.logo_url && (
+            <div className="absolute top-2 left-2 z-10 w-8 h-8 rounded-lg overflow-hidden border-2 border-white shadow-sm bg-white">
+              <Image src={listing.logo_url} alt="" fill className="object-cover" sizes="32px" />
             </div>
           )}
         </div>
@@ -245,9 +238,9 @@ function HorizontalCard({
               {listing.name}
             </h3>
 
-            {(listing.is_paw_verified || listing.subscription_tier === 'featured' || listing.subscription_tier === 'premium' || (listing.badges && listing.badges.length > 0)) && (
+            {(listing.owner_id || (listing.badges && listing.badges.length > 0)) && (
               <div className="flex flex-wrap items-center gap-1.5">
-                {(listing.is_paw_verified || listing.subscription_tier === 'featured' || listing.subscription_tier === 'premium') && (
+                {listing.owner_id && (
                   <span className="inline-flex items-center gap-0.5 text-brand-accent text-xs font-medium">
                     <CheckCircle weight="fill" className="w-3.5 h-3.5" />
                     Verified
@@ -264,22 +257,30 @@ function HorizontalCard({
             )}
           </div>
 
-          {/* Rating + location */}
+          {/* Location + price */}
           <div className="flex items-center gap-3 mb-2 text-xs text-text-muted">
-            {listing.rating > 0 && (
-              <div className="flex items-center gap-1">
-                <Star weight="fill" className="w-3.5 h-3.5 text-[#FBC02D]" />
-                <span className="font-semibold text-text">{listing.rating}</span>
-                {listing.review_count > 0 && (
-                  <span>({listing.review_count})</span>
-                )}
-              </div>
-            )}
             <div className="flex items-center gap-1">
               <MapPin weight="fill" className="w-3 h-3 text-brand-secondary" />
               <span>{listing.city}, {listing.state}</span>
             </div>
+            {(listing.price_min > 0) && (
+              <span className="text-xs font-semibold text-text">
+                ${listing.price_min}-${listing.price_max}
+              </span>
+            )}
           </div>
+
+          {/* Waitlist status */}
+          {listing.waitlist_status === "immediate" && (
+            <span className="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-50 border border-green-200 rounded-full px-2 py-0.5 mb-2">
+              Accepting clients
+            </span>
+          )}
+          {listing.waitlist_status === "closed" && (
+            <span className="inline-flex items-center gap-1 text-[10px] font-medium text-red-700 bg-red-50 border border-red-200 rounded-full px-2 py-0.5 mb-2">
+              Waitlist closed
+            </span>
+          )}
 
           {/* Tags */}
           {(serviceTags.length > 0 || specialtyTags.length > 0) && normalized && (

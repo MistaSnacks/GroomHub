@@ -1,15 +1,36 @@
-// ─── JSON-LD Schema Generators ──────────────────────────
+// --- JSON-LD Schema Generators ---
 import type { NormalizedListing } from "./types";
 import type { BlogPostFull } from "./blog";
+import { getServiceTag } from "./tags";
 
 const BASE_URL = "https://groomlocal.com";
 
-/** Force http → https for image URLs */
-function safeImageUrl(url: string | undefined): string | undefined {
-  if (!url) return undefined;
-  if (url.startsWith("http://")) return url.replace("http://", "https://");
-  if (url.startsWith("/")) return `${BASE_URL}${url}`;
-  return url;
+/** Validate that a string looks like a valid URL */
+function isValidUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === "https:" || parsed.protocol === "http:";
+  } catch {
+    return false;
+  }
+}
+
+/** Force http to https for image URLs, validate result */
+function safeImageUrl(url: string | undefined | null): string | undefined {
+  if (!url || !url.trim()) return undefined;
+  let resolved = url.trim();
+  if (resolved.startsWith("http://")) resolved = resolved.replace("http://", "https://");
+  if (resolved.startsWith("/")) resolved = `${BASE_URL}${resolved}`;
+  if (!isValidUrl(resolved)) return undefined;
+  return resolved;
+}
+
+/** Validate and normalize a website URL */
+function safeWebsiteUrl(url: string | undefined | null): string | undefined {
+  if (!url || !url.trim()) return undefined;
+  const trimmed = url.trim();
+  if (!isValidUrl(trimmed)) return undefined;
+  return trimmed;
 }
 
 function sanitizeDescription(text: string | null | undefined): string | undefined {
@@ -22,54 +43,112 @@ function sanitizeDescription(text: string | null | undefined): string | undefine
   return clean;
 }
 
+/** Valid schema.org day names */
+const VALID_DAYS = new Set([
+  "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
+]);
+
+/** Validate time format (HH:MM or H:MM) */
+function isValidTime(time: string): boolean {
+  return /^\d{1,2}:\d{2}(:\d{2})?(\s?(AM|PM))?$/i.test(time);
+}
+
 export function localBusinessSchema(listing: NormalizedListing) {
   const image = safeImageUrl(listing.images?.[0]);
-  const hours = listing.hours?.filter((h) => !h.closed && h.open && h.close);
+  const validWebsite = safeWebsiteUrl(listing.website);
+  const hours = listing.hours?.filter(
+    (h) => !h.closed && h.open && h.close && VALID_DAYS.has(h.day) && isValidTime(h.open) && isValidTime(h.close)
+  );
 
-  return {
+  // Build address only with non-empty fields
+  const address: Record<string, string> = {
+    "@type": "PostalAddress",
+    addressCountry: "US",
+  };
+  if (listing.address?.trim()) address.streetAddress = listing.address.trim();
+  if (listing.city?.trim()) address.addressLocality = listing.city.trim();
+  if (listing.state?.trim()) address.addressRegion = listing.state.trim();
+  if (listing.zip?.trim()) address.postalCode = listing.zip.trim();
+
+  const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "@id": `${BASE_URL}/groomer/${listing.slug}`,
     name: listing.name,
-    description: sanitizeDescription(listing.short_description) || sanitizeDescription(listing.description),
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: listing.address,
-      addressLocality: listing.city,
-      addressRegion: listing.state,
-      postalCode: listing.zip,
-      addressCountry: "US",
-    },
-    telephone: listing.phone,
-    ...(listing.website && { url: listing.website }),
-    ...(listing.email && { email: listing.email }),
-    ...(listing.rating > 0 && listing.review_count > 0 && {
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: listing.rating,
-        reviewCount: listing.review_count,
-        bestRating: 5,
-        worstRating: 1,
-      },
-    }),
-    ...(listing.lat && listing.lng && {
-      geo: {
-        "@type": "GeoCoordinates",
-        latitude: listing.lat,
-        longitude: listing.lng,
-      },
-    }),
-    ...(listing.price_range && (listing.price_range as string) !== "N/A" && { priceRange: listing.price_range }),
-    ...(image && { image }),
-    ...(hours && hours.length > 0 && {
-      openingHoursSpecification: hours.map((h) => ({
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: h.day,
-        opens: h.open,
-        closes: h.close,
-      })),
-    }),
+    address,
   };
+
+  const desc = sanitizeDescription(listing.short_description) || sanitizeDescription(listing.description);
+  if (desc) schema.description = desc;
+
+  // Only include telephone when it has a real value
+  if (listing.phone?.trim()) schema.telephone = listing.phone.trim();
+
+  if (validWebsite) schema.url = validWebsite;
+  if (listing.email?.trim()) schema.email = listing.email.trim();
+
+  // Geo coordinates must be valid numbers
+  if (
+    typeof listing.lat === "number" && typeof listing.lng === "number" &&
+    isFinite(listing.lat) && isFinite(listing.lng) &&
+    listing.lat !== 0 && listing.lng !== 0
+  ) {
+    schema.geo = {
+      "@type": "GeoCoordinates",
+      latitude: listing.lat,
+      longitude: listing.lng,
+    };
+  }
+
+  // priceRange is deprecated by Google - use makesOffer/priceSpecification instead
+  // (removed priceRange field entirely)
+
+  if (image) schema.image = image;
+
+  if (hours && hours.length > 0) {
+    schema.openingHoursSpecification = hours.map((h) => ({
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: h.day,
+      opens: h.open,
+      closes: h.close,
+    }));
+  }
+
+  // Service catalog with proper Offer types
+  if (listing.service_tags && listing.service_tags.length > 0) {
+    schema.hasOfferCatalog = {
+      "@type": "OfferCatalog",
+      name: "Grooming Services",
+      itemListElement: listing.service_tags.map((slug) => {
+        const tag = getServiceTag(slug);
+        const offer: Record<string, unknown> = {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: tag?.label || slug,
+            ...(tag?.description ? { description: tag.description } : {}),
+          },
+        };
+        return offer;
+      }),
+    };
+  }
+
+  if (typeof listing.price_min === "number" && listing.price_min > 0) {
+    schema.makesOffer = {
+      "@type": "Offer",
+      priceSpecification: {
+        "@type": "PriceSpecification",
+        minPrice: listing.price_min,
+        ...(typeof listing.price_max === "number" && listing.price_max > 0
+          ? { maxPrice: listing.price_max }
+          : {}),
+        priceCurrency: "USD",
+      },
+    };
+  }
+
+  return schema;
 }
 
 export function breadcrumbSchema(
@@ -106,8 +185,8 @@ export function organizationSchema() {
     logo: `${BASE_URL}/icon.svg`,
     description: "The Pacific Northwest's most trusted pet grooming directory.",
     areaServed: [
-      { "@type": "State", name: "Washington" },
-      { "@type": "State", name: "Oregon" },
+      { "@type": "AdministrativeArea", name: "Washington" },
+      { "@type": "AdministrativeArea", name: "Oregon" },
     ],
   };
 }
@@ -134,9 +213,14 @@ export function cityPageSchema(
   const graph: Record<string, unknown>[] = [breadcrumbBody, itemListBody];
 
   if (faqs && faqs.length > 0) {
-    const faqSchema = cityFaqSchema(faqs);
-    const { "@context": _fq, ...faqBody } = faqSchema;
-    graph.push(faqBody);
+    const validFaqs = faqs.filter(
+      (faq) => faq.question?.trim() && faq.answer?.trim()
+    );
+    if (validFaqs.length > 0) {
+      const faqSchema = cityFaqSchema(validFaqs);
+      const { "@context": _fq, ...faqBody } = faqSchema;
+      graph.push(faqBody);
+    }
   }
 
   return {
@@ -193,59 +277,61 @@ export function itemListSchema(
     "@type": "ItemList",
     name,
     numberOfItems: Math.min(listings.length, 20),
-    itemListElement: listings.slice(0, 20).map((listing, i) => ({
-      "@type": "ListItem",
-      position: i + 1,
-      item: {
+    itemListElement: listings.slice(0, 20).map((listing, i) => {
+      const item: Record<string, unknown> = {
         "@type": "LocalBusiness",
         name: listing.name,
         url: `${BASE_URL}/groomer/${listing.slug}`,
-        ...(listing.address && {
-          address: {
-            "@type": "PostalAddress",
-            streetAddress: listing.address,
-            addressLocality: listing.city,
-            addressRegion: listing.state,
-            addressCountry: "US",
-          },
-        }),
-        ...(listing.rating > 0 && listing.review_count > 0 && {
-          aggregateRating: {
-            "@type": "AggregateRating",
-            ratingValue: listing.rating,
-            reviewCount: listing.review_count,
-            bestRating: 5,
-            worstRating: 1,
-          },
-        }),
-      },
-    })),
+      };
+
+      if (listing.address?.trim()) {
+        const address: Record<string, string> = {
+          "@type": "PostalAddress",
+          addressCountry: "US",
+        };
+        if (listing.address.trim()) address.streetAddress = listing.address.trim();
+        if (listing.city?.trim()) address.addressLocality = listing.city.trim();
+        if (listing.state?.trim()) address.addressRegion = listing.state.trim();
+        item.address = address;
+      }
+
+      return {
+        "@type": "ListItem",
+        position: i + 1,
+        item,
+      };
+    }),
   };
 }
 
 export function cityFaqSchema(
   faqs: Array<{ question: string; answer: string }>
 ) {
+  const validFaqs = faqs.filter(
+    (faq) => faq.question?.trim() && faq.answer?.trim()
+  );
+
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: faqs.map((faq) => ({
+    mainEntity: validFaqs.map((faq) => ({
       "@type": "Question",
-      name: faq.question,
+      name: faq.question.trim(),
       acceptedAnswer: {
         "@type": "Answer",
-        text: faq.answer,
+        text: faq.answer.trim(),
       },
     })),
   };
 }
 
 export function blogPostSchema(post: BlogPostFull) {
-  return {
+  const image = safeImageUrl(post.image ?? undefined) || `${BASE_URL}/og-image.png`;
+
+  const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     headline: post.title,
-    description: post.excerpt,
     datePublished: post.date,
     dateModified: post.date,
     author: {
@@ -256,11 +342,19 @@ export function blogPostSchema(post: BlogPostFull) {
       "@type": "Organization",
       name: "GroomLocal",
       url: BASE_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: `${BASE_URL}/icon.svg`,
+      },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": `${BASE_URL}/blog/${post.slug}`,
     },
-    image: safeImageUrl(post.image ?? undefined) || `${BASE_URL}/og-image.png`,
+    image,
   };
+
+  if (post.excerpt?.trim()) schema.description = post.excerpt.trim();
+
+  return schema;
 }

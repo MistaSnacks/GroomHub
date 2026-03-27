@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import {
-  Star,
   MapPin,
   Phone,
   Globe,
@@ -14,6 +14,9 @@ import {
   ShieldCheck,
   ImageSquare,
   CaretRight,
+  CurrencyDollar,
+  CalendarCheck,
+  Hourglass,
 } from "@phosphor-icons/react/dist/ssr";
 import { BadgePill } from "@/components/badge-pill";
 import { GalleryImage } from "@/components/gallery-image";
@@ -23,9 +26,11 @@ import { AdSlot } from "@/components/ad-slot";
 import { WaveDivider } from "@/components/wave-divider";
 import { ContactForm } from "@/components/contact-form";
 import { getListingBySlug, getListingsByCity } from "@/lib/supabase/queries";
-import { getServiceLabel, getSpecialtyLabel } from "@/lib/tags";
+import { getServiceLabel, getSpecialtyLabel, getServiceTag, getSpecialtyTag } from "@/lib/tags";
 import { localBusinessSchema, breadcrumbSchema } from "@/lib/schema";
 import { stateSlugFromAbbr, stateNameFromAbbr } from "@/lib/geography";
+import { PageViewTracker } from "@/components/page-view-tracker";
+import { clampDescription, clampTitle } from "@/lib/seo-utils";
 
 export const revalidate = 300;
 
@@ -41,11 +46,31 @@ export async function generateMetadata({
 
   if (!listing) return { title: "Groomer Not Found" };
 
-  const description = listing.short_description || listing.description;
-  const truncatedDesc = description.length > 160 ? description.slice(0, 157) + "..." : description.length < 120
-    ? `${description} Find reviews, services, and contact info for ${listing.name} in ${listing.city}, ${listing.state}.`.slice(0, 160)
-    : description;
-  const title = `${listing.name} | ${listing.city}, ${listing.state} Groomer`;
+  const rawDesc = listing.short_description || listing.description;
+  // Build a description that lands in the 120-155 char sweet spot
+  let truncatedDesc: string;
+  if (rawDesc.length < 120) {
+    // Pad short descriptions with location and service context
+    let padded = `${rawDesc} View services, pricing, and contact info for ${listing.name} in ${listing.city}, ${listing.state}. Compare on GroomLocal.`;
+    // If still too short, use a fully constructed fallback
+    if (padded.length < 120) {
+      padded = `${listing.name} is a dog groomer in ${listing.city}, ${listing.state}. ${rawDesc} View services, pricing, and hours on GroomLocal.`;
+    }
+    truncatedDesc = clampDescription(padded);
+  } else {
+    truncatedDesc = clampDescription(rawDesc);
+  }
+  // Build SEO title: try full format, then drop "Groomer", then truncate name
+  const suffix = ` | ${listing.city}, ${listing.state}`;
+  const fullTitle = `${listing.name}${suffix} Groomer`;
+  let title: string;
+  if (fullTitle.length <= 47) {
+    title = fullTitle;
+  } else if (`${listing.name}${suffix}`.length <= 47) {
+    title = `${listing.name}${suffix}`;
+  } else {
+    title = clampTitle(`${listing.name}${suffix}`);
+  }
   const ogImage = `/api/og/groomer?slug=${encodeURIComponent(slug)}`;
 
   return {
@@ -106,6 +131,8 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
         }}
       />
 
+      <PageViewTracker listingId={listing.id} />
+
       {/* Breadcrumbs */}
       <div className="bg-gradient-to-b from-bg to-white border-b border-border">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3">
@@ -141,23 +168,17 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                       <BadgePill key={badge} badge={badge} size="md" />
                     ))}
                   </div>
-                  <h1 className="font-heading text-2xl sm:text-3xl font-bold text-brand-primary">
-                    {listing.name}
-                  </h1>
-                </div>
-                {listing.rating > 0 && (
-                  <div className="flex items-center gap-1.5 rounded-xl bg-brand-secondary/10 px-4 py-2">
-                    <Star weight="fill" className="h-5 w-5 text-[#FBC02D] shrink-0" />
-                    <span className="font-heading text-xl font-bold text-brand-primary">
-                      {listing.rating}
-                    </span>
-                    {listing.review_count > 0 && (
-                      <span className="text-sm text-text-muted">
-                        ({listing.review_count} reviews)
-                      </span>
+                  <div className="flex items-center gap-3">
+                    {listing.logo_url && (
+                      <div className="relative w-16 h-16 rounded-lg overflow-hidden border border-border shrink-0">
+                        <Image src={listing.logo_url} alt={`${listing.name} logo`} fill className="object-cover" sizes="64px" />
+                      </div>
                     )}
+                    <h1 className="font-heading text-2xl sm:text-3xl font-bold text-brand-primary">
+                      {listing.name}
+                    </h1>
                   </div>
-                )}
+                </div>
               </div>
 
               <div className="flex flex-wrap gap-4 text-sm text-text-muted mb-4">
@@ -177,16 +198,23 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                   </span>
                 )}
                 {listing.website ? (
-                  <a
-                    href={listing.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-brand-accent hover:underline"
-                  >
-                    <Globe weight="bold" className="h-4 w-4" />
-                    Website
-                    <ArrowSquareOut weight="bold" className="h-3 w-3" />
-                  </a>
+                  listing.owner_id ? (
+                    <a
+                      href={listing.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 text-brand-accent hover:underline"
+                    >
+                      <Globe weight="bold" className="h-4 w-4" />
+                      Website
+                      <ArrowSquareOut weight="bold" className="h-3 w-3" />
+                    </a>
+                  ) : (
+                    <span className="flex items-center gap-1.5 text-text-muted">
+                      <Globe weight="bold" className="h-4 w-4" />
+                      {listing.website.replace(/https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
+                    </span>
+                  )
                 ) : (
                   <span className="flex items-center gap-1.5 text-text-muted/50">
                     <Globe weight="bold" className="h-4 w-4" />
@@ -194,6 +222,36 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                   </span>
                 )}
               </div>
+
+              {/* Availability Status */}
+              {listing.waitlist_status && (
+                <div className="flex items-center gap-2 mt-2">
+                  {listing.waitlist_status === "immediate" && (
+                    <span className="inline-flex items-center gap-1.5 text-xs font-medium text-green-700 bg-green-50 border border-green-200 rounded-full px-3 py-1">
+                      <CalendarCheck weight="fill" className="w-3.5 h-3.5" />
+                      Accepting new clients
+                    </span>
+                  )}
+                  {listing.waitlist_status === "short" && (
+                    <span className="inline-flex items-center gap-1.5 text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-3 py-1">
+                      <Hourglass weight="fill" className="w-3.5 h-3.5" />
+                      Short waitlist
+                    </span>
+                  )}
+                  {listing.waitlist_status === "long" && (
+                    <span className="inline-flex items-center gap-1.5 text-xs font-medium text-orange-700 bg-orange-50 border border-orange-200 rounded-full px-3 py-1">
+                      <Hourglass weight="fill" className="w-3.5 h-3.5" />
+                      Long waitlist
+                    </span>
+                  )}
+                  {listing.waitlist_status === "closed" && (
+                    <span className="inline-flex items-center gap-1.5 text-xs font-medium text-red-700 bg-red-50 border border-red-200 rounded-full px-3 py-1">
+                      <Hourglass weight="fill" className="w-3.5 h-3.5" />
+                      Not accepting new clients
+                    </span>
+                  )}
+                </div>
+              )}
 
               {/* Claim CTA - only show if unclaimed */}
               {!listing.owner_id ? (
@@ -250,15 +308,22 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                 Services
               </h2>
               {listing.service_tags.length > 0 ? (
-                <div className="flex flex-wrap gap-2">
-                  {listing.service_tags.map((slug) => (
-                    <span
-                      key={slug}
-                      className="rounded-full bg-brand-secondary/10 px-4 py-2 text-sm font-medium text-brand-secondary border border-brand-secondary/20"
-                    >
-                      {getServiceLabel(slug)}
-                    </span>
-                  ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {listing.service_tags.map((slug) => {
+                    const tag = getServiceTag(slug);
+                    return (
+                      <div key={slug} className="rounded-xl bg-brand-secondary/5 border border-brand-secondary/15 p-3">
+                        <span className="text-sm font-semibold text-brand-primary">
+                          {getServiceLabel(slug)}
+                        </span>
+                        {tag?.description && (
+                          <p className="text-xs text-text-muted mt-1 leading-relaxed">
+                            {tag.description}
+                          </p>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               ) : listing.services.length > 0 ? (
                 <div className="divide-y divide-border">
@@ -279,15 +344,22 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                 <h2 className="font-heading text-xl font-semibold text-brand-primary mb-4">
                   Specialties
                 </h2>
-                <div className="flex flex-wrap gap-2">
-                  {listing.specialty_tags.map((slug) => (
-                    <span
-                      key={slug}
-                      className="rounded-full bg-brand-accent/10 px-4 py-2 text-sm font-medium text-brand-accent border border-brand-accent/20"
-                    >
-                      {getSpecialtyLabel(slug)}
-                    </span>
-                  ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {listing.specialty_tags.map((slug) => {
+                    const tag = getSpecialtyTag(slug);
+                    return (
+                      <div key={slug} className="rounded-xl bg-brand-accent/5 border border-brand-accent/15 p-3">
+                        <span className="text-sm font-semibold text-brand-primary">
+                          {getSpecialtyLabel(slug)}
+                        </span>
+                        {tag?.description && (
+                          <p className="text-xs text-text-muted mt-1 leading-relaxed">
+                            {tag.description}
+                          </p>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -315,20 +387,42 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                     <p className="text-sm font-semibold text-brand-primary">{listing.team_size} groomers</p>
                   </div>
                 )}
-                {listing.rating > 0 && (
-                  <div className="rounded-xl bg-surface p-3 text-center">
-                    <Star weight="fill" className="h-4 w-4 text-[#FBC02D] mx-auto mb-1" />
-                    <p className="text-xs text-text-muted">Rating</p>
-                    <p className="text-sm font-semibold text-brand-primary">{listing.rating}/5</p>
-                  </div>
-                )}
                 <div className="rounded-xl bg-surface p-3 text-center">
-                  <Clock weight="fill" className="h-4 w-4 text-brand-accent mx-auto mb-1" />
-                  <p className="text-xs text-text-muted">Price</p>
-                  <p className="text-sm font-semibold text-brand-primary">{listing.price_range || "$$"}</p>
+                  <CurrencyDollar weight="fill" className="h-4 w-4 text-brand-accent mx-auto mb-1" />
+                  <p className="text-xs text-text-muted">Starting at</p>
+                  {listing.price_min > 0 ? (
+                    <p className="text-sm font-semibold text-brand-primary">
+                      ${listing.price_min} - ${listing.price_max}
+                    </p>
+                  ) : (
+                    <p className="text-sm font-semibold text-brand-primary">{listing.price_range || "$$"}</p>
+                  )}
                 </div>
               </div>
             </div>
+
+            {/* Pricing */}
+            {listing.price_min > 0 && (
+              <div className="rounded-2xl border border-border bg-white p-6">
+                <h2 className="font-heading text-xl font-semibold text-brand-primary mb-4">
+                  Pricing
+                </h2>
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="text-2xl font-bold text-brand-primary">${listing.price_min}</span>
+                  <span className="text-text-muted">to</span>
+                  <span className="text-2xl font-bold text-brand-primary">${listing.price_max}</span>
+                </div>
+                <p className="text-sm text-text-muted">
+                  Prices vary by breed, coat type, and services requested. Contact {listing.name} for an exact quote.
+                </p>
+                {listing.transparent_pricing && (
+                  <p className="text-xs text-brand-secondary font-medium mt-2 flex items-center gap-1">
+                    <ShieldCheck weight="fill" className="w-3.5 h-3.5" />
+                    This business offers transparent, upfront pricing
+                  </p>
+                )}
+              </div>
+            )}
 
             {/* Hours */}
             {listing.hours && listing.hours.length > 0 && (
@@ -348,18 +442,6 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                 </div>
               </div>
             )}
-
-            {/* Reviews */}
-            <div>
-              <h2 className="font-heading text-xl font-semibold text-brand-primary mb-4">
-                Reviews {listing.review_count > 0 && `(${listing.review_count})`}
-              </h2>
-              <div className="rounded-2xl border border-border bg-white p-8 text-center">
-                <p className="text-sm text-text-muted">
-                  No reviews yet. Be the first to throw them a bone!
-                </p>
-              </div>
-            </div>
 
             {/* Similar Groomers */}
             {similar.length > 0 && (
@@ -381,7 +463,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
             <div className="sticky top-24 space-y-4">
 
               {/* Premium Contact Form */}
-              {listing.subscription_tier === 'premium' && (
+              {listing.owner_id && (
                 <div className="mb-4">
                   <ContactForm listingId={listing.id} listingName={listing.name} />
                 </div>
@@ -409,12 +491,21 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                     </p>
                   )}
                   {listing.website ? (
-                    <p className="flex items-center gap-2">
-                      <Globe weight="bold" className="w-4 h-4 shrink-0" />
-                      <a href={listing.website} target="_blank" rel="noopener noreferrer" className="text-brand-accent hover:underline truncate">
-                        {listing.website.replace(/https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
-                      </a>
-                    </p>
+                    listing.owner_id ? (
+                      <p className="flex items-center gap-2">
+                        <Globe weight="bold" className="w-4 h-4 shrink-0" />
+                        <a href={listing.website} target="_blank" rel="noopener noreferrer" className="text-brand-accent hover:underline truncate">
+                          {listing.website.replace(/https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
+                        </a>
+                      </p>
+                    ) : (
+                      <p className="flex items-center gap-2 text-text-muted">
+                        <Globe weight="bold" className="w-4 h-4 shrink-0" />
+                        <span className="truncate">
+                          {listing.website.replace(/https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
+                        </span>
+                      </p>
+                    )
                   ) : (
                     <p className="flex items-center gap-2 text-text-muted/50">
                       <Globe weight="bold" className="w-4 h-4 shrink-0" />
@@ -438,6 +529,18 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                       loading="lazy"
                     />
                   </div>
+                )}
+
+                {listing.booking_url && (
+                  <a
+                    href={listing.booking_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 flex items-center justify-center w-full px-4 py-2.5 rounded-full cta-gradient text-brand-primary font-semibold text-sm hover:opacity-90 transition-opacity"
+                  >
+                    <CalendarCheck weight="bold" className="w-4 h-4 mr-2" />
+                    Book an Appointment
+                  </a>
                 )}
               </div>
 
@@ -488,11 +591,6 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                   {listing.is_paw_verified && (
                     <li className="flex items-center gap-2 text-sm text-text-muted">
                       <span className="text-success">&#10003;</span> Paw-Verified Business
-                    </li>
-                  )}
-                  {listing.review_count > 0 && (
-                    <li className="flex items-center gap-2 text-sm text-text-muted">
-                      <span className="text-success">&#10003;</span> {listing.review_count}+ real reviews
                     </li>
                   )}
                   {listing.year_established > 0 && (
