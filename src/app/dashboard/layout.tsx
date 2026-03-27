@@ -9,9 +9,8 @@ export const metadata: Metadata = {
 import {
     Buildings,
     ChartLineUp,
-    Image as ImageIcon,
+    PencilSimple,
     EnvelopeSimpleOpen,
-    Storefront,
     User,
     GearSix
 } from "@phosphor-icons/react/dist/ssr";
@@ -28,10 +27,17 @@ export default async function DashboardLayout({
         redirect("/login");
     }
 
+    // Fetch user's first listing slug for the edit link
+    const { data: listings } = await supabase
+        .from("business_listings")
+        .select("slug")
+        .eq("owner_id", user.id)
+        .limit(1);
+    const listingSlug = listings?.[0]?.slug;
+
     const navLinks = [
         { name: "Overview", href: "/dashboard", icon: ChartLineUp, exact: true },
-        { name: "Public Profile", href: "/dashboard/profile", icon: Storefront },
-        { name: "Photos", href: "/dashboard/photos", icon: ImageIcon },
+        ...(listingSlug ? [{ name: "Edit Profile", href: `/dashboard/listing/${listingSlug}`, icon: PencilSimple }] : []),
         { name: "Lead Inbox", href: "/dashboard/inbox", icon: EnvelopeSimpleOpen },
         { name: "Account", href: "/dashboard/account", icon: User },
         { name: "Settings", href: "/dashboard/settings", icon: GearSix },

@@ -124,6 +124,10 @@ export async function updateListing(formData: FormData) {
   const phone = formData.get("phone") as string;
   const email = formData.get("email") as string;
   const website = formData.get("website") as string;
+  const address = formData.get("address") as string;
+  const city = formData.get("city") as string;
+  const state = formData.get("state") as string;
+  const zip = formData.get("zip") as string;
   const servicesRaw = formData.get("services") as string;
   const specialtiesRaw = formData.get("specialties") as string;
   const hoursRaw = formData.get("hours") as string;
@@ -146,6 +150,10 @@ export async function updateListing(formData: FormData) {
       phone: phone || undefined,
       email: email || undefined,
       website: website || undefined,
+      ...(address ? { address } : {}),
+      ...(city ? { city } : {}),
+      ...(state ? { state } : {}),
+      ...(zip ? { zip } : {}),
       ...(services !== undefined ? { services } : {}),
       ...(specialties !== undefined ? { specialties } : {}),
       ...(hours !== undefined ? { hours } : {}),

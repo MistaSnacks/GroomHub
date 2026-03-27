@@ -30,13 +30,14 @@ export default async function EditListingPage({ params, searchParams }: EditList
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 w-full flex flex-col gap-6 max-w-2xl">
-      <div className="mb-2">
-        <h1 className="font-heading text-3xl font-bold text-brand-primary mb-2">
-          Edit {listing.name}
+    <div className="p-4 sm:p-6 lg:p-8 w-full flex flex-col gap-6 max-w-4xl">
+      <div className="flex items-center justify-between mb-2">
+        <h1 className="font-heading text-2xl font-bold text-brand-primary">
+          Edit Profile
         </h1>
         <Link
           href={`/groomer/${slug}`}
+          target="_blank"
           className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-brand-primary transition-colors"
         >
           <ArrowSquareOut weight="bold" className="w-4 h-4" />
@@ -56,6 +57,7 @@ export default async function EditListingPage({ params, searchParams }: EditList
       )}
 
       <EditListingClient
+        listingId={listing.id}
         slug={listing.slug}
         name={listing.name}
         description={listing.description}
@@ -70,6 +72,9 @@ export default async function EditListingPage({ params, searchParams }: EditList
         services={listing.services}
         specialties={listing.specialties}
         hours={listing.hours || []}
+        images={listing.images || []}
+        logoUrl={listing.logo_url || ""}
+        subscriptionTier={listing.subscription_tier || "free"}
       />
     </div>
   );
