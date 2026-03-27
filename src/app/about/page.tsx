@@ -16,6 +16,7 @@ export const metadata: Metadata = {
     twitter: {
         card: 'summary_large_image',
         title: 'About GroomLocal',
+        description: 'The Pacific Northwest\'s trusted pet grooming directory. Connecting pet parents with verified groomers across Washington and Oregon.',
         images: ['/og-image.png'],
     },
 };

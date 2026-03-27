@@ -8,6 +8,7 @@ export const revalidate = 300;
 import { getListingsByServiceTag, getCityBySlug } from "@/lib/supabase/queries";
 import { stateAbbrFromSlug } from "@/lib/geography";
 import { WaveDivider } from "@/components/wave-divider";
+import { clampDescription, clampTitle } from "@/lib/seo-utils";
 
 interface Props {
   params: Promise<{ state: string; city: string }>;
@@ -18,20 +19,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const cityData = await getCityBySlug(city, stateAbbrFromSlug(state));
   const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
 
+  const stateAbbr = stateAbbrFromSlug(state);
   const ogImage = `/api/og/city?city=${encodeURIComponent(city)}&state=${encodeURIComponent(state)}&service=cat`;
+  const title = clampTitle(`Cat Groomers in ${cityName}, ${stateAbbr}`);
+  const description = clampDescription(`Find cat groomers in ${cityName}, ${stateAbbr}. Browse feline-friendly salons with gentle handling and stress-free grooming. Compare services and book on GroomLocal.`);
 
   return {
-    title: `Cat Groomers in ${cityName}, ${stateAbbrFromSlug(state)}`,
-    description: `Find the best cat groomers in ${cityName}, ${stateAbbrFromSlug(state)}. Browse feline-friendly salons with gentle handling, dedicated cat suites, and stress-free grooming for your kitty.`,
+    title,
+    description,
     alternates: { canonical: `/cat-grooming/${state}/${city}` },
     openGraph: {
-      title: `Cat Groomers in ${cityName}, ${stateAbbrFromSlug(state)}`,
-      description: `Find the best cat groomers in ${cityName}, ${stateAbbrFromSlug(state)}. Browse feline-friendly salons with gentle handling, dedicated cat suites, and stress-free grooming for your kitty.`,
+      title,
+      description,
+      type: "website",
+      url: `/cat-grooming/${state}/${city}`,
+      siteName: "GroomLocal",
       images: [{ url: ogImage, width: 1200, height: 630, alt: `Cat groomers in ${cityName}` }],
     },
     twitter: {
       card: "summary_large_image",
-      title: `Cat Groomers in ${cityName}, ${stateAbbrFromSlug(state)}`,
+      title,
+      description,
       images: [ogImage],
     },
   };

@@ -38,6 +38,7 @@ export const metadata: Metadata = {
     description:
       "Find the pawfect dog groomer in Seattle, Tacoma, Portland & the Pacific Northwest.",
     type: "website",
+    url: "https://groomlocal.com",
     locale: "en_US",
     siteName: "GroomLocal",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "GroomLocal" }],

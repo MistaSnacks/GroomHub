@@ -125,12 +125,20 @@ export function SiteHeader() {
                 </button>
               </>
             ) : (
-              <Link
-                href="/login"
-                className="text-sm font-medium text-text-muted hover:text-brand-primary transition-colors mr-2"
-              >
-                Log in
-              </Link>
+              <>
+                <Link
+                  href="/login"
+                  className="text-sm font-medium text-text-muted hover:text-brand-primary transition-colors mr-2"
+                >
+                  Log in
+                </Link>
+                <Link
+                  href="/signup"
+                  className="text-sm font-medium text-text-muted hover:text-brand-primary transition-colors mr-2"
+                >
+                  Sign up
+                </Link>
+              </>
             )}
             <Link
               href="/for-groomers"

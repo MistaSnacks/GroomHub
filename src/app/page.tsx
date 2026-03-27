@@ -16,6 +16,22 @@ export const revalidate = 300;
 
 export const metadata: Metadata = {
   alternates: { canonical: "https://groomlocal.com" },
+  openGraph: {
+    title: "GroomLocal | Find Dog Groomers in the PNW",
+    description:
+      "Find the best dog groomer in Seattle, Tacoma, Portland and the Pacific Northwest. Verified listings, real reviews, and instant booking.",
+    type: "website",
+    url: "https://groomlocal.com",
+    siteName: "GroomLocal",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "GroomLocal" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "GroomLocal | Find Dog Groomers in the PNW",
+    description:
+      "Find the best dog groomer in Seattle, Tacoma, Portland and the Pacific Northwest. Verified listings, real reviews, and instant booking.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default async function HomePage() {

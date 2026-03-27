@@ -16,7 +16,12 @@ export const metadata: Metadata = {
     siteName: "GroomLocal",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Grooming specialties" }],
   },
-  twitter: { card: "summary_large_image", images: ["/og-image.png"] },
+  twitter: {
+    card: "summary_large_image",
+    title: "Grooming Specialties | Find Expert Care",
+    description: "Browse groomers by specialty across the PNW. From doodle experts to fear-free certified, find the exact expertise your pet needs.",
+    images: ["/og-image.png"],
+  },
 };
 
 // Mixed card sizes: Row 1 = 2 wider, Row 2+ = 3 equal

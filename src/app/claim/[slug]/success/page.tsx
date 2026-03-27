@@ -2,8 +2,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { CheckCircle, ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { WaveDivider } from "@/components/wave-divider";
-import { getListingBySlug } from "@/lib/supabase/queries";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { CopyBadge } from "@/components/copy-badge";
 
 export default async function ClaimSuccessPage({
@@ -13,14 +13,35 @@ export default async function ClaimSuccessPage({
 }) {
     const { slug } = await params;
 
-    // Ownership check: only the claiming user should see this page
+    // Auth check
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
-    const listing = await getListingBySlug(slug);
+    if (!user) {
+        redirect(`/claim/${slug}`);
+    }
 
-    if (!listing || !user || listing.owner_id !== user.id) {
-        redirect(`/groomer/${slug}`);
+    // Use admin client for the ownership check to bypass RLS/caching issues.
+    // The anon-key singleton could return stale data or hide owner_id.
+    const supabaseAdmin = createAdminClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+
+    const { data: listing } = await supabaseAdmin
+        .from("business_listings")
+        .select("*")
+        .eq("slug", slug)
+        .single();
+
+    if (!listing) {
+        redirect(`/dog-grooming`);
+    }
+
+    // If listing is NOT owned by this user, send to claim step 1 (not groomer
+    // profile, which would show the "Claim" CTA and create a loop)
+    if (listing.owner_id !== user.id) {
+        redirect(`/claim/${slug}`);
     }
 
     return (

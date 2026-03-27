@@ -25,6 +25,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Dog Groomers | Browse All Cities",
+    description: "Browse dog groomers across Washington and Oregon. Find verified groomers in every PNW city.",
     images: ["/og-image.png"],
   },
 };

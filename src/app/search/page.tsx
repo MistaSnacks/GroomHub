@@ -31,9 +31,25 @@ export async function generateMetadata({ searchParams }: SearchPageProps) {
   else if (type === "specialty" && tag)
     title = `${getSpecialtyLabel(tag)} Groomers`;
 
+  const description = "Search for dog groomers across the Pacific Northwest. Filter by service, specialty, or location.";
+
   return {
     title: `${title} | PNW Grooming Directory`,
     robots: { index: false },
+    openGraph: {
+      title: `${title} | PNW Grooming Directory`,
+      description,
+      type: "website",
+      url: "/search",
+      siteName: "GroomLocal",
+      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Search GroomLocal" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | PNW Grooming Directory`,
+      description,
+      images: ["/og-image.png"],
+    },
   };
 }
 

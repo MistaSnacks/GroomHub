@@ -16,7 +16,12 @@ export const metadata: Metadata = {
     siteName: "GroomLocal",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Mobile dog groomers in the PNW" }],
   },
-  twitter: { card: "summary_large_image", images: ["/og-image.png"] },
+  twitter: {
+    card: "summary_large_image",
+    title: "Mobile Dog Groomers | Grooming at Your Door",
+    description: "Find mobile dog groomers across Washington and Oregon. Convenient grooming that comes to your home.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default async function MobileGroomingHub() {

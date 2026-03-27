@@ -14,6 +14,7 @@ import {
 import { STATES, stateSlugFromAbbr, buildCityPath, buildServicePath } from "@/lib/geography";
 import { servicePageSchema } from "@/lib/schema";
 import { WaveDivider } from "@/components/wave-divider";
+import { clampDescription, clampTitle } from "@/lib/seo-utils";
 import { AnimatedSection, AnimatedItem } from "@/components/animated-section";
 import type { NormalizedListing } from "@/lib/types";
 
@@ -32,8 +33,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const tag = getSpecialtyTag(slug);
   if (!tag) return {};
 
-  const title = `${tag.label} Groomers | PNW Specialists`;
-  const description = `Find groomers specializing in ${tag.label.toLowerCase()} across Washington and Oregon. Compare ratings, reviews, and book with confidence.`;
+  // Shorter suffix to fit long specialty labels (e.g. "Skin Sensitive / Allergy")
+  const fullTitle = `${tag.label} Groomers | PNW Specialists`;
+  const shortTitle = `${tag.label} Groomers in the PNW`;
+  const title = fullTitle.length <= 47
+    ? fullTitle
+    : shortTitle.length <= 47
+      ? shortTitle
+      : clampTitle(shortTitle);
+  const description = clampDescription(
+    `Find groomers specializing in ${tag.label.toLowerCase()} across Washington and Oregon. Compare ratings, read reviews, and book your appointment on GroomLocal.`,
+  );
 
   return {
     title,

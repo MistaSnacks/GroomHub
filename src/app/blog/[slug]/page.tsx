@@ -17,6 +17,7 @@ import { WaveDivider } from "@/components/wave-divider";
 import { AnimatedSection, AnimatedItem } from "@/components/animated-section";
 import { mdxComponents } from "@/components/mdx-components";
 import remarkGfm from "remark-gfm";
+import { clampDescription } from "@/lib/seo-utils";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -32,17 +33,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!post) return {};
 
   const ogImage = post.image || "/og-image.png";
+  const desc = clampDescription(post.excerpt);
 
   return {
     title: post.title,
-    description: post.excerpt,
+    description: desc,
     alternates: {
       canonical: `/blog/${post.slug}`,
     },
     openGraph: {
       title: post.title,
-      description: post.excerpt,
+      description: desc,
       type: "article",
+      url: `/blog/${post.slug}`,
+      siteName: "GroomLocal",
       publishedTime: post.date,
       authors: [post.author.name],
       images: [{ url: ogImage, width: 1200, height: 630, alt: post.title }],
@@ -50,7 +54,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title: post.title,
-      description: post.excerpt,
+      description: desc,
       images: [ogImage],
     },
   };

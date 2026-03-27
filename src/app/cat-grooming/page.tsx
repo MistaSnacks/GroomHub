@@ -16,7 +16,12 @@ export const metadata: Metadata = {
     siteName: "GroomLocal",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Cat groomers in the PNW" }],
   },
-  twitter: { card: "summary_large_image", images: ["/og-image.png"] },
+  twitter: {
+    card: "summary_large_image",
+    title: "Cat Groomers | Find Cat Grooming Near You",
+    description: "Find verified cat groomers across Washington and Oregon. Feline-friendly salons with dedicated suites and gentle handling.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default async function CatGroomingHub() {

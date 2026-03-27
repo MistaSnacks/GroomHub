@@ -24,7 +24,12 @@ export function PromoFindGroomers() {
               >
                 Search Groomers
               </Link>
-              <span className="text-sm text-slate-600">Free to use. Always.</span>
+              <Link
+                href="/get-quotes"
+                className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-white/80 text-slate-900 font-bold text-lg hover:bg-white transition-all shadow-sm"
+              >
+                Get Free Quotes
+              </Link>
             </div>
           </div>
 

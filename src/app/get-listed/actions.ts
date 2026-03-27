@@ -44,25 +44,8 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
     return { ok: false, error: "Something went wrong. Please try again." };
   }
 
-  // Fire-and-forget email notification (silently skip if no API key)
-  const resendKey = process.env.RESEND_API_KEY;
-  if (resendKey) {
-    fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${resendKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: "GroomLocal <noreply@groomlocal.com>",
-        to: "hello@groomlocal.com",
-        subject: `New listing submission: ${business_name}`,
-        text: `Business: ${business_name}\nContact: ${contact_name || "N/A"}\nCity: ${city}, ${state}\nEmail: ${email}\nPhone: ${phone || "N/A"}\nWebsite: ${website || "N/A"}\nNotes: ${notes || "N/A"}`,
-      }),
-    }).catch(() => {
-      // Silently ignore email failures
-    });
-  }
+  // Email notification handled by Supabase database webhook
+  // triggering the notify-listing-submission Edge Function
 
   return { ok: true };
 }

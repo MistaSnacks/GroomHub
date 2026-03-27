@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useFormStatus } from "react-dom";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Check, ArrowRight, X } from "@phosphor-icons/react/dist/ssr";
+import { Check, ArrowRight, X, WarningCircle } from "@phosphor-icons/react/dist/ssr";
 import { WaveDivider } from "@/components/wave-divider";
 import { pricingTiers } from "@/lib/pricing";
 import { processClaim } from "@/app/claim/actions";
@@ -10,9 +12,23 @@ import { processClaim } from "@/app/claim/actions";
 export function ClaimPlansClient({ slug }: { slug: string }) {
     const [isAnnual, setIsAnnual] = useState(false);
     const [selectedPlan, setSelectedPlan] = useState<string>("standard");
+    const searchParams = useSearchParams();
+    const error = searchParams.get("error");
 
     return (
         <div className="flex-1 flex flex-col bg-bg">
+            {/* Error banner */}
+            {error && (
+                <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 pt-6">
+                    <div className="flex items-center gap-3 p-4 text-sm text-[#C2185B] bg-[#FCE4EC] rounded-xl border border-[#F48FB1]">
+                        <WarningCircle weight="bold" className="w-5 h-5 shrink-0" />
+                        {error === "already-claimed"
+                            ? "This listing has already been claimed by another user."
+                            : error}
+                    </div>
+                </div>
+            )}
+
             {/* Header section */}
             <section className="py-12">
                 <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
@@ -141,18 +157,26 @@ export function ClaimPlansClient({ slug }: { slug: string }) {
                         <input type="hidden" name="slug" value={slug} />
                         <input type="hidden" name="plan" value={selectedPlan} />
                         <input type="hidden" name="isAnnual" value={String(isAnnual)} />
-                        <button
-                            type="submit"
-                            className="flex items-center justify-center gap-2 w-full sm:w-auto rounded-full bg-brand-primary px-8 py-4 text-base font-bold text-white transition-all hover:bg-brand-primary/90 hover:scale-[1.02] shadow-md cursor-pointer"
-                        >
-                            {selectedPlan === 'free' ? 'Complete Claim' : 'Proceed to Checkout'}
-                            <ArrowRight weight="bold" className="w-5 h-5" />
-                        </button>
+                        <SubmitButton label={selectedPlan === 'free' ? 'Complete Claim' : 'Proceed to Checkout'} />
                     </form>
                 </div>
             </section>
 
             <WaveDivider variant="footer" fromColor="#FDF8F0" toColor="#4ECDC4" />
         </div>
+    );
+}
+
+function SubmitButton({ label }: { label: string }) {
+    const { pending } = useFormStatus();
+    return (
+        <button
+            type="submit"
+            disabled={pending}
+            className="flex items-center justify-center gap-2 w-full sm:w-auto rounded-full bg-brand-primary px-8 py-4 text-base font-bold text-white transition-all hover:bg-brand-primary/90 hover:scale-[1.02] shadow-md cursor-pointer disabled:opacity-70 disabled:hover:scale-100"
+        >
+            {pending ? "Claiming..." : label}
+            {!pending && <ArrowRight weight="bold" className="w-5 h-5" />}
+        </button>
     );
 }

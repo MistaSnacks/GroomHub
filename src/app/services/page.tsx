@@ -18,7 +18,12 @@ export const metadata: Metadata = {
     siteName: "GroomLocal",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Dog grooming services" }],
   },
-  twitter: { card: "summary_large_image", images: ["/og-image.png"] },
+  twitter: {
+    card: "summary_large_image",
+    title: "Dog Grooming Services & Specialties",
+    description: "Browse dog groomers by service or specialty across the PNW. Find the exact care your pet needs.",
+    images: ["/og-image.png"],
+  },
 };
 
 // Colored card pattern: indices 3=teal, 4=amber, 7=amber

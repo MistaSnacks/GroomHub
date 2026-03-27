@@ -21,7 +21,12 @@ export const metadata: Metadata = {
     siteName: "GroomLocal",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "GroomLocal Blog" }],
   },
-  twitter: { card: "summary_large_image", images: ["/og-image.png"] },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog | Grooming Tips, Guides & Pet Care",
+    description: "Expert grooming tips, seasonal care guides, and pet care advice from PNW groomers.",
+    images: ["/og-image.png"],
+  },
 };
 
 interface BlogPageProps {

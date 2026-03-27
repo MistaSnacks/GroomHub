@@ -13,7 +13,12 @@ export const metadata: Metadata = {
     siteName: "GroomLocal",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Get grooming quotes on GroomLocal" }],
   },
-  twitter: { card: "summary_large_image", images: ["/og-image.png"] },
+  twitter: {
+    card: "summary_large_image",
+    title: "Get Grooming Quotes",
+    description: "Get personalized quotes from up to 5 top-rated groomers in your area. Free, fast, and no commitment.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function GetQuotesPage() {

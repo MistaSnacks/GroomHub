@@ -17,7 +17,12 @@ export const metadata: Metadata = {
     siteName: "GroomLocal",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Get listed on GroomLocal" }],
   },
-  twitter: { card: "summary_large_image", images: ["/og-image.png"] },
+  twitter: {
+    card: "summary_large_image",
+    title: "Get Listed | Add Your Grooming Business",
+    description: "Submit your grooming business to GroomLocal and start connecting with local pet parents across the PNW.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function GetListedPage() {
@@ -101,13 +106,13 @@ export default function GetListedPage() {
               <div className="rounded-2xl p-5 bg-brand-secondary">
                 <h3 className="font-heading font-bold mb-2 text-slate-900">Already listed?</h3>
                 <p className="text-sm mb-3 text-slate-700">
-                  If your business is already in our directory, you can claim it to unlock editing and analytics.
+                  Use the search above to find your business and claim it. Claiming unlocks editing, photo uploads, and analytics.
                 </p>
                 <Link
                   href="/for-groomers"
-                  className="inline-flex items-center px-4 py-2 rounded-full bg-brand-primary text-white text-sm font-semibold transition-colors hover:bg-brand-primary/90"
+                  className="text-sm font-semibold text-slate-900 hover:text-brand-primary transition-colors underline underline-offset-2"
                 >
-                  Claim Your Listing
+                  Learn about groomer tools
                 </Link>
               </div>
             </div>

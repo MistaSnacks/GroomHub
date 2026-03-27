@@ -11,6 +11,7 @@ import { getEnrichedCityContent } from "@/lib/city-content";
 import { cityPageSchema, cityFaqSchema } from "@/lib/schema";
 import { WaveDivider } from "@/components/wave-divider";
 import { AdSlot } from "@/components/ad-slot";
+import { clampDescription, clampTitle } from "@/lib/seo-utils";
 
 function buildCityFaqs(cityName: string, stateAbbr: string, groomerCount: number, parkCount: number) {
   const stateName = stateAbbr === "WA" ? "Washington" : "Oregon";
@@ -54,12 +55,29 @@ export async function generateMetadata({ params }: CityPageProps): Promise<Metad
   const groomerText = groomerCount
     ? `${groomerCount} verified groomer${groomerCount !== 1 ? "s" : ""}`
     : "verified groomers";
-  const title = groomerCount
-    ? `${groomerCount} Best Dog Groomers in ${cityName}, ${stateAbbr} (2026)`
-    : `Best Dog Groomers in ${cityName}, ${stateAbbr} (2026)`;
+  // Build title within 47-char limit (layout appends " | GroomLocal")
+  // Try formats from most descriptive to shortest
+  const titleWithCount = groomerCount
+    ? `Top ${groomerCount} Dog Groomers in ${cityName}, ${stateAbbr}`
+    : `Dog Groomers in ${cityName}, ${stateAbbr}`;
+  const titleShort = groomerCount
+    ? `Dog Groomers in ${cityName}, ${stateAbbr} (${groomerCount})`
+    : `Dog Groomers in ${cityName}, ${stateAbbr}`;
+  const title = titleWithCount.length <= 47
+    ? titleWithCount
+    : titleShort.length <= 47
+      ? titleShort
+      : clampTitle(titleShort);
+  const basePart = `Compare ${groomerText} in ${cityName}, ${stateName} with prices, reviews, and services.`;
+  const withCta = `${basePart} Find your next groomer on GroomLocal.`;
   const parkCount = content?.dogParks?.length ?? 0;
-  const parkMention = parkCount > 0 ? ` Plus ${parkCount} local dog parks.` : "";
-  const description = `Compare ${groomerText} in ${cityName}, ${stateName} with prices, reviews, and services.${parkMention} Find your next groomer on GroomLocal.`;
+  const withParks = parkCount > 0
+    ? `${basePart} Plus ${parkCount} local dog parks. Find your next groomer on GroomLocal.`
+    : withCta;
+  // Use the version with parks if it fits, otherwise drop parks mention
+  const description = clampDescription(
+    withParks.length <= 155 ? withParks : withCta,
+  );
   const ogImage = `/api/og/city?city=${encodeURIComponent(city)}&state=${encodeURIComponent(state)}`;
 
   return {

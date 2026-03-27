@@ -49,7 +49,7 @@ export default function PricingPage() {
           <nav className="flex items-center gap-1.5 text-xs text-brand-accent mb-5 font-semibold tracking-wide">
             <Link href="/" className="hover:text-brand-primary transition-colors">Home</Link>
             <CaretRight weight="bold" className="w-3 h-3 text-text-muted" />
-            <Link href="/get-listed" className="hover:text-brand-primary transition-colors">For Groomers</Link>
+            <Link href="/for-groomers" className="hover:text-brand-primary transition-colors">For Groomers</Link>
             <CaretRight weight="bold" className="w-3 h-3 text-text-muted" />
             <span className="text-brand-primary">Pricing</span>
           </nav>

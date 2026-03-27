@@ -8,6 +8,7 @@ export const revalidate = 300;
 import { getListingsByServiceTag, getCityBySlug } from "@/lib/supabase/queries";
 import { stateAbbrFromSlug } from "@/lib/geography";
 import { WaveDivider } from "@/components/wave-divider";
+import { clampDescription, clampTitle } from "@/lib/seo-utils";
 
 interface Props {
   params: Promise<{ state: string; city: string }>;
@@ -18,20 +19,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const cityData = await getCityBySlug(city, stateAbbrFromSlug(state));
   const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
 
+  const stateAbbr = stateAbbrFromSlug(state);
   const ogImage = `/api/og/city?city=${encodeURIComponent(city)}&state=${encodeURIComponent(state)}&service=mobile`;
+  // "Mobile Groomers" instead of "Mobile Dog Groomers" to save 4 chars
+  const title = clampTitle(`Mobile Groomers in ${cityName}, ${stateAbbr}`);
+  const description = clampDescription(`Find mobile dog groomers in ${cityName}, ${stateAbbr}. At-home grooming with fully equipped vans, no car ride stress. Compare prices and book on GroomLocal.`);
 
   return {
-    title: `Mobile Dog Groomers in ${cityName}, ${stateAbbrFromSlug(state)}`,
-    description: `Find the best mobile dog groomers in ${cityName}, ${stateAbbrFromSlug(state)}. Convenient at-home grooming with fully equipped vans. No car ride stress for your pup.`,
+    title,
+    description,
     alternates: { canonical: `/mobile-grooming/${state}/${city}` },
     openGraph: {
-      title: `Mobile Dog Groomers in ${cityName}, ${stateAbbrFromSlug(state)}`,
-      description: `Find the best mobile dog groomers in ${cityName}, ${stateAbbrFromSlug(state)}. Convenient at-home grooming with fully equipped vans. No car ride stress for your pup.`,
+      title,
+      description,
+      type: "website",
+      url: `/mobile-grooming/${state}/${city}`,
+      siteName: "GroomLocal",
       images: [{ url: ogImage, width: 1200, height: 630, alt: `Mobile groomers in ${cityName}` }],
     },
     twitter: {
       card: "summary_large_image",
-      title: `Mobile Dog Groomers in ${cityName}, ${stateAbbrFromSlug(state)}`,
+      title,
+      description,
       images: [ogImage],
     },
   };

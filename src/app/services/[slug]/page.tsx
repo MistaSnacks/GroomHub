@@ -14,6 +14,7 @@ import {
 import { STATES, stateSlugFromAbbr, buildCityPath, buildSpecialtyPath } from "@/lib/geography";
 import { servicePageSchema } from "@/lib/schema";
 import { WaveDivider } from "@/components/wave-divider";
+import { clampDescription, clampTitle } from "@/lib/seo-utils";
 import { AnimatedSection, AnimatedItem } from "@/components/animated-section";
 import type { NormalizedListing } from "@/lib/types";
 
@@ -32,8 +33,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const tag = getServiceTag(slug);
   if (!tag) return {};
 
-  const title = `${tag.label} Groomers in the PNW`;
-  const description = `Browse dog groomers offering ${tag.label.toLowerCase()} across Washington and Oregon. Compare ratings, read reviews, and book online.`;
+  const title = clampTitle(`${tag.label} Groomers in the PNW`);
+  const description = clampDescription(
+    `Browse dog groomers offering ${tag.label.toLowerCase()} across Washington and Oregon. Compare ratings, read reviews, and book your appointment on GroomLocal.`,
+  );
 
   return {
     title,

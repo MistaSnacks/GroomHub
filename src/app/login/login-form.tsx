@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import { ArrowRight } from "@phosphor-icons/react";
 import { createClient } from "@/lib/supabase/browser";
 
 interface LoginFormProps {
@@ -15,6 +15,7 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,6 +38,30 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
     router.refresh();
   };
 
+  const handleForgotPassword = async () => {
+    if (!email) {
+      setError("Enter your email address first, then click forgot password.");
+      return;
+    }
+    setError(null);
+    setLoading(true);
+
+    const supabase = createClient();
+    const { error: resetErr } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${location.origin}/auth/callback?next=/reset-password`,
+    });
+
+    setLoading(false);
+
+    if (resetErr) {
+      setError(resetErr.message);
+      return;
+    }
+
+    setResetSent(true);
+    setTimeout(() => setResetSent(false), 8000);
+  };
+
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       {error && (
@@ -45,13 +70,19 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
         </div>
       )}
 
+      {resetSent && (
+        <div className="p-3 text-sm text-[#2E7D32] bg-[#E8F5E9] rounded-xl border border-[#A5D6A7]">
+          Password reset link sent! Check your inbox.
+        </div>
+      )}
+
       <div>
-        <label className="block text-sm font-medium text-text mb-1.5" htmlFor="email">
+        <label className="block text-sm font-medium text-text mb-1.5" htmlFor="login-email">
           Email Address
         </label>
         <input
           type="email"
-          id="email"
+          id="login-email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm shadow-sm transition-colors focus:border-brand-primary focus:ring-1 focus:ring-brand-primary outline-none"
@@ -61,16 +92,25 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-text mb-1.5" htmlFor="password">
-          Password
-        </label>
+        <div className="flex items-center justify-between mb-1.5">
+          <label className="block text-sm font-medium text-text" htmlFor="login-password">
+            Password
+          </label>
+          <button
+            type="button"
+            onClick={handleForgotPassword}
+            className="text-xs text-brand-accent hover:text-brand-primary transition-colors font-medium"
+          >
+            Forgot password?
+          </button>
+        </div>
         <input
           type="password"
-          id="password"
+          id="login-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm shadow-sm transition-colors focus:border-brand-primary focus:ring-1 focus:ring-brand-primary outline-none"
-          placeholder="••••••••"
+          placeholder="Your password"
           required
           minLength={6}
         />

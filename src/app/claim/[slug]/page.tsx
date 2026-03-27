@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { Check, ArrowRight, ShieldCheck, MapPin } from "@phosphor-icons/react/dist/ssr";
@@ -22,7 +22,12 @@ export default async function ClaimPage({
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  // If already claimed (basic check)
+  // If already claimed by THIS user, skip straight to success
+  if (listing.owner_id && user && listing.owner_id === user.id) {
+    redirect(`/claim/${listing.slug}/success`);
+  }
+
+  // If claimed by someone else
   if (listing.owner_id) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-8 text-center bg-bg">

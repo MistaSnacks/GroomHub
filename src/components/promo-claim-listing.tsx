@@ -36,7 +36,7 @@ export function PromoClaimListing() {
                 Claim Your Listing
               </Link>
               <Link
-                href="/about"
+                href="/for-groomers"
                 className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-white/20 text-white font-bold text-lg hover:bg-white/30 transition-all w-full sm:w-auto"
               >
                 Learn More

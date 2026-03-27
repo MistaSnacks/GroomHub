@@ -10,12 +10,12 @@ export default async function ClaimPlansPage({
 }) {
     const { slug } = await params;
 
-    // Auth gate: redirect to login if not authenticated
+    // Auth gate: send back to step 1 (which has the auth form), not /login
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        redirect(`/login?redirect=/claim/${slug}/plans`);
+        redirect(`/claim/${slug}`);
     }
 
     // Check listing exists and is unclaimed
@@ -25,6 +25,12 @@ export default async function ClaimPlansPage({
         redirect(`/dog-grooming`);
     }
 
+    // If already claimed by THIS user, send them to success
+    if (listing.owner_id === user.id) {
+        redirect(`/claim/${slug}/success`);
+    }
+
+    // If claimed by someone else, show the groomer profile
     if (listing.owner_id) {
         redirect(`/groomer/${slug}`);
     }
