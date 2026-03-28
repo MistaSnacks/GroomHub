@@ -5,7 +5,8 @@ import { CaretRight, MapPin, PawPrint, Park, MapTrifold, Storefront, TreeStructu
 import { CityListingsClient } from "@/components/city-listings-client";
 
 export const revalidate = 300;
-import { getListingsByCity, getCitiesByState, getCityBySlug } from "@/lib/supabase/queries";
+import { getListingsByCity, getCitiesByState, getCityBySlug, getFeaturedByCity } from "@/lib/supabase/queries";
+import { FeaturedSection } from "@/components/featured-section";
 import { stateNameFromSlug, stateAbbrFromSlug, buildCityPath } from "@/lib/geography";
 import { getEnrichedCityContent } from "@/lib/city-content";
 import { cityPageSchema, cityFaqSchema } from "@/lib/schema";
@@ -106,10 +107,11 @@ export default async function CityPage({ params }: CityPageProps) {
   const stateAbbr = stateAbbrFromSlug(state);
   const stateName = stateNameFromSlug(state);
 
-  const [listings, cityData, relatedCities] = await Promise.all([
+  const [listings, cityData, relatedCities, featuredListings] = await Promise.all([
     getListingsByCity(city, stateAbbr),
     getCityBySlug(city, stateAbbr),
     getCitiesByState(stateAbbr),
+    getFeaturedByCity(city, stateAbbr),
   ]);
 
   const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
@@ -154,6 +156,9 @@ export default async function CityPage({ params }: CityPageProps) {
       {/* Main content - Listings */}
       <section className="bg-bg flex-1">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 w-full">
+          {featuredListings.length > 0 && (
+            <FeaturedSection listings={featuredListings} cityName={cityName} />
+          )}
           <Suspense fallback={<div className="py-8 text-center text-text-muted">Loading filters...</div>}>
             <CityListingsClient
               listings={listings}
