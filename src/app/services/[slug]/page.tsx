@@ -13,6 +13,7 @@ import {
 } from "@/lib/tags";
 import { STATES, stateSlugFromAbbr, buildCityPath, buildSpecialtyPath } from "@/lib/geography";
 import { servicePageSchema } from "@/lib/schema";
+import { getServiceContent } from "@/lib/service-content";
 import { WaveDivider } from "@/components/wave-divider";
 import { clampDescription, clampTitle } from "@/lib/seo-utils";
 import { AnimatedSection, AnimatedItem } from "@/components/animated-section";
@@ -35,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const title = clampTitle(`${tag.label} Groomers in the PNW`);
   const description = clampDescription(
-    `Browse dog groomers offering ${tag.label.toLowerCase()} across Washington and Oregon. Compare ratings, read reviews, and book your appointment on GroomLocal.`,
+    `Browse dog groomers offering ${tag.label.toLowerCase()} across Washington and Oregon. Compare services, pricing, and contact details on GroomLocal.`,
   );
 
   return {
@@ -88,6 +89,8 @@ export default async function ServiceLandingPage({ params }: Props) {
 
   const schema = servicePageSchema(slug, tag.label, "service", listings);
 
+  const serviceContent = getServiceContent(slug);
+
   // Related specialties (first 6)
   const relatedSpecialties = SPECIALTY_TAGS.slice(0, 6);
 
@@ -121,6 +124,37 @@ export default async function ServiceLandingPage({ params }: Props) {
           </p>
         </div>
       </section>
+
+      {/* Editorial Content */}
+      {serviceContent && (
+        <section className="bg-bg pb-10 pt-2">
+          <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+            <p className="text-lg text-text-muted leading-relaxed mb-8">
+              {serviceContent.intro}
+            </p>
+
+            <div className="space-y-4 text-text-muted leading-relaxed">
+              {serviceContent.body.map((paragraph, i) => (
+                <p key={i}>{paragraph}</p>
+              ))}
+            </div>
+
+            <div className="mt-8">
+              <h2 className="font-heading text-lg font-semibold text-brand-primary mb-3">
+                Tips for Pet Owners
+              </h2>
+              <ul className="space-y-2">
+                {serviceContent.tips.map((tip, i) => (
+                  <li key={i} className="flex items-start gap-2 text-text-muted leading-relaxed">
+                    <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-brand-secondary shrink-0" />
+                    {tip}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+      )}
 
       <WaveDivider variant="gentle" fromColor="#FDF8F0" toColor="#FDF8F0" />
 

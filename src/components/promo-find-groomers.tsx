@@ -15,7 +15,7 @@ export function PromoFindGroomers() {
               in town.
             </h2>
             <p className="text-lg mb-8 max-w-xl mx-auto lg:mx-0 text-slate-700">
-              Compare ratings, read real reviews, and find groomers who specialize in exactly what your pet needs. All in one place.
+              Compare services, pricing, and specialties to find groomers who are the right fit for your pet. All in one place.
             </p>
             <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
               <Link

@@ -14,13 +14,15 @@ export async function generateSitemaps() {
   return [{ id: 0 }, { id: 1 }, { id: 2 }];
 }
 
-export default async function sitemap({
-  id,
-}: {
-  id: number;
+export default async function sitemap(args: {
+  id: Promise<number> | number;
 }): Promise<MetadataRoute.Sitemap> {
+  // Next.js 16 makes id a Promise (like params/searchParams)
+  const chunkId = Number(await args.id);
+
   // ── Chunk 0: Static pages, states, services, specialties, blog ──
-  if (id === 0) {
+  if (chunkId === 0) {
+
     const staticPages: MetadataRoute.Sitemap = [
       { url: BASE_URL, lastModified: new Date(), changeFrequency: "daily", priority: 1.0 },
       { url: `${BASE_URL}/dog-grooming`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
@@ -75,7 +77,8 @@ export default async function sitemap({
   }
 
   // ── Chunk 1: Individual groomer profiles ──
-  if (id === 1) {
+  if (chunkId === 1) {
+
     const listings = await getAllListings();
 
     return listings.map((listing) => ({
@@ -87,6 +90,7 @@ export default async function sitemap({
   }
 
   // ── Chunk 2: City pages (dog-grooming, cat-grooming, mobile-grooming) ──
+
   const cities = await getCities();
 
   const cityPages: MetadataRoute.Sitemap = cities.map((city) => ({

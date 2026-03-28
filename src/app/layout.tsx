@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     template: "%s | GroomLocal",
   },
   description:
-    "Find the pawfect dog groomer in Seattle, Tacoma, Portland & the Pacific Northwest. Verified listings, real reviews, and instant booking.",
+    "Find the pawfect dog groomer in Seattle, Tacoma, Portland and the Pacific Northwest. 1,177+ verified listings with services, pricing, and contact info.",
   keywords: [
     "dog grooming",
     "pet grooming",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "GroomLocal | Find Dog Groomers in the PNW",
     description:
-      "Find the pawfect dog groomer in Seattle, Tacoma, Portland & the Pacific Northwest.",
+      "Find the pawfect dog groomer in Seattle, Tacoma, Portland and the Pacific Northwest. 1,177+ verified groomer listings.",
     type: "website",
     url: "https://groomlocal.com",
     locale: "en_US",
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "GroomLocal | Find Dog Groomers in the PNW",
     description:
-      "Find the pawfect dog groomer in Seattle, Tacoma, Portland & the Pacific Northwest.",
+      "Find the pawfect dog groomer in Seattle, Tacoma, Portland and the Pacific Northwest. 1,177+ verified groomer listings.",
     images: ["/og-image.png"],
   },
 };

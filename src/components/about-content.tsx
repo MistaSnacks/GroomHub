@@ -47,7 +47,7 @@ export function AboutContent({ metrics }: AboutContentProps) {
               Our Story
             </motion.p>
             <motion.h1 variants={itemVariants} className="font-heading text-5xl md:text-6xl font-bold mb-6 text-brand-primary">
-              Built by pet parents,{" "}
+              Built by groomers,{" "}
               <span className="text-brand-secondary italic">for pet parents.</span>
             </motion.h1>
             <motion.p variants={itemVariants} className="text-lg md:text-xl text-text-muted">
@@ -81,10 +81,10 @@ export function AboutContent({ metrics }: AboutContentProps) {
                 It started with a bad haircut.
               </h2>
               <p className="text-text-muted text-lg leading-relaxed mb-4">
-                After one too many mismatched grooming experiences, we realized the PNW needed a better way to find and compare pet groomers. Not another generic directory &mdash; a curated, pet-first resource built by people who actually care.
+                GroomLocal was started by a working groomer who saw how hard it was for pet parents to find quality grooming services in the Pacific Northwest. After years behind the grooming table, we knew what makes a great groomer and wanted to make that easier to find.
               </p>
               <p className="text-text-muted text-lg leading-relaxed mb-8">
-                Today, GroomLocal helps thousands of pet parents across Washington and Oregon discover verified groomers who truly love what they do.
+                Today, GroomLocal lists over {metrics.totalGroomers.toLocaleString()} groomers across Washington and Oregon. Every listing includes services offered, contact details, and location info so you can make an informed choice.
               </p>
 
               {/* Stats */}
@@ -141,7 +141,7 @@ export function AboutContent({ metrics }: AboutContentProps) {
               </div>
               <h3 className="font-heading text-2xl font-bold text-brand-primary mb-3">Pets First</h3>
               <p className="text-text-muted leading-relaxed flex-1">
-                Every decision we make starts with one question: is this better for pets? We verify groomers, highlight fear-free options, and make sure your furry family member is always the priority.
+                Every decision we make starts with one question: is this better for pets? We verify groomers, highlight fear-free options, and make sure your pet is always the priority.
               </p>
             </motion.div>
 
@@ -152,7 +152,7 @@ export function AboutContent({ metrics }: AboutContentProps) {
               </div>
               <h3 className="font-heading text-lg font-bold text-brand-primary mb-2">Transparency</h3>
               <p className="text-sm text-text-muted leading-relaxed">
-                Real reviews, verified listings, and honest pricing. No hidden surprises.
+                Verified listings, transparent pricing, and honest information. No hidden surprises.
               </p>
             </motion.div>
 
@@ -201,7 +201,7 @@ export function AboutContent({ metrics }: AboutContentProps) {
                 Meet <span className="text-brand-accent">Maui</span>
               </h2>
               <p className="text-text-muted text-lg mb-6 leading-relaxed">
-                Maui is our small, fluffy, and endlessly enthusiastic Chief Grooming Officer! With his signature red bandana and happy tail wags, he&apos;s here to guide you through finding the best grooming services for your furry family members.
+                Maui is our small, fluffy, and endlessly enthusiastic Chief Grooming Officer! With his signature red bandana and happy tail wags, he&apos;s here to guide you through finding the best grooming services for your pets.
               </p>
               <p className="text-text-muted text-lg leading-relaxed">
                 Whether he&apos;s testing out a new bubble bath or giving the paw of approval to a fresh haircut, Maui ensures every groomer in our directory meets our high standards.

@@ -14,20 +14,76 @@ import { WaveDivider } from "@/components/wave-divider";
 import { AdSlot } from "@/components/ad-slot";
 import { clampDescription, clampTitle } from "@/lib/seo-utils";
 
+const SEATTLE_METRO = new Set([
+  "seattle", "bellevue", "redmond", "kirkland", "renton", "bothell",
+  "lynnwood", "shoreline", "burien", "edmonds", "sammamish",
+  "mercer island", "issaquah", "woodinville", "kenmore",
+]);
+const PORTLAND_METRO = new Set([
+  "portland", "beaverton", "tigard", "lake oswego", "gresham",
+  "hillsboro", "tualatin", "milwaukie", "oregon city", "west linn", "clackamas",
+]);
+const TACOMA_SOUTH_SOUND = new Set([
+  "tacoma", "lakewood", "puyallup", "federal way", "auburn",
+  "kent", "olympia", "lacey", "tumwater",
+]);
+const MIDSIZE_WA = new Set([
+  "spokane", "bellingham", "vancouver", "everett", "marysville",
+  "yakima", "tri-cities", "walla walla", "kennewick", "richland", "pasco",
+]);
+const MIDSIZE_OR = new Set([
+  "eugene", "salem", "bend", "corvallis", "medford",
+  "ashland", "albany", "springfield",
+]);
+const DRY_CLIMATE_CITIES = new Set([
+  "spokane", "yakima", "tri-cities", "kennewick", "richland", "pasco",
+  "walla walla", "bend", "medford", "ashland",
+]);
+
+function getCityPriceRange(cityName: string, stateAbbr: string): string {
+  const lower = cityName.toLowerCase();
+  if (SEATTLE_METRO.has(lower)) return "$60 to $120";
+  if (PORTLAND_METRO.has(lower)) return "$50 to $110";
+  if (TACOMA_SOUTH_SOUND.has(lower)) return "$45 to $100";
+  if (MIDSIZE_WA.has(lower)) return "$40 to $95";
+  if (MIDSIZE_OR.has(lower)) return "$40 to $90";
+  return "$35 to $85";
+}
+
 function buildCityFaqs(cityName: string, stateAbbr: string, groomerCount: number, parkCount: number) {
   const stateName = stateAbbr === "WA" ? "Washington" : "Oregon";
+  const priceRange = getCityPriceRange(cityName, stateAbbr);
+  const lower = cityName.toLowerCase();
+  const isDry = DRY_CLIMATE_CITIES.has(lower);
+
+  // FAQ 2: grooming frequency varies by climate
+  const frequencyAnswer = isDry
+    ? "Most dogs should be professionally groomed every 4 to 8 weeks. Dogs with longer coats (Poodles, Shih Tzus, Goldendoodles) need grooming every 4 to 6 weeks. Short-haired breeds can go 8 to 12 weeks between appointments. In drier areas like " + cityName + ", there is less mud buildup, but dust and dry conditions can affect coat health. Regular brushing at home between visits helps prevent matting and keeps your dog's coat in good shape."
+    : "Most dogs should be professionally groomed every 4 to 8 weeks. Dogs with longer coats (Poodles, Shih Tzus, Goldendoodles) need grooming every 4 to 6 weeks. Short-haired breeds can go 8 to 12 weeks between appointments. In the Pacific Northwest, dogs often need grooming every 4 to 6 weeks during the rainy months (October through April) due to mud and damp conditions. Regular brushing at home between visits helps prevent matting.";
+
+  // FAQ 3: what to look for, varies by groomer count
+  let groomerCountDetail: string;
+  if (groomerCount >= 10) {
+    groomerCountDetail = `With ${groomerCount} groomers in ${cityName}, you have plenty of options to compare.`;
+  } else if (groomerCount >= 3) {
+    groomerCountDetail = `${cityName} has ${groomerCount} groomers, so consider expanding your search to nearby cities for more options.`;
+  } else {
+    const label = groomerCount === 1 ? "groomer" : "groomers";
+    groomerCountDetail = `While ${cityName} has ${groomerCount} ${label} listed, nearby cities offer additional options to consider.`;
+  }
+
   return [
     {
       question: `How much does dog grooming cost in ${cityName}?`,
-      answer: `Dog grooming in ${cityName}, ${stateName} typically costs $40 to $90 for a standard bath and haircut, depending on your dog's size, breed, and coat condition. Prices may be higher for large breeds or dogs with matted fur. Compare ${groomerCount} groomers on GroomLocal to find the best value.`,
+      answer: `Dog grooming in ${cityName}, ${stateName} typically costs ${priceRange} for a standard bath and haircut, depending on your dog's size, breed, and coat condition. Prices may be higher for large breeds or dogs with matted fur. Compare ${groomerCount} groomers on GroomLocal to find the best value.`,
     },
     {
       question: "How often should I groom my dog?",
-      answer: "Most dogs should be professionally groomed every 4 to 8 weeks. Dogs with longer coats (Poodles, Shih Tzus, Goldendoodles) need grooming every 4 to 6 weeks. Short-haired breeds can go 8 to 12 weeks between appointments. Regular brushing at home between visits helps prevent matting.",
+      answer: frequencyAnswer,
     },
     {
       question: `What should I look for in a dog groomer in ${cityName}?`,
-      answer: `Look for groomers with positive reviews, proper certifications, and a clean facility. Ask about their experience with your dog's breed. A good groomer will discuss your preferences before starting and handle your dog with patience. ${cityName} has ${groomerCount} groomers listed on GroomLocal, each with service details and contact information.`,
+      answer: `Look for groomers with positive reviews, proper certifications, and a clean facility. Ask about their experience with your dog's breed. A good groomer will discuss your preferences before starting and handle your dog with patience. ${groomerCountDetail} Each listing on GroomLocal includes service details and contact information.`,
     },
     {
       question: `Are there mobile dog groomers in ${cityName}?`,
@@ -53,6 +109,8 @@ export async function generateMetadata({ params }: CityPageProps): Promise<Metad
   const content = getEnrichedCityContent(stateAbbr, city);
 
   const groomerCount = cityData?.groomer_count ?? 0;
+  // Prevent indexing of thin city pages with fewer than 3 listings
+  const shouldIndex = groomerCount >= 3;
   const groomerText = groomerCount
     ? `${groomerCount} verified groomer${groomerCount !== 1 ? "s" : ""}`
     : "verified groomers";
@@ -84,6 +142,7 @@ export async function generateMetadata({ params }: CityPageProps): Promise<Metad
   return {
     title,
     description,
+    robots: shouldIndex ? undefined : { index: false, follow: true },
     alternates: { canonical: `/dog-grooming/${state}/${city}` },
     openGraph: {
       title,
@@ -148,6 +207,9 @@ export default async function CityPage({ params }: CityPageProps) {
               {content.intro}
             </p>
           )}
+          <p className="mt-2 text-xs text-text-muted/60">
+            Listings last updated: {new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+          </p>
         </div>
       </section>
 

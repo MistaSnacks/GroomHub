@@ -15,6 +15,7 @@ export interface BlogPostMeta {
   category: string;
   author: BlogAuthor;
   date: string;
+  dateModified: string | null;
   readTime: string;
   image: string | null;
   tags: string[];
@@ -51,6 +52,7 @@ function readAllPosts(): BlogPostFull[] {
         bio: data.author?.bio ?? "",
       },
       date: data.date ?? "",
+      dateModified: data.dateModified ?? null,
       readTime: data.readTime ?? "",
       image: data.image ?? null,
       tags: data.tags ?? [],

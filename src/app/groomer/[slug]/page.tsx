@@ -46,10 +46,23 @@ export async function generateMetadata({
 
   if (!listing) return { title: "Groomer Not Found" };
 
-  const rawDesc = listing.short_description || listing.description;
+  const unsanitized = listing.short_description || listing.description;
+  // Strip URLs, image refs, markdown artifacts, and excessive whitespace from scraped data
+  const rawDesc = unsanitized
+    .replace(/\(?\bhttps?:\/\/[^\s)]+\)?/gi, "")
+    .replace(/!\[.*?\]\(.*?\)/g, "")
+    .replace(/\[([^\]]*)\]\(.*?\)/g, "$1")
+    .replace(/[#*_~`]+/g, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
   // Build a description that lands in the 120-155 char sweet spot
+  // If rawDesc is empty after sanitization, use a constructed fallback
   let truncatedDesc: string;
-  if (rawDesc.length < 120) {
+  if (!rawDesc || rawDesc.length < 20) {
+    truncatedDesc = clampDescription(
+      `${listing.name} offers professional dog grooming in ${listing.city}, ${listing.state}. View services, pricing, hours, and contact info on GroomLocal.`
+    );
+  } else if (rawDesc.length < 120) {
     // Pad short descriptions with location and service context
     let padded = `${rawDesc} View services, pricing, and contact info for ${listing.name} in ${listing.city}, ${listing.state}. Compare on GroomLocal.`;
     // If still too short, use a fully constructed fallback

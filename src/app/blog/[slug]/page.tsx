@@ -48,6 +48,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `/blog/${post.slug}`,
       siteName: "GroomLocal",
       publishedTime: post.date,
+      modifiedTime: post.dateModified || post.date,
       authors: [post.author.name],
       images: [{ url: ogImage, width: 1200, height: 630, alt: post.title }],
     },

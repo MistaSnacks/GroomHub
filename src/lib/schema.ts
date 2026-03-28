@@ -333,7 +333,7 @@ export function blogPostSchema(post: BlogPostFull) {
     "@type": "BlogPosting",
     headline: post.title,
     datePublished: post.date,
-    dateModified: post.date,
+    dateModified: post.dateModified || post.date,
     author: {
       "@type": "Person",
       name: post.author.name,

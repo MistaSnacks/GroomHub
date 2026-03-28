@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "GroomLocal | Find Dog Groomers in the PNW",
     description:
-      "Find the best dog groomer in Seattle, Tacoma, Portland and the Pacific Northwest. Verified listings, real reviews, and instant booking.",
+      "Find the best dog groomer in Seattle, Tacoma, Portland and the Pacific Northwest. 1,177+ verified groomer listings with services, pricing, and contact info.",
     type: "website",
     url: "https://groomlocal.com",
     siteName: "GroomLocal",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "GroomLocal | Find Dog Groomers in the PNW",
     description:
-      "Find the best dog groomer in Seattle, Tacoma, Portland and the Pacific Northwest. Verified listings, real reviews, and instant booking.",
+      "Find the best dog groomer in Seattle, Tacoma, Portland and the Pacific Northwest. 1,177+ verified groomer listings with services, pricing, and contact info.",
     images: ["/og-image.png"],
   },
 };
@@ -50,6 +50,15 @@ export default async function HomePage() {
       <HomeHero totalCount={totalCount} />
 
       <WaveDivider variant="gentle" fromColor="#FDF8F0" toColor="#FFFFFF" />
+
+      {/* SEO Intro */}
+      <section className="bg-white pt-8 pb-0">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-text-muted text-base leading-relaxed">
+            GroomLocal is the Pacific Northwest&apos;s dog grooming directory, covering {totalCount.toLocaleString()}+ groomers across {cityCount} cities in Washington and Oregon. Compare services, pricing, and contact details for salons, mobile groomers, and self-wash stations near you. Whether you need a full groom for a Goldendoodle or a quick nail trim for a senior Lab, start here.
+          </p>
+        </div>
+      </section>
 
       {/* PREMIUM GROOMERS */}
       <section className="bg-white py-16 md:py-24">

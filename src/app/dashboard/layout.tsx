@@ -8,8 +8,7 @@ export const metadata: Metadata = {
 };
 import {
     Buildings,
-    ChartLineUp,
-    PencilSimple,
+    Storefront,
     EnvelopeSimpleOpen,
     User,
     GearSix
@@ -27,17 +26,8 @@ export default async function DashboardLayout({
         redirect("/login");
     }
 
-    // Fetch user's first listing slug for the edit link
-    const { data: listings } = await supabase
-        .from("business_listings")
-        .select("slug")
-        .eq("owner_id", user.id)
-        .limit(1);
-    const listingSlug = listings?.[0]?.slug;
-
     const navLinks = [
-        { name: "Overview", href: "/dashboard", icon: ChartLineUp, exact: true },
-        ...(listingSlug ? [{ name: "Edit Profile", href: `/dashboard/listing/${listingSlug}`, icon: PencilSimple }] : []),
+        { name: "My Listings", href: "/dashboard", icon: Storefront, exact: true },
         { name: "Lead Inbox", href: "/dashboard/inbox", icon: EnvelopeSimpleOpen },
         { name: "Account", href: "/dashboard/account", icon: User },
         { name: "Settings", href: "/dashboard/settings", icon: GearSix },
