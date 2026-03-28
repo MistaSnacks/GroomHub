@@ -1,6 +1,7 @@
 import { supabase } from "./client";
 import { normalizeTags } from "../tags";
 import type { BusinessListing, NormalizedListing, CityWithCount } from "../types";
+import { getMetroNeighbors, FEATURED_SPOTS_PER_CITY } from "../metro-clusters";
 
 // ─── Tag Normalization at Query Time ────────────────────
 function withTags(listing: BusinessListing): NormalizedListing {
@@ -234,6 +235,123 @@ export async function getFeaturedListings(
     return [];
   }
   return withTagsAll((data ?? []) as BusinessListing[]);
+}
+
+export interface FeaturedCityListing extends NormalizedListing {
+  /** true if this listing is from a neighboring city, not the current city */
+  isSpillover: boolean;
+}
+
+/**
+ * Get featured listings for a city page, with metro cluster spillover.
+ * 1. Fetch featured listings in the target city
+ * 2. If fewer than FEATURED_SPOTS_PER_CITY, fill from metro neighbors
+ * 3. Cap at FEATURED_SPOTS_PER_CITY total
+ */
+export async function getFeaturedByCity(
+  citySlug: string,
+  stateAbbr: string
+): Promise<FeaturedCityListing[]> {
+  // First: get featured listings in this exact city
+  const localSlugs = citySlugVariants(citySlug, stateAbbr);
+
+  const { data: localData, error: localError } = await supabase
+    .from("business_listings")
+    .select("*")
+    .eq("is_featured", true)
+    .eq("state", stateAbbr.toUpperCase())
+    .in("city_slug", localSlugs)
+    .order("rating", { ascending: false })
+    .limit(FEATURED_SPOTS_PER_CITY);
+
+  if (localError) {
+    console.error("getFeaturedByCity local error:", localError.message);
+    return [];
+  }
+
+  const localListings: FeaturedCityListing[] = withTagsAll(
+    (localData ?? []) as BusinessListing[]
+  ).map((l) => ({ ...l, isSpillover: false }));
+
+  // If we already have enough, return early
+  if (localListings.length >= FEATURED_SPOTS_PER_CITY) {
+    return localListings.slice(0, FEATURED_SPOTS_PER_CITY);
+  }
+
+  // Otherwise: fill from metro neighbors
+  const neighbors = getMetroNeighbors(citySlug);
+  if (neighbors.length === 0) {
+    return localListings;
+  }
+
+  const remaining = FEATURED_SPOTS_PER_CITY - localListings.length;
+  const localIds = new Set(localListings.map((l) => l.id));
+
+  // Build all slug variants for neighbor cities
+  const neighborSlugs = neighbors.flatMap((n) => citySlugVariants(n, stateAbbr));
+
+  const { data: neighborData, error: neighborError } = await supabase
+    .from("business_listings")
+    .select("*")
+    .eq("is_featured", true)
+    .eq("state", stateAbbr.toUpperCase())
+    .in("city_slug", neighborSlugs)
+    .order("rating", { ascending: false })
+    .limit(remaining + 5); // fetch a few extra to account for dedup
+
+  if (neighborError) {
+    console.error("getFeaturedByCity neighbor error:", neighborError.message);
+    return localListings;
+  }
+
+  const neighborListings: FeaturedCityListing[] = withTagsAll(
+    (neighborData ?? []) as BusinessListing[]
+  )
+    .filter((l) => !localIds.has(l.id))
+    .slice(0, remaining)
+    .map((l) => ({ ...l, isSpillover: true }));
+
+  return [...localListings, ...neighborListings];
+}
+
+/**
+ * Count how many featured spots are taken in a city (local only, no spillover).
+ * Used on the pricing page for scarcity signals.
+ */
+export async function getFeaturedCountByCity(
+  citySlug: string,
+  stateAbbr: string
+): Promise<number> {
+  const localSlugs = citySlugVariants(citySlug, stateAbbr);
+
+  const { count, error } = await supabase
+    .from("business_listings")
+    .select("*", { count: "exact", head: true })
+    .eq("is_featured", true)
+    .eq("state", stateAbbr.toUpperCase())
+    .in("city_slug", localSlugs);
+
+  if (error) {
+    console.error("getFeaturedCountByCity error:", error.message);
+    return 0;
+  }
+  return count ?? 0;
+}
+
+/**
+ * Get featured listing counts for a list of cities.
+ * Used on the pricing page for scarcity signals.
+ */
+export async function getFeaturedCountsForCities(
+  cities: { slug: string; name: string; stateAbbr: string }[]
+): Promise<{ cityName: string; taken: number }[]> {
+  const results = await Promise.all(
+    cities.map(async ({ slug, name, stateAbbr }) => ({
+      cityName: name,
+      taken: await getFeaturedCountByCity(slug, stateAbbr),
+    }))
+  );
+  return results;
 }
 
 export async function getAllListings(): Promise<NormalizedListing[]> {
