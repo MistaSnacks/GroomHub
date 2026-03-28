@@ -5,8 +5,9 @@ import { CaretRight, MapPin, Cat } from "@phosphor-icons/react/dist/ssr";
 import { CityListingsClient } from "@/components/city-listings-client";
 
 export const revalidate = 300;
-import { getListingsByServiceTag, getCityBySlug } from "@/lib/supabase/queries";
+import { getListingsByServiceTag, getCityBySlug, getFeaturedByCity } from "@/lib/supabase/queries";
 import { stateAbbrFromSlug } from "@/lib/geography";
+import { FeaturedSection } from "@/components/featured-section";
 import { WaveDivider } from "@/components/wave-divider";
 import { clampDescription, clampTitle } from "@/lib/seo-utils";
 
@@ -48,9 +49,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CatGroomingCityPage({ params }: Props) {
   const { state, city } = await params;
   const stateAbbr = stateAbbrFromSlug(state);
-  const [listings, cityData] = await Promise.all([
+  const [listings, cityData, featuredListings] = await Promise.all([
     getListingsByServiceTag("cat-grooming", city, stateAbbr),
     getCityBySlug(city, stateAbbr),
+    getFeaturedByCity(city, stateAbbr),
   ]);
   const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
 
@@ -79,6 +81,8 @@ export default async function CatGroomingCityPage({ params }: Props) {
       </section>
 
       <WaveDivider variant="gentle" fromColor="#FDF8F0" toColor="#FDF8F0" />
+
+      <FeaturedSection listings={featuredListings} cityName={cityName} />
 
       <section className="bg-bg flex-1">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 w-full">
