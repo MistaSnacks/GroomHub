@@ -85,6 +85,12 @@ export function SiteHeader() {
             <NavDropdown label="Services" type="services" />
             <NavDropdown label="Specialties" type="specialties" />
             <Link
+              href="/resources"
+              className="text-sm font-medium text-text-muted hover:text-brand-primary transition-colors"
+            >
+              Resources
+            </Link>
+            <Link
               href="/blog"
               className="text-sm font-medium text-text-muted hover:text-brand-primary transition-colors"
             >
@@ -178,6 +184,13 @@ export function SiteHeader() {
               </div>
             </div>
             <div className="px-3 py-2 border-t border-brand-primary/10">
+              <Link
+                href="/resources"
+                className="block rounded-lg px-3 py-2.5 text-sm font-medium text-brand-primary/70 hover:text-brand-primary hover:bg-brand-primary/5 transition-colors"
+                onClick={() => setMobileOpen(false)}
+              >
+                Resources
+              </Link>
               <Link
                 href="/blog"
                 className="block rounded-lg px-3 py-2.5 text-sm font-medium text-brand-primary/70 hover:text-brand-primary hover:bg-brand-primary/5 transition-colors"
