@@ -177,8 +177,8 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
               <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
                 <div>
                   <div className="flex flex-wrap items-center gap-2 mb-2">
-                    {listing.badges?.map((badge) => (
-                      <BadgePill key={badge} badge={badge} size="md" />
+                    {listing.badges?.map((badge, i) => (
+                      <BadgePill key={`${badge}-${i}`} badge={badge} size="md" />
                     ))}
                   </div>
                   <div className="flex items-center gap-3">
@@ -340,8 +340,8 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                 </div>
               ) : listing.services.length > 0 ? (
                 <div className="divide-y divide-border">
-                  {listing.services.map((service) => (
-                    <div key={service} className="flex items-center justify-between py-3">
+                  {listing.services.map((service, i) => (
+                    <div key={`${service}-${i}`} className="flex items-center justify-between py-3">
                       <span className="text-sm text-text">{service}</span>
                     </div>
                   ))}
