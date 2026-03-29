@@ -358,3 +358,32 @@ export function blogPostSchema(post: BlogPostFull) {
 
   return schema;
 }
+
+export function resourcesPageSchema(
+  posts: { title: string; slug: string; excerpt: string; date: string }[]
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Pet Owner Resources",
+    description:
+      "Grooming guides organized by what you need: getting started, costs, special situations, seasonal care, and breed-specific tips.",
+    url: `${BASE_URL}/resources`,
+    publisher: {
+      "@type": "Organization",
+      name: "GroomLocal",
+      url: BASE_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: `${BASE_URL}/icon.svg`,
+      },
+    },
+    hasPart: posts.map((post) => ({
+      "@type": "Article",
+      headline: post.title,
+      url: `${BASE_URL}/blog/${post.slug}`,
+      datePublished: post.date,
+      description: post.excerpt,
+    })),
+  };
+}
