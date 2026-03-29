@@ -5,7 +5,7 @@ import { BadgePill } from "./badge-pill";
 import { ListingImage } from "./listing-image";
 import { getServiceLabel, getSpecialtyLabel } from "@/lib/tags";
 import type { BusinessListing, NormalizedListing, Badge } from "@/lib/types";
-import { logClickAction } from "@/lib/analytics";
+import { TrackedWebsiteLink } from "./tracked-website-link";
 
 interface ListingCardProps {
   listing: BusinessListing | NormalizedListing;
@@ -172,15 +172,13 @@ export function ListingCard({ listing, index = 0, compact = false, variant = "ve
               <ArrowRight weight="bold" className="w-3 h-3 ml-1" />
             </Link>
             {listing.website && listing.owner_id && (
-              <a
+              <TrackedWebsiteLink
                 href={listing.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => logClickAction(listing.id, "website_click")}
+                listingId={listing.id}
                 className="flex flex-1 items-center justify-center cta-gradient text-brand-primary font-semibold text-xs rounded-xl hover:opacity-90 border-0 h-9"
               >
                 Visit Website
-              </a>
+              </TrackedWebsiteLink>
             )}
           </div>
         </div>
