@@ -84,10 +84,10 @@ export default function ResourcesPage() {
     ...section,
     posts: section.slugs
       .map((slug) => getBlogPostBySlug(slug))
-      .filter(Boolean),
+      .filter((p): p is NonNullable<typeof p> => Boolean(p)),
   }));
 
-  const allPosts = sections.flatMap((s) => s.posts).filter((p): p is NonNullable<typeof p> => Boolean(p));
+  const allPosts = sections.flatMap((s) => s.posts);
 
   const bgColors = ["bg-white", "bg-bg"];
 
@@ -141,8 +141,8 @@ export default function ResourcesPage() {
                   className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
                 >
                   {section.posts.map((post) => (
-                    <AnimatedItem key={post!.slug}>
-                      <BlogCard post={post!} />
+                    <AnimatedItem key={post.slug}>
+                      <BlogCard post={post} />
                     </AnimatedItem>
                   ))}
                 </AnimatedSection>
