@@ -1,6 +1,8 @@
 import { getClaimedListings } from "./actions";
 import { ClaimedListingsClient } from "./claimed-listings-client";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Claimed Listings - Admin",
 };

@@ -1,8 +1,312 @@
 # GroomLocal Backlink Targets
 
-200+ backlink opportunities organized by category and effort level. Deduplicated and prioritized.
+251 backlink opportunities organized by category and effort level. Deduplicated and prioritized.
 
 Last updated: 2026-04-02
+
+---
+
+## Progress Board
+
+### Submitted (move here when done)
+- [ ] _none yet_
+
+### In Progress
+- [ ] _none yet_
+
+### Tier 1: Profiles & Citations
+- [ ] Google Business Profile
+- [ ] Bing Places
+- [ ] LinkedIn Company Page
+- [ ] Facebook Business Page
+- [ ] Pinterest Business
+- [ ] SlideShare
+- [ ] Issuu
+- [ ] Yelp
+- [ ] Scribd
+- [ ] About.me
+- [ ] Gravatar
+- [ ] Foursquare
+- [ ] SourceForge
+- [ ] GitHub Org
+- [ ] Wellfound (AngelList)
+- [ ] Crunchbase
+- [ ] Speaker Deck
+- [ ] Craigslist
+- [ ] F6S
+- [ ] WebCatalog
+
+### Tier 2: Pet Industry Directories
+- [ ] BringFido
+- [ ] PetGroomingToday
+- [ ] Pet Groomer Finder
+- [ ] PetBizs
+- [ ] PuppyFinder
+- [ ] Local Pet Care
+- [ ] House of Petz
+- [ ] Pet Pro Search
+- [ ] House My Pet
+- [ ] Pets Near You
+- [ ] RaisingSpot
+- [ ] DirectoryOf.Business
+- [ ] Pet Junction
+- [ ] GroomerHQ
+- [ ] Paws Local
+- [ ] Pawfect Directory
+- [ ] DogsNow
+- [ ] AOTW.co
+- [ ] Pet World Directory
+- [ ] Bark.com
+- [ ] TrustAnalytica
+- [ ] VancouverPetServices
+
+### Tier 3: Pet Associations & Orgs
+- [ ] NDGAA
+- [ ] IPG (Salem, OR)
+- [ ] APPGA
+- [ ] USADG
+- [ ] Professional Pet Groomers & Stylists Alliance
+- [ ] World Pet Association (WPA)
+- [ ] American Pet Products Association (APPA)
+- [ ] IBPSA
+- [ ] American Pet Professionals
+- [ ] WAGA
+- [ ] AKC Groomer Hub
+- [ ] California PPGA
+- [ ] Texas PPGA
+- [ ] PetBoss Go-To List
+
+### Tier 4: Local/Regional PNW
+- [ ] Seattle Chamber of Commerce
+- [ ] 206area.com
+- [ ] SeattleDogZone
+- [ ] SeattleOnly
+- [ ] SeattleDirect
+- [ ] Rain City Pets
+- [ ] Seattle DogSpot
+- [ ] CityDog Directory (Seattle)
+- [ ] Dog Friendly Seattle
+- [ ] Grisha Stewart Dog Pro Directory
+- [ ] Ballard Alliance
+- [ ] Capitol Hill Business Alliance
+- [ ] Fremont Chamber of Commerce
+- [ ] Seattle.gov Neighborhood Biz Orgs
+- [ ] Portland Business Alliance
+- [ ] WhirLocal (Portland/OR)
+- [ ] PDX.Directory
+- [ ] Shop Small PDX
+- [ ] Alberta Main Street (Portland)
+- [ ] CityDog Directory (Portland)
+- [ ] Portland Pet Sitters Directory
+- [ ] The Pointy Snoot (Portland)
+- [ ] Oregon Business Directory
+- [ ] Oregon SMB Directory
+- [ ] Oregon State Chamber
+- [ ] Tacoma-Pierce County Chamber
+- [ ] Pierce County Business Directory
+- [ ] TacomaWA.business
+- [ ] Make It Tacoma
+- [ ] ListSpokane
+- [ ] Hey, Spokane!
+- [ ] SpokaneLocal
+- [ ] Live Local INW
+- [ ] SIMBA (Spokane)
+- [ ] Greater Spokane Valley Chamber
+- [ ] Basecamp INW
+- [ ] Thurston County Chamber
+- [ ] Olympia Business Directory
+- [ ] Whatcom Local (Bellingham)
+- [ ] Bellingham Regional Chamber
+- [ ] Bellingham Small Business Directory
+- [ ] CougsFirst! Business Directory
+- [ ] Washington-WebBusiness
+- [ ] Good Business Network (WA)
+- [ ] Eugene's Best
+- [ ] Eugene Spotlights
+- [ ] Eugene Chamber of Commerce
+- [ ] Thriving Oregon (Lane County)
+- [ ] Lane Thrive
+- [ ] Central Oregon Insider (Bend)
+- [ ] Downtown Bend Business Association
+- [ ] Patch.com (all PNW cities)
+- [ ] FindMe.directory
+- [ ] Best of the Northwest
+- [ ] Business Impact NW
+- [ ] Petworks (Seattle/Portland)
+- [ ] PetProFinder
+- [ ] NE Veterinary Hospital (Seattle)
+- [ ] Jasmine Directory
+
+### Tier 4a: PNW Shelters & Rescues
+- [ ] Oregon Humane Society
+- [ ] Seattle Humane
+- [ ] Humane Society for Tacoma & Pierce County
+- [ ] Humane Society for SW Washington
+- [ ] Pawsitive Alliance (WA)
+- [ ] Humane Animal Rescue Partners of WA
+
+### Tier 4b: PNW Tourism & Lifestyle
+- [ ] Travel Portland
+- [ ] Visit Seattle
+- [ ] Visit Bend / Visit Central Oregon
+- [ ] Mindful PNW Travels
+- [ ] CircaWanderlust
+- [ ] Northwest Knowledge
+
+### Tier 4c: PNW Pet Events
+- [ ] Northwest Grooming Show (Tacoma, Apr 16-19 2026) -- URGENT
+- [ ] Rose City Classic Dog Show (Portland)
+- [ ] DoPDX (Portland Events)
+
+### Tier 4d: PNW Real Estate/Relocation
+- [ ] Portland Relocation Guide
+- [ ] Urban Nest Realty
+- [ ] Homes by Xan (Seattle)
+- [ ] VDB Compass (Seattle)
+
+### Tier 5: Startup & Product Directories
+- [ ] Product Hunt
+- [ ] BetaList
+- [ ] Indie Hackers
+- [ ] BetaPage
+- [ ] Startup Stash
+- [ ] AlternativeTo
+- [ ] SaaSHub (DR76)
+- [ ] Uneed
+- [ ] SaaS Cubes
+- [ ] StartupDirectory
+- [ ] OpenHunts
+- [ ] BetrTesters
+- [ ] ProductListDir
+- [ ] LaunchDirectories
+- [ ] Blastra
+- [ ] CallUpContact (DR76)
+- [ ] Ben's Bites (DR59)
+- [ ] Startup Benchmarks (DR54)
+- [ ] AIX Collection (DR54)
+- [ ] BusinessHunt (DR51)
+
+### Tier 6: General Business Directories
+- [ ] BBB
+- [ ] Hotfrog
+- [ ] Manta
+- [ ] Spoke
+- [ ] Brownbook
+- [ ] Cylex
+- [ ] Bunity
+- [ ] BOTW (Best of the Web)
+- [ ] WebRank Directory
+- [ ] Directory World
+- [ ] Moo Directory
+- [ ] Big Links Directory
+- [ ] Edocr
+
+### Tier 7: Review Platforms
+- [ ] G2
+- [ ] Capterra
+- [ ] GetApp
+- [ ] TrustPilot
+- [ ] Software Suggest
+- [ ] AppCrit
+- [ ] TechnologyMatch
+
+### Tier 8: Content Sharing
+- [ ] SlideShare
+- [ ] Issuu
+- [ ] Scribd
+- [ ] Speaker Deck
+- [ ] Edocr
+- [ ] Visual.ly
+- [ ] Infographic Journal
+- [ ] Reddit r/infographics
+
+### Tier 9: Guest Post Targets
+- [ ] Rover Blog
+- [ ] DogTime
+- [ ] PetPlace
+- [ ] EntirelyPets
+- [ ] Sparky Steps
+- [ ] VetRanch
+- [ ] PetsAnalysis
+- [ ] DoggieBark
+- [ ] PetBarkAndPurr
+- [ ] Kombai.dog
+- [ ] The Pets Lover
+- [ ] Pet Ponderosa (PNW)
+- [ ] BlogForOregon
+- [ ] HARO / Qwoted
+
+### Tier 10: Editorial/Roundup Outreach
+- [ ] Best in the PNW (Seattle Times)
+- [ ] Seattle Met
+- [ ] The Oregonian / OregonLive
+- [ ] Portland Tribune
+- [ ] Willamette Week
+- [ ] Portland Monthly
+- [ ] The Rip City Review (Portland)
+- [ ] Emerald City Paws
+- [ ] UpperPawSide
+- [ ] Portland.com
+- [ ] TheGoodyPet
+- [ ] BestInHood
+- [ ] Feedspot Top 50 Pet Grooming Blogs
+- [ ] Data-Driven Blog Post (Linkable Asset)
+- [ ] Local Pet Blogger Outreach
+- [ ] BrightLocal Citation Sources
+
+### Tier 11: Grooming Schools & Alumni
+- [ ] Academy of Pet Careers
+- [ ] Paragon School of Pet Grooming
+- [ ] Animal Behavior College
+- [ ] Merryfield Academy
+
+### Tier 12: Press Release Sites
+- [ ] PRLog
+- [ ] OpenPR
+- [ ] PR Distribution
+- [ ] Newswire Jet
+- [ ] SubmitPR
+
+### Tier 13: Forums & Q&A
+- [ ] Quora
+- [ ] Reddit r/doggrooming
+- [ ] Reddit r/smallbusiness
+- [ ] DogForum.com
+- [ ] Pet Forums UK
+- [ ] GrowthHackr
+- [ ] Gaenity
+- [ ] Facebook Groups (WA Pet Groomers)
+
+### Tier 14: Podcasts
+- [ ] Prosperous Pet Business Podcast
+- [ ] Hey Joe! Podcast (Paragon)
+- [ ] Dog Grooming Business Help
+- [ ] Groomer Tales
+- [ ] PetBiz Podcast
+
+### Tier 15: Awards & Recognition
+- [ ] Webby Awards
+- [ ] SBA Small Business Awards
+- [ ] WIPO Global Awards
+- [ ] Amber Grants
+- [ ] Startup Innovation Awards
+
+### Tier 16: .edu & .gov Resource Pages
+- [ ] Michigan State LibGuide
+- [ ] Iowa State Companion Animal Careers
+- [ ] SBA.gov Resources
+- [ ] GroomLocal Scholarship (create)
+
+### Tier 17: Badge Strategy
+- [ ] "Verified on GroomLocal" Badge
+- [ ] "Top Rated on GroomLocal" Badge
+
+### Tier 18: High-Authority Resource Links
+- [ ] ASPCA Dog Grooming Tips
+- [ ] PreventiveVet
+- [ ] US Chamber of Commerce (CO-)
+- [ ] Fit Small Business
+- [ ] AIOSEO Blog
 
 ---
 
@@ -18,7 +322,7 @@ Last updated: 2026-04-02
 | Tier 4b: PNW Tourism & Lifestyle | 6 | Medium-Hard |
 | Tier 4c: PNW Pet Events | 3 | Medium |
 | Tier 4d: PNW Real Estate/Relocation (Pet Content) | 4 | Medium |
-| Tier 5: Startup & Product Directories | 18 | Low |
+| Tier 5: Startup & Product Directories | 23 | Low |
 | Tier 6: General Business Directories | 13 | Low |
 | Tier 7: Review Platforms | 7 | Low-Medium |
 | Tier 8: Content Sharing (Slides, Docs, Infographics) | 10 | Low |
@@ -32,7 +336,7 @@ Last updated: 2026-04-02
 | Tier 16: .edu & .gov Resource Pages | 4 | Hard |
 | Tier 17: Badge Strategy (Highest ROI) | 2 | Medium |
 | Tier 18: High-Authority Resource Links | 5 | Hard |
-| **Total** | **245** | |
+| **Total** | **251** | |
 
 ---
 
@@ -268,7 +572,7 @@ Last updated: 2026-04-02
 | 138 | BetaPage | https://betapage.co | 45 | Dofollow | Submit product listing (free) | Low |
 | 139 | Startup Stash | https://startupstash.com | 55 | Dofollow | Submit as "Pet Services" tool | Low |
 | 140 | AlternativeTo | https://alternativeto.net | 89 | Dofollow | Submit as alternative to Yelp, Thumbtack | Low |
-| 141 | SaaSHub | https://saashub.com | 65 | Dofollow | Submit via free listing form | Low |
+| 141 | SaaSHub | https://saashub.com | 76 | Dofollow | Submit via free listing form | Low |
 | 142 | Uneed | https://uneed.best | 45 | Dofollow | Submit product (free, community upvotes) | Low |
 | 143 | SaaS Cubes | https://saascubes.com | 30 | Dofollow | Free submit, permanent dofollow | Low |
 | 144 | StartupDirectory | https://startupdirectory.net | 25 | Dofollow | Free submit with dofollow links | Low |
@@ -277,6 +581,13 @@ Last updated: 2026-04-02
 | 147 | ProductListDir | https://productlistdir.com | 20 | Dofollow | Free software directory listing | Low |
 | 148 | LaunchDirectories | https://launchdirectories.com | 35 | Dofollow | Submit product (also lists 100+ other directories) | Low |
 | 149 | Blastra | https://blastra.io | 25 | Dofollow | Free SaaS listing | Low |
+| 150 | CallUpContact | https://callupcontact.com | 76 | Dofollow | Free business profile with website link | Low |
+| 151 | Ben's Bites | https://bensbites.com | 59 | Dofollow | Submit as AI/tech-adjacent product | Low |
+| 152 | Startup Benchmarks | https://startupbenchmarks.com | 54 | Dofollow | Submit startup listing | Low |
+| 153 | AIX Collection | https://aixcollection.com | 54 | Dofollow | Submit product listing | Low |
+| 154 | BusinessHunt | https://businesshunt.co | 51 | Dofollow | Submit product/business listing | Low |
+
+> **Paid service option:** [RankInPublic](https://rankinpublic.xyz/directory-submission-service) offers manual submission to 140+ curated directories ($199-$249). Testimonials show +17 to +24 DR gains. Consider if DIY pace is too slow.
 
 ---
 
@@ -284,19 +595,19 @@ Last updated: 2026-04-02
 
 | # | Site | URL | Est. DA | Link Type | Action | Difficulty |
 |---|------|-----|---------|-----------|--------|------------|
-| 150 | BBB | https://www.bbb.org/get-listed | 93 | Dofollow | Submit GroomLocal as business | Low |
-| 151 | Hotfrog | https://hotfrog.com | 65 | Dofollow | Free business listing with NAP + website | Low |
-| 152 | Manta | https://manta.com | 70 | Nofollow | Claim/create free business profile | Low |
-| 153 | Spoke | https://spoke.com | 55 | Nofollow | Create free company profile | Low |
-| 154 | Brownbook | https://brownbook.net | 60 | Dofollow | Free business listing | Low |
-| 155 | Cylex | https://cylex.us.com | 55 | Dofollow | Free business listing with website link | Low |
-| 156 | Bunity | https://bunity.com | 40 | Dofollow | $3 one-time for permanent dofollow listing | Low |
-| 157 | BOTW (Best of the Web) | https://botw.org | 65 | Dofollow | Paid editorial review ($299 one-time) | Medium |
-| 158 | WebRank Directory | https://webrankdirectory.org | 30 | Dofollow | Free, human-edited | Low |
-| 159 | Directory World | https://directoryworld.net | 35 | Dofollow | Free, human-edited | Low |
-| 160 | Moo Directory | https://moo-directory.com | 30 | Dofollow | Free, human-edited | Low |
-| 161 | Big Links Directory | https://biglinksdirectory.com | 20 | Dofollow | Free, human-curated | Low |
-| 162 | Edocr | https://edocr.com | 55 | Dofollow | Upload documents with embedded links | Low |
+| 155 | BBB | https://www.bbb.org/get-listed | 93 | Dofollow | Submit GroomLocal as business | Low |
+| 156 | Hotfrog | https://hotfrog.com | 65 | Dofollow | Free business listing with NAP + website | Low |
+| 157 | Manta | https://manta.com | 70 | Nofollow | Claim/create free business profile | Low |
+| 158 | Spoke | https://spoke.com | 55 | Nofollow | Create free company profile | Low |
+| 159 | Brownbook | https://brownbook.net | 60 | Dofollow | Free business listing | Low |
+| 160 | Cylex | https://cylex.us.com | 55 | Dofollow | Free business listing with website link | Low |
+| 161 | Bunity | https://bunity.com | 40 | Dofollow | $3 one-time for permanent dofollow listing | Low |
+| 162 | BOTW (Best of the Web) | https://botw.org | 65 | Dofollow | Paid editorial review ($299 one-time) | Medium |
+| 163 | WebRank Directory | https://webrankdirectory.org | 30 | Dofollow | Free, human-edited | Low |
+| 164 | Directory World | https://directoryworld.net | 35 | Dofollow | Free, human-edited | Low |
+| 165 | Moo Directory | https://moo-directory.com | 30 | Dofollow | Free, human-edited | Low |
+| 166 | Big Links Directory | https://biglinksdirectory.com | 20 | Dofollow | Free, human-curated | Low |
+| 167 | Edocr | https://edocr.com | 55 | Dofollow | Upload documents with embedded links | Low |
 
 ---
 
