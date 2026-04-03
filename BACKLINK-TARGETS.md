@@ -1,6 +1,6 @@
 # GroomLocal Backlink Targets
 
-251 backlink opportunities organized by category and effort level. Deduplicated and prioritized.
+352 backlink opportunities organized by category and effort level. Deduplicated and prioritized.
 
 Last updated: 2026-04-02
 
@@ -186,6 +186,109 @@ Last updated: 2026-04-02
 - [ ] AIX Collection (DR54)
 - [ ] BusinessHunt (DR51)
 
+### Tier 5b: Startup/SaaS Directories (RankInPublic list, DR 30+)
+- [ ] StackShare (DR79)
+- [ ] Active Search Results (DR74)
+- [ ] Viesearch (DR73)
+- [ ] MedSci AI (DR72)
+- [ ] Good AI Tools (DR71)
+- [ ] TinyLaunch (DR70)
+- [ ] SideProjectors (DR70)
+- [ ] Future Tools (DR69)
+- [ ] PeerPush (DR68)
+- [ ] Sitelike.org (DR67)
+- [ ] Addon.biz (DR65)
+- [ ] Navs.site (DR62)
+- [ ] Acid Tools (DR59)
+- [ ] NextGen Tools (DR56)
+- [ ] Idea Kiln (DR56)
+- [ ] Firsto (DR56)
+- [ ] What Launched Today (DR55)
+- [ ] Startups Lab (DR55)
+- [ ] See What New AI (DR54)
+- [ ] Ramen.Tools (DR53)
+- [ ] SaaS Browser (DR52)
+- [ ] Scout Forge (DR51)
+- [ ] Unite List (DR50)
+- [ ] Product Wing (DR50)
+- [ ] AI Tech Viral (DR50)
+- [ ] Shipybara (DR49)
+- [ ] SaasHunt (DR48)
+- [ ] LaunchitX (DR48)
+- [ ] Indietool (DR48)
+- [ ] AppaList (DR48)
+- [ ] Tool Finddir (DR47)
+- [ ] Solver Tools (DR47)
+- [ ] Software Bolt (DR47)
+- [ ] SaaS Wheel (DR47)
+- [ ] Promote Project (DR47)
+- [ ] Power Up Tools (DR47)
+- [ ] My Launch Stash (DR47)
+- [ ] Appsy Tools (DR47)
+- [ ] AIGC 160 (DR47)
+- [ ] Trustiner (DR46)
+- [ ] Startup Vessel (DR46)
+- [ ] Saas Field (DR46)
+- [ ] ProjectHunt (DR46)
+- [ ] Hunt for Tools (DR46)
+- [ ] BestofAI (DR46)
+- [ ] Beam Tools (DR46)
+- [ ] Launch.com (DR45)
+- [ ] Best Tool Vault (DR45)
+- [ ] AI Toolz (DR45)
+- [ ] We Like Tools (DR44)
+- [ ] Toshi List (DR44)
+- [ ] Source Dir (DR44)
+- [ ] SaaS Hub Directory (DR44)
+- [ ] Launch Scroll (DR44)
+- [ ] CTRL ALT (DR44)
+- [ ] Ash List (DR44)
+- [ ] Top Trend Tools (DR43)
+- [ ] Tools Cosmos (DR43)
+- [ ] Tool Prism (DR43)
+- [ ] Tool Journey (DR43)
+- [ ] The Core Tools (DR43)
+- [ ] That App Show (DR43)
+- [ ] Super AI Boom (DR43)
+- [ ] Stack Directory (DR43)
+- [ ] SaaS Tools Dir (DR43)
+- [ ] My Start Tools (DR43)
+- [ ] DR Checker (DR43)
+- [ ] Toolfio (DR42)
+- [ ] Tool Signal (DR42)
+- [ ] Tiny Tool Hub (DR42)
+- [ ] The Key Tools (DR42)
+- [ ] Smart Kit Hub (DR42)
+- [ ] SaaS Roots (DR42)
+- [ ] Latest AI Updates (DR42)
+- [ ] Tools Under Radar (DR41)
+- [ ] Tools List HQ (DR41)
+- [ ] The Mega Tools (DR41)
+- [ ] The App Tools (DR41)
+- [ ] Startup AIdeas (DR41)
+- [ ] ShowMySites (DR41)
+- [ ] Verified Tools (DR40)
+- [ ] BuiltByMe (DR40)
+- [ ] ProductBurst (DR39)
+- [ ] Open Launch (DR39)
+- [ ] Launch List (DR39)
+- [ ] Make.rs (DR38)
+- [ ] VerifiedDR (DR37)
+- [ ] TinyLaunchpad (DR37)
+- [ ] NavFolders (DR37)
+- [ ] Makerlist.io (DR36)
+- [ ] Saaspa.ge (DR35)
+- [ ] Launch Vault (DR35)
+- [ ] FF2050.AI (DR35)
+- [ ] DevHub (DR35)
+- [ ] DeepLaunch.io (DR35)
+- [ ] CurateClick (DR35)
+- [ ] Bowora (DR35)
+- [ ] DevHunt (DR46)
+- [ ] Fazier (DR35)
+- [ ] MicroLaunch (DR30)
+- [ ] Startups.fyi (DR30)
+
 ### Tier 6: General Business Directories
 - [ ] BBB
 - [ ] Hotfrog
@@ -323,6 +426,7 @@ Last updated: 2026-04-02
 | Tier 4c: PNW Pet Events | 3 | Medium |
 | Tier 4d: PNW Real Estate/Relocation (Pet Content) | 4 | Medium |
 | Tier 5: Startup & Product Directories | 23 | Low |
+| Tier 5b: Startup/SaaS Directories (RankInPublic) | 101 | Low |
 | Tier 6: General Business Directories | 13 | Low |
 | Tier 7: Review Platforms | 7 | Low-Medium |
 | Tier 8: Content Sharing (Slides, Docs, Infographics) | 10 | Low |
@@ -336,7 +440,7 @@ Last updated: 2026-04-02
 | Tier 16: .edu & .gov Resource Pages | 4 | Hard |
 | Tier 17: Badge Strategy (Highest ROI) | 2 | Medium |
 | Tier 18: High-Authority Resource Links | 5 | Hard |
-| **Total** | **251** | |
+| **Total** | **352** | |
 
 ---
 
@@ -587,7 +691,111 @@ Last updated: 2026-04-02
 | 153 | AIX Collection | https://aixcollection.com | 54 | Dofollow | Submit product listing | Low |
 | 154 | BusinessHunt | https://businesshunt.co | 51 | Dofollow | Submit product/business listing | Low |
 
-> **Paid service option:** [RankInPublic](https://rankinpublic.xyz/directory-submission-service) offers manual submission to 140+ curated directories ($199-$249). Testimonials show +17 to +24 DR gains. Consider if DIY pace is too slow.
+### Tier 5b: Startup/SaaS Directories (via RankInPublic list, DR 30+)
+
+| # | Site | URL | DR | Link Type | Action | Difficulty |
+|---|------|-----|----|-----------|--------|------------|
+| 155 | StackShare | https://stackshare.io | 79 | Dofollow | List your tech stack and product | Low |
+| 156 | Active Search Results | https://activesearchresults.com | 74 | Dofollow | Free search engine/directory submission | Low |
+| 157 | Viesearch | https://viesearch.com | 73 | Dofollow | Free directory submission | Low |
+| 158 | MedSci AI | https://medsci.ai | 72 | Dofollow | Submit product listing | Low |
+| 159 | Good AI Tools | https://goodaitools.com | 71 | Dofollow | Submit tool listing | Low |
+| 160 | TinyLaunch | https://tinylaunch.com | 70 | Dofollow | Submit product launch | Low |
+| 161 | SideProjectors | https://sideprojectors.com | 70 | Dofollow | List side project / product | Low |
+| 162 | Future Tools | https://futuretools.io | 69 | Dofollow | Submit tool listing | Low |
+| 163 | PeerPush | https://peerpush.com | 68 | Dofollow | Submit product for community feedback | Low |
+| 164 | Sitelike.org | https://sitelike.org | 67 | Dofollow | Submit site for similar sites listing | Low |
+| 165 | Addon.biz | https://addon.biz | 65 | Dofollow | Submit business/product listing | Low |
+| 166 | Navs.site | https://navs.site | 62 | Dofollow | Submit to navigation directory | Low |
+| 167 | Acid Tools | https://acidtools.com | 59 | Dofollow | Submit tool listing | Low |
+| 168 | NextGen Tools | https://nextgentools.com | 56 | Dofollow | Submit product listing | Low |
+| 169 | Idea Kiln | https://ideakiln.com | 56 | Dofollow | Submit startup/product | Low |
+| 170 | Firsto | https://firsto.com | 56 | Dofollow | Submit product listing | Low |
+| 171 | What Launched Today | https://whatlaunchedtoday.com | 55 | Dofollow | Submit daily product launch | Low |
+| 172 | Startups Lab | https://startupslab.com | 55 | Dofollow | Submit startup listing | Low |
+| 173 | See What New AI | https://seewhatnewai.com | 54 | Dofollow | Submit product | Low |
+| 174 | Ramen.Tools | https://ramen.tools | 53 | Dofollow | Submit indie/bootstrap tool | Low |
+| 175 | SaaS Browser | https://saasbrowser.com | 52 | Dofollow | Submit SaaS listing | Low |
+| 176 | Scout Forge | https://scoutforge.com | 51 | Dofollow | Submit product listing | Low |
+| 177 | Unite List | https://unitelist.com | 50 | Dofollow | Submit product listing | Low |
+| 178 | Product Wing | https://productwing.com | 50 | Dofollow | Submit product launch | Low |
+| 179 | AI Tech Viral | https://aitechviral.com | 50 | Dofollow | Submit product listing | Low |
+| 180 | Shipybara | https://shipybara.com | 49 | Dofollow | Submit product listing | Low |
+| 181 | SaasHunt | https://saashunt.com | 48 | Dofollow | Submit SaaS listing | Low |
+| 182 | LaunchitX | https://launchitx.com | 48 | Dofollow | Submit product launch | Low |
+| 183 | Indietool | https://indietool.com | 48 | Dofollow | Submit indie tool | Low |
+| 184 | AppaList | https://appalist.com | 48 | Dofollow | Submit app/product listing | Low |
+| 185 | Tool Finddir | https://toolfinddir.com | 47 | Dofollow | Submit tool listing | Low |
+| 186 | Solver Tools | https://solvertools.com | 47 | Dofollow | Submit tool listing | Low |
+| 187 | Software Bolt | https://softwarebolt.com | 47 | Dofollow | Submit software listing | Low |
+| 188 | SaaS Wheel | https://saaswheel.com | 47 | Dofollow | Submit SaaS listing | Low |
+| 189 | Promote Project | https://promoteproject.com | 47 | Dofollow | Submit project/product | Low |
+| 190 | Power Up Tools | https://poweruptools.com | 47 | Dofollow | Submit tool listing | Low |
+| 191 | My Launch Stash | https://mylaunchstash.com | 47 | Dofollow | Submit product launch | Low |
+| 192 | Appsy Tools | https://appsytools.com | 47 | Dofollow | Submit tool listing | Low |
+| 193 | AIGC 160 | https://aigc160.com | 47 | Dofollow | Submit product listing | Low |
+| 194 | Trustiner | https://trustiner.com | 46 | Dofollow | Submit product listing | Low |
+| 195 | Startup Vessel | https://startupvessel.com | 46 | Dofollow | Submit startup listing | Low |
+| 196 | Saas Field | https://saasfield.com | 46 | Dofollow | Submit SaaS listing | Low |
+| 197 | ProjectHunt | https://projecthunt.com | 46 | Dofollow | Submit project/product | Low |
+| 198 | Hunt for Tools | https://huntfortools.com | 46 | Dofollow | Submit tool listing | Low |
+| 199 | BestofAI | https://bestofai.com | 46 | Dofollow | Submit product listing | Low |
+| 200 | Beam Tools | https://beamtools.com | 46 | Dofollow | Submit tool listing | Low |
+| 201 | Launch.com | https://launch.com | 45 | Dofollow | Submit product launch | Low |
+| 202 | Best Tool Vault | https://besttoolvault.com | 45 | Dofollow | Submit tool listing | Low |
+| 203 | AI Toolz | https://aitoolz.com | 45 | Dofollow | Submit tool listing | Low |
+| 204 | We Like Tools | https://weliketools.com | 44 | Dofollow | Submit tool listing | Low |
+| 205 | Toshi List | https://toshilist.com | 44 | Dofollow | Submit product listing | Low |
+| 206 | Source Dir | https://sourcedir.com | 44 | Dofollow | Submit to source directory | Low |
+| 207 | SaaS Hub Directory | https://saashubdirectory.com | 44 | Dofollow | Submit SaaS listing | Low |
+| 208 | Launch Scroll | https://launchscroll.com | 44 | Dofollow | Submit product launch | Low |
+| 209 | CTRL ALT | https://ctrlalt.com | 44 | Dofollow | Submit product listing | Low |
+| 210 | Ash List | https://ashlist.com | 44 | Dofollow | Submit product listing | Low |
+| 211 | Top Trend Tools | https://toptrendtools.com | 43 | Dofollow | Submit tool listing | Low |
+| 212 | Tools Cosmos | https://toolscosmos.com | 43 | Dofollow | Submit tool listing | Low |
+| 213 | Tool Prism | https://toolprism.com | 43 | Dofollow | Submit tool listing | Low |
+| 214 | Tool Journey | https://tooljourney.com | 43 | Dofollow | Submit tool listing | Low |
+| 215 | The Core Tools | https://thecoretools.com | 43 | Dofollow | Submit tool listing | Low |
+| 216 | That App Show | https://thatappshow.com | 43 | Dofollow | Submit app/product | Low |
+| 217 | Super AI Boom | https://superaiboom.com | 43 | Dofollow | Submit product listing | Low |
+| 218 | Stack Directory | https://stackdirectory.com | 43 | Dofollow | Submit to stack directory | Low |
+| 219 | SaaS Tools Dir | https://saastoolsdir.com | 43 | Dofollow | Submit SaaS listing | Low |
+| 220 | My Start Tools | https://mystarttools.com | 43 | Dofollow | Submit tool listing | Low |
+| 221 | DR Checker | https://drchecker.com | 43 | Dofollow | Submit product listing | Low |
+| 222 | Toolfio | https://toolfio.com | 42 | Dofollow | Submit tool listing | Low |
+| 223 | Tool Signal | https://toolsignal.com | 42 | Dofollow | Submit tool listing | Low |
+| 224 | Tiny Tool Hub | https://tinytoolhub.com | 42 | Dofollow | Submit tool listing | Low |
+| 225 | The Key Tools | https://thekeytools.com | 42 | Dofollow | Submit tool listing | Low |
+| 226 | Smart Kit Hub | https://smartkithub.com | 42 | Dofollow | Submit tool listing | Low |
+| 227 | SaaS Roots | https://saasroots.com | 42 | Dofollow | Submit SaaS listing | Low |
+| 228 | Latest AI Updates | https://latestupdates.ai | 42 | Dofollow | Submit product listing | Low |
+| 229 | Tools Under Radar | https://toolsunderradar.com | 41 | Dofollow | Submit tool listing | Low |
+| 230 | Tools List HQ | https://toolslisthq.com | 41 | Dofollow | Submit tool listing | Low |
+| 231 | The Mega Tools | https://themegatools.com | 41 | Dofollow | Submit tool listing | Low |
+| 232 | The App Tools | https://theapptools.com | 41 | Dofollow | Submit app listing | Low |
+| 233 | Startup AIdeas | https://startupaideas.com | 41 | Dofollow | Submit startup listing | Low |
+| 234 | ShowMySites | https://showmysites.com | 41 | Dofollow | Submit site listing | Low |
+| 235 | Verified Tools | https://verifiedtools.com | 40 | Dofollow | Submit tool listing | Low |
+| 236 | BuiltByMe | https://builtbyme.com | 40 | Dofollow | Submit product listing | Low |
+| 237 | ProductBurst | https://productburst.com | 39 | Dofollow | Submit product listing | Low |
+| 238 | Open Launch | https://openlaunch.com | 39 | Dofollow | Submit product launch | Low |
+| 239 | Launch List | https://launchlist.com | 39 | Dofollow | Submit product launch | Low |
+| 240 | Make.rs | https://make.rs | 38 | Dofollow | Submit maker project | Low |
+| 241 | VerifiedDR | https://verifieddr.com | 37 | Dofollow | Submit product listing | Low |
+| 242 | TinyLaunchpad | https://tinylaunchpad.com | 37 | Dofollow | Submit product launch | Low |
+| 243 | NavFolders | https://navfolders.com | 37 | Dofollow | Submit to navigation directory | Low |
+| 244 | Makerlist.io | https://makerlist.io | 36 | Dofollow | Submit maker project | Low |
+| 245 | Saaspa.ge | https://saaspa.ge | 35 | Dofollow | Submit SaaS page | Low |
+| 246 | Launch Vault | https://launchvault.com | 35 | Dofollow | Submit product launch | Low |
+| 247 | FF2050.AI | https://ff2050.ai | 35 | Dofollow | Submit product listing | Low |
+| 248 | DevHub | https://devhub.com | 35 | Dofollow | Submit developer tool | Low |
+| 249 | DeepLaunch.io | https://deeplaunch.io | 35 | Dofollow | Submit product launch | Low |
+| 250 | CurateClick | https://curateclick.com | 35 | Dofollow | Submit curated product | Low |
+| 251 | Bowora | https://bowora.com | 35 | Dofollow | Submit product listing | Low |
+| 252 | DevHunt | https://devhunt.org | 46 | Dofollow | Submit dev tool launch | Low |
+| 253 | Fazier | https://fazier.com | 35 | Dofollow | Submit product listing | Low |
+| 254 | MicroLaunch | https://microlaunch.com | 30 | Dofollow | Submit micro product launch | Low |
+| 255 | Startups.fyi | https://startups.fyi | 30 | Dofollow | Submit startup listing | Low |
 
 ---
 
