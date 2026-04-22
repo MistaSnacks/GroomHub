@@ -1,15 +1,21 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
-import { CaretRight, MapPin, Van } from "@phosphor-icons/react/dist/ssr";
+import { CaretRight, MapPin, Van, Question } from "@phosphor-icons/react/dist/ssr";
 import { CityListingsClient } from "@/components/city-listings-client";
 
 export const revalidate = 300;
-import { getListingsByServiceTag, getCityBySlug, getFeaturedByCity } from "@/lib/supabase/queries";
-import { stateAbbrFromSlug } from "@/lib/geography";
+import { getListingsByServiceTag, getCitiesByState, getCityBySlug, getFeaturedByCity } from "@/lib/supabase/queries";
+import { stateAbbrFromSlug, stateNameFromSlug, getNearbyCities, buildServiceCityPath } from "@/lib/geography";
+import { getMetroNeighbors } from "@/lib/metro-clusters";
+import { buildMobileGroomingFaqs } from "@/lib/city-faqs";
+import { cityFaqSchema } from "@/lib/schema";
 import { FeaturedSection } from "@/components/featured-section";
 import { WaveDivider } from "@/components/wave-divider";
+import { CityStatsBlock } from "@/components/city-stats-block";
 import { clampDescription, clampTitle } from "@/lib/seo-utils";
+import { CityPricingSection } from "@/components/city-pricing-section";
+import { getCityPricingBreakdown } from "@/lib/city-pricing";
 
 interface Props {
   params: Promise<{ state: string; city: string }>;
@@ -22,7 +28,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const stateAbbr = stateAbbrFromSlug(state);
   const ogImage = `/api/og/city?city=${encodeURIComponent(city)}&state=${encodeURIComponent(state)}&service=mobile`;
-  // "Mobile Groomers" instead of "Mobile Dog Groomers" to save 4 chars
   const title = clampTitle(`Mobile Groomers in ${cityName}, ${stateAbbr}`);
   const description = clampDescription(`Find mobile dog groomers in ${cityName}, ${stateAbbr}. At-home grooming with fully equipped vans, no car ride stress. Compare prices and book on GroomLocal.`);
 
@@ -50,12 +55,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function MobileGroomingCityPage({ params }: Props) {
   const { state, city } = await params;
   const stateAbbr = stateAbbrFromSlug(state);
-  const [listings, cityData, featuredListings] = await Promise.all([
+  const stateName = stateNameFromSlug(state);
+
+  const [listings, cityData, relatedCities, featuredListings] = await Promise.all([
     getListingsByServiceTag("mobile-grooming", city, stateAbbr),
     getCityBySlug(city, stateAbbr),
+    getCitiesByState(stateAbbr),
     getFeaturedByCity(city, stateAbbr),
   ]);
+
   const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
+  const nearby = getNearbyCities(city, relatedCities, getMetroNeighbors(city), 6);
+  const faqs = buildMobileGroomingFaqs(cityName, stateAbbr, listings.length);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -65,6 +76,8 @@ export default async function MobileGroomingCityPage({ params }: Props) {
             <Link href="/" className="hover:text-brand-primary transition-colors">Home</Link>
             <CaretRight weight="bold" className="w-3 h-3 text-text-muted" />
             <Link href="/mobile-grooming" className="hover:text-brand-primary transition-colors">Mobile Grooming</Link>
+            <CaretRight weight="bold" className="w-3 h-3 text-text-muted" />
+            <span className="text-text-muted">{stateName}</span>
             <CaretRight weight="bold" className="w-3 h-3 text-text-muted" />
             <span className="text-brand-primary">{cityName}</span>
           </nav>
@@ -78,6 +91,12 @@ export default async function MobileGroomingCityPage({ params }: Props) {
             <MapPin weight="fill" className="w-4 h-4 text-brand-secondary" />
             {listings.length} mobile groomers found
           </p>
+          <CityStatsBlock
+            groomerCount={listings.length}
+            metroCityCount={getMetroNeighbors(city).length + 1}
+            serviceCount={new Set(listings.flatMap((l) => l.service_tags ?? [])).size}
+            lastUpdated={new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+          />
         </div>
       </section>
 
@@ -97,7 +116,74 @@ export default async function MobileGroomingCityPage({ params }: Props) {
         </div>
       </section>
 
-      <WaveDivider variant="footer" fromColor="#FDF8F0" toColor="#4ECDC4" />
+      {/* Pricing Guide */}
+      <CityPricingSection
+        cityName={cityName}
+        pricing={getCityPricingBreakdown(cityName, "mobile-grooming")}
+        serviceLabel="Mobile Grooming"
+      />
+
+      {/* FAQ Section */}
+      <section className="bg-white py-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-2 mb-6">
+            <Question weight="duotone" className="w-6 h-6 text-brand-secondary" />
+            <h2 className="font-heading text-2xl font-semibold text-brand-primary">
+              Frequently Asked Questions About Mobile Grooming in {cityName}
+            </h2>
+          </div>
+          <div className="space-y-4">
+            {faqs.map((faq) => (
+              <details
+                key={faq.question}
+                className="group rounded-xl border border-border bg-bg/50 overflow-hidden"
+              >
+                <summary className="flex items-center justify-between cursor-pointer p-5 text-brand-primary font-medium text-sm hover:bg-bg transition-colors">
+                  <span>{faq.question}</span>
+                  <CaretRight weight="bold" className="w-4 h-4 text-text-muted group-open:rotate-90 transition-transform" />
+                </summary>
+                <div className="px-5 pb-5 text-sm text-text-muted leading-relaxed">
+                  {faq.answer}
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Nearby Cities */}
+      {nearby.length > 0 && (
+        <>
+          <WaveDivider variant="gentle" fromColor="#FFFFFF" toColor="#FDF8F0" />
+          <section className="bg-bg py-10">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <h2 className="font-heading text-xl font-semibold text-brand-primary mb-4">
+                Mobile Grooming in Nearby Cities
+              </h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                {nearby.map((c) => (
+                  <Link
+                    key={c.slug}
+                    href={buildServiceCityPath("mobile-grooming", state, c.slug)}
+                    className="rounded-xl border border-border bg-white px-4 py-3 text-center hover:border-brand-accent/40 hover:shadow-sm transition-all"
+                  >
+                    <div className="text-sm font-medium text-brand-primary">{c.name}</div>
+                    <div className="text-xs text-text-muted">{c.groomer_count} groomers</div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        </>
+      )}
+
+      <WaveDivider variant="footer" fromColor={nearby.length > 0 ? "#FDF8F0" : "#FFFFFF"} toColor="#4ECDC4" />
+
+      {/* FAQPage Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(cityFaqSchema(faqs)) }}
+      />
     </div>
   );
 }

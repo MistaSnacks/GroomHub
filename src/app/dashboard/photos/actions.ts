@@ -106,6 +106,9 @@ export async function deletePhoto(formData: FormData) {
   const { listing, admin } = result;
 
   const currentImages = listing.images || [];
+  if (!currentImages.includes(imageUrl)) {
+    return { error: "Image does not belong to this listing." };
+  }
   const newImages = currentImages.filter((img: string) => img !== imageUrl);
 
   // Try to delete from storage (extract path from URL)
@@ -129,6 +132,51 @@ export async function deletePhoto(formData: FormData) {
   revalidatePath(`/groomer/${listing.slug}`);
   revalidatePath("/dashboard/photos");
   return { success: true };
+}
+
+export async function deletePhotos(listingId: string, imageUrls: string[]) {
+  if (!listingId || imageUrls.length === 0) return { error: "Missing data" };
+
+  const result = await requireListingOwnership(listingId);
+  if ("error" in result) return { error: result.error };
+  const { listing, admin } = result;
+
+  const currentImages: string[] = listing.images || [];
+  const owned = new Set(currentImages);
+  const verified = imageUrls.filter((u) => owned.has(u));
+
+  if (verified.length === 0) {
+    return { error: "No matching images on this listing." };
+  }
+
+  const toDelete = new Set(verified);
+  const newImages = currentImages.filter((img: string) => !toDelete.has(img));
+
+  const storagePaths: string[] = [];
+  for (const imageUrl of verified) {
+    try {
+      const url = new URL(imageUrl);
+      const pathMatch = url.pathname.match(/\/groomer-photos\/(.+)$/);
+      if (pathMatch) storagePaths.push(pathMatch[1]);
+    } catch {
+      // Skip invalid URLs
+    }
+  }
+
+  if (storagePaths.length > 0) {
+    await admin.storage.from("groomer-photos").remove(storagePaths);
+  }
+
+  const { error: dbError } = await admin
+    .from("business_listings")
+    .update({ images: newImages })
+    .eq("id", listingId);
+
+  if (dbError) return { error: "Failed to delete photos." };
+
+  revalidatePath(`/groomer/${listing.slug}`);
+  revalidatePath("/dashboard/photos");
+  return { success: true, deleted: verified.length };
 }
 
 export async function uploadLogo(formData: FormData) {

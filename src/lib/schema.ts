@@ -248,7 +248,8 @@ export function servicePageSchema(
   slug: string,
   label: string,
   type: "service" | "specialty",
-  listings: NormalizedListing[]
+  listings: NormalizedListing[],
+  faqs?: Array<{ question: string; answer: string }>
 ) {
   const basePath = type === "service" ? "/services" : "/specialties";
   const breadcrumb = breadcrumbSchema([
@@ -262,9 +263,20 @@ export function servicePageSchema(
   const { "@context": _bc, ...breadcrumbBody } = breadcrumb;
   const { "@context": _il, ...itemListBody } = itemList;
 
+  const graph: object[] = [breadcrumbBody, itemListBody];
+
+  if (faqs && faqs.length > 0) {
+    const validFaqs = faqs.filter((f) => f.question.trim() && f.answer.trim());
+    if (validFaqs.length > 0) {
+      const faq = cityFaqSchema(validFaqs);
+      const { "@context": _fq, ...faqBody } = faq;
+      graph.push(faqBody);
+    }
+  }
+
   return {
     "@context": "https://schema.org",
-    "@graph": [breadcrumbBody, itemListBody],
+    "@graph": graph,
   };
 }
 
@@ -325,7 +337,10 @@ export function cityFaqSchema(
   };
 }
 
-export function blogPostSchema(post: BlogPostFull) {
+export function blogPostSchema(
+  post: BlogPostFull,
+  options?: { wordCount?: number; articleSection?: string; keywords?: string[] }
+) {
   const image = safeImageUrl(post.image ?? undefined) || `${BASE_URL}/og-image.png`;
 
   const schema: Record<string, unknown> = {
@@ -334,6 +349,7 @@ export function blogPostSchema(post: BlogPostFull) {
     headline: post.title,
     datePublished: post.date,
     dateModified: post.dateModified || post.date,
+    inLanguage: "en-US",
     author: {
       "@type": "Person",
       name: post.author.name,
@@ -355,8 +371,51 @@ export function blogPostSchema(post: BlogPostFull) {
   };
 
   if (post.excerpt?.trim()) schema.description = post.excerpt.trim();
+  if (options?.wordCount && options.wordCount > 0) schema.wordCount = options.wordCount;
+  if (options?.articleSection) schema.articleSection = options.articleSection;
+  if (options?.keywords && options.keywords.length > 0) schema.keywords = options.keywords;
 
   return schema;
+}
+
+export function blogListingSchema(
+  posts: { title: string; slug: string; excerpt: string; date: string }[]
+) {
+  const breadcrumb = breadcrumbSchema([
+    { name: "Home", href: "/" },
+    { name: "Blog", href: "/blog" },
+  ]);
+
+  const { "@context": _bc, ...breadcrumbBody } = breadcrumb;
+
+  const collectionPage = {
+    "@type": "CollectionPage",
+    name: "GroomLocal Blog",
+    description:
+      "Expert grooming tips, seasonal care guides, and pet care advice from PNW groomers.",
+    url: `${BASE_URL}/blog`,
+    publisher: {
+      "@type": "Organization",
+      name: "GroomLocal",
+      url: BASE_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: `${BASE_URL}/icon.svg`,
+      },
+    },
+    hasPart: posts.map((post) => ({
+      "@type": "BlogPosting",
+      headline: post.title,
+      url: `${BASE_URL}/blog/${post.slug}`,
+      datePublished: post.date,
+      description: post.excerpt,
+    })),
+  };
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [breadcrumbBody, collectionPage],
+  };
 }
 
 export function resourcesPageSchema(

@@ -69,6 +69,7 @@ export default async function BlogArticlePage({ params }: Props) {
 
   const related = getRelatedPosts(slug, 3);
   const categoryLabel = getCategoryLabel(post.category);
+  const wordCount = post.content.trim().split(/\s+/).filter(Boolean).length;
 
   const breadcrumbs = [
     { name: "Home", href: "/" },
@@ -82,7 +83,11 @@ export default async function BlogArticlePage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(blogPostSchema(post)),
+          __html: JSON.stringify(blogPostSchema(post, {
+            wordCount,
+            articleSection: categoryLabel,
+            keywords: post.tags,
+          })),
         }}
       />
       <script
