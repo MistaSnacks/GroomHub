@@ -75,7 +75,7 @@ export function buildSpecialtyPath(slug: string): string {
 
 /**
  * Build a service-specific city path.
- * e.g., buildServiceCityPath("cat-grooming", "wa", "seattle") → "/cat-grooming/wa/seattle"
+ * e.g., buildServiceCityPath("cat-grooming", "wa", "seattle") -> "/cat-grooming/wa/seattle"
  */
 export function buildServiceCityPath(
   service: string,
@@ -83,4 +83,32 @@ export function buildServiceCityPath(
   citySlug: string
 ): string {
   return `/${service}/${stateSlug}/${citySlug}`;
+}
+
+/**
+ * Get nearby cities prioritizing metro cluster neighbors over statewide top cities.
+ * Falls back to top-by-groomer-count if city is not in any cluster.
+ */
+export function getNearbyCities(
+  citySlug: string,
+  allCities: { slug: string; name: string; groomer_count: number }[],
+  neighborSlugs: string[],
+  limit = 6
+): typeof allCities {
+  const neighborSet = new Set(neighborSlugs);
+
+  const excluded = new Set([citySlug, citySlug.replace(/-wa$|-or$/, "")]);
+  const candidates = allCities.filter(
+    (c) => !excluded.has(c.slug) && !excluded.has(c.slug.replace(/-wa$|-or$/, ""))
+  );
+
+  const metro = candidates.filter((c) => {
+    const plain = c.slug.replace(/-wa$|-or$/, "");
+    return neighborSet.has(plain);
+  });
+
+  const metroSlugs = new Set(metro.map((c) => c.slug));
+  const rest = candidates.filter((c) => !metroSlugs.has(c.slug));
+
+  return [...metro, ...rest].slice(0, limit);
 }

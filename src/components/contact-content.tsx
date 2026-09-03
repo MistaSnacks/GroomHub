@@ -1,10 +1,11 @@
 "use client";
 
+import { useState, useTransition } from "react";
 import Link from "next/link";
 import { motion, Variants } from "framer-motion";
-import { MauiMascot } from "./maui-mascot";
-import { EnvelopeSimpleOpen, Clock, Storefront, PawPrint } from "@phosphor-icons/react";
+import { EnvelopeSimpleOpen, Clock, Storefront, PawPrint, Check } from "@phosphor-icons/react";
 import { WaveDivider } from "./wave-divider";
+import { sendContactMessage } from "@/app/contact/actions";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -23,7 +24,32 @@ const itemVariants: Variants = {
   },
 };
 
+const fieldClass =
+  "w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent";
+
 export function ContactContent() {
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [isPending, startTransition] = useTransition();
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    setErrorMsg("");
+
+    startTransition(async () => {
+      const result = await sendContactMessage(formData);
+      if (result.ok) {
+        form.reset();
+        setStatus("success");
+      } else {
+        setStatus("error");
+        setErrorMsg(result.error);
+      }
+    });
+  }
+
   return (
     <div className="min-h-screen text-brand-primary overflow-hidden">
 
@@ -67,33 +93,67 @@ export function ContactContent() {
               <h2 className="font-heading text-2xl font-bold text-brand-primary mb-6">
                 Send us a message
               </h2>
-              <form className="space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-brand-primary mb-1.5">First name</label>
-                    <input type="text" className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" placeholder="Your first name" />
+              {status === "success" ? (
+                <div className="flex flex-col items-center justify-center text-center py-10">
+                  <div className="flex items-center justify-center gap-2 text-brand-primary font-semibold mb-2">
+                    <Check weight="bold" className="w-5 h-5 text-brand-secondary" />
+                    Message sent
+                  </div>
+                  <p className="text-sm text-text-muted max-w-sm">
+                    Thanks for reaching out. We typically respond within 24 hours on business days.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setStatus("idle")}
+                    className="mt-6 text-sm font-bold text-brand-primary hover:underline"
+                  >
+                    Send another message
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <input
+                    type="text"
+                    name="hp_field"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                    className="absolute -left-[9999px] h-0 w-0 overflow-hidden"
+                  />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="contact-first-name" className="block text-sm font-medium text-brand-primary mb-1.5">First name</label>
+                      <input id="contact-first-name" name="first_name" type="text" required maxLength={60} className={fieldClass} placeholder="Your first name" />
+                    </div>
+                    <div>
+                      <label htmlFor="contact-last-name" className="block text-sm font-medium text-brand-primary mb-1.5">Last name</label>
+                      <input id="contact-last-name" name="last_name" type="text" maxLength={60} className={fieldClass} placeholder="Your last name" />
+                    </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-brand-primary mb-1.5">Last name</label>
-                    <input type="text" className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" placeholder="Your last name" />
+                    <label htmlFor="contact-email" className="block text-sm font-medium text-brand-primary mb-1.5">Email</label>
+                    <input id="contact-email" name="email" type="email" required className={fieldClass} placeholder="you@example.com" />
                   </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-brand-primary mb-1.5">Email</label>
-                  <input type="email" className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" placeholder="you@example.com" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-brand-primary mb-1.5">Subject</label>
-                  <input type="text" className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" placeholder="What can we help with?" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-brand-primary mb-1.5">Message</label>
-                  <textarea rows={5} className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent resize-none" placeholder="Tell us more..." />
-                </div>
-                <button type="submit" className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 rounded-full bg-brand-primary text-white font-semibold hover:bg-brand-primary/90 transition-colors">
-                  Send Message
-                </button>
-              </form>
+                  <div>
+                    <label htmlFor="contact-subject" className="block text-sm font-medium text-brand-primary mb-1.5">Subject</label>
+                    <input id="contact-subject" name="subject" type="text" maxLength={200} className={fieldClass} placeholder="What can we help with?" />
+                  </div>
+                  <div>
+                    <label htmlFor="contact-message" className="block text-sm font-medium text-brand-primary mb-1.5">Message</label>
+                    <textarea id="contact-message" name="message" required minLength={10} maxLength={2000} rows={5} className={`${fieldClass} resize-none`} placeholder="Tell us more..." />
+                  </div>
+                  {status === "error" && (
+                    <p role="alert" className="text-sm text-red-700">{errorMsg}</p>
+                  )}
+                  <button
+                    type="submit"
+                    disabled={isPending}
+                    className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 rounded-full bg-brand-primary text-white font-semibold hover:bg-brand-primary/90 transition-colors disabled:opacity-70"
+                  >
+                    {isPending ? "Sending..." : "Send Message"}
+                  </button>
+                </form>
+              )}
             </motion.div>
 
             {/* Info Cards */}

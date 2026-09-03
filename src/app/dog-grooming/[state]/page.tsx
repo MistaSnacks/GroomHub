@@ -4,12 +4,17 @@ import { redirect, notFound } from "next/navigation";
 import { CaretRight, MapPin } from "@phosphor-icons/react/dist/ssr";
 import { getCityBrowseSummary } from "@/lib/supabase/queries";
 
-export const revalidate = 300;
 import { isValidStateSlug, stateNameFromSlug, stateAbbrFromSlug, stateSlugFromAbbr } from "@/lib/geography";
 import { supabase } from "@/lib/supabase/client";
 import { statePageSchema } from "@/lib/schema";
 import { WaveDivider } from "@/components/wave-divider";
 import { CityPillGrid } from "@/components/city-pill-grid";
+
+export const revalidate = 300;
+
+export async function generateStaticParams() {
+  return [];
+}
 
 const TOP_CITIES = ["seattle", "portland", "tacoma", "bellevue", "eugene", "olympia", "bend", "redmond"];
 

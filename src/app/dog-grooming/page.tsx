@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 import { CaretRight } from "@phosphor-icons/react/dist/ssr";
 import { getCityBrowseSummary, getTotalListingCount } from "@/lib/supabase/queries";
-
-export const revalidate = 300;
-import { stateSlugFromAbbr, buildServicePath, buildSpecialtyPath } from "@/lib/geography";
-import { isValidServiceSlug, isValidSpecialtySlug } from "@/lib/tags";
+import { stateSlugFromAbbr } from "@/lib/geography";
 import { WaveDivider } from "@/components/wave-divider";
 import { CityPillGrid } from "@/components/city-pill-grid";
+
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Dog Groomers | Browse All Cities",
@@ -30,20 +28,7 @@ export const metadata: Metadata = {
   },
 };
 
-interface HubProps {
-  searchParams: Promise<{ service?: string; specialty?: string }>;
-}
-
-export default async function DogGroomingHub({ searchParams }: HubProps) {
-  const sp = await searchParams;
-
-  if (sp.service && isValidServiceSlug(sp.service)) {
-    redirect(buildServicePath(sp.service));
-  }
-  if (sp.specialty && isValidSpecialtySlug(sp.specialty)) {
-    redirect(buildSpecialtyPath(sp.specialty));
-  }
-
+export default async function DogGroomingHub() {
   const [waSummary, orSummary, totalCount] = await Promise.all([
     getCityBrowseSummary("WA"),
     getCityBrowseSummary("OR"),

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
-import { CaretRight, PawPrint, MapPin, ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import { CaretRight, PawPrint, MapPin } from "@phosphor-icons/react/dist/ssr";
 import { CityListingsClient } from "@/components/city-listings-client";
 import { getListingsBySpecialtyTag } from "@/lib/supabase/queries";
 import {

@@ -107,7 +107,7 @@ function TypeIcon({ type }: { type: FlatItem["type"] }) {
     case "city":
       return <MapPin weight="fill" className={`${ICON_CLASS} text-brand-secondary`} />;
     case "service":
-      return <Scissors weight="fill" className={`${ICON_CLASS} text-brand-accent`} />;
+      return <Scissors weight="fill" className={`${ICON_CLASS} text-brand-accent-ink`} />;
     case "specialty":
       return <PawPrint weight="fill" className={`${ICON_CLASS} text-brand-secondary`} />;
     case "groomer":
@@ -154,8 +154,9 @@ export function SearchHero() {
         if (res.ok) {
           const data: SearchResult = await res.json();
           setResults(data);
-          const flat = flattenResults(data);
-          setIsOpen(flat.length > 0);
+          // Open even with zero matches so the user gets feedback instead of
+          // a silently missing panel.
+          setIsOpen(true);
           setActiveIndex(-1);
         }
       } catch {
@@ -260,7 +261,7 @@ export function SearchHero() {
   ];
 
   return (
-    <div className="w-full max-w-2xl mx-auto lg:mx-0" ref={wrapperRef}>
+    <div className="w-full max-w-2xl mx-auto lg:mx-0 relative" ref={wrapperRef}>
       {/* Search box */}
       <form
         onSubmit={handleSubmit}
@@ -284,6 +285,7 @@ export function SearchHero() {
             className="w-full h-12 pl-10 pr-4 rounded-xl border border-border bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-secondary text-text"
             role="combobox"
             aria-expanded={isOpen}
+            aria-controls="search-hero-listbox"
             aria-haspopup="listbox"
             aria-activedescendant={
               activeIndex >= 0 ? flatItems[activeIndex]?.id : undefined
@@ -308,8 +310,28 @@ export function SearchHero() {
       </form>
 
       {/* Autocomplete dropdown */}
+      {isOpen && flatItems.length === 0 && query.trim().length >= 2 && !isLoading && (
+        <div id="search-hero-listbox" className="absolute z-50 w-full max-w-2xl mt-1 bg-white rounded-xl border border-border shadow-xl overflow-hidden">
+          <p className="px-4 py-3 text-sm text-text-muted">
+            No quick matches for &ldquo;{query.trim()}&rdquo;.
+          </p>
+          <button
+            type="button"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-brand-accent-ink hover:bg-surface border-t border-border transition-colors"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+              setIsOpen(false);
+            }}
+          >
+            <MagnifyingGlass weight="bold" className="w-3.5 h-3.5" />
+            Search all listings for &ldquo;{query.trim()}&rdquo;
+          </button>
+        </div>
+      )}
       {isOpen && flatItems.length > 0 && (
         <div
+          id="search-hero-listbox"
           className="absolute z-50 w-full max-w-2xl mt-1 bg-white rounded-xl border border-border shadow-xl overflow-hidden"
           role="listbox"
         >
@@ -323,6 +345,7 @@ export function SearchHero() {
                 </div>
                 {items.map(({ item, flatIndex }) => (
                   <button
+                    type="button"
                     key={item.id}
                     id={item.id}
                     role="option"
@@ -356,7 +379,8 @@ export function SearchHero() {
 
           {/* "View all results" footer */}
           <button
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-brand-accent hover:bg-surface border-t border-border transition-colors"
+            type="button"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-brand-accent-ink hover:bg-surface border-t border-border transition-colors"
             onMouseDown={(e) => {
               e.preventDefault();
               router.push(`/search?q=${encodeURIComponent(query.trim())}`);
@@ -374,9 +398,10 @@ export function SearchHero() {
         <span className="text-text-muted text-sm font-medium">Popular:</span>
         {popularCities.map((c) => (
           <button
+            type="button"
             key={c.slug}
             onClick={() => router.push(`/dog-grooming/${c.state}/${c.slug}`)}
-            className="text-sm px-3.5 py-1.5 rounded-full border border-border text-text-muted hover:border-brand-accent/40 hover:text-brand-accent transition-all font-medium"
+            className="text-sm px-3.5 py-1.5 rounded-full border border-border text-text-muted hover:border-brand-accent/40 hover:text-brand-accent-ink transition-all font-medium"
           >
             {c.name}
           </button>

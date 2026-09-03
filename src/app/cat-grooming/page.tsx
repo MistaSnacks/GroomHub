@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CaretRight, Cat, MapPin, ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import { CaretRight, Cat } from "@phosphor-icons/react/dist/ssr";
 import { getAllCitiesWithCounts } from "@/lib/supabase/queries";
 import { stateSlugFromAbbr } from "@/lib/geography";
 import { WaveDivider } from "@/components/wave-divider";
@@ -8,6 +8,7 @@ import { WaveDivider } from "@/components/wave-divider";
 export const metadata: Metadata = {
   title: "Cat Groomers | Find Cat Grooming Near You",
   description: "Find verified cat groomers across Washington and Oregon. Feline-friendly salons with dedicated suites and gentle handling.",
+  alternates: { canonical: "/cat-grooming" },
   openGraph: {
     title: "Cat Groomers | Find Cat Grooming Near You",
     description: "Find verified cat groomers across Washington and Oregon. Feline-friendly salons with dedicated suites and gentle handling.",

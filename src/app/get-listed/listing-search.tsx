@@ -53,7 +53,7 @@ export function ListingSearch() {
   return (
     <div className="bg-white rounded-2xl border border-border p-5 md:p-6">
       <h3 className="font-heading font-bold text-brand-primary mb-1">
-        Already in our directory?
+        Find and claim your listing
       </h3>
       <p className="text-sm text-text-muted mb-4">
         Search for your business first. If we have it, you can claim it right away.
@@ -64,7 +64,9 @@ export function ListingSearch() {
           weight="bold"
           className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted pointer-events-none"
         />
+        <label htmlFor="claim-listing-search" className="sr-only">Search by business name</label>
         <input
+          id="claim-listing-search"
           type="text"
           value={query}
           onChange={(e) => {

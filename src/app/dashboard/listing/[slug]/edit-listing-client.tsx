@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
 import {
   MapPin,
@@ -21,11 +21,13 @@ import { updateListing } from "../../actions";
 import {
   uploadPhoto,
   deletePhoto,
+  deletePhotos,
   uploadLogo,
   deleteLogo,
 } from "../../photos/actions";
 import { SERVICE_TAGS, SPECIALTY_TAGS } from "@/lib/tags";
 import { getLimits } from "@/lib/tiers";
+import { usableListingImages } from "@/lib/images";
 import type { DayHours } from "@/lib/types";
 
 const DAYS = [
@@ -60,11 +62,14 @@ interface EditListingClientProps {
 }
 
 function initHours(existing: DayHours[]): DayHours[] {
+  const list = Array.isArray(existing) ? existing : [];
   return DAYS.map((day) => {
-    const found = existing.find((h) => h.day === day);
+    const found = list.find((h) => h.day === day);
     return found || { day, open: "09:00", close: "17:00", closed: false };
   });
 }
+
+const MAX_CLIENT_FILE_SIZE = 5 * 1024 * 1024;
 
 const inputClass =
   "bg-transparent border-b border-transparent hover:border-border focus:border-brand-primary outline-none transition-colors w-full";
@@ -112,11 +117,25 @@ export function EditListingClient(props: EditListingClientProps) {
   const [saveResult, setSaveResult] = useState<"success" | "error" | null>(
     null
   );
+  const [saveError, setSaveError] = useState("");
+  const [isDirty, setIsDirty] = useState(false);
+  const [selectedPhotos, setSelectedPhotos] = useState<Set<string>>(new Set());
+  const [bulkDeleting, setBulkDeleting] = useState(false);
 
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const logoInputRef = useRef<HTMLInputElement>(null);
 
   const limits = getLimits(props.subscriptionTier);
+
+  useEffect(() => {
+    if (!isDirty) return;
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, [isDirty]);
 
   // -- Tag toggles --
   function toggleService(label: string) {
@@ -124,6 +143,7 @@ export function EditListingClient(props: EditListingClientProps) {
     if (next.has(label)) next.delete(label);
     else next.add(label);
     setSelectedServices(next);
+    setIsDirty(true);
   }
 
   function toggleSpecialty(label: string) {
@@ -131,6 +151,7 @@ export function EditListingClient(props: EditListingClientProps) {
     if (next.has(label)) next.delete(label);
     else next.add(label);
     setSelectedSpecialties(next);
+    setIsDirty(true);
   }
 
   // -- Hours --
@@ -142,6 +163,7 @@ export function EditListingClient(props: EditListingClientProps) {
     setEditHours((prev) =>
       prev.map((h, i) => (i === index ? { ...h, [field]: value } : h))
     );
+    setIsDirty(true);
   }
 
   // -- Photo upload --
@@ -157,6 +179,10 @@ export function EditListingClient(props: EditListingClientProps) {
       setUploadingPhotos(true);
       try {
         for (const file of files) {
+          if (file.size > MAX_CLIENT_FILE_SIZE) {
+            setPhotoError("File must be under 5MB.");
+            break;
+          }
           const formData = new FormData();
           formData.set("listingId", props.listingId);
           formData.set("file", file);
@@ -165,9 +191,9 @@ export function EditListingClient(props: EditListingClientProps) {
             setPhotoError(result.error || "An error occurred");
             break;
           }
-          // Optimistically add a preview URL (will be replaced on next load)
-          const previewUrl = URL.createObjectURL(file);
-          setImages((prev) => [...prev, previewUrl]);
+          if (result && "url" in result && result.url) {
+            setImages((prev) => [...prev, result.url]);
+          }
         }
       } finally {
         setUploadingPhotos(false);
@@ -191,10 +217,42 @@ export function EditListingClient(props: EditListingClientProps) {
     [props.listingId]
   );
 
+  // -- Multi-select photo delete --
+  function togglePhotoSelect(url: string) {
+    setSelectedPhotos((prev) => {
+      const next = new Set(prev);
+      if (next.has(url)) next.delete(url);
+      else next.add(url);
+      return next;
+    });
+  }
+
+  const handleBulkDelete = useCallback(async () => {
+    if (selectedPhotos.size === 0) return;
+    const count = selectedPhotos.size;
+    if (!confirm(`Delete ${count} photo${count > 1 ? "s" : ""}? This cannot be undone.`)) return;
+
+    setBulkDeleting(true);
+    setPhotoError("");
+    const urls = Array.from(selectedPhotos);
+    const result = await deletePhotos(props.listingId, urls);
+    if (result && "error" in result) {
+      setPhotoError(result.error || "An error occurred");
+    } else {
+      setImages((prev) => prev.filter((img) => !selectedPhotos.has(img)));
+      setSelectedPhotos(new Set());
+    }
+    setBulkDeleting(false);
+  }, [selectedPhotos, props.listingId]);
+
   // -- Logo upload --
   const handleLogoUpload = useCallback(
     async (file: File) => {
       setLogoError("");
+      if (file.size > MAX_CLIENT_FILE_SIZE) {
+        setLogoError("File must be under 5MB.");
+        return;
+      }
       setUploadingLogo(true);
       try {
         const formData = new FormData();
@@ -205,8 +263,9 @@ export function EditListingClient(props: EditListingClientProps) {
           setLogoError(result.error || "An error occurred");
           return;
         }
-        const previewUrl = URL.createObjectURL(file);
-        setLogoUrl(previewUrl);
+        if (result && "url" in result && result.url) {
+          setLogoUrl(result.url);
+        }
       } finally {
         setUploadingLogo(false);
       }
@@ -266,28 +325,29 @@ export function EditListingClient(props: EditListingClientProps) {
   async function handleSave(formData: FormData) {
     setSaving(true);
     setSaveResult(null);
+    setSaveError("");
     try {
-      await updateListing(formData);
-      // updateListing redirects on success, so we may not reach here
-      setSaveResult("success");
+      const result = await updateListing(formData);
+      if (result && "error" in result) {
+        setSaveResult("error");
+        setSaveError(result.error || "Something went wrong. Please try again.");
+      } else {
+        setSaveResult("success");
+        setIsDirty(false);
+      }
     } catch {
       setSaveResult("error");
+      setSaveError("Something went wrong. Please try again.");
     } finally {
       setSaving(false);
     }
   }
 
   // Filter out placeholder images (same as public profile)
-  const realImages = images.filter(
-    (img) =>
-      !img.includes("unsplash.com") &&
-      !img.includes("pexels.com") &&
-      !img.includes("placehold.co") &&
-      !img.includes("placeholder")
-  );
+  const realImages = usableListingImages(images);
 
   return (
-    <form action={handleSave} className="space-y-8">
+    <form action={handleSave} onChange={() => setIsDirty(true)} className="space-y-8">
       <input type="hidden" name="slug" value={props.slug} />
       <input
         type="hidden"
@@ -310,10 +370,12 @@ export function EditListingClient(props: EditListingClientProps) {
         <div className="flex flex-wrap items-start gap-4 mb-4">
           {/* Logo upload area */}
           <div
-            className={`relative w-16 h-16 rounded-lg overflow-hidden border-2 border-dashed shrink-0 cursor-pointer transition-colors ${
+            className={`relative w-20 h-20 rounded-xl overflow-hidden shrink-0 cursor-pointer transition-all ${
               isDraggingLogo
-                ? "border-brand-primary bg-brand-primary/5"
-                : "border-border hover:border-brand-secondary"
+                ? "border-2 border-brand-primary bg-brand-primary/5 scale-105"
+                : logoUrl
+                  ? "border border-border shadow-sm hover:shadow-md"
+                  : "border-2 border-dashed border-border hover:border-brand-secondary bg-gradient-to-br from-surface to-brand-secondary/5"
             }`}
             onDragOver={handleLogoDragOver}
             onDragLeave={handleLogoDragLeave}
@@ -334,23 +396,28 @@ export function EditListingClient(props: EditListingClientProps) {
                   alt="Business logo"
                   fill
                   className="object-cover"
-                  sizes="64px"
+                  sizes="80px"
                 />
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition-opacity">
+                  <Camera weight="bold" className="w-4 h-4 text-white mb-0.5" />
+                  <span className="text-[10px] font-medium text-white">Change</span>
+                </div>
                 <button
                   type="button"
+                  aria-label="Remove logo"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleLogoDelete();
                   }}
-                  className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition-opacity"
+                  className="absolute top-1 right-1 p-1 rounded-full bg-black/60 text-white opacity-0 hover:opacity-100 transition-opacity hover:bg-black/80"
                 >
-                  <Trash weight="bold" className="w-4 h-4 text-white" />
+                  <X weight="bold" className="w-3 h-3" />
                 </button>
               </>
             ) : (
-              <div className="flex flex-col items-center justify-center w-full h-full text-text-muted/40">
-                <Camera weight="duotone" className="w-5 h-5" />
-                <span className="text-[8px] mt-0.5">Logo</span>
+              <div className="flex flex-col items-center justify-center w-full h-full text-text-muted/40 hover:text-brand-secondary transition-colors">
+                <Camera weight="duotone" className="w-6 h-6 mb-1" />
+                <span className="text-[10px] font-medium">Add logo</span>
               </div>
             )}
             <input
@@ -368,7 +435,9 @@ export function EditListingClient(props: EditListingClientProps) {
 
           {/* Business name */}
           <div className="flex-1 min-w-0">
+            <label htmlFor="edit-name" className="sr-only">Business name</label>
             <input
+              id="edit-name"
               type="text"
               name="name"
               value={name}
@@ -376,6 +445,7 @@ export function EditListingClient(props: EditListingClientProps) {
               className={`${inputClass} font-heading text-2xl sm:text-3xl font-bold text-brand-primary py-1`}
               placeholder="Business Name"
               required
+              maxLength={120}
             />
           </div>
         </div>
@@ -390,40 +460,56 @@ export function EditListingClient(props: EditListingClientProps) {
           <div className="flex items-start gap-1.5">
             <MapPin weight="fill" className="h-4 w-4 shrink-0 mt-2" />
             <div className="flex-1 grid grid-cols-1 sm:grid-cols-4 gap-2">
-              <input
-                type="text"
-                name="address"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                className={`${inputClass} text-sm py-1 sm:col-span-2`}
-                placeholder="Street address"
-              />
-              <input
-                type="text"
-                name="city"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                className={`${inputClass} text-sm py-1`}
-                placeholder="City"
-              />
+              <div className="sm:col-span-2">
+                <label htmlFor="edit-address" className="sr-only">Street address</label>
+                <input
+                  id="edit-address"
+                  type="text"
+                  name="address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  className={`${inputClass} text-sm py-1`}
+                  placeholder="Street address"
+                />
+              </div>
+              <div>
+                <label htmlFor="edit-city" className="sr-only">City</label>
+                <input
+                  id="edit-city"
+                  type="text"
+                  name="city"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  className={`${inputClass} text-sm py-1`}
+                  placeholder="City"
+                />
+              </div>
               <div className="flex gap-2">
-                <input
-                  type="text"
-                  name="state"
-                  value={state}
-                  onChange={(e) => setState(e.target.value)}
-                  className={`${inputClass} text-sm py-1 w-16`}
-                  placeholder="ST"
-                  maxLength={2}
-                />
-                <input
-                  type="text"
-                  name="zip"
-                  value={zip}
-                  onChange={(e) => setZip(e.target.value)}
-                  className={`${inputClass} text-sm py-1 w-24`}
-                  placeholder="Zip"
-                />
+                <div>
+                  <label htmlFor="edit-state" className="sr-only">State</label>
+                  <input
+                    id="edit-state"
+                    type="text"
+                    name="state"
+                    value={state}
+                    onChange={(e) => setState(e.target.value)}
+                    className={`${inputClass} text-sm py-1 w-16`}
+                    placeholder="ST"
+                    maxLength={2}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="edit-zip" className="sr-only">Zip</label>
+                  <input
+                    id="edit-zip"
+                    type="text"
+                    name="zip"
+                    value={zip}
+                    onChange={(e) => setZip(e.target.value)}
+                    className={`${inputClass} text-sm py-1 w-24`}
+                    placeholder="Zip"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -431,7 +517,9 @@ export function EditListingClient(props: EditListingClientProps) {
           {/* Phone */}
           <div className="flex items-center gap-1.5">
             <Phone weight="fill" className="h-4 w-4 shrink-0" />
+            <label htmlFor="edit-phone" className="sr-only">Phone number</label>
             <input
+              id="edit-phone"
               type="tel"
               name="phone"
               value={phone}
@@ -444,7 +532,9 @@ export function EditListingClient(props: EditListingClientProps) {
           {/* Email */}
           <div className="flex items-center gap-1.5">
             <EnvelopeSimple weight="fill" className="h-4 w-4 shrink-0" />
+            <label htmlFor="edit-email" className="sr-only">Email address</label>
             <input
+              id="edit-email"
               type="email"
               name="email"
               value={email}
@@ -457,7 +547,9 @@ export function EditListingClient(props: EditListingClientProps) {
           {/* Website */}
           <div className="flex items-center gap-1.5">
             <Globe weight="bold" className="h-4 w-4 shrink-0" />
+            <label htmlFor="edit-website" className="sr-only">Website</label>
             <input
+              id="edit-website"
               type="url"
               name="website"
               value={website}
@@ -471,9 +563,50 @@ export function EditListingClient(props: EditListingClientProps) {
 
       {/* ─── Gallery Section ─── */}
       <div className="rounded-2xl border border-border bg-white p-6">
-        <h2 className="font-heading text-xl font-semibold text-brand-primary mb-4">
-          Gallery
-        </h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="font-heading text-xl font-semibold text-brand-primary">
+            Gallery
+          </h2>
+          <div className="flex items-center gap-2">
+            {selectedPhotos.size > 0 ? (
+              <>
+                <span className="text-sm font-medium text-brand-primary">
+                  {selectedPhotos.size} selected
+                </span>
+                {selectedPhotos.size < realImages.length && (
+                  <button
+                    type="button"
+                    onClick={() => setSelectedPhotos(new Set(realImages))}
+                    className="text-xs font-bold text-brand-secondary hover:text-brand-secondary/80 transition-colors"
+                  >
+                    Select all
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setSelectedPhotos(new Set())}
+                  className="inline-flex items-center gap-1 rounded-full border border-border px-3 py-1.5 text-xs font-bold text-text-muted hover:text-brand-primary hover:border-brand-primary transition-all"
+                >
+                  <X weight="bold" className="w-3 h-3" />
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleBulkDelete}
+                  disabled={bulkDeleting}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-[#C2185B] px-4 py-1.5 text-xs font-bold text-white hover:bg-[#AD1457] transition-all disabled:opacity-50"
+                >
+                  <Trash weight="bold" className="w-3.5 h-3.5" />
+                  {bulkDeleting ? "Deleting..." : `Delete ${selectedPhotos.size}`}
+                </button>
+              </>
+            ) : (
+              <span className="text-sm text-text-muted">
+                {realImages.length}/{limits.photos} photos
+              </span>
+            )}
+          </div>
+        </div>
 
         {photoError && (
           <div className="flex items-center gap-2 p-3 mb-4 text-sm text-[#C2185B] bg-[#FCE4EC] rounded-xl border border-[#F48FB1]">
@@ -492,32 +625,67 @@ export function EditListingClient(props: EditListingClientProps) {
           onDragLeave={handleGalleryDragLeave}
           onDrop={handleGalleryDrop}
         >
+          {realImages.length > 1 && selectedPhotos.size === 0 && (
+            <p className="text-xs text-text-muted/50 mb-3">
+              Click photos to select multiple, then delete at once.
+            </p>
+          )}
+
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {/* Existing photos */}
-            {realImages.map((img, i) => (
-              <div
-                key={`${img}-${i}`}
-                className="relative aspect-square rounded-xl overflow-hidden bg-surface group"
-              >
-                <Image
-                  src={img}
-                  alt={`Photo ${i + 1}`}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 640px) 50vw, 33vw"
-                />
-                <button
-                  type="button"
-                  onClick={() => handlePhotoDelete(img)}
-                  className="absolute top-2 right-2 p-1.5 rounded-full bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/80"
-                >
-                  <X weight="bold" className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            ))}
+            {realImages.map((img, i) => {
+              const isSelected = selectedPhotos.has(img);
+              const selectMode = selectedPhotos.size > 0;
+
+              return (
+                <div key={`${img}-${i}`} className="relative aspect-square group">
+                  <button
+                    type="button"
+                    aria-pressed={isSelected}
+                    aria-label={isSelected ? `Deselect photo ${i + 1}` : `Select photo ${i + 1}`}
+                    className={`absolute inset-0 rounded-xl overflow-hidden bg-surface cursor-pointer border-2 transition-all text-left ${
+                      isSelected
+                        ? "border-[#C2185B] ring-2 ring-[#C2185B]/30"
+                        : "border-transparent hover:border-brand-primary/30"
+                    }`}
+                    onClick={() => togglePhotoSelect(img)}
+                  >
+                    <Image
+                      src={img}
+                      alt={`Photo ${i + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 50vw, 33vw"
+                    />
+
+                    <div className={`absolute top-2 left-2 z-10 transition-opacity ${isSelected || selectMode ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}>
+                      <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors ${
+                        isSelected ? "bg-[#C2185B] text-white" : "bg-white/80 text-text-muted border border-border"
+                      }`}>
+                        <CheckCircle weight={isSelected ? "fill" : "regular"} className="w-4 h-4" />
+                      </div>
+                    </div>
+
+                    {isSelected && (
+                      <div className="absolute inset-0 bg-[#C2185B]/10" />
+                    )}
+                  </button>
+                  {!selectMode && (
+                    <button
+                      type="button"
+                      aria-label={`Delete photo ${i + 1}`}
+                      onClick={() => handlePhotoDelete(img)}
+                      className="absolute top-2 right-2 z-10 p-1.5 rounded-full bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/80"
+                    >
+                      <X weight="bold" className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+              );
+            })}
 
             {/* Upload zone */}
-            {realImages.length < limits.photos && (
+            {realImages.length < limits.photos && selectedPhotos.size === 0 && (
               <button
                 type="button"
                 onClick={() => galleryInputRef.current?.click()}
@@ -561,10 +729,12 @@ export function EditListingClient(props: EditListingClientProps) {
           </div>
 
           {/* Drop zone hint */}
-          <p className="text-center text-xs text-text-muted/50 mt-3">
-            Drop photos here or click the + to browse.{" "}
-            {realImages.length}/{limits.photos} photos used.
-          </p>
+          {selectedPhotos.size === 0 && (
+            <p className="text-center text-xs text-text-muted/50 mt-3">
+              Drop photos here or click the + to browse.{" "}
+              {realImages.length}/{limits.photos} photos used.
+            </p>
+          )}
         </div>
 
         <input
@@ -680,12 +850,12 @@ export function EditListingClient(props: EditListingClientProps) {
               value={shortDescription}
               onChange={(e) => setShortDescription(e.target.value)}
               rows={2}
-              maxLength={200}
+              maxLength={300}
               className="w-full rounded-xl border border-border bg-surface/30 px-4 py-3 text-sm transition-colors focus:border-brand-primary focus:ring-1 focus:ring-brand-primary outline-none resize-none"
               placeholder="A brief summary of your business..."
             />
             <p className="text-xs text-text-muted mt-1 text-right">
-              {shortDescription.length}/200
+              {shortDescription.length}/300
             </p>
           </div>
 
@@ -702,6 +872,7 @@ export function EditListingClient(props: EditListingClientProps) {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={5}
+              maxLength={5000}
               className="w-full rounded-xl border border-border bg-surface/30 px-4 py-3 text-sm leading-relaxed transition-colors focus:border-brand-primary focus:ring-1 focus:ring-brand-primary outline-none resize-none"
               placeholder="Tell pet parents about your experience, approach, and what makes your business special..."
             />
@@ -772,12 +943,12 @@ export function EditListingClient(props: EditListingClientProps) {
           {saveResult === "error" && (
             <div className="flex items-center gap-2 text-sm text-[#C2185B]">
               <WarningCircle weight="fill" className="w-5 h-5" />
-              Something went wrong. Please try again.
+              {saveError || "Something went wrong. Please try again."}
             </div>
           )}
           {!saveResult && (
             <p className="text-xs text-text-muted hidden sm:block">
-              Changes are saved when you click the button.
+              {isDirty ? "You have unsaved changes." : "Changes are saved when you click the button."}
             </p>
           )}
           <button

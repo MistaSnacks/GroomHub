@@ -45,6 +45,7 @@ export interface BusinessListing {
   owner_id?: string;
   subscription_tier?: "free" | "standard" | "featured" | "premium";
   claimed_at?: string;
+  updated_at?: string | null;
 }
 
 /** Listing with normalized tag arrays (post-migration) */
@@ -53,6 +54,33 @@ export interface NormalizedListing extends BusinessListing {
   specialty_tags: string[];
   feature_tags: string[];
   price_tag: PriceTag;
+}
+
+/** Slim listing shape for cards, filters, and list-page client payloads. */
+export interface ListingCardData {
+  id: string;
+  slug: string;
+  name: string;
+  city: string;
+  state: string;
+  images: string[];
+  logo_url?: string;
+  price_range: "$" | "$$" | "$$$";
+  price_min: number;
+  price_max: number;
+  owner_id?: string;
+  badges: Badge[];
+  subscription_tier?: "free" | "standard" | "featured" | "premium";
+  service_tags: string[];
+  specialty_tags: string[];
+  feature_tags: string[];
+  price_tag: PriceTag;
+  short_description: string;
+  is_featured: boolean;
+  rating: number;
+  review_count: number;
+  waitlist_status?: "immediate" | "short" | "long" | "closed";
+  website?: string;
 }
 
 export interface Lead {

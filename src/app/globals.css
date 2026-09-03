@@ -7,7 +7,9 @@
   --brand-secondary: #4ECDC4;
   /* Mint / Teal */
   --brand-accent: #FF7E67;
-  /* Warm Coral */
+  /* Warm Coral (surfaces only — not text) */
+  --brand-accent-ink: #C4452E;
+  /* Darkened coral, ≥4.5:1 on white and cream */
   --darkest: #0F172A;
   /* Deep navy for dark sections */
   --success: #6BCB77;
@@ -44,6 +46,7 @@
   --color-brand-primary: var(--brand-primary);
   --color-brand-secondary: var(--brand-secondary);
   --color-brand-accent: var(--brand-accent);
+  --color-brand-accent-ink: var(--brand-accent-ink);
 
   --color-bg: var(--bg);
   --color-surface: var(--surface);
@@ -212,7 +215,7 @@ h6 {
   /* 12px */
   font-weight: 500;
   background-color: rgba(255, 126, 103, 0.15);
-  color: #D4553E;
+  color: var(--brand-accent-ink);
   border: 1px solid rgba(255, 126, 103, 0.3);
 }
 
@@ -246,9 +249,41 @@ h6 {
   }
 }
 
+@keyframes navDropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-nav-dropdown {
+  animation: navDropdownIn 0.15s ease-out forwards;
+}
+
 .animate-fade-slide-up {
   animation: fadeSlideUp 0.5s ease forwards;
   opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-slide-up {
+    animation: none;
+    opacity: 1;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 *:focus-visible {
@@ -279,9 +314,9 @@ html {
   background: var(--text-muted);
 }
 
-/* Dark section variant - used on coral (#FF7E67) backgrounds */
+/* Coral / teal section text — navy on brand surfaces (≥4.5:1) */
 .section-dark {
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--brand-primary);
 }
 
 .section-dark h1,
@@ -290,11 +325,11 @@ html {
 .section-dark h4,
 .section-dark h5,
 .section-dark h6 {
-  color: #ffffff;
+  color: var(--brand-primary);
 }
 
 .section-dark p {
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(30, 41, 59, 0.8);
 }
 
 /* Bento grid layout */

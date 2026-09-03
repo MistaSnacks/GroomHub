@@ -2,28 +2,37 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { List, X, MagnifyingGlass, MapPin, CaretDown } from "@phosphor-icons/react/dist/ssr";
+import { List, X } from "@phosphor-icons/react/dist/ssr";
 import { NavDropdown } from "./nav-dropdown";
 import type { CityWithCount } from "@/lib/types";
 import { createClient } from "@/lib/supabase/browser";
 import type { User } from "@supabase/supabase-js";
 
-export function SiteHeader() {
+interface SiteHeaderProps {
+  cities?: CityWithCount[];
+}
+
+export function SiteHeader({ cities = [] }: SiteHeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [cities, setCities] = useState<CityWithCount[]>([]);
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [authReady, setAuthReady] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
   const isHome = pathname === "/";
 
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user);
+      setAuthReady(true);
+    });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
+      setAuthReady(true);
     });
 
     return () => subscription.unsubscribe();
@@ -37,29 +46,21 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    // Fetch cities for nav dropdown
-    fetch("/api/cities")
-      .then((r) => r.json())
-      .then((data) => setCities(data))
-      .catch(() => {
-        // Fallback cities if API not available
-        setCities([
-          { slug: "seattle", name: "Seattle", state: "WA", state_abbr: "WA", groomer_count: 50 },
-          { slug: "tacoma", name: "Tacoma", state: "WA", state_abbr: "WA", groomer_count: 25 },
-          { slug: "bellevue", name: "Bellevue", state: "WA", state_abbr: "WA", groomer_count: 15 },
-          { slug: "portland", name: "Portland", state: "OR", state_abbr: "OR", groomer_count: 30 },
-          { slug: "olympia", name: "Olympia", state: "WA", state_abbr: "WA", groomer_count: 10 },
-          { slug: "lakewood", name: "Lakewood", state: "WA", state_abbr: "WA", groomer_count: 8 },
-        ]);
-      });
-  }, []);
+  async function handleLogout() {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    setMobileOpen(false);
+    router.push("/");
+    router.refresh();
+  }
 
   return (
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${scrolled
         ? "bg-bg/95 backdrop-blur-md shadow-sm py-0"
-        : "bg-transparent py-1"
+        : isHome
+          ? "bg-transparent py-1"
+          : "bg-bg py-1"
         }`}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -112,40 +113,42 @@ export function SiteHeader() {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
-            {user ? (
-              <>
-                <Link
-                  href="/dashboard"
-                  className="text-sm font-medium text-brand-primary hover:text-brand-primary/80 transition-colors mr-2"
-                >
-                  Dashboard
-                </Link>
-                <button
-                  onClick={async () => {
-                    const supabase = createClient();
-                    await supabase.auth.signOut();
-                  }}
-                  className="text-sm font-medium text-text-muted hover:text-brand-primary transition-colors mr-2"
-                >
-                  Log out
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/login"
-                  className="text-sm font-medium text-text-muted hover:text-brand-primary transition-colors mr-2"
-                >
-                  Log in
-                </Link>
-                <Link
-                  href="/signup"
-                  className="text-sm font-medium text-text-muted hover:text-brand-primary transition-colors mr-2"
-                >
-                  Sign up
-                </Link>
-              </>
-            )}
+            <div className="flex items-center justify-end min-w-[148px]">
+              {!authReady ? (
+                <span className="inline-block h-5 w-28" aria-hidden="true" />
+              ) : user ? (
+                <>
+                  <Link
+                    href="/dashboard"
+                    className="text-sm font-medium text-brand-primary hover:text-brand-primary/80 transition-colors mr-2"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="text-sm font-medium text-text-muted hover:text-brand-primary transition-colors mr-2"
+                  >
+                    Log out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    className="text-sm font-medium text-text-muted hover:text-brand-primary transition-colors mr-2"
+                  >
+                    Log in
+                  </Link>
+                  <Link
+                    href="/signup"
+                    className="text-sm font-medium text-text-muted hover:text-brand-primary transition-colors mr-2"
+                  >
+                    Sign up
+                  </Link>
+                </>
+              )}
+            </div>
             <Link
               href="/for-groomers"
               className="rounded-full border-[1.5px] border-brand-primary/15 px-5 py-2.5 text-sm font-medium hover:border-brand-primary/30 hover:bg-brand-primary/5 transition-all"
@@ -157,8 +160,10 @@ export function SiteHeader() {
 
           {/* Mobile menu toggle */}
           <button
+            type="button"
             className="md:hidden p-2 rounded-lg text-brand-primary hover:bg-brand-primary/5 transition-colors"
             onClick={() => setMobileOpen(!mobileOpen)}
+            aria-expanded={mobileOpen}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
           >
             {mobileOpen ? (
@@ -184,6 +189,20 @@ export function SiteHeader() {
               </div>
             </div>
             <div className="px-3 py-2 border-t border-brand-primary/10">
+              <Link
+                href="/services"
+                className="block rounded-lg px-3 py-2.5 text-sm font-medium text-brand-primary/70 hover:text-brand-primary hover:bg-brand-primary/5 transition-colors"
+                onClick={() => setMobileOpen(false)}
+              >
+                Services
+              </Link>
+              <Link
+                href="/specialties"
+                className="block rounded-lg px-3 py-2.5 text-sm font-medium text-brand-primary/70 hover:text-brand-primary hover:bg-brand-primary/5 transition-colors"
+                onClick={() => setMobileOpen(false)}
+              >
+                Specialties
+              </Link>
               <Link
                 href="/resources"
                 className="block rounded-lg px-3 py-2.5 text-sm font-medium text-brand-primary/70 hover:text-brand-primary hover:bg-brand-primary/5 transition-colors"
@@ -215,8 +234,8 @@ export function SiteHeader() {
             </div>
 
             {/* Mobile Auth Links */}
-            <div className="px-3 py-2 border-t border-brand-primary/10">
-              {user ? (
+            <div className="px-3 py-2 border-t border-brand-primary/10 min-h-[88px]">
+              {!authReady ? null : user ? (
                 <>
                   <Link
                     href="/dashboard"
@@ -226,24 +245,30 @@ export function SiteHeader() {
                     Dashboard
                   </Link>
                   <button
-                    onClick={async () => {
-                      const supabase = createClient();
-                      await supabase.auth.signOut();
-                      setMobileOpen(false);
-                    }}
+                    type="button"
+                    onClick={handleLogout}
                     className="block w-full text-left rounded-lg px-3 py-2.5 text-sm font-medium text-brand-primary/70 hover:text-brand-primary hover:bg-brand-primary/5 transition-colors"
                   >
                     Log out
                   </button>
                 </>
               ) : (
-                <Link
-                  href="/login"
-                  className="block rounded-lg px-3 py-2.5 text-sm font-medium text-brand-primary/70 hover:text-brand-primary hover:bg-brand-primary/5 transition-colors"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Log in
-                </Link>
+                <>
+                  <Link
+                    href="/login"
+                    className="block rounded-lg px-3 py-2.5 text-sm font-medium text-brand-primary/70 hover:text-brand-primary hover:bg-brand-primary/5 transition-colors"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Log in
+                  </Link>
+                  <Link
+                    href="/signup"
+                    className="block rounded-lg px-3 py-2.5 text-sm font-medium text-brand-primary/70 hover:text-brand-primary hover:bg-brand-primary/5 transition-colors"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Sign up
+                  </Link>
+                </>
               )}
             </div>
 

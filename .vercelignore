@@ -1,0 +1,13 @@
+# Local Python virtualenv for background-removal scripts. 686MB and contains
+# absolute symlinks that fail the Vercel build ("not a valid symlink").
+.venv_rembg
+.venv
+
+# Local-only working files: never imported by the Next.js build.
+screenshots
+temp_scripts
+grill-me-v1-takeaways
+outreach
+*.log
+*.mp4
+*.tsbuildinfo

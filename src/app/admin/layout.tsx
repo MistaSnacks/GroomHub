@@ -1,11 +1,21 @@
 import Link from "next/link";
 import Image from "next/image";
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { requireAdmin } from "@/lib/admin";
 
-export default function AdminLayout({
+export const metadata: Metadata = {
+    robots: { index: false, follow: false },
+};
+
+export default async function AdminLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
+    if (!(await requireAdmin())) {
+        redirect("/login?redirect=/admin/dashboard");
+    }
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">
             {/* Top Navbar - Reused from SiteHeader but minimal */}

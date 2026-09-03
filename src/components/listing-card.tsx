@@ -4,18 +4,27 @@ import { MapPin, ArrowRight, CheckCircle, ImageSquare } from "@phosphor-icons/re
 import { BadgePill } from "./badge-pill";
 import { ListingImage } from "./listing-image";
 import { getServiceLabel, getSpecialtyLabel } from "@/lib/tags";
-import type { BusinessListing, NormalizedListing, Badge } from "@/lib/types";
+import { isUsableListingImage } from "@/lib/images";
+import type { BusinessListing, ListingCardData, NormalizedListing, Badge } from "@/lib/types";
 import { TrackedWebsiteLink } from "./tracked-website-link";
 
+type CardListing = BusinessListing | NormalizedListing | ListingCardData;
+
 interface ListingCardProps {
-  listing: BusinessListing | NormalizedListing;
+  listing: CardListing;
   index?: number;
   compact?: boolean;
   variant?: "vertical" | "horizontal";
 }
 
-function isNormalized(listing: BusinessListing | NormalizedListing): listing is NormalizedListing {
+function isNormalized(listing: CardListing): listing is NormalizedListing | ListingCardData {
   return "service_tags" in listing;
+}
+
+function listingBlurb(listing: CardListing): string {
+  if (listing.short_description) return listing.short_description;
+  if ("description" in listing) return listing.description;
+  return "";
 }
 
 export function ListingCard({ listing, index = 0, compact = false, variant = "vertical" }: ListingCardProps) {
@@ -24,8 +33,7 @@ export function ListingCard({ listing, index = 0, compact = false, variant = "ve
   const specialtyTags = normalized ? listing.specialty_tags.slice(0, 3) : [];
 
   const firstImage = listing.images && listing.images.length > 0 ? listing.images[0] : "";
-  const isStockOrPlaceholder = firstImage.includes("placehold.co") || firstImage.includes("placeholder") || firstImage.includes("unsplash.com") || firstImage.includes("pexels.com");
-  const hasImage = !!firstImage && !isStockOrPlaceholder;
+  const hasImage = isUsableListingImage(firstImage);
 
   if (variant === "horizontal") {
     return <HorizontalCard listing={listing} normalized={normalized} serviceTags={serviceTags} specialtyTags={specialtyTags} hasImage={hasImage} index={index} />;
@@ -57,7 +65,7 @@ export function ListingCard({ listing, index = 0, compact = false, variant = "ve
           {hasImage ? (
             <ListingImage src={listing.images[0]} alt={listing.name} compact={compact} />
           ) : (
-            <div className={`relative w-full flex flex-col items-center justify-center bg-gradient-to-br from-surface to-brand-secondary/5 border-b border-border/50 ${compact ? 'h-40' : 'h-48'}`}>
+            <div className={`relative w-full flex flex-col items-center justify-center bg-gradient-to-br from-surface to-brand-secondary/5 border-b border-border/50 ${compact ? 'aspect-[4/3]' : 'aspect-[3/2]'}`}>
               <ImageSquare weight="duotone" className="w-12 h-12 text-text-muted/25 mb-2" />
               <span className="text-xs font-medium text-text-muted/40">Photo coming soon</span>
             </div>
@@ -88,7 +96,7 @@ export function ListingCard({ listing, index = 0, compact = false, variant = "ve
                 <div className="text-sm font-semibold text-text">{listing.price_range || "$$"}</div>
               )}
               {listing.owner_id && (
-                <div className="flex items-center gap-0.5 text-brand-accent text-xs mt-0.5 justify-end">
+                <div className="flex items-center gap-0.5 text-brand-accent-ink text-xs mt-0.5 justify-end">
                   <CheckCircle weight="fill" className="w-3 h-3" />
                   <span>Verified</span>
                 </div>
@@ -111,7 +119,7 @@ export function ListingCard({ listing, index = 0, compact = false, variant = "ve
               {serviceTags.map((slug) => (
                 <span
                   key={slug}
-                  className="text-xs px-2 py-0.5 rounded-full bg-brand-accent/10 text-brand-accent border border-brand-accent/20 font-medium"
+                  className="text-xs px-2 py-0.5 rounded-full bg-brand-accent/10 text-brand-accent-ink border border-brand-accent/20 font-medium"
                 >
                   {getServiceLabel(slug)}
                 </span>
@@ -139,7 +147,7 @@ export function ListingCard({ listing, index = 0, compact = false, variant = "ve
           )}
 
           {/* Raw services fallback */}
-          {!normalized && listing.services.length > 0 && (
+          {!normalized && "services" in listing && listing.services.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-2">
               {listing.services.slice(0, 4).map((service) => (
                 <span
@@ -159,7 +167,7 @@ export function ListingCard({ listing, index = 0, compact = false, variant = "ve
 
           {/* Description */}
           <p className="text-sm text-text-muted leading-relaxed mb-4 line-clamp-2">
-            {listing.short_description || listing.description}
+            {listingBlurb(listing)}
           </p>
 
           {/* Actions */}
@@ -196,7 +204,7 @@ function HorizontalCard({
   hasImage,
   index,
 }: {
-  listing: BusinessListing | NormalizedListing;
+  listing: CardListing;
   normalized: boolean;
   serviceTags: string[];
   specialtyTags: string[];
@@ -232,14 +240,14 @@ function HorizontalCard({
         <div className="flex-1 p-4 md:p-5 flex flex-col min-w-0">
           {/* Name + badges */}
           <div className="mb-1">
-            <h3 className="font-heading font-semibold text-base text-brand-primary leading-tight truncate group-hover:text-brand-accent transition-colors mb-1">
+            <h3 className="font-heading font-semibold text-base text-brand-primary leading-tight truncate group-hover:text-brand-accent-ink transition-colors mb-1">
               {listing.name}
             </h3>
 
             {(listing.owner_id || (listing.badges && listing.badges.length > 0)) && (
               <div className="flex flex-wrap items-center gap-1.5">
                 {listing.owner_id && (
-                  <span className="inline-flex items-center gap-0.5 text-brand-accent text-xs font-medium">
+                  <span className="inline-flex items-center gap-0.5 text-brand-accent-ink text-xs font-medium">
                     <CheckCircle weight="fill" className="w-3.5 h-3.5" />
                     Verified
                   </span>
@@ -284,7 +292,7 @@ function HorizontalCard({
           {(serviceTags.length > 0 || specialtyTags.length > 0) && normalized && (
             <div className="flex flex-wrap gap-1.5 mb-2">
               {serviceTags.map((slug) => (
-                <span key={slug} className="text-xs px-2 py-0.5 rounded-full bg-brand-accent/10 text-brand-accent border border-brand-accent/20 font-medium">
+                <span key={slug} className="text-xs px-2 py-0.5 rounded-full bg-brand-accent/10 text-brand-accent-ink border border-brand-accent/20 font-medium">
                   {getServiceLabel(slug)}
                 </span>
               ))}
@@ -297,7 +305,7 @@ function HorizontalCard({
           )}
 
           {/* Raw services fallback */}
-          {!normalized && listing.services.length > 0 && (
+          {!normalized && "services" in listing && listing.services.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-2">
               {listing.services.slice(0, 4).map((service) => (
                 <span key={service} className="text-xs px-2 py-0.5 rounded-full bg-surface text-text-muted border border-border">
@@ -308,7 +316,7 @@ function HorizontalCard({
           )}
 
           {/* CTA link */}
-          <span className="inline-flex items-center gap-1 text-sm font-semibold text-brand-accent group-hover:text-brand-accent mt-auto pt-1">
+          <span className="inline-flex items-center gap-1 text-sm font-semibold text-brand-accent-ink group-hover:text-brand-accent-ink mt-auto pt-1">
             View profile
             <ArrowRight weight="bold" className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </span>

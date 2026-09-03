@@ -18,7 +18,7 @@ function ensureHttps(url: string): string {
 export function ListingImage({ src, alt, compact = false, fill = false }: ListingImageProps) {
   const [failed, setFailed] = useState(false);
 
-  const heightClass = fill ? "h-full" : compact ? "h-40" : "h-48";
+  const heightClass = fill ? "h-full" : compact ? "aspect-[4/3]" : "aspect-[3/2]";
   const safeSrc = ensureHttps(src);
 
   if (failed) {
@@ -32,10 +32,12 @@ export function ListingImage({ src, alt, compact = false, fill = false }: Listin
 
   return (
     <div className={`relative w-full overflow-hidden bg-surface ${fill ? "" : "border-b border-border/50"} ${heightClass}`}>
+      {/* Listing photos come from many scraped hosts; next.config only allowlists a few. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={safeSrc}
         alt={alt}
-        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
         loading="lazy"
         onError={() => setFailed(true)}
       />

@@ -5,6 +5,7 @@ import { getCities, getTotalListingCount } from '@/lib/supabase/queries';
 export const metadata: Metadata = {
     title: 'About Us',
     description: 'GroomLocal is the Pacific Northwest\'s trusted pet grooming directory. Connecting pet parents with verified groomers across Washington and Oregon.',
+    alternates: { canonical: '/about' },
     openGraph: {
         title: 'About GroomLocal',
         description: 'The Pacific Northwest\'s trusted pet grooming directory. Connecting pet parents with verified groomers across Washington and Oregon.',

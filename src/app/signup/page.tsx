@@ -24,7 +24,7 @@ export default function SignupPage() {
             email,
             password,
             options: {
-                emailRedirectTo: `${location.origin}/auth/callback`,
+                emailRedirectTo: `${location.origin}/auth/callback?next=/dashboard`,
             },
         });
 
@@ -52,7 +52,7 @@ export default function SignupPage() {
                             Create an account
                         </h1>
                         <p className="text-text-muted">
-                            Join the PNW Grooming Directory
+                            Join GroomLocal
                         </p>
                     </div>
 
@@ -102,7 +102,7 @@ export default function SignupPage() {
                                         className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm shadow-sm transition-colors focus:border-brand-primary focus:ring-1 focus:ring-brand-primary outline-none"
                                         placeholder="••••••••"
                                         required
-                                        minLength={6}
+                                        minLength={8}
                                     />
                                 </div>
 

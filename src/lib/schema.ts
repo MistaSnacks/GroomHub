@@ -229,6 +229,49 @@ export function cityPageSchema(
   };
 }
 
+export function serviceCityPageSchema(
+  listings: NormalizedListing[],
+  cityName: string,
+  stateAbbr: string,
+  statePath: string,
+  citySlug: string,
+  hub: { name: string; path: string },
+  faqs?: Array<{ question: string; answer: string }>,
+  listName?: string
+) {
+  const breadcrumb = breadcrumbSchema([
+    { name: "Home", href: "/" },
+    { name: hub.name, href: hub.path },
+    { name: stateAbbr === "WA" ? "Washington" : "Oregon", href: `${hub.path}/${statePath}` },
+    { name: cityName, href: `${hub.path}/${statePath}/${citySlug}` },
+  ]);
+  const itemList = itemListSchema(
+    listings,
+    listName ?? `${hub.name} in ${cityName}, ${stateAbbr}`
+  );
+
+  const { "@context": _bc, ...breadcrumbBody } = breadcrumb;
+  const { "@context": _il, ...itemListBody } = itemList;
+
+  const graph: Record<string, unknown>[] = [breadcrumbBody, itemListBody];
+
+  if (faqs && faqs.length > 0) {
+    const validFaqs = faqs.filter(
+      (faq) => faq.question?.trim() && faq.answer?.trim()
+    );
+    if (validFaqs.length > 0) {
+      const faqSchema = cityFaqSchema(validFaqs);
+      const { "@context": _fq, ...faqBody } = faqSchema;
+      graph.push(faqBody);
+    }
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": graph,
+  };
+}
+
 export function statePageSchema(stateName: string, statePath: string) {
   const breadcrumb = breadcrumbSchema([
     { name: "Home", href: "/" },

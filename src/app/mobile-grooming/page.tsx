@@ -8,6 +8,7 @@ import { WaveDivider } from "@/components/wave-divider";
 export const metadata: Metadata = {
   title: "Mobile Dog Groomers | Grooming at Your Door",
   description: "Find mobile dog groomers across Washington and Oregon. Convenient grooming that comes to your home.",
+  alternates: { canonical: "/mobile-grooming" },
   openGraph: {
     title: "Mobile Dog Groomers | Grooming at Your Door",
     description: "Find mobile dog groomers across Washington and Oregon. Convenient grooming that comes to your home.",

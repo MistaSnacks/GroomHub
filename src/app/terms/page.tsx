@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Terms of Service",
   description:
     "Review the terms and conditions for using the GroomLocal pet grooming directory.",
+  alternates: { canonical: "/terms" },
   openGraph: {
     title: "Terms of Service",
     description: "Review the terms and conditions for using the GroomLocal pet grooming directory.",

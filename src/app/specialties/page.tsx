@@ -8,6 +8,7 @@ import { AnimatedSection, AnimatedItem } from "@/components/animated-section";
 export const metadata: Metadata = {
   title: "Grooming Specialties | Find Expert Care",
   description: "Browse groomers by specialty across the PNW. From doodle experts to fear-free certified, find the exact expertise your pet needs.",
+  alternates: { canonical: "/specialties" },
   openGraph: {
     title: "Grooming Specialties | Find Expert Care",
     description: "Browse groomers by specialty across the PNW. From doodle experts to fear-free certified, find the exact expertise your pet needs.",

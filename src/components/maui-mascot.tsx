@@ -7,8 +7,9 @@ interface MauiMascotProps {
   size?: number;
   className?: string;
   src?: string;
-  animation?: "bounce" | "float" | "none" | "sayingHi"; // sayingHi kept for backward compatibility
+  animation?: "bounce" | "float" | "none";
   interactive?: boolean;
+  priority?: boolean;
 }
 
 export function MauiMascot({
@@ -17,10 +18,11 @@ export function MauiMascot({
   src = "/maui-assets/00-maui-main.png",
   animation = "float",
   interactive = true,
+  priority = false,
 }: MauiMascotProps) {
 
   const getAnimationProps = () => {
-    if (animation === "float" || animation === "sayingHi") {
+    if (animation === "float") {
       return {
         animate: { y: [0, -10, 0] },
         transition: { repeat: Infinity, duration: 4, ease: "easeInOut" as const }
@@ -49,7 +51,7 @@ export function MauiMascot({
         width={size}
         height={size}
         className="w-full h-full object-contain drop-shadow-md"
-        priority
+        priority={priority}
       />
     </motion.div>
   );

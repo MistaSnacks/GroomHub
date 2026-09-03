@@ -19,7 +19,7 @@ export function PricingCard({ tier, isAnnual }: PricingCardProps) {
     >
       {tier.isPopular && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-          <span className="rounded-full bg-brand-secondary px-4 py-1 text-xs font-bold text-white shadow-sm">
+          <span className="rounded-full bg-brand-secondary px-4 py-1 text-xs font-bold text-brand-primary shadow-sm">
             Most Pawpular
           </span>
         </div>
@@ -69,7 +69,7 @@ export function PricingCard({ tier, isAnnual }: PricingCardProps) {
       <Link
         href="/for-groomers"
         className={`block text-center rounded-full py-3 px-6 text-sm font-semibold transition-colors ${tier.isPopular
-            ? "bg-brand-secondary text-white hover:bg-brand-secondary/90"
+            ? "bg-brand-secondary text-brand-primary hover:bg-brand-secondary/90"
             : tier.price === 0
               ? "bg-surface text-brand-primary hover:bg-border"
               : "bg-brand-primary text-white hover:bg-brand-primary/90"

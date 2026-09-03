@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Star, MapPin, Trophy, ArrowRight, CheckCircle, ImageSquare } from "@phosphor-icons/react/dist/ssr";
 import { ListingImage } from "./listing-image";
 import { getServiceLabel } from "@/lib/tags";
+import { isUsableListingImage } from "@/lib/images";
 import type { NormalizedListing } from "@/lib/types";
 
 interface FeaturedListingBannerProps {
@@ -10,8 +11,7 @@ interface FeaturedListingBannerProps {
 
 export function FeaturedListingBanner({ listing }: FeaturedListingBannerProps) {
   const firstImage = listing.images && listing.images.length > 0 ? listing.images[0] : "";
-  const isStockOrPlaceholder = firstImage.includes("placehold.co") || firstImage.includes("placeholder") || firstImage.includes("unsplash.com") || firstImage.includes("pexels.com");
-  const hasImage = !!firstImage && !isStockOrPlaceholder;
+  const hasImage = isUsableListingImage(firstImage);
 
   return (
     <div className="relative rounded-2xl border-2 border-brand-secondary/40 bg-gradient-to-r from-brand-secondary/5 to-white overflow-hidden mb-6">
@@ -25,7 +25,7 @@ export function FeaturedListingBanner({ listing }: FeaturedListingBannerProps) {
         {/* Image */}
         <div className="md:w-72 h-48 md:h-auto shrink-0 overflow-hidden">
           {hasImage ? (
-            <ListingImage src={firstImage} alt={listing.name} />
+            <ListingImage src={firstImage} alt={listing.name} fill />
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-surface to-brand-secondary/10">
               <ImageSquare weight="duotone" className="w-12 h-12 text-text-muted/25 mb-2" />
@@ -54,7 +54,7 @@ export function FeaturedListingBanner({ listing }: FeaturedListingBannerProps) {
               </span>
             )}
             {listing.is_paw_verified && (
-              <span className="flex items-center gap-0.5 text-xs text-brand-accent">
+              <span className="flex items-center gap-0.5 text-xs text-brand-accent-ink">
                 <CheckCircle weight="fill" className="w-3 h-3" />
                 Verified
               </span>
@@ -71,7 +71,7 @@ export function FeaturedListingBanner({ listing }: FeaturedListingBannerProps) {
               {listing.service_tags.slice(0, 5).map((slug) => (
                 <span
                   key={slug}
-                  className="text-xs px-2 py-0.5 rounded-full bg-brand-accent/10 text-brand-accent border border-brand-accent/20 font-medium"
+                  className="text-xs px-2 py-0.5 rounded-full bg-brand-accent/10 text-brand-accent-ink border border-brand-accent/20 font-medium"
                 >
                   {getServiceLabel(slug)}
                 </span>

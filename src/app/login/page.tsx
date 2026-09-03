@@ -2,20 +2,22 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
+import { safeRedirectPath } from "@/lib/safe-redirect";
 import { LoginForm } from "./login-form";
 
 interface LoginPageProps {
-  searchParams: Promise<{ redirect?: string }>;
+  searchParams: Promise<{ redirect?: string; error?: string }>;
 }
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
-  const { redirect: redirectTo } = await searchParams;
+  const { redirect: redirectTo, error: authError } = await searchParams;
+  const nextPath = safeRedirectPath(redirectTo);
 
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (user) {
-    redirect(redirectTo || "/dashboard");
+    redirect(nextPath);
   }
 
   return (
@@ -38,7 +40,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             Sign in to manage your listings
           </p>
 
-          <LoginForm redirectTo={redirectTo} />
+          <LoginForm redirectTo={nextPath} authError={authError} />
         </div>
 
         <p className="text-sm text-text-muted text-center mt-6">

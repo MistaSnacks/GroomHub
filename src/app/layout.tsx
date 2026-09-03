@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { getCities } from "@/lib/supabase/queries";
 
 const fredoka = Fredoka({
   variable: "--font-fredoka",
@@ -24,15 +25,7 @@ export const metadata: Metadata = {
   },
   description:
     "Find the pawfect dog groomer in Seattle, Tacoma, Portland and the Pacific Northwest. 1,177+ verified listings with services, pricing, and contact info.",
-  keywords: [
-    "dog grooming",
-    "pet grooming",
-    "dog groomer near me",
-    "Seattle dog grooming",
-    "Tacoma pet grooming",
-    "Portland dog groomer",
-    "PNW pet services",
-  ],
+  manifest: "/manifest.json",
   openGraph: {
     title: "GroomLocal | Find Dog Groomers in the PNW",
     description:
@@ -50,19 +43,26 @@ export const metadata: Metadata = {
       "Find the pawfect dog groomer in Seattle, Tacoma, Portland and the Pacific Northwest. 1,177+ verified groomer listings.",
     images: ["/og-image.png"],
   },
+  alternates: {
+    types: {
+      "application/rss+xml": "/blog/feed.xml",
+    },
+  },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cities = await getCities();
+
   return (
     <html lang="en">
       <body
         className={`${fredoka.variable} ${inter.variable} antialiased min-h-screen flex flex-col bg-bg text-text`}
       >
-        <SiteHeader />
+        <SiteHeader cities={cities} />
         <main className="flex-1 flex flex-col">{children}</main>
         <SiteFooter />
         <Analytics />

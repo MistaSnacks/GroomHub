@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "node:path";
 
 const nextConfig: NextConfig = {
   images: {
@@ -11,7 +12,35 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "storage.googleapis.com",
       },
+      {
+        protocol: "https",
+        hostname: "afnkgwbajztnfkpijtcl.supabase.co",
+      },
     ],
+  },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "6mb",
+    },
+  },
+  turbopack: {
+    root: path.join(__dirname),
+  },
+  async redirects() {
+    return [
+      {
+        source: "/dog-grooming",
+        has: [{ type: "query", key: "service", value: "(?<service>.*)" }],
+        destination: "/services/:service",
+        permanent: true,
+      },
+      {
+        source: "/dog-grooming",
+        has: [{ type: "query", key: "specialty", value: "(?<specialty>.*)" }],
+        destination: "/specialties/:specialty",
+        permanent: true,
+      },
+    ];
   },
   async headers() {
     return [

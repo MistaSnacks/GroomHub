@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
-import { CaretRight, Scissors, MapPin, ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import { CaretRight, Scissors, MapPin, Question } from "@phosphor-icons/react/dist/ssr";
 import { CityListingsClient } from "@/components/city-listings-client";
 import { getListingsByServiceTag } from "@/lib/supabase/queries";
 import {
@@ -86,10 +86,9 @@ export default async function ServiceLandingPage({ params }: Props) {
 
   const listings = await getListingsByServiceTag(slug);
   const stateMap = groupByStateAndCity(listings);
-
-  const schema = servicePageSchema(slug, tag.label, "service", listings);
-
   const serviceContent = getServiceContent(slug);
+
+  const schema = servicePageSchema(slug, tag.label, "service", listings, serviceContent?.faqs);
 
   // Related specialties (first 6)
   const relatedSpecialties = SPECIALTY_TAGS.slice(0, 6);
@@ -156,7 +155,37 @@ export default async function ServiceLandingPage({ params }: Props) {
         </section>
       )}
 
-      <WaveDivider variant="gentle" fromColor="#FDF8F0" toColor="#FDF8F0" />
+      {/* FAQ Section */}
+      {serviceContent?.faqs && serviceContent.faqs.length > 0 && (
+        <section className="bg-white py-10">
+          <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center gap-2 mb-6">
+              <Question weight="duotone" className="w-6 h-6 text-brand-secondary" />
+              <h2 className="font-heading text-2xl font-semibold text-brand-primary">
+                Frequently Asked Questions
+              </h2>
+            </div>
+            <div className="space-y-4">
+              {serviceContent.faqs.map((faq) => (
+                <details
+                  key={faq.question}
+                  className="group rounded-xl border border-border bg-bg/50 overflow-hidden"
+                >
+                  <summary className="flex items-center justify-between cursor-pointer p-5 text-brand-primary font-medium text-sm hover:bg-bg transition-colors">
+                    <span>{faq.question}</span>
+                    <CaretRight weight="bold" className="w-4 h-4 text-text-muted group-open:rotate-90 transition-transform" />
+                  </summary>
+                  <div className="px-5 pb-5 text-sm text-text-muted leading-relaxed">
+                    {faq.answer}
+                  </div>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      <WaveDivider variant="gentle" fromColor={serviceContent?.faqs ? "#FFFFFF" : "#FDF8F0"} toColor="#FDF8F0" />
 
       {/* State/City Breakdown */}
       <section className="bg-bg py-10">

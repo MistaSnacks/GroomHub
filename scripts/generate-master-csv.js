@@ -28,7 +28,7 @@ const path = require('path');
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 const DATA_DIR = path.join(PROJECT_ROOT, 'data');
 const ENRICHED_FILE = path.join(DATA_DIR, 'groomers_enriched.json');
-const OSM_FILE = path.join(PROJECT_ROOT, 'groomers_osm.json');
+const OSM_FILE = path.join(PROJECT_ROOT, 'temp_scripts', 'groomers_osm.json');
 const OUTPUT_CSV = path.join(DATA_DIR, 'master-groomers.csv');
 
 // The CSV columns matching the Supabase business_listings table schema

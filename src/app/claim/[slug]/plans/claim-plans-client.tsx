@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useFormStatus } from "react-dom";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Check, ArrowRight, X, WarningCircle } from "@phosphor-icons/react/dist/ssr";
+import { Check, ArrowRight, X, WarningCircle, Star } from "@phosphor-icons/react/dist/ssr";
 import { WaveDivider } from "@/components/wave-divider";
 import { pricingTiers } from "@/lib/pricing";
 import { processClaim } from "@/app/claim/actions";
@@ -24,10 +24,27 @@ export function ClaimPlansClient({ slug }: { slug: string }) {
                         <WarningCircle weight="bold" className="w-5 h-5 shrink-0" />
                         {error === "already-claimed"
                             ? "This listing has already been claimed by another user."
-                            : error}
+                            : "We couldn't complete this claim. Please try again."}
                     </div>
                 </div>
             )}
+
+            {/* Founding member banner */}
+            <section className="pt-8 px-4 sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-3xl bg-brand-accent/5 border border-brand-accent/20 rounded-2xl p-5 flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-full bg-brand-accent/15 flex items-center justify-center shrink-0">
+                        <Star weight="fill" className="w-5 h-5 text-brand-accent" />
+                    </div>
+                    <div>
+                        <p className="font-semibold text-brand-primary text-sm mb-1">Founding Member Beta</p>
+                        <p className="text-sm text-text-muted">
+                            As an early member, you get <strong className="text-brand-primary">all Premium features free for 90 days</strong>.
+                            In return, we ask that you add a GroomLocal link on your website and share a quick testimonial.
+                            Pick any plan below to get started.
+                        </p>
+                    </div>
+                </div>
+            </section>
 
             {/* Header section */}
             <section className="py-12">
@@ -39,7 +56,7 @@ export function ClaimPlansClient({ slug }: { slug: string }) {
                         Select your plan
                     </h1>
                     <p className="text-lg text-text-muted">
-                        Choose how you want to manage your listing on the directory.
+                        Choose how you want to manage your listing. All plans include full features during our founding member beta.
                     </p>
 
                     <div className="mt-8 inline-flex items-center gap-1 bg-white border border-border rounded-full p-1">
@@ -86,57 +103,62 @@ export function ClaimPlansClient({ slug }: { slug: string }) {
                         return (
                             <div
                                 key={tier.slug}
-                                onClick={() => setSelectedPlan(tier.slug)}
-                                className={`relative rounded-2xl border-2 p-6 flex flex-col h-full cursor-pointer transition-transform ${cardBg} ${isSelected ? 'ring-4 ring-brand-primary/20 scale-[1.02]' : 'hover:scale-[1.01]'}`}
+                                className={`relative rounded-2xl border-2 p-6 flex flex-col h-full ${cardBg} ${isSelected ? 'ring-4 ring-brand-primary/20 scale-[1.02]' : ''}`}
                             >
-                                {/* Radio selection indicator */}
-                                <div className="absolute top-6 right-6 w-5 h-5 rounded-full border-2 border-brand-primary/20 flex items-center justify-center bg-white/50">
-                                    {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-brand-primary" />}
-                                </div>
-
-                                {isFeatured && (
-                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                                        <span className="rounded-full bg-white px-4 py-1 text-xs font-bold text-brand-accent shadow-sm whitespace-nowrap">
-                                            Most Pawpular
-                                        </span>
+                                <button
+                                    type="button"
+                                    aria-pressed={isSelected}
+                                    onClick={() => setSelectedPlan(tier.slug)}
+                                    className={`text-left flex flex-col flex-1 cursor-pointer transition-transform ${isSelected ? '' : 'hover:scale-[1.01]'}`}
+                                >
+                                    <div className="absolute top-6 right-6 w-5 h-5 rounded-full border-2 border-brand-primary/20 flex items-center justify-center bg-white/50">
+                                        {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-brand-primary" />}
                                     </div>
-                                )}
 
-                                <div className="mb-5 pr-8">
-                                    <h3 className="font-heading text-xl font-bold">{tier.name}</h3>
-                                    <p className={`text-sm mt-1 ${isFeatured || isPremium ? "opacity-80" : "text-text-muted"}`}>
-                                        {tier.description}
-                                    </p>
-                                </div>
-
-                                <div className="mb-6">
-                                    <div className="flex items-baseline gap-1">
-                                        <span className="font-heading text-4xl font-bold">
-                                            ${displayPrice}
-                                        </span>
-                                        {tier.price > 0 && (
-                                            <span className={`text-sm ${isFeatured || isPremium ? "opacity-60" : "text-text-muted"}`}>/mo</span>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <ul className="flex-1 space-y-2.5 mb-6">
-                                    {tier.features.slice(0, 5).map((feature) => (
-                                        <li key={feature.text} className="flex items-start gap-2">
-                                            {feature.included ? (
-                                                <Check weight="bold" className={`h-4 w-4 mt-0.5 shrink-0 ${isFeatured ? "text-white" : isPremium ? "text-brand-primary" : "text-brand-accent"}`} />
-                                            ) : (
-                                                <X weight="bold" className={`h-4 w-4 mt-0.5 shrink-0 ${isFeatured || isPremium ? "opacity-30" : "text-border"}`} />
-                                            )}
-                                            <span className={`text-sm ${feature.included ? "" : isFeatured || isPremium ? "opacity-40" : "text-text-muted/50"}`}>
-                                                {feature.text}
+                                    {isFeatured && (
+                                        <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                                            <span className="rounded-full bg-white px-4 py-1 text-xs font-bold text-brand-accent shadow-sm whitespace-nowrap">
+                                                Most Pawpular
                                             </span>
-                                        </li>
-                                    ))}
-                                    <li className="text-xs font-medium pt-2 opacity-60">
-                                        <Link href="/pricing" target="_blank" className="hover:underline">View full feature list ↗</Link>
-                                    </li>
-                                </ul>
+                                        </div>
+                                    )}
+
+                                    <div className="mb-5 pr-8">
+                                        <h3 className="font-heading text-xl font-bold">{tier.name}</h3>
+                                        <p className={`text-sm mt-1 ${isFeatured || isPremium ? "opacity-80" : "text-text-muted"}`}>
+                                            {tier.description}
+                                        </p>
+                                    </div>
+
+                                    <div className="mb-6">
+                                        <div className="flex items-baseline gap-1">
+                                            <span className="font-heading text-4xl font-bold">
+                                                ${displayPrice}
+                                            </span>
+                                            {tier.price > 0 && (
+                                                <span className={`text-sm ${isFeatured || isPremium ? "opacity-60" : "text-text-muted"}`}>/mo</span>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <ul className="flex-1 space-y-2.5 mb-6">
+                                        {tier.features.slice(0, 5).map((feature) => (
+                                            <li key={feature.text} className="flex items-start gap-2">
+                                                {feature.included ? (
+                                                    <Check weight="bold" className={`h-4 w-4 mt-0.5 shrink-0 ${isFeatured ? "text-white" : isPremium ? "text-brand-primary" : "text-brand-accent"}`} />
+                                                ) : (
+                                                    <X weight="bold" className={`h-4 w-4 mt-0.5 shrink-0 ${isFeatured || isPremium ? "opacity-30" : "text-border"}`} />
+                                                )}
+                                                <span className={`text-sm ${feature.included ? "" : isFeatured || isPremium ? "opacity-40" : "text-text-muted/50"}`}>
+                                                    {feature.text}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </button>
+                                <p className="text-xs font-medium pt-2 opacity-60">
+                                    <Link href="/pricing" target="_blank" className="hover:underline">View full feature list ↗</Link>
+                                </p>
                             </div>
                         );
                     })}

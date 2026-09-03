@@ -72,7 +72,7 @@ export function AboutContent({ metrics }: AboutContentProps) {
             <motion.div variants={itemVariants} className="w-full md:w-2/5 flex justify-center">
               <div className="relative">
                 <div className="absolute inset-0 bg-brand-accent/20 rounded-full blur-3xl -z-10" />
-                <MauiMascot src="/maui-assets/08-maui-playing-ball.png" size={320} animation="float" />
+                <MauiMascot src="/maui-assets/08-maui-playing-ball.png" size={320} animation="float" priority />
               </div>
             </motion.div>
 

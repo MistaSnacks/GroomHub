@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { User, EnvelopeSimple, SignOut } from "@phosphor-icons/react/dist/ssr";
+import { User, EnvelopeSimple } from "@phosphor-icons/react/dist/ssr";
+import { SignOutButton } from "./sign-out-button";
 
 export default async function AccountPage() {
   const supabase = await createClient();
@@ -54,15 +55,7 @@ export default async function AccountPage() {
           </div>
 
           <div className="pt-4 border-t border-border">
-            <form action="/api/auth/signout" method="POST">
-              <a
-                href="/login"
-                className="inline-flex items-center gap-2 rounded-lg border border-red-200 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
-              >
-                <SignOut weight="bold" className="w-4 h-4" />
-                Sign Out
-              </a>
-            </form>
+            <SignOutButton />
           </div>
         </div>
       </div>

@@ -25,7 +25,7 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
 
     const redirectUrl = `${typeof window !== "undefined" ? location.origin : ""}/auth/callback?next=/claim/${listingSlug}/plans`;
 
-    const handleSignUp = async () => {
+    const handleSignUp = async (): Promise<"navigated" | "confirm-email" | "error"> => {
         const supabase = createClient();
         const { error: signUpErr, data } = await supabase.auth.signUp({
             email,
@@ -34,28 +34,26 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
         });
 
         if (signUpErr) {
-            // "User already registered" means they need to sign in instead
             if (signUpErr.message.toLowerCase().includes("already registered")) {
                 setError("An account with this email already exists. Try signing in instead.");
                 setMode("signin");
-                return;
+                return "error";
             }
             setError(signUpErr.message);
-            return;
+            return "error";
         }
 
         if (data.session) {
-            // Email confirmation is disabled, user is logged in
             router.push(`/claim/${listingSlug}/plans`);
             router.refresh();
-            return;
+            return "navigated";
         }
 
-        // Email confirmation required
         setStatus("confirm-email");
+        return "confirm-email";
     };
 
-    const handleSignIn = async () => {
+    const handleSignIn = async (): Promise<"navigated" | "confirm-email" | "error"> => {
         const supabase = createClient();
         const { error: signInErr } = await supabase.auth.signInWithPassword({
             email,
@@ -65,14 +63,15 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
         if (signInErr) {
             if (signInErr.message.toLowerCase().includes("email not confirmed")) {
                 setStatus("confirm-email");
-                return;
+                return "confirm-email";
             }
             setError(signInErr.message);
-            return;
+            return "error";
         }
 
         router.push(`/claim/${listingSlug}/plans`);
         router.refresh();
+        return "navigated";
     };
 
     const handleResendConfirmation = async () => {
@@ -108,17 +107,31 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
 
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (password.length < 8) {
+            setError("Password must be at least 8 characters.");
+            return;
+        }
         setStatus("loading");
         setError(null);
 
-        if (mode === "signup") {
-            await handleSignUp();
-        } else {
-            await handleSignIn();
-        }
+        let navigated = false;
+        let confirmEmail = false;
 
-        // If we didn't navigate away or switch to confirm-email, restore idle
-        if (status === "loading") setStatus("idle");
+        try {
+            if (mode === "signup") {
+                const outcome = await handleSignUp();
+                if (outcome === "navigated") navigated = true;
+                if (outcome === "confirm-email") confirmEmail = true;
+            } else {
+                const outcome = await handleSignIn();
+                if (outcome === "navigated") navigated = true;
+                if (outcome === "confirm-email") confirmEmail = true;
+            }
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+        } finally {
+            if (!navigated && !confirmEmail) setStatus("idle");
+        }
     };
 
     // Confirmation email sent state
@@ -230,9 +243,9 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm shadow-sm transition-colors focus:border-brand-primary focus:ring-1 focus:ring-brand-primary outline-none"
-                    placeholder={mode === "signup" ? "Create a password (6+ characters)" : "Your password"}
+                    placeholder={mode === "signup" ? "Create a password (8+ characters)" : "Your password"}
                     required
-                    minLength={6}
+                    minLength={8}
                 />
             </div>
 

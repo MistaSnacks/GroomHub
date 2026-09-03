@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { CaretRight, CalendarBlank, Clock, Tag } from "@phosphor-icons/react/dist/ssr";
@@ -8,6 +9,7 @@ import {
   getBlogPosts,
   getRelatedPosts,
   getCategoryLabel,
+  formatBlogDate,
 } from "@/lib/blog";
 import { blogPostSchema, breadcrumbSchema } from "@/lib/schema";
 import { BlogCard } from "@/components/blog-card";
@@ -122,11 +124,7 @@ export default async function BlogArticlePage({ params }: Props) {
               <div className="flex flex-wrap items-center gap-4 text-sm text-slate-600">
                 <span className="flex items-center gap-1.5">
                   <CalendarBlank weight="bold" className="w-4 h-4" />
-                  {new Date(post.date).toLocaleDateString("en-US", {
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
+                  {formatBlogDate(post.date)}
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Clock weight="bold" className="w-4 h-4" />
@@ -141,10 +139,14 @@ export default async function BlogArticlePage({ params }: Props) {
             {/* Image Content */}
             {post.image && (
               <div className="flex justify-center md:justify-end items-end h-full w-full mt-8 md:mt-0">
-                <img
+                <Image
                   src={post.image}
                   alt={post.title}
-                  className="w-[220px] sm:w-[280px] md:w-[350px] object-contain drop-shadow-xl z-20 relative"
+                  width={700}
+                  height={700}
+                  priority
+                  sizes="(max-width: 640px) 220px, (max-width: 768px) 280px, 350px"
+                  className="w-[220px] sm:w-[280px] md:w-[350px] h-auto object-contain drop-shadow-xl z-20 relative"
                 />
               </div>
             )}

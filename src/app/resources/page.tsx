@@ -9,11 +9,12 @@ import { AnimatedSection, AnimatedItem } from "@/components/animated-section";
 import { resourcesPageSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Pet Owner Resources | GroomLocal",
+  title: "Pet Owner Resources",
   description:
     "Grooming guides organized by what you need: getting started, costs, special situations, seasonal care, and breed-specific tips.",
+  alternates: { canonical: "/resources" },
   openGraph: {
-    title: "Pet Owner Resources | GroomLocal",
+    title: "Pet Owner Resources",
     description:
       "Grooming guides organized by what you need: getting started, costs, special situations, seasonal care, and breed-specific tips.",
     type: "website",
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pet Owner Resources | GroomLocal",
+    title: "Pet Owner Resources",
     description:
       "Grooming guides organized by what you need: getting started, costs, special situations, seasonal care, and breed-specific tips.",
     images: ["/og-image.png"],

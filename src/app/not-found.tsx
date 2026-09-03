@@ -11,6 +11,7 @@ export default function NotFound() {
           size={160}
           animation="float"
           interactive={false}
+          priority
         />
 
         <h1 className="font-heading text-5xl font-bold text-brand-primary mt-6 mb-3">

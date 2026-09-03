@@ -1,11 +1,17 @@
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import type { Metadata } from "next";
 import { Check, ArrowRight, ShieldCheck, MapPin } from "@phosphor-icons/react/dist/ssr";
 import { getListingBySlug } from "@/lib/supabase/queries";
+import { usableListingImages } from "@/lib/images";
 import { WaveDivider } from "@/components/wave-divider";
 import { ClaimForm } from "./claim-form";
 import { createClient } from "@/lib/supabase/server";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default async function ClaimPage({
   params,
@@ -26,6 +32,8 @@ export default async function ClaimPage({
   if (listing.owner_id && user && listing.owner_id === user.id) {
     redirect(`/claim/${listing.slug}/success`);
   }
+
+  const heroImage = usableListingImages(listing.images)[0];
 
   // If claimed by someone else
   if (listing.owner_id) {
@@ -60,8 +68,14 @@ export default async function ClaimPage({
             Hello, {listing.name}!
           </h1>
           <p className="text-lg text-text-muted">
-            Claiming your free profile allows you to reply to reviews, update your hours, and control your reputation.
+            Take control of your business info, get a Verified badge on your listing, and start connecting with local pet parents.
           </p>
+
+          {/* Founding member callout */}
+          <div className="mt-6 inline-flex items-center gap-2 bg-brand-accent/10 border border-brand-accent/20 rounded-full px-5 py-2">
+            <span className="text-sm font-semibold text-brand-accent">Founding Member Offer</span>
+            <span className="text-sm text-text-muted">All Premium features free during beta</span>
+          </div>
         </div>
       </section>
 
@@ -77,8 +91,8 @@ export default async function ClaimPage({
             <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm sticky top-24">
               <div className="flex items-start gap-4 mb-6">
                 <div className="w-16 h-16 rounded-xl overflow-hidden bg-brand-secondary/20 flex items-center justify-center shrink-0 relative">
-                  {listing.images?.[0] ? (
-                    <Image src={listing.images[0]} alt={listing.name} fill className="object-cover" sizes="64px" />
+                  {heroImage ? (
+                    <Image src={heroImage} alt={listing.name} fill className="object-cover" sizes="64px" />
                   ) : (
                     <span className="font-heading text-2xl text-brand-primary font-bold">{listing.name.charAt(0)}</span>
                   )}
@@ -96,16 +110,20 @@ export default async function ClaimPage({
                 <h4 className="font-semibold text-brand-primary text-sm">Why claim this profile?</h4>
                 <ul className="space-y-3">
                   <li className="flex gap-2 text-sm text-text">
-                    <Check weight="bold" className="w-4 h-4 text-brand-accent mt-0.5" />
+                    <Check weight="bold" className="w-4 h-4 text-brand-accent mt-0.5 shrink-0" />
                     Take control of your business info and hours
                   </li>
                   <li className="flex gap-2 text-sm text-text">
-                    <Check weight="bold" className="w-4 h-4 text-brand-accent mt-0.5" />
-                    Respond to pet parent reviews
+                    <Check weight="bold" className="w-4 h-4 text-brand-accent mt-0.5 shrink-0" />
+                    <span>Get a <strong className="text-brand-accent">Verified</strong> badge on your listing card</span>
                   </li>
                   <li className="flex gap-2 text-sm text-text">
-                    <Check weight="bold" className="w-4 h-4 text-brand-accent mt-0.5" />
-                    Optionally upgrade to remove competitor ads
+                    <Check weight="bold" className="w-4 h-4 text-brand-accent mt-0.5 shrink-0" />
+                    Upload photos and showcase your best work
+                  </li>
+                  <li className="flex gap-2 text-sm text-text">
+                    <Check weight="bold" className="w-4 h-4 text-brand-accent mt-0.5 shrink-0" />
+                    Show up when pet parents search your area
                   </li>
                 </ul>
               </div>
@@ -143,7 +161,7 @@ export default async function ClaimPage({
                       Create a free owner account
                     </h2>
                     <p className="text-sm text-text-muted mb-6">
-                      We'll link this profile to your new account.
+                      We&apos;ll link this profile to your new account.
                     </p>
 
                     <ClaimForm listingSlug={listing.slug} listingName={listing.name} />

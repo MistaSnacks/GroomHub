@@ -14,7 +14,7 @@ export function FeaturedSection({ listings, cityName }: FeaturedSectionProps) {
   return (
     <section className="mb-8">
       <div className="flex items-center gap-2 mb-5">
-        <Star weight="fill" className="w-5 h-5 text-brand-accent" />
+        <Star weight="fill" className="w-5 h-5 text-brand-accent-ink" />
         <h2 className="font-heading text-xl font-semibold text-brand-primary">
           Featured Groomers in {cityName}
         </h2>
@@ -23,7 +23,7 @@ export function FeaturedSection({ listings, cityName }: FeaturedSectionProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {listings.map((listing) => (
           <div key={listing.slug} className="relative">
-            <div className="rounded-xl border-2 border-brand-accent/30 bg-brand-accent/[0.03]">
+            <div className="rounded-xl border-2 border-brand-accent/30 bg-brand-accent/[0.03] p-4">
               <ListingCard listing={listing} compact />
             </div>
             {listing.isSpillover && (

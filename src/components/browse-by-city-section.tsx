@@ -18,7 +18,7 @@ export function BrowseByCitySection({ waCities, orCities }: BrowseByCitySectionP
     <section className="bg-white py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
         <div className="text-center mb-12">
-          <p className="text-xs font-semibold uppercase tracking-widest text-brand-accent mb-2">
+          <p className="text-xs font-semibold uppercase tracking-widest text-brand-accent-ink mb-2">
             Explore the PNW
           </p>
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-brand-primary mb-2">
@@ -49,7 +49,7 @@ export function BrowseByCitySection({ waCities, orCities }: BrowseByCitySectionP
             stateAbbr="OR"
             stateName="Oregon"
             cardBg="bg-brand-accent/10"
-            badgeBg="bg-brand-accent text-white"
+            badgeBg="bg-brand-accent text-brand-primary"
             totalGroomers={orTotal}
             initialLimit={OR_SHOW_COUNT}
             showSearch={false}

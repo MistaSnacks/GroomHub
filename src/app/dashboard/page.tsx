@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Storefront, PencilSimple, ArrowSquareOut, PlusCircle } from "@phosphor-icons/react/dist/ssr";
 import { createClient } from "@/lib/supabase/server";
 import { getListingsByOwner } from "@/lib/supabase/queries";
+import { StatusBanner } from "./status-banner";
 
 const tierColors: Record<string, string> = {
   free: "bg-border text-text-muted",
@@ -10,7 +11,12 @@ const tierColors: Record<string, string> = {
   premium: "bg-brand-secondary/15 text-brand-secondary",
 };
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string; success?: string; "account-deleted"?: string }>;
+}) {
+  const params = await searchParams;
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -19,8 +25,23 @@ export default async function DashboardPage() {
 
   const listings = await getListingsByOwner(user.id);
 
+  const errorMessage =
+    params.error === "not-authorized"
+      ? "You are not authorized to edit that listing."
+      : params.error
+        ? params.error
+        : null;
+  const successMessage =
+    params.success === "updated"
+      ? "Listing updated successfully."
+      : params["account-deleted"] === "true"
+        ? "Your account has been deleted."
+        : null;
+
   return (
     <div className="p-4 sm:p-6 lg:p-8 w-full flex flex-col gap-6">
+      {errorMessage && <StatusBanner variant="error" message={errorMessage} />}
+      {successMessage && <StatusBanner variant="success" message={successMessage} />}
       <div className="mb-2">
         <h1 className="font-heading text-3xl font-bold text-brand-primary mb-2">
           Overview

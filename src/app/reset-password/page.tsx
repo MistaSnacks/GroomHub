@@ -1,49 +1,49 @@
-"use client";
-
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, CheckCircle } from "@phosphor-icons/react";
-import { createClient } from "@/lib/supabase/browser";
+import { redirect } from "next/navigation";
+import { ArrowRight, CheckCircle } from "@phosphor-icons/react/dist/ssr";
+import { createClient } from "@/lib/supabase/server";
 
-export default function ResetPasswordPage() {
-    const router = useRouter();
-    const [password, setPassword] = useState("");
-    const [confirm, setConfirm] = useState("");
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
+export const metadata: Metadata = {
+    robots: { index: false, follow: false },
+};
 
-    const handleReset = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError(null);
+function resetErrorMessage(code: string | undefined): string | null {
+    if (!code) return null;
+    if (code === "mismatch") return "Passwords do not match.";
+    if (code === "short") return "Password must be at least 8 characters.";
+    return "Something went wrong. Please try again.";
+}
 
-        if (password !== confirm) {
-            setError("Passwords do not match.");
-            return;
-        }
+async function updatePassword(formData: FormData) {
+    "use server";
 
-        if (password.length < 6) {
-            setError("Password must be at least 6 characters.");
-            return;
-        }
+    const password = formData.get("password")?.toString() ?? "";
+    const confirm = formData.get("confirm")?.toString() ?? "";
 
-        setLoading(true);
+    if (password !== confirm) {
+        redirect("/reset-password?error=mismatch");
+    }
+    if (password.length < 8) {
+        redirect("/reset-password?error=short");
+    }
 
-        const supabase = createClient();
-        const { error: updateErr } = await supabase.auth.updateUser({
-            password,
-        });
+    const supabase = await createClient();
+    const { error } = await supabase.auth.updateUser({ password });
 
-        if (updateErr) {
-            setError(updateErr.message);
-            setLoading(false);
-            return;
-        }
+    if (error) {
+        redirect("/reset-password?error=failed");
+    }
 
-        setSuccess(true);
-        setLoading(false);
-    };
+    redirect("/reset-password?success=1");
+}
+
+export default async function ResetPasswordPage({
+    searchParams,
+}: {
+    searchParams: Promise<{ error?: string; success?: string }>;
+}) {
+    const { error, success } = await searchParams;
 
     if (success) {
         return (
@@ -68,6 +68,8 @@ export default function ResetPasswordPage() {
         );
     }
 
+    const errorMessage = resetErrorMessage(error);
+
     return (
         <div className="flex-1 flex flex-col bg-bg min-h-screen items-center justify-center px-4">
             <div className="w-full max-w-sm">
@@ -81,10 +83,10 @@ export default function ResetPasswordPage() {
                 </div>
 
                 <div className="bg-white rounded-2xl border border-border p-8 shadow-sm">
-                    <form onSubmit={handleReset} className="space-y-4">
-                        {error && (
+                    <form action={updatePassword} className="space-y-4">
+                        {errorMessage && (
                             <div className="p-3 text-sm text-[#C2185B] bg-[#FCE4EC] rounded-xl border border-[#F48FB1]">
-                                {error}
+                                {errorMessage}
                             </div>
                         )}
 
@@ -95,12 +97,11 @@ export default function ResetPasswordPage() {
                             <input
                                 type="password"
                                 id="new-password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                name="password"
                                 className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm shadow-sm transition-colors focus:border-brand-primary focus:ring-1 focus:ring-brand-primary outline-none"
-                                placeholder="At least 6 characters"
+                                placeholder="At least 8 characters"
                                 required
-                                minLength={6}
+                                minLength={8}
                             />
                         </div>
 
@@ -111,23 +112,21 @@ export default function ResetPasswordPage() {
                             <input
                                 type="password"
                                 id="confirm-password"
-                                value={confirm}
-                                onChange={(e) => setConfirm(e.target.value)}
+                                name="confirm"
                                 className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm shadow-sm transition-colors focus:border-brand-primary focus:ring-1 focus:ring-brand-primary outline-none"
                                 placeholder="Type it again"
                                 required
-                                minLength={6}
+                                minLength={8}
                             />
                         </div>
 
                         <div className="pt-2">
                             <button
                                 type="submit"
-                                disabled={loading}
-                                className="flex items-center justify-center gap-2 w-full rounded-full bg-brand-primary px-6 py-3.5 text-sm font-bold text-white transition-all hover:bg-brand-primary/90 hover:scale-[1.02] shadow-md disabled:opacity-70 disabled:hover:scale-100"
+                                className="flex items-center justify-center gap-2 w-full rounded-full bg-brand-primary px-6 py-3.5 text-sm font-bold text-white transition-all hover:bg-brand-primary/90 hover:scale-[1.02] shadow-md"
                             >
-                                {loading ? "Updating..." : "Update Password"}
-                                {!loading && <ArrowRight weight="bold" className="w-4 h-4" />}
+                                Update Password
+                                <ArrowRight weight="bold" className="w-4 h-4" />
                             </button>
                         </div>
                     </form>

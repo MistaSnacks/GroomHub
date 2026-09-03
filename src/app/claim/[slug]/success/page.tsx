@@ -60,10 +60,13 @@ export default async function ClaimSuccessPage({
                     </div>
 
                     <h1 className="font-heading text-3xl md:text-5xl font-bold text-brand-primary mb-4">
-                        Listing Claimed!
+                        Welcome, Founding Member!
                     </h1>
-                    <p className="text-lg text-text-muted mb-8">
-                        Welcome to the PNW Grooming Directory. You now have full control over <strong className="text-brand-primary">{listing.name}</strong>.
+                    <p className="text-lg text-text-muted mb-4">
+                        You now have full control over <strong className="text-brand-primary">{listing.name}</strong>. Your listing now shows a Verified badge to pet parents.
+                    </p>
+                    <p className="text-sm text-text-muted mb-8 max-w-md mx-auto">
+                        As a founding member, all Premium features are yours free for 90 days. We just ask for two small things: a link to GroomLocal on your website, and a one-line testimonial about your experience.
                     </p>
 
                     <div className="bg-white rounded-2xl border border-border p-6 shadow-sm mb-8 text-left max-w-sm mx-auto">
@@ -71,15 +74,15 @@ export default async function ClaimSuccessPage({
                         <ul className="space-y-3">
                             <li className="flex gap-2 text-sm text-text-muted">
                                 <div className="w-6 h-6 rounded-full bg-brand-secondary/20 flex items-center justify-center text-brand-secondary font-bold text-xs shrink-0 mt-0.5">1</div>
-                                Complete your profile details
+                                Complete your profile details and hours
                             </li>
                             <li className="flex gap-2 text-sm text-text-muted">
                                 <div className="w-6 h-6 rounded-full bg-brand-secondary/20 flex items-center justify-center text-brand-secondary font-bold text-xs shrink-0 mt-0.5">2</div>
-                                Add business hours and website
+                                Upload your best grooming photos
                             </li>
                             <li className="flex gap-2 text-sm text-text-muted">
-                                <div className="w-6 h-6 rounded-full bg-brand-secondary/20 flex items-center justify-center text-brand-secondary font-bold text-xs shrink-0 mt-0.5">3</div>
-                                Upload your best photos
+                                <div className="w-6 h-6 rounded-full bg-brand-accent/20 flex items-center justify-center text-brand-accent font-bold text-xs shrink-0 mt-0.5">3</div>
+                                Add the GroomLocal badge to your website (below)
                             </li>
                         </ul>
                     </div>
@@ -109,10 +112,13 @@ export default async function ClaimSuccessPage({
                     <div className="flex flex-col md:flex-row items-center gap-10">
                         <div className="flex-1">
                             <h2 className="font-heading text-2xl font-bold text-brand-primary mb-3">
-                                Show off your verified status
+                                Add your GroomLocal badge
                             </h2>
-                            <p className="text-text-muted mb-6">
-                                Did you know that verified listings rank higher in local search results? Add the GroomLocal Verified Badge to your website to build trust with pet parents and improve your SEO.
+                            <p className="text-text-muted mb-2">
+                                Paste this badge on your website (footer, about page, or sidebar) to show clients you are a verified local business. It also helps your search ranking by creating a trusted backlink.
+                            </p>
+                            <p className="text-sm text-brand-accent font-medium mb-6">
+                                This is part of your founding member agreement to keep Premium features free.
                             </p>
                             <CopyBadge listingSlug={slug} />
                         </div>

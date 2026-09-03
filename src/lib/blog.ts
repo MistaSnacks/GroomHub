@@ -98,6 +98,20 @@ export function getCategoryLabel(slug: string): string {
   return CATEGORIES[slug] ?? slug;
 }
 
+export function formatBlogDate(
+  date: string,
+  options: Intl.DateTimeFormatOptions = {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  },
+): string {
+  return new Date(date).toLocaleDateString("en-US", {
+    ...options,
+    timeZone: "UTC",
+  });
+}
+
 export function getRelatedPosts(
   currentSlug: string,
   limit = 3

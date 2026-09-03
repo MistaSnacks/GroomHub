@@ -2,20 +2,44 @@ import { NextRequest, NextResponse } from "next/server";
 import { getCities, searchListings } from "@/lib/supabase/queries";
 import { SERVICE_TAGS, SPECIALTY_TAGS, type TagDefinition } from "@/lib/tags";
 import Fuse from "fuse.js";
+import type { CityWithCount } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
-function matchTags(query: string, tags: TagDefinition[]) {
-  const fuse = new Fuse(tags, {
-    keys: ["label", "aliases"],
-    threshold: 0.3,
-    ignoreLocation: true,
-  });
+// Tag lists are static, so build their indexes once per server instance
+// instead of on every keystroke request.
+const TAG_FUSE_OPTIONS = {
+  keys: ["label", "aliases"],
+  threshold: 0.3,
+  ignoreLocation: true,
+};
+const serviceFuse = new Fuse(SERVICE_TAGS, TAG_FUSE_OPTIONS);
+const specialtyFuse = new Fuse(SPECIALTY_TAGS, TAG_FUSE_OPTIONS);
 
+function matchTags(query: string, fuse: Fuse<TagDefinition>) {
   return fuse.search(query).map(result => ({
     slug: result.item.slug,
     label: result.item.label,
   }));
+}
+
+// Cities change rarely; rebuild their index on the same 5-min cadence as the
+// underlying query cache.
+let cityFuseCache: { fuse: Fuse<CityWithCount>; builtAt: number; count: number } | null = null;
+const CITY_FUSE_TTL_MS = 5 * 60 * 1000;
+
+function getCityFuse(cities: CityWithCount[]): Fuse<CityWithCount> {
+  const now = Date.now();
+  if (cityFuseCache && now - cityFuseCache.builtAt < CITY_FUSE_TTL_MS && cityFuseCache.count === cities.length) {
+    return cityFuseCache.fuse;
+  }
+  const fuse = new Fuse(cities, {
+    keys: ["name", "slug"],
+    threshold: 0.3,
+    ignoreLocation: true,
+  });
+  cityFuseCache = { fuse, builtAt: now, count: cities.length };
+  return fuse;
 }
 
 export async function GET(request: NextRequest) {
@@ -38,20 +62,11 @@ export async function GET(request: NextRequest) {
     searchListings(q),
   ]);
 
-  // Match cities using Fuse.js
-  const cityFuse = new Fuse(allCities, {
-    keys: ["name", "slug"],
-    threshold: 0.3,
-    ignoreLocation: true,
-  });
+  const cities = getCityFuse(allCities).search(q).map(res => res.item).slice(0, 5);
 
-  const cities = cityFuse.search(q).map(res => res.item).slice(0, 5);
-
-  // Match service tags
-  const services = isZip ? [] : matchTags(q, SERVICE_TAGS).slice(0, 4);
-
-  // Match specialty tags
-  const specialties = isZip ? [] : matchTags(q, SPECIALTY_TAGS).slice(0, 4);
+  // Tag matches only make sense for word-like queries, not full ZIP codes
+  const services = isZip ? [] : matchTags(q, serviceFuse).slice(0, 4);
+  const specialties = isZip ? [] : matchTags(q, specialtyFuse).slice(0, 4);
 
   // Limit groomer results for dropdown
   const groomerResults = groomers.slice(0, 6);

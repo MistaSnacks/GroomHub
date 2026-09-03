@@ -57,3 +57,10 @@ get_roles.sql
 
 # claude code
 .claude/
+
+# scratch / local tooling
+/temp_scripts/
+/screenshots/
+.superpowers/
+.vscode/
+/public/maui-assets/_compare/

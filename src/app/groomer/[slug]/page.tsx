@@ -6,11 +6,9 @@ import {
   MapPin,
   Phone,
   Globe,
-  Clock,
   Users,
   Calendar,
   ArrowSquareOut,
-  PawPrint,
   ShieldCheck,
   ImageSquare,
   CaretRight,
@@ -19,20 +17,25 @@ import {
   Hourglass,
 } from "@phosphor-icons/react/dist/ssr";
 import { BadgePill } from "@/components/badge-pill";
+import type { Badge } from "@/lib/types";
 import { GalleryImage } from "@/components/gallery-image";
 import { ListingCard } from "@/components/listing-card";
-import { FeaturedListingBanner } from "@/components/featured-listing-banner";
 import { AdSlot } from "@/components/ad-slot";
 import { WaveDivider } from "@/components/wave-divider";
 import { ContactForm } from "@/components/contact-form";
-import { getListingBySlug, getListingsByCity } from "@/lib/supabase/queries";
+import { getListingBySlug, getListingsByCity, canonicalCitySlug } from "@/lib/supabase/queries";
 import { getServiceLabel, getSpecialtyLabel, getServiceTag, getSpecialtyTag } from "@/lib/tags";
+import { usableListingImages } from "@/lib/images";
 import { localBusinessSchema, breadcrumbSchema } from "@/lib/schema";
 import { stateSlugFromAbbr, stateNameFromAbbr } from "@/lib/geography";
 import { PageViewTracker } from "@/components/page-view-tracker";
 import { clampDescription, clampTitle } from "@/lib/seo-utils";
 
 export const revalidate = 300;
+
+export async function generateStaticParams() {
+  return [];
+}
 
 interface GroomerPageProps {
   params: Promise<{ slug: string }>;
@@ -124,7 +127,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
     { name: "Home", href: "/" },
     { name: "Dog Grooming", href: "/dog-grooming" },
     { name: stateName, href: `/dog-grooming/${stateSlug}` },
-    { name: listing.city, href: `/dog-grooming/${stateSlug}/${listing.city_slug}` },
+    { name: listing.city, href: `/dog-grooming/${stateSlug}/${canonicalCitySlug(listing.city_slug)}` },
     { name: listing.name, href: `/groomer/${listing.slug}` },
   ];
 
@@ -177,9 +180,17 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
               <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
                 <div>
                   <div className="flex flex-wrap items-center gap-2 mb-2">
-                    {listing.badges?.map((badge, i) => (
-                      <BadgePill key={`${badge}-${i}`} badge={badge} size="md" />
-                    ))}
+                    {(() => {
+                      let displayBadges: Badge[] = listing.badges || [];
+                      if (listing.subscription_tier === "premium") {
+                        displayBadges = Array.from(new Set(["best-in-show", "paw-verified", ...displayBadges])) as Badge[];
+                      } else if (listing.subscription_tier === "featured") {
+                        displayBadges = Array.from(new Set(["paw-verified", ...displayBadges])) as Badge[];
+                      }
+                      return displayBadges.map((badge) => (
+                        <BadgePill key={badge} badge={badge} size="md" />
+                      ));
+                    })()}
                   </div>
                   <div className="flex items-center gap-3">
                     {listing.logo_url && (
@@ -270,6 +281,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
               {!listing.owner_id ? (
                 <Link
                   href={`/claim/${listing.slug}`}
+                  rel="nofollow"
                   className="inline-flex items-center gap-1.5 text-xs text-text-muted hover:text-brand-primary transition-colors"
                 >
                   <ShieldCheck weight="duotone" className="w-3.5 h-3.5" />
@@ -289,15 +301,26 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                 Gallery
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {listing.images && listing.images.filter((img) => !img.includes("unsplash.com") && !img.includes("pexels.com") && !img.includes("placehold.co") && !img.includes("placeholder")).length > 0 ? (
-                  listing.images
-                    .filter((img) => !img.includes("unsplash.com") && !img.includes("pexels.com") && !img.includes("placehold.co") && !img.includes("placeholder"))
+                {usableListingImages(listing.images).length > 0 ? (
+                  usableListingImages(listing.images)
                     .map((img, i) => (
                       <div key={i} className="aspect-square rounded-xl overflow-hidden bg-surface">
-                        <GalleryImage
-                          src={img}
-                          alt={`${listing.name} photo ${i + 1}`}
-                        />
+                        {i === 0 ? (
+                          // Remote listing photos are not all on allowlisted hosts.
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={img}
+                            alt={`${listing.name} photo ${i + 1}`}
+                            className="w-full h-full object-cover"
+                            loading="eager"
+                            fetchPriority="high"
+                          />
+                        ) : (
+                          <GalleryImage
+                            src={img}
+                            alt={`${listing.name} photo ${i + 1}`}
+                          />
+                        )}
                       </div>
                     ))
                 ) : (
@@ -438,7 +461,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
             )}
 
             {/* Hours */}
-            {listing.hours && listing.hours.length > 0 && (
+            {Array.isArray(listing.hours) && listing.hours.length > 0 && (
               <div className="rounded-2xl border border-border bg-white p-6">
                 <h2 className="font-heading text-xl font-semibold text-brand-primary mb-4">
                   Business Hours
@@ -478,7 +501,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
               {/* Premium Contact Form */}
               {listing.owner_id && (
                 <div className="mb-4">
-                  <ContactForm listingId={listing.id} listingName={listing.name} />
+                  <ContactForm listingId={listing.id} listingSlug={listing.slug} listingName={listing.name} />
                 </div>
               )}
 
@@ -630,6 +653,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                   </p>
                   <Link
                     href={`/claim/${listing.slug}`}
+                    rel="nofollow"
                     className="inline-flex items-center justify-center w-full px-4 py-2.5 rounded-full bg-brand-primary text-white font-semibold text-sm hover:bg-brand-primary/90 transition-colors"
                   >
                     Claim Listing

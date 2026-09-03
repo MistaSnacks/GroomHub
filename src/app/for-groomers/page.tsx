@@ -5,7 +5,6 @@ import {
   TrendUp,
   ChartBar,
   ShieldCheck,
-  Star,
   Check,
 } from "@phosphor-icons/react/dist/ssr";
 import { MauiMascot } from "@/components/maui-mascot";
@@ -16,6 +15,7 @@ export const metadata: Metadata = {
   title: "For Groomers | List Your Business",
   description:
     "Get your grooming business in front of thousands of pet owners in the PNW. Free to list, powerful tools to grow. Join the pack today.",
+  alternates: { canonical: "/for-groomers" },
   openGraph: {
     title: "For Groomers | List Your Business",
     description: "Get your grooming business in front of thousands of pet owners in the PNW. Free to list, powerful tools to grow.",
@@ -48,8 +48,8 @@ const features = [
   },
   {
     icon: ChartBar,
-    title: "Track Your Performance",
-    desc: "See how many pet owners view your listing, click your website, and request quotes.",
+    title: "Manage Your Listing",
+    desc: "Update photos, hours, services, and contact info from your dashboard anytime.",
     colored: false,
   },
   {
@@ -79,27 +79,6 @@ const steps = [
   },
 ];
 
-const testimonials = [
-  {
-    name: "Sarah C.",
-    business: "Furever Grooming",
-    text: "Since claiming our listing on the PNW Grooming Directory, our online bookings have jumped 40%. The quality of leads is amazing.",
-    rating: 5,
-  },
-  {
-    name: "Mike R.",
-    business: "Puget Pups Mobile",
-    text: "Finally a platform that understands groomers. No competitor ads on my profile, fair pricing, and the dashboard actually shows useful data.",
-    rating: 5,
-  },
-  {
-    name: "Jenny L.",
-    business: "Rose City Groomers",
-    text: "We went from 3 new clients per month to over 15 after getting our Featured listing. Best marketing investment we've made.",
-    rating: 5,
-  },
-];
-
 export default function ForGroomersPage() {
   return (
     <>
@@ -120,7 +99,7 @@ export default function ForGroomersPage() {
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                 <Link
-                  href="/get-listed"
+                  href="/get-listed#claim"
                   className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-brand-primary text-white font-bold text-lg hover:bg-brand-primary/90 transition-all w-full sm:w-auto"
                 >
                   Claim Your Free Listing
@@ -140,7 +119,7 @@ export default function ForGroomersPage() {
             </div>
 
             <div className="flex-1 flex justify-center">
-              <MauiMascot src="/maui-assets/14-maui-sitting-pretty-alt.png" size={360} animation="float" />
+              <MauiMascot src="/maui-assets/14-maui-sitting-pretty-alt.png" size={360} animation="float" priority />
             </div>
           </div>
         </div>
@@ -223,41 +202,8 @@ export default function ForGroomersPage() {
         </div>
       </section>
 
-      <WaveDivider variant="gentle" fromColor="#FDF8F0" toColor="#FFFFFF" />
-
-      {/* Testimonials */}
-      <section className="bg-white py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="font-heading text-3xl md:text-4xl font-bold text-brand-primary mb-2">
-              Groomers love the Directory
-            </h2>
-          </div>
-          <AnimatedSection variant="stagger" className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map((t) => (
-              <AnimatedItem key={t.name}>
-                <div className="rounded-2xl border border-border bg-white p-6 h-full flex flex-col">
-                  <div className="flex items-center gap-0.5 mb-4">
-                    {Array.from({ length: t.rating }).map((_, i) => (
-                      <Star key={i} weight="fill" className="h-4 w-4 text-[#FBC02D]" />
-                    ))}
-                  </div>
-                  <p className="text-sm text-text leading-relaxed mb-6 italic flex-1">
-                    &ldquo;{t.text}&rdquo;
-                  </p>
-                  <div>
-                    <p className="text-sm font-semibold text-brand-primary">{t.name}</p>
-                    <p className="text-xs text-text-muted mt-0.5">{t.business}</p>
-                  </div>
-                </div>
-              </AnimatedItem>
-            ))}
-          </AnimatedSection>
-        </div>
-      </section>
-
       {/* Final CTA - Coral */}
-      <WaveDivider variant="steep" fromColor="#FFFFFF" toColor="#FA8072" />
+      <WaveDivider variant="steep" fromColor="#FDF8F0" toColor="#FA8072" />
 
       <section className="bg-brand-accent py-16 md:py-20 relative overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
@@ -273,7 +219,7 @@ export default function ForGroomersPage() {
                 Join the PNW&apos;s best pet grooming directory today. Start free, upgrade when you&apos;re ready.
               </p>
               <Link
-                href="/get-listed"
+                href="/get-listed#claim"
                 className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-white text-brand-accent font-bold text-lg hover:bg-surface transition-all"
               >
                 Claim Your Free Listing

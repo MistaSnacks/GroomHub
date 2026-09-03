@@ -28,7 +28,7 @@ export function HomeHero({ totalCount }: HomeHeroProps) {
                         transition={{ duration: 0.6, ease: "easeOut" }}
                         className="flex-1 text-center lg:text-left z-10 lg:pl-4 order-2 lg:order-1"
                     >
-                        <div className="inline-flex items-center gap-2 bg-brand-accent/15 border border-brand-accent/30 rounded-full px-4 py-1.5 text-sm mb-6 text-brand-accent shadow-sm font-semibold tracking-wide">
+                        <div className="inline-flex items-center gap-2 bg-brand-accent/15 border border-brand-accent/30 rounded-full px-4 py-1.5 text-sm mb-6 text-brand-accent-ink shadow-sm font-semibold tracking-wide">
                             <Dog weight="duotone" className="w-5 h-5" /> PNW&apos;s #1 Pet Grooming Directory
                         </div>
 
@@ -57,7 +57,7 @@ export function HomeHero({ totalCount }: HomeHeroProps) {
                         transition={{ duration: 0.5, delay: 0.3, type: "spring", stiffness: 100 }}
                         className="shrink-0 flex flex-col items-center justify-end z-0 relative group order-1 lg:order-2"
                     >
-                        <MauiMascot size={320} interactive className="drop-shadow-2xl z-10" />
+                        <MauiMascot size={320} interactive priority className="drop-shadow-2xl z-10" />
 
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}

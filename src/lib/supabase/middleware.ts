@@ -1,5 +1,23 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { isAdminEmail } from '@/lib/admin'
+
+function copyCookies(from: NextResponse, to: NextResponse) {
+    from.cookies.getAll().forEach(({ name, value }) => {
+        to.cookies.set(name, value)
+    })
+}
+
+function loginRedirect(request: NextRequest, supabaseResponse: NextResponse) {
+    const url = request.nextUrl.clone()
+    const dest = `${request.nextUrl.pathname}${request.nextUrl.search}`
+    url.pathname = '/login'
+    url.search = ''
+    url.searchParams.set('redirect', dest)
+    const redirectResponse = NextResponse.redirect(url)
+    copyCookies(supabaseResponse, redirectResponse)
+    return redirectResponse
+}
 
 export async function updateSession(request: NextRequest) {
     let supabaseResponse = NextResponse.next({
@@ -15,7 +33,7 @@ export async function updateSession(request: NextRequest) {
                     return request.cookies.getAll()
                 },
                 setAll(cookiesToSet) {
-                    cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
+                    cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
                     supabaseResponse = NextResponse.next({
                         request,
                     })
@@ -35,14 +53,19 @@ export async function updateSession(request: NextRequest) {
         data: { user },
     } = await supabase.auth.getUser()
 
-    if (
-        !user &&
-        request.nextUrl.pathname.startsWith('/dashboard')
-    ) {
-        // no user, potentially respond by redirecting the user to the login page
+    const pathname = request.nextUrl.pathname
+
+    if (!user && (pathname.startsWith('/dashboard') || pathname.startsWith('/admin'))) {
+        return loginRedirect(request, supabaseResponse)
+    }
+
+    if (user && pathname.startsWith('/admin') && !isAdminEmail(user.email)) {
         const url = request.nextUrl.clone()
-        url.pathname = '/login'
-        return NextResponse.redirect(url)
+        url.pathname = '/'
+        url.search = ''
+        const redirectResponse = NextResponse.redirect(url)
+        copyCookies(supabaseResponse, redirectResponse)
+        return redirectResponse
     }
 
     // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're

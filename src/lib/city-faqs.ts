@@ -66,9 +66,13 @@ function groomerCountPhrase(cityName: string, count: number): string {
 export function buildDogGroomingFaqs(
   cityName: string,
   stateAbbr: string,
-  groomerCount: number,
-  parkCount: number
+  listings: { service_tags?: string[] }[],
+  _parkCount: number
 ) {
+  const groomerCount = listings.length;
+  const mobileCount = listings.filter((l) =>
+    l.service_tags?.includes("mobile-grooming")
+  ).length;
   const stateName = stateAbbr === "WA" ? "Washington" : "Oregon";
   const priceRange = getCityPriceRange(cityName, stateAbbr);
   const dry = isDryClimate(cityName);
@@ -92,7 +96,9 @@ export function buildDogGroomingFaqs(
     },
     {
       question: `Are there mobile dog groomers in ${cityName}?`,
-      answer: `Yes, several groomers in ${cityName}, ${stateAbbr} offer mobile grooming services. Mobile groomers come to your home in a fully equipped van, which is convenient for busy pet owners or dogs that get anxious at salons. Check individual listings on GroomLocal for mobile availability.`,
+      answer: mobileCount === 0
+        ? `No mobile groomers are listed in ${cityName}, ${stateAbbr} yet. Check nearby cities on GroomLocal for mobile grooming options.`
+        : `${cityName}, ${stateAbbr} has ${mobileCount} mobile groomer${mobileCount === 1 ? "" : "s"} listed. Mobile groomers come to your home in a fully equipped van, which is convenient for busy pet owners or dogs that get anxious at salons. Check individual listings on GroomLocal for mobile availability.`,
     },
     {
       question: "What grooming services do most groomers offer?",

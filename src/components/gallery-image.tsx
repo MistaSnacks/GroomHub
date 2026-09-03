@@ -26,6 +26,8 @@ export function GalleryImage({ src, alt }: GalleryImageProps) {
   }
 
   return (
+    // Listing photos come from many scraped hosts; next.config only allowlists a few.
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={ensureHttps(src)}
       alt={alt}

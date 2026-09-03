@@ -14,14 +14,14 @@ export function PremiumPlaceholderCard({ index = 0 }: { index?: number }) {
 
       <Link href="/pricing" className="block rounded-xl overflow-hidden flex flex-col h-full border-t-[6px] border border-border border-t-brand-secondary/40 border-dashed">
         {/* Placeholder image area */}
-        <div className="relative w-full h-40 flex flex-col items-center justify-center bg-gradient-to-br from-surface via-white to-brand-secondary/5">
+        <div className="relative w-full aspect-[4/3] flex flex-col items-center justify-center bg-gradient-to-br from-surface via-white to-brand-secondary/5">
           <Storefront weight="duotone" className="w-14 h-14 text-brand-secondary/30 mb-2" />
           <span className="text-sm font-heading font-semibold text-brand-primary/40">
             Your Business Here
           </span>
         </div>
 
-        <div className="p-4">
+        <div className="p-4 flex-1 flex flex-col">
           {/* Fake header skeleton */}
           <div className="mb-2">
             <div className="h-5 bg-surface rounded-full w-3/4 mb-2"></div>

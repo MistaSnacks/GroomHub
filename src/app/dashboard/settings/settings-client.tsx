@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Key, Warning, Trash, ShieldCheck, ArrowsClockwise } from "@phosphor-icons/react/dist/ssr";
+import { Key, Warning, Trash, ArrowsClockwise } from "@phosphor-icons/react/dist/ssr";
 import { unclaimListing, updatePassword, deleteAccount } from "../actions";
 
 interface SettingsClientProps {

@@ -26,7 +26,7 @@ const http = require('http');
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 const DATA_DIR = path.join(PROJECT_ROOT, 'data');
 const RAW_PRIMARY = path.join(DATA_DIR, 'groomers_wa_or_raw.json');
-const RAW_FALLBACK = path.join(PROJECT_ROOT, 'groomers_osm.json');
+const RAW_FALLBACK = path.join(PROJECT_ROOT, 'temp_scripts', 'groomers_osm.json');
 const OUTPUT_FILE = path.join(DATA_DIR, 'groomers_enriched.json');
 const PROGRESS_FILE = path.join(DATA_DIR, '.enrich_progress.json');
 

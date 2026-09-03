@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient as createServiceClient } from "@supabase/supabase-js";
+import { requireAdmin } from "@/lib/admin";
 
 function getAdmin() {
   return createServiceClient(
@@ -10,6 +11,9 @@ function getAdmin() {
 }
 
 export async function getClaimedListings() {
+  if (!(await requireAdmin())) {
+    throw new Error("Unauthorized");
+  }
   const admin = getAdmin();
   const { data, error } = await admin
     .from("business_listings")
@@ -25,6 +29,10 @@ export async function getClaimedListings() {
 }
 
 export async function toggleFeatured(slug: string, featured: boolean) {
+  if (!(await requireAdmin())) {
+    throw new Error("Unauthorized");
+  }
+
   const admin = getAdmin();
   const { error } = await admin
     .from("business_listings")

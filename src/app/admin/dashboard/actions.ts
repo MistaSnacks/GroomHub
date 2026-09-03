@@ -2,13 +2,16 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createServiceClient } from "@supabase/supabase-js";
+import { requireAdmin } from "@/lib/admin";
 
 export async function getUserSignups(days: number) {
+    if (!(await requireAdmin())) {
+        throw new Error("Unauthorized");
+    }
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
     const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
     const supabase = createServiceClient(supabaseUrl, serviceKey);
 
-    const endDate = new Date();
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days);
     const prevStartDate = new Date();
@@ -60,9 +63,12 @@ export async function getUserSignups(days: number) {
 }
 
 export async function getDashboardAnalytics(days: number) {
+    if (!(await requireAdmin())) {
+        throw new Error("Unauthorized");
+    }
+
     const supabase = await createClient();
 
-    const endDate = new Date();
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days);
 

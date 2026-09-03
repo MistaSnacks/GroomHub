@@ -25,13 +25,8 @@ export default async function ClaimPlansPage({
         redirect(`/dog-grooming`);
     }
 
-    // If already claimed by THIS user, send them to success
-    if (listing.owner_id === user.id) {
-        redirect(`/claim/${slug}/success`);
-    }
-
-    // If claimed by someone else, show the groomer profile
-    if (listing.owner_id) {
+    // Existing owners can change plans. Only bounce visitors who don't own it.
+    if (listing.owner_id && listing.owner_id !== user.id) {
         redirect(`/groomer/${slug}`);
     }
 

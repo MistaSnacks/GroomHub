@@ -3,8 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { CaretDown, MapPin, Scissors, PawPrint } from "@phosphor-icons/react/dist/ssr";
-import { motion, AnimatePresence } from "framer-motion";
-import { STATES, stateSlugFromAbbr, stateNameFromAbbr } from "@/lib/geography";
+import { stateSlugFromAbbr } from "@/lib/geography";
 import { SERVICE_TAGS, SPECIALTY_TAGS } from "@/lib/tags";
 import type { CityWithCount } from "@/lib/types";
 
@@ -31,7 +30,10 @@ export function NavDropdown({ label, type, cities = [] }: NavDropdownProps) {
   return (
     <div ref={ref} className="relative">
       <button
+        type="button"
         onClick={() => setOpen(!open)}
+        aria-expanded={open}
+        aria-haspopup="true"
         className="flex items-center gap-1 text-sm font-medium text-text-muted hover:text-brand-primary transition-colors"
       >
         {label}
@@ -41,25 +43,17 @@ export function NavDropdown({ label, type, cities = [] }: NavDropdownProps) {
         />
       </button>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.15 }}
-            className="absolute top-full left-0 mt-2 z-50 min-w-[320px] rounded-xl border border-border bg-white shadow-lg overflow-hidden"
-          >
-            {type === "cities" ? (
-              <CitiesDropdown cities={cities} onClose={() => setOpen(false)} />
-            ) : type === "services" ? (
-              <ServicesDropdown onClose={() => setOpen(false)} />
-            ) : (
-              <SpecialtiesDropdown onClose={() => setOpen(false)} />
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {open && (
+        <div className="absolute top-full left-0 mt-2 z-50 min-w-[320px] rounded-xl border border-border bg-white shadow-lg overflow-hidden animate-nav-dropdown">
+          {type === "cities" ? (
+            <CitiesDropdown cities={cities} onClose={() => setOpen(false)} />
+          ) : type === "services" ? (
+            <ServicesDropdown onClose={() => setOpen(false)} />
+          ) : (
+            <SpecialtiesDropdown onClose={() => setOpen(false)} />
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -165,7 +159,7 @@ function SpecialtiesDropdown({ onClose }: { onClose: () => void }) {
               onClick={onClose}
               className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm text-text hover:bg-surface transition-colors"
             >
-              <PawPrint weight="fill" className="w-3 h-3 text-brand-accent shrink-0" />
+              <PawPrint weight="fill" className="w-3 h-3 text-brand-accent-ink shrink-0" />
               {tag.label}
             </Link>
           </li>

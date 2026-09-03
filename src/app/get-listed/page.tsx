@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "Get Listed | Add Your Grooming Business",
   description:
     "Not in our directory yet? Submit your grooming business to GroomLocal and start connecting with local pet parents across the PNW.",
+  alternates: { canonical: "/get-listed" },
   openGraph: {
     title: "Get Listed | Add Your Grooming Business",
     description: "Submit your grooming business to GroomLocal and start connecting with local pet parents across the PNW.",
@@ -58,7 +59,9 @@ export default function GetListedPage() {
 
             {/* Search + Form */}
             <div className="lg:col-span-3 space-y-6">
-              <ListingSearch />
+              <div id="claim">
+                <ListingSearch />
+              </div>
               <GetListedForm />
             </div>
 
@@ -106,10 +109,10 @@ export default function GetListedPage() {
               <div className="rounded-2xl p-5 bg-brand-secondary">
                 <h3 className="font-heading font-bold mb-2 text-slate-900">Already listed?</h3>
                 <p className="text-sm mb-3 text-slate-700">
-                  Use the search above to find your business and claim it. Claiming unlocks editing, photo uploads, and analytics.
+                  Use the search above to find your business and claim it. Claiming unlocks editing and photo uploads.
                 </p>
                 <Link
-                  href="/for-groomers"
+                  href="/pricing"
                   className="text-sm font-semibold text-slate-900 hover:text-brand-primary transition-colors underline underline-offset-2"
                 >
                   Learn about groomer tools

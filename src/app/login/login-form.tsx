@@ -4,16 +4,30 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight } from "@phosphor-icons/react";
 import { createClient } from "@/lib/supabase/browser";
+import { safeRedirectPath } from "@/lib/safe-redirect";
 
 interface LoginFormProps {
   redirectTo?: string;
+  authError?: string;
 }
 
-export function LoginForm({ redirectTo }: LoginFormProps) {
+function mapAuthError(code: string): string {
+  if (code === "access_denied") {
+    return "Access was denied. Sign in below or request a new link.";
+  }
+  if (code === "otp_expired") {
+    return "That confirmation link has expired. Request a new one.";
+  }
+  return "That link is invalid or has expired. Request a new one.";
+}
+
+export function LoginForm({ redirectTo, authError }: LoginFormProps) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(
+    authError ? mapAuthError(authError) : null
+  );
   const [loading, setLoading] = useState(false);
   const [resetSent, setResetSent] = useState(false);
 
@@ -34,7 +48,7 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
       return;
     }
 
-    router.push(redirectTo || "/dashboard");
+    router.push(safeRedirectPath(redirectTo));
     router.refresh();
   };
 
@@ -112,7 +126,7 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
           className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm shadow-sm transition-colors focus:border-brand-primary focus:ring-1 focus:ring-brand-primary outline-none"
           placeholder="Your password"
           required
-          minLength={6}
+          minLength={8}
         />
       </div>
 

@@ -38,7 +38,7 @@ export function GetListedForm() {
           Submission received!
         </h2>
         <p className="text-text-muted">
-          We&apos;ll review your business and get your listing live within 48 hours. Keep an eye on your inbox for a confirmation.
+          We&apos;ll review your business and get your listing live within 48 hours.
         </p>
       </div>
     );
@@ -58,24 +58,32 @@ export function GetListedForm() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-5">
+        <input
+          type="text"
+          name="hp_field"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          className="absolute -left-[9999px] h-0 w-0 overflow-hidden"
+        />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-brand-primary mb-1.5">Business name *</label>
-            <input type="text" name="business_name" required className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" placeholder="e.g. Pawfect Grooming" />
+            <label htmlFor="listed-business-name" className="block text-sm font-medium text-brand-primary mb-1.5">Business name *</label>
+            <input id="listed-business-name" type="text" name="business_name" required className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" placeholder="e.g. Pawfect Grooming" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-brand-primary mb-1.5">Your name</label>
-            <input type="text" name="contact_name" className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" placeholder="First and last" />
+            <label htmlFor="listed-contact-name" className="block text-sm font-medium text-brand-primary mb-1.5">Your name</label>
+            <input id="listed-contact-name" type="text" name="contact_name" className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" placeholder="First and last" />
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-brand-primary mb-1.5">City *</label>
-            <input type="text" name="city" required className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" placeholder="e.g. Seattle" />
+            <label htmlFor="listed-city" className="block text-sm font-medium text-brand-primary mb-1.5">City *</label>
+            <input id="listed-city" type="text" name="city" required className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" placeholder="e.g. Seattle" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-brand-primary mb-1.5">State *</label>
-            <select name="state" required className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent bg-white">
+            <label htmlFor="listed-state" className="block text-sm font-medium text-brand-primary mb-1.5">State *</label>
+            <select id="listed-state" name="state" required className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent bg-white">
               <option value="">Select state</option>
               <option value="WA">Washington</option>
               <option value="OR">Oregon</option>
@@ -83,20 +91,20 @@ export function GetListedForm() {
           </div>
         </div>
         <div>
-          <label className="block text-sm font-medium text-brand-primary mb-1.5">Email *</label>
-          <input type="email" name="email" required className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" placeholder="you@yourbusiness.com" />
+          <label htmlFor="listed-email" className="block text-sm font-medium text-brand-primary mb-1.5">Email *</label>
+          <input id="listed-email" type="email" name="email" required className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" placeholder="you@yourbusiness.com" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-brand-primary mb-1.5">Phone</label>
-          <input type="tel" name="phone" className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" placeholder="(555) 123-4567" />
+          <label htmlFor="listed-phone" className="block text-sm font-medium text-brand-primary mb-1.5">Phone</label>
+          <input id="listed-phone" type="tel" name="phone" className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" placeholder="(555) 123-4567" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-brand-primary mb-1.5">Website</label>
-          <input type="url" name="website" className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" placeholder="https://yourbusiness.com" />
+          <label htmlFor="listed-website" className="block text-sm font-medium text-brand-primary mb-1.5">Website</label>
+          <input id="listed-website" type="url" name="website" className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" placeholder="https://yourbusiness.com" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-brand-primary mb-1.5">Anything else?</label>
-          <textarea name="notes" rows={3} className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent resize-none" placeholder="Services offered, hours, anything we should know..." />
+          <label htmlFor="listed-notes" className="block text-sm font-medium text-brand-primary mb-1.5">Anything else?</label>
+          <textarea id="listed-notes" name="notes" rows={3} className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent resize-none" placeholder="Services offered, hours, anything we should know..." />
         </div>
         <button
           type="submit"

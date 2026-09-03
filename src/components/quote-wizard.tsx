@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -38,6 +38,9 @@ const serviceOptions = [
 export function QuoteWizard() {
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const hpRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
     petType: "" as string,
     petName: "",
@@ -55,6 +58,37 @@ export function QuoteWizard() {
 
   const updateForm = (field: string, value: string | string[]) => {
     setForm((prev) => ({ ...prev, [field]: value }));
+    setError("");
+  };
+
+  const validateStep = (s: number): string => {
+    if (s === 0) {
+      if (!form.petType) return "Please select a pet type.";
+      if (!form.petSize) return "Please select your pet's size.";
+    }
+    if (s === 1 && form.services.length === 0) {
+      return "Please select at least one service.";
+    }
+    if (s === 2 && !form.city.trim()) {
+      return "Please enter your city or ZIP code.";
+    }
+    if (s === 3) {
+      if (!form.name.trim()) return "Please enter your name.";
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+        return "Please enter a valid email address.";
+      }
+    }
+    return "";
+  };
+
+  const goNext = () => {
+    const message = validateStep(step);
+    if (message) {
+      setError(message);
+      return;
+    }
+    setError("");
+    setStep(step + 1);
   };
 
   const toggleService = (service: string) => {
@@ -64,8 +98,31 @@ export function QuoteWizard() {
     updateForm("services", services);
   };
 
-  const handleSubmit = () => {
-    setSubmitted(true);
+  const handleSubmit = async () => {
+    const message = validateStep(step);
+    if (message) {
+      setError(message);
+      return;
+    }
+    setError("");
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/quotes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, hp_field: hpRef.current?.value ?? "" }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(data.error || "Something went wrong. Please try again.");
+        return;
+      }
+      setSubmitted(true);
+    } catch {
+      setError("Something went wrong. Please check your connection and try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (submitted) {
@@ -78,9 +135,9 @@ export function QuoteWizard() {
           Pawsome! You&apos;re all set!
         </h2>
         <p className="text-text-muted max-w-md mx-auto mb-2">
-          We&apos;re fetching quotes from the best groomers in{" "}
-          <strong>{form.city || "your area"}</strong>. Expect to hear back
-          within 24 hours.
+          We&apos;ll forward your request to local groomers in{" "}
+          <strong>{form.city || "your area"}</strong>. They can reach out
+          when they have availability.
         </p>
         <p className="text-sm text-text-muted">
           {form.petName && (
@@ -127,11 +184,11 @@ export function QuoteWizard() {
       {step === 0 && (
         <div className="space-y-6">
           <h3 className="font-[family-name:var(--font-fredoka)] text-2xl font-semibold text-brand-primary">
-            Tell us about your fur baby
+            Tell us about your pet
           </h3>
 
           <div>
-            <label className="text-sm font-medium text-text mb-2 block">
+            <label id="quote-pet-type-label" className="text-sm font-medium text-text mb-2 block">
               What kind of pet?
             </label>
             <div className="flex gap-3">
@@ -156,10 +213,11 @@ export function QuoteWizard() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-sm font-medium text-text mb-1.5 block">
+              <label htmlFor="quote-pet-name" className="text-sm font-medium text-text mb-1.5 block">
                 Pet&apos;s Name
               </label>
               <input
+                id="quote-pet-name"
                 type="text"
                 value={form.petName}
                 onChange={(e) => updateForm("petName", e.target.value)}
@@ -168,10 +226,11 @@ export function QuoteWizard() {
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-text mb-1.5 block">
+              <label htmlFor="quote-pet-breed" className="text-sm font-medium text-text mb-1.5 block">
                 Breed
               </label>
               <input
+                id="quote-pet-breed"
                 type="text"
                 value={form.petBreed}
                 onChange={(e) => updateForm("petBreed", e.target.value)}
@@ -182,7 +241,7 @@ export function QuoteWizard() {
           </div>
 
           <div>
-            <label className="text-sm font-medium text-text mb-2 block">
+            <label id="quote-pet-size-label" className="text-sm font-medium text-text mb-2 block">
               Size
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -241,12 +300,13 @@ export function QuoteWizard() {
           </h3>
 
           <div>
-            <label className="text-sm font-medium text-text mb-1.5 block">
+            <label htmlFor="quote-city" className="text-sm font-medium text-text mb-1.5 block">
               City or ZIP Code
             </label>
             <div className="relative">
               <MapPin weight="fill" className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" />
               <input
+                id="quote-city"
                 type="text"
                 value={form.city}
                 onChange={(e) => updateForm("city", e.target.value)}
@@ -258,10 +318,11 @@ export function QuoteWizard() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-sm font-medium text-text mb-1.5 block">
+              <label htmlFor="quote-date" className="text-sm font-medium text-text mb-1.5 block">
                 Preferred Date
               </label>
               <input
+                id="quote-date"
                 type="date"
                 value={form.preferredDate}
                 onChange={(e) => updateForm("preferredDate", e.target.value)}
@@ -269,10 +330,11 @@ export function QuoteWizard() {
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-text mb-1.5 block">
+              <label htmlFor="quote-time" className="text-sm font-medium text-text mb-1.5 block">
                 Preferred Time
               </label>
               <select
+                id="quote-time"
                 value={form.preferredTime}
                 onChange={(e) => updateForm("preferredTime", e.target.value)}
                 className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent"
@@ -296,12 +358,13 @@ export function QuoteWizard() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="sm:col-span-2">
-              <label className="text-sm font-medium text-text mb-1.5 block">
+              <label htmlFor="quote-name" className="text-sm font-medium text-text mb-1.5 block">
                 Your Name
               </label>
               <div className="relative">
                 <User weight="fill" className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" />
                 <input
+                  id="quote-name"
                   type="text"
                   value={form.name}
                   onChange={(e) => updateForm("name", e.target.value)}
@@ -311,10 +374,11 @@ export function QuoteWizard() {
               </div>
             </div>
             <div>
-              <label className="text-sm font-medium text-text mb-1.5 block">
+              <label htmlFor="quote-email" className="text-sm font-medium text-text mb-1.5 block">
                 Email
               </label>
               <input
+                id="quote-email"
                 type="email"
                 value={form.email}
                 onChange={(e) => updateForm("email", e.target.value)}
@@ -323,10 +387,11 @@ export function QuoteWizard() {
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-text mb-1.5 block">
+              <label htmlFor="quote-phone" className="text-sm font-medium text-text mb-1.5 block">
                 Phone
               </label>
               <input
+                id="quote-phone"
                 type="tel"
                 value={form.phone}
                 onChange={(e) => updateForm("phone", e.target.value)}
@@ -337,10 +402,11 @@ export function QuoteWizard() {
           </div>
 
           <div>
-            <label className="text-sm font-medium text-text mb-1.5 block">
+            <label htmlFor="quote-notes" className="text-sm font-medium text-text mb-1.5 block">
               Anything else we should know?
             </label>
             <textarea
+              id="quote-notes"
               value={form.notes}
               onChange={(e) => updateForm("notes", e.target.value)}
               placeholder="e.g. My dog is anxious around dryers, prefers a teddy bear cut..."
@@ -351,11 +417,29 @@ export function QuoteWizard() {
         </div>
       )}
 
+      <input
+        ref={hpRef}
+        type="text"
+        name="hp_field"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="hidden"
+        defaultValue=""
+      />
+
+      {/* Validation / submit error */}
+      {error && (
+        <p role="alert" className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+          {error}
+        </p>
+      )}
+
       {/* Navigation */}
       <div className="flex items-center justify-between mt-8 pt-6 border-t border-border">
         {step > 0 ? (
           <button
-            onClick={() => setStep(step - 1)}
+            onClick={() => { setError(""); setStep(step - 1); }}
             className="flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium text-text-muted hover:bg-surface transition-colors"
           >
             <ArrowLeft weight="bold" className="h-4 w-4" /> Back
@@ -366,7 +450,7 @@ export function QuoteWizard() {
 
         {step < steps.length - 1 ? (
           <button
-            onClick={() => setStep(step + 1)}
+            onClick={goNext}
             className="flex items-center gap-2 rounded-full bg-brand-secondary px-6 py-2.5 text-sm font-semibold text-white hover:bg-brand-secondary/90 transition-colors"
           >
             Next <ArrowRight weight="bold" className="h-4 w-4" />
@@ -374,10 +458,11 @@ export function QuoteWizard() {
         ) : (
           <button
             onClick={handleSubmit}
-            className="flex items-center gap-2 rounded-full bg-brand-primary px-6 py-2.5 text-sm font-semibold text-white hover:bg-brand-primary/90 transition-colors"
+            disabled={submitting}
+            className="flex items-center gap-2 rounded-full bg-brand-primary px-6 py-2.5 text-sm font-semibold text-white hover:bg-brand-primary/90 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           >
             <PawPrint weight="fill" className="h-4 w-4" />
-            Fetch My Quotes
+            {submitting ? "Sending..." : "Send My Request"}
           </button>
         )}
       </div>

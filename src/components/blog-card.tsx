@@ -1,7 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import { CalendarBlank, Clock, ImageSquare } from "@phosphor-icons/react/dist/ssr";
 import type { BlogPostFull } from "@/lib/blog";
-import { getCategoryLabel } from "@/lib/blog";
+import { formatBlogDate, getCategoryLabel } from "@/lib/blog";
 
 interface BlogCardProps {
   post: BlogPostFull;
@@ -17,13 +18,15 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
       className={`group block card-lift bg-white rounded-2xl border border-border overflow-hidden ${featured ? "md:flex" : ""}`}
     >
       {/* Image */}
-      <div className={`bg-gradient-to-br from-bg to-brand-secondary/5 flex items-center justify-center ${featured ? "md:w-2/5 aspect-[4/3] md:aspect-auto" : "aspect-[16/9]"}`}>
+      <div className={`relative bg-gradient-to-br from-bg to-brand-secondary/5 flex items-center justify-center ${featured ? "md:w-2/5 aspect-[4/3] md:aspect-auto" : "aspect-[16/9]"}`}>
         {post.image ? (
-          <img
+          <Image
             src={post.image}
             alt={post.title}
-            className="w-full h-full object-contain p-4"
-            loading="lazy"
+            fill
+            sizes={featured ? "(min-width: 768px) 40vw, 100vw" : "(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"}
+            className="object-contain p-4"
+            priority={featured}
           />
         ) : (
           <div className="flex flex-col items-center justify-center py-8">
@@ -49,7 +52,7 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
         <div className="flex items-center gap-4 text-xs text-text-muted">
           <span className="flex items-center gap-1">
             <CalendarBlank weight="bold" className="w-3.5 h-3.5" />
-            {new Date(post.date).toLocaleDateString("en-US", {
+            {formatBlogDate(post.date, {
               month: "short",
               day: "numeric",
               year: "numeric",

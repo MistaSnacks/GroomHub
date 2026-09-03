@@ -10,8 +10,6 @@ import {
     CartesianGrid,
     Tooltip,
     ResponsiveContainer,
-    BarChart,
-    Bar,
     PieChart,
     Pie,
     Cell,
@@ -25,11 +23,26 @@ import {
     Eye,
     UserPlus,
     ShieldCheck,
+    type LucideIcon,
 } from "lucide-react";
 
+type DashboardAnalytics = Awaited<ReturnType<typeof getDashboardAnalytics>>;
+type UserSignupsData = Awaited<ReturnType<typeof getUserSignups>>;
+type TrendDirection = UserSignupsData["trend"];
 
-
-const KPICard = ({ title, value, trend, trendValue, icon: Icon }: any) => {
+const KPICard = ({
+    title,
+    value,
+    trend,
+    trendValue,
+    icon: Icon,
+}: {
+    title: string;
+    value: string;
+    trend: TrendDirection;
+    trendValue: string;
+    icon: LucideIcon;
+}) => {
     const isPositive = trend === "up";
     return (
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between">
@@ -64,25 +77,28 @@ const KPICard = ({ title, value, trend, trendValue, icon: Icon }: any) => {
 
 export function AnalyticsDashboard() {
     const [dateRange, setDateRange] = useState("30D");
-    const [isLoading, setIsLoading] = useState(true);
-    const [data, setData] = useState<any>(null);
-    const [userData, setUserData] = useState<any>(null);
+    const [data, setData] = useState<DashboardAnalytics | null>(null);
+    const [userData, setUserData] = useState<UserSignupsData | null>(null);
+    const [loadedDays, setLoadedDays] = useState<number | null>(null);
+
+    const days = dateRange === "7D" ? 7 : dateRange === "90D" ? 90 : 30;
+    const isLoading = loadedDays !== days || !data;
 
     useEffect(() => {
-        let days = 30;
-        if (dateRange === "7D") days = 7;
-        if (dateRange === "90D") days = 90;
-
-        setIsLoading(true);
+        let cancelled = false;
         Promise.all([
             getDashboardAnalytics(days),
             getUserSignups(days),
         ]).then(([analytics, users]) => {
+            if (cancelled) return;
             setData(analytics);
             setUserData(users);
-            setIsLoading(false);
+            setLoadedDays(days);
         });
-    }, [dateRange]);
+        return () => {
+            cancelled = true;
+        };
+    }, [days]);
 
     if (isLoading || !data) {
         return (
@@ -109,6 +125,8 @@ export function AnalyticsDashboard() {
                     {["7D", "30D", "90D"].map((range) => (
                         <button
                             key={range}
+                            type="button"
+                            aria-pressed={dateRange === range}
                             onClick={() => setDateRange(range)}
                             className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${dateRange === range
                                 ? "bg-white text-gray-900 shadow-sm"
@@ -127,7 +145,9 @@ export function AnalyticsDashboard() {
                     (tab, i) => (
                         <button
                             key={tab}
-                            className={`px-1 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${i === 0
+                            type="button"
+                            aria-pressed={i === 0}
+                            className={`px-1 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${i === 0}
                                 ? "border-blue-500 text-blue-600"
                                 : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                                 }`}
@@ -274,8 +294,8 @@ export function AnalyticsDashboard() {
                         Action breakdown
                     </h2>
                     <div className="space-y-6">
-                        {data.breakdownData.map((item: any, i: number) => {
-                            const maxVal = data.breakdownData.reduce((acc: number, cur: any) => acc + cur.value, 0);
+                        {data.breakdownData.map((item, i) => {
+                            const maxVal = data.breakdownData.reduce((acc, cur) => acc + cur.value, 0);
                             const percent = maxVal === 0 ? 0 : Math.round((item.value / maxVal) * 100);
 
                             return (
@@ -335,7 +355,7 @@ export function AnalyticsDashboard() {
                                     stroke="none"
                                     cornerRadius={10}
                                 >
-                                    {data.searchRateData.map((entry: any, index: number) => (
+                                    {data.searchRateData.map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={entry.color} />
                                     ))}
                                 </Pie>
@@ -354,7 +374,7 @@ export function AnalyticsDashboard() {
                         Top performing searches
                     </h2>
                     <div className="flex flex-col justify-center h-[200px] gap-4">
-                        {data.topSearches.length > 0 ? data.topSearches.map((search: any, i: number) => {
+                        {data.topSearches.length > 0 ? data.topSearches.map((search, i) => {
                             const maxVol = data.topSearches[0].volume;
                             const width = Math.max(10, Math.round((search.volume / maxVol) * 100));
                             return (
@@ -403,7 +423,7 @@ export function AnalyticsDashboard() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {userData.recentSignups.map((user: any, i: number) => (
+                                {userData.recentSignups.map((user, i) => (
                                     <tr key={i} className="border-b border-gray-50 hover:bg-gray-50/50">
                                         <td className="py-3 px-4 font-medium text-gray-900">{user.email}</td>
                                         <td className="py-3 px-4 text-gray-600">

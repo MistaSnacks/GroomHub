@@ -1,7 +1,16 @@
+import { unstable_cache } from "next/cache";
 import { supabase } from "./client";
 import { normalizeTags } from "../tags";
 import type { BusinessListing, NormalizedListing, CityWithCount } from "../types";
 import { getMetroNeighbors, FEATURED_SPOTS_PER_CITY } from "../metro-clusters";
+
+/**
+ * Cache tag for the full-table reads that back search + city browse.
+ * These caches are time-revalidated every 5 min (see getCachedListingRows /
+ * getCities). The tag is attached so a future server action can call
+ * revalidateTag(LISTINGS_CACHE_TAG) for immediate, on-demand invalidation.
+ */
+export const LISTINGS_CACHE_TAG = "listings";
 
 // ─── Tag Normalization at Query Time ────────────────────
 function withTags(listing: BusinessListing): NormalizedListing {
@@ -21,6 +30,10 @@ function withTagsAll(listings: BusinessListing[]): NormalizedListing[] {
   return listings.map(withTags);
 }
 
+function hasKnownCity(listing: { city?: string | null }): boolean {
+  return Boolean(listing.city && listing.city.trim() && listing.city !== "Unknown");
+}
+
 // ─── Slug Helpers ───────────────────────────────────────
 // Some listings have suffixed slugs (e.g. "seattle-wa") while others
 // have plain slugs ("seattle"). These helpers normalize both formats.
@@ -33,6 +46,11 @@ function plainSlug(slug: string): string {
     if (slug.endsWith(suffix)) return slug.slice(0, -suffix.length);
   }
   return slug;
+}
+
+/** Canonical city slug for URLs: strips legacy -wa / -or suffixes. */
+export function canonicalCitySlug(slug: string): string {
+  return plainSlug(slug);
 }
 
 /** Return both plain and suffixed variants so we catch all listings */
@@ -97,7 +115,9 @@ export async function getListingsByCity(
     console.error("getListingsByCity error:", error.message);
     return [];
   }
-  return applyHierarchy(dedupeBySlug(withTagsAll((data ?? []) as BusinessListing[])));
+  return applyHierarchy(
+    dedupeBySlug(withTagsAll((data ?? []) as BusinessListing[]).filter(hasKnownCity))
+  );
 }
 
 export async function getListingsByState(
@@ -112,7 +132,7 @@ export async function getListingsByState(
     console.error("getListingsByState error:", error.message);
     return [];
   }
-  return applyHierarchy(withTagsAll((data ?? []) as BusinessListing[]));
+  return applyHierarchy(withTagsAll((data ?? []) as BusinessListing[]).filter(hasKnownCity));
 }
 
 export async function getListingBySlug(
@@ -131,31 +151,64 @@ export async function getListingBySlug(
   return withTags(data as BusinessListing);
 }
 
+async function fetchAllListingRows(): Promise<BusinessListing[]> {
+  const allListings: BusinessListing[] = [];
+  const pageSize = 1000;
+  let page = 0;
+  let hasMore = true;
+
+  while (hasMore) {
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+
+    const { data, error } = await supabase
+      .from("business_listings")
+      .select("*")
+      .order("rating", { ascending: false })
+      .range(from, to);
+
+    if (error) {
+      console.error("fetchAllListingRows error:", error.message);
+      return allListings;
+    }
+
+    if (data) {
+      allListings.push(...(data as BusinessListing[]));
+      hasMore = data.length === pageSize;
+    } else {
+      hasMore = false;
+    }
+
+    page++;
+  }
+
+  return allListings;
+}
+
+const getCachedListingRows = unstable_cache(fetchAllListingRows, ["all-listing-rows"], {
+  revalidate: 300,
+  tags: [LISTINGS_CACHE_TAG],
+});
+
 export async function getListingsByServiceTag(
   serviceTag: string,
   citySlug?: string,
   stateAbbr?: string
 ): Promise<NormalizedListing[]> {
-  let query = supabase.from("business_listings").select("*");
+  let results = withTagsAll(await getCachedListingRows())
+    .filter(hasKnownCity)
+    .filter((l) => l.service_tags.includes(serviceTag));
 
   if (citySlug) {
-    query = query.in("city_slug", slugVariants(citySlug));
+    const variants = new Set(slugVariants(citySlug));
+    results = results.filter((l) => variants.has(l.city_slug));
   }
-  if (stateAbbr) query = query.eq("state", stateAbbr.toUpperCase());
-
-  const { data, error } = await query;
-
-  if (error) {
-    console.error("getListingsByServiceTag error:", error.message);
-    return [];
+  if (stateAbbr) {
+    const state = stateAbbr.toUpperCase();
+    results = results.filter((l) => l.state.toUpperCase() === state);
   }
 
-  // Filter by service tag after normalization
-  const normalized = withTagsAll((data ?? []) as BusinessListing[]).filter((l) =>
-    l.service_tags.includes(serviceTag)
-  );
-
-  return applyHierarchy(normalized);
+  return applyHierarchy(results);
 }
 
 export async function getListingsBySpecialtyTag(
@@ -163,25 +216,20 @@ export async function getListingsBySpecialtyTag(
   citySlug?: string,
   stateAbbr?: string
 ): Promise<NormalizedListing[]> {
-  let query = supabase.from("business_listings").select("*");
+  let results = withTagsAll(await getCachedListingRows())
+    .filter(hasKnownCity)
+    .filter((l) => l.specialty_tags.includes(specialtyTag));
 
   if (citySlug) {
-    query = query.in("city_slug", slugVariants(citySlug));
+    const variants = new Set(slugVariants(citySlug));
+    results = results.filter((l) => variants.has(l.city_slug));
   }
-  if (stateAbbr) query = query.eq("state", stateAbbr.toUpperCase());
-
-  const { data, error } = await query;
-
-  if (error) {
-    console.error("getListingsBySpecialtyTag error:", error.message);
-    return [];
+  if (stateAbbr) {
+    const state = stateAbbr.toUpperCase();
+    results = results.filter((l) => l.state.toUpperCase() === state);
   }
 
-  const normalized = withTagsAll((data ?? []) as BusinessListing[]).filter((l) =>
-    l.specialty_tags.includes(specialtyTag)
-  );
-
-  return applyHierarchy(normalized);
+  return applyHierarchy(results);
 }
 
 export async function getListingsByFilters(filters: {
@@ -190,22 +238,16 @@ export async function getListingsByFilters(filters: {
   citySlug?: string;
   stateAbbr?: string;
 }): Promise<NormalizedListing[]> {
-  let query = supabase.from("business_listings").select("*");
+  let results = withTagsAll(await getCachedListingRows()).filter(hasKnownCity);
 
   if (filters.citySlug) {
-    query = query.in("city_slug", slugVariants(filters.citySlug));
+    const variants = new Set(slugVariants(filters.citySlug));
+    results = results.filter((l) => variants.has(l.city_slug));
   }
-  if (filters.stateAbbr) query = query.eq("state", filters.stateAbbr.toUpperCase());
-
-  const { data, error } = await query;
-
-  if (error) {
-    console.error("getListingsByFilters error:", error.message);
-    return [];
+  if (filters.stateAbbr) {
+    const state = filters.stateAbbr.toUpperCase();
+    results = results.filter((l) => l.state.toUpperCase() === state);
   }
-
-  let results = withTagsAll((data ?? []) as BusinessListing[]);
-
   if (filters.serviceTags && filters.serviceTags.length > 0) {
     results = results.filter((l) =>
       filters.serviceTags!.some((tag) => l.service_tags.includes(tag))
@@ -234,7 +276,7 @@ export async function getFeaturedListings(
     console.error("getFeaturedListings error:", error.message);
     return [];
   }
-  return withTagsAll((data ?? []) as BusinessListing[]);
+  return withTagsAll((data ?? []) as BusinessListing[]).filter(hasKnownCity);
 }
 
 export interface FeaturedCityListing extends NormalizedListing {
@@ -271,7 +313,9 @@ export async function getFeaturedByCity(
 
   const localListings: FeaturedCityListing[] = withTagsAll(
     (localData ?? []) as BusinessListing[]
-  ).map((l) => ({ ...l, isSpillover: false }));
+  )
+    .filter(hasKnownCity)
+    .map((l) => ({ ...l, isSpillover: false }));
 
   // If we already have enough, return early
   if (localListings.length >= FEATURED_SPOTS_PER_CITY) {
@@ -307,6 +351,7 @@ export async function getFeaturedByCity(
   const neighborListings: FeaturedCityListing[] = withTagsAll(
     (neighborData ?? []) as BusinessListing[]
   )
+    .filter(hasKnownCity)
     .filter((l) => !localIds.has(l.id))
     .slice(0, remaining)
     .map((l) => ({ ...l, isSpillover: true }));
@@ -355,37 +400,7 @@ export async function getFeaturedCountsForCities(
 }
 
 export async function getAllListings(): Promise<NormalizedListing[]> {
-  const allListings: BusinessListing[] = [];
-  const pageSize = 1000;
-  let page = 0;
-  let hasMore = true;
-
-  while (hasMore) {
-    const from = page * pageSize;
-    const to = from + pageSize - 1;
-
-    const { data, error } = await supabase
-      .from("business_listings")
-      .select("*")
-      .order("rating", { ascending: false })
-      .range(from, to);
-
-    if (error) {
-      console.error("getAllListings error:", error.message);
-      return [];
-    }
-
-    if (data) {
-      allListings.push(...(data as BusinessListing[]));
-      hasMore = data.length === pageSize;
-    } else {
-      hasMore = false;
-    }
-
-    page++;
-  }
-
-  return withTagsAll(allListings);
+  return withTagsAll(await getCachedListingRows()).filter(hasKnownCity);
 }
 
 // ─── Owner Queries ──────────────────────────────────────
@@ -494,9 +509,12 @@ export async function getCityBrowseSummary(
   };
 }
 
-export async function getCities(): Promise<CityWithCount[]> {
-  return aggregateCities(await getCityRows());
-}
+// Cached: hit on every /api/search request. Time-revalidated every 5 min.
+export const getCities = unstable_cache(
+  async (): Promise<CityWithCount[]> => aggregateCities(await getCityRows()),
+  ["all-cities"],
+  { revalidate: 300, tags: [LISTINGS_CACHE_TAG] }
+);
 
 export async function getCitiesByState(
   stateAbbr: string
@@ -559,50 +577,27 @@ export async function getListingCountByCity(
   return count ?? 0;
 }
 
-import Fuse from "fuse.js";
+import Fuse, { type Expression } from "fuse.js";
 
-export async function searchListings(
-  query: string
-): Promise<NormalizedListing[]> {
-  const q = query.toLowerCase().trim();
-  if (!q) return [];
+// Building a Fuse index over the full table is the expensive part of search,
+// so keep one per server instance and rebuild only when the cached rows
+// change (same 5-min cadence as getCachedListingRows).
+let listingFuseCache: {
+  fuse: Fuse<NormalizedListing>;
+  rowCount: number;
+  builtAt: number;
+} | null = null;
+const LISTING_FUSE_TTL_MS = 5 * 60 * 1000;
 
-  const allListings: BusinessListing[] = [];
-  const pageSize = 1000;
-  let page = 0;
-  let hasMore = true;
-
-  while (hasMore) {
-    const from = page * pageSize;
-    const to = from + pageSize - 1;
-
-    const { data, error } = await supabase
-      .from("business_listings")
-      .select("*")
-      .order("is_featured", { ascending: false })
-      .order("rating", { ascending: false })
-      .range(from, to);
-
-    if (error) {
-      console.error("searchListings error:", error.message);
-      return [];
-    }
-
-    if (data) {
-      allListings.push(...(data as BusinessListing[]));
-      hasMore = data.length === pageSize;
-    } else {
-      hasMore = false;
-    }
-
-    page++;
+function getListingFuse(all: NormalizedListing[]): Fuse<NormalizedListing> {
+  const now = Date.now();
+  if (
+    listingFuseCache &&
+    now - listingFuseCache.builtAt < LISTING_FUSE_TTL_MS &&
+    listingFuseCache.rowCount === all.length
+  ) {
+    return listingFuseCache.fuse;
   }
-
-  const all = withTagsAll(allListings);
-
-  // Split the query into distinct terms for multi-intent searching
-  // e.g. "Seattle Mobile" -> ["seattle", "mobile"]
-  const terms = q.split(/\s+/).filter(Boolean);
 
   const fuse = new Fuse(all, {
     keys: [
@@ -619,6 +614,27 @@ export async function searchListings(
     useExtendedSearch: true, // Required for logical queries ($and)
   });
 
+  listingFuseCache = { fuse, rowCount: all.length, builtAt: now };
+  return fuse;
+}
+
+export async function searchListings(
+  query: string
+): Promise<NormalizedListing[]> {
+  const q = query.toLowerCase().trim();
+  if (!q) return [];
+
+  // Reuse the cached full-table read instead of re-scanning the table on
+  // every keystroke. Fuse.js reorders by match score, so the DB-side
+  // ordering is irrelevant here.
+  const all = withTagsAll(await getCachedListingRows()).filter(hasKnownCity);
+
+  // Split the query into distinct terms for multi-intent searching
+  // e.g. "Seattle Mobile" -> ["seattle", "mobile"]
+  const terms = q.split(/\s+/).filter(Boolean);
+
+  const fuse = getListingFuse(all);
+
   // Create a logical query where EVERY term must match *somewhere* in the listing
   // This allows "Seattle Mobile" to match a listing where city="Seattle" and service_tags="mobile"
   const logicalQuery = {
@@ -631,7 +647,7 @@ export async function searchListings(
         { specialty_tags: term },
         { description: term },
         { address: term }
-      ] as any[]
+      ] as Expression[]
     }))
   };
 

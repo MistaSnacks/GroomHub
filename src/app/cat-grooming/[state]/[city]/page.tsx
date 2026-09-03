@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { CaretRight, MapPin, Cat, Question } from "@phosphor-icons/react/dist/ssr";
 import { CityListingsClient } from "@/components/city-listings-client";
-
-export const revalidate = 300;
 import { getListingsByServiceTag, getCitiesByState, getCityBySlug, getFeaturedByCity } from "@/lib/supabase/queries";
-import { stateAbbrFromSlug, stateNameFromSlug, getNearbyCities, buildServiceCityPath } from "@/lib/geography";
+import { stateAbbrFromSlug, stateNameFromSlug, getNearbyCities, buildServiceCityPath, buildCityPath, isValidStateSlug } from "@/lib/geography";
 import { getMetroNeighbors } from "@/lib/metro-clusters";
 import { buildCatGroomingFaqs } from "@/lib/city-faqs";
-import { cityFaqSchema } from "@/lib/schema";
+import { getEnrichedCityContent } from "@/lib/city-content";
+import { serviceCityPageSchema } from "@/lib/schema";
 import { FeaturedSection } from "@/components/featured-section";
 import { WaveDivider } from "@/components/wave-divider";
 import { CityStatsBlock } from "@/components/city-stats-block";
@@ -17,23 +17,37 @@ import { clampDescription, clampTitle } from "@/lib/seo-utils";
 import { CityPricingSection } from "@/components/city-pricing-section";
 import { getCityPricingBreakdown } from "@/lib/city-pricing";
 
+export const revalidate = 300;
+
+export async function generateStaticParams() {
+  return [];
+}
+
 interface Props {
   params: Promise<{ state: string; city: string }>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { state, city } = await params;
-  const cityData = await getCityBySlug(city, stateAbbrFromSlug(state));
-  const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
+  if (!isValidStateSlug(state)) notFound();
 
   const stateAbbr = stateAbbrFromSlug(state);
+  const [cityData, listings] = await Promise.all([
+    getCityBySlug(city, stateAbbr),
+    getListingsByServiceTag("cat-grooming", city, stateAbbr),
+  ]);
+  if (!cityData && !getEnrichedCityContent(stateAbbr, city)) notFound();
+
+  const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
   const ogImage = `/api/og/city?city=${encodeURIComponent(city)}&state=${encodeURIComponent(state)}&service=cat`;
   const title = clampTitle(`Cat Groomers in ${cityName}, ${stateAbbr}`);
   const description = clampDescription(`Find cat groomers in ${cityName}, ${stateAbbr}. Browse feline-friendly salons with gentle handling and stress-free grooming. Compare services and book on GroomLocal.`);
+  const shouldIndex = listings.length >= 3;
 
   return {
     title,
     description,
+    robots: shouldIndex ? undefined : { index: false, follow: true },
     alternates: { canonical: `/cat-grooming/${state}/${city}` },
     openGraph: {
       title,
@@ -54,6 +68,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CatGroomingCityPage({ params }: Props) {
   const { state, city } = await params;
+  if (!isValidStateSlug(state)) notFound();
   const stateAbbr = stateAbbrFromSlug(state);
   const stateName = stateNameFromSlug(state);
 
@@ -64,9 +79,12 @@ export default async function CatGroomingCityPage({ params }: Props) {
     getFeaturedByCity(city, stateAbbr),
   ]);
 
+  if (!cityData && !getEnrichedCityContent(stateAbbr, city)) notFound();
+
   const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
   const nearby = getNearbyCities(city, relatedCities, getMetroNeighbors(city), 6);
   const faqs = buildCatGroomingFaqs(cityName, stateAbbr, listings.length);
+  const hasListings = listings.length > 0;
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -87,71 +105,93 @@ export default async function CatGroomingCityPage({ params }: Props) {
               Cat Groomers in <span className="text-brand-secondary">{cityName}, {stateAbbr}</span>
             </h1>
           </div>
-          <p className="text-text-muted flex items-center gap-1.5">
-            <MapPin weight="fill" className="w-4 h-4 text-brand-secondary" />
-            {listings.length} cat groomers found
-          </p>
-          <CityStatsBlock
-            groomerCount={listings.length}
-            metroCityCount={getMetroNeighbors(city).length + 1}
-            serviceCount={new Set(listings.flatMap((l) => l.service_tags ?? [])).size}
-            lastUpdated={new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" })}
-          />
+          {hasListings ? (
+            <>
+              <p className="text-text-muted flex items-center gap-1.5">
+                <MapPin weight="fill" className="w-4 h-4 text-brand-secondary" />
+                {listings.length} cat groomers found
+              </p>
+              <CityStatsBlock
+                groomerCount={listings.length}
+                metroCityCount={getMetroNeighbors(city).length + 1}
+                serviceCount={new Set(listings.flatMap((l) => l.service_tags ?? [])).size}
+                lastUpdated={new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+              />
+            </>
+          ) : null}
         </div>
       </section>
 
       <WaveDivider variant="gentle" fromColor="#FDF8F0" toColor="#FDF8F0" />
 
-      <FeaturedSection listings={featuredListings} cityName={cityName} />
+      {hasListings ? (
+        <>
+          <FeaturedSection listings={featuredListings} cityName={cityName} />
 
-      <section className="bg-bg flex-1">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 w-full">
-          <Suspense fallback={<div className="py-8 text-center text-text-muted">Loading filters...</div>}>
-            <CityListingsClient
-              listings={listings}
-              heading={`Cat Groomers in ${cityName}`}
-              preFilterService="cat-grooming"
-            />
-          </Suspense>
-        </div>
-      </section>
+          <section className="bg-bg flex-1">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 w-full">
+              <Suspense fallback={<div className="py-8 text-center text-text-muted">Loading filters...</div>}>
+                <CityListingsClient
+                  listings={listings}
+                  heading={`Cat Groomers in ${cityName}`}
+                  preFilterService="cat-grooming"
+                />
+              </Suspense>
+            </div>
+          </section>
 
-      {/* Pricing Guide */}
-      <CityPricingSection
-        cityName={cityName}
-        pricing={getCityPricingBreakdown(cityName, "cat-grooming")}
-        serviceLabel="Cat Grooming"
-      />
+          <CityPricingSection
+            cityName={cityName}
+            pricing={getCityPricingBreakdown(cityName, "cat-grooming")}
+            serviceLabel="Cat Grooming"
+          />
 
-      {/* FAQ Section */}
-      <section className="bg-white py-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2 mb-6">
-            <Question weight="duotone" className="w-6 h-6 text-brand-secondary" />
-            <h2 className="font-heading text-2xl font-semibold text-brand-primary">
-              Frequently Asked Questions About Cat Grooming in {cityName}
-            </h2>
+          <section className="bg-white py-10">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center gap-2 mb-6">
+                <Question weight="duotone" className="w-6 h-6 text-brand-secondary" />
+                <h2 className="font-heading text-2xl font-semibold text-brand-primary">
+                  Frequently Asked Questions About Cat Grooming in {cityName}
+                </h2>
+              </div>
+              <div className="space-y-4">
+                {faqs.map((faq) => (
+                  <details
+                    key={faq.question}
+                    className="group rounded-xl border border-border bg-bg/50 overflow-hidden"
+                  >
+                    <summary className="flex items-center justify-between cursor-pointer p-5 text-brand-primary font-medium text-sm hover:bg-bg transition-colors">
+                      <span>{faq.question}</span>
+                      <CaretRight weight="bold" className="w-4 h-4 text-text-muted group-open:rotate-90 transition-transform" />
+                    </summary>
+                    <div className="px-5 pb-5 text-sm text-text-muted leading-relaxed">
+                      {faq.answer}
+                    </div>
+                  </details>
+                ))}
+              </div>
+            </div>
+          </section>
+        </>
+      ) : (
+        <section className="bg-bg flex-1">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 w-full text-center">
+            <p className="font-heading text-lg text-brand-primary">
+              No cat groomers are listed in {cityName} yet.
+            </p>
+            <p className="text-sm text-text-muted mt-2">
+              Browse dog groomers in {cityName} instead.
+            </p>
+            <Link
+              href={buildCityPath(state, city)}
+              className="inline-flex mt-5 text-sm font-semibold text-brand-accent underline hover:text-brand-primary"
+            >
+              Dog groomers in {cityName}, {stateAbbr}
+            </Link>
           </div>
-          <div className="space-y-4">
-            {faqs.map((faq) => (
-              <details
-                key={faq.question}
-                className="group rounded-xl border border-border bg-bg/50 overflow-hidden"
-              >
-                <summary className="flex items-center justify-between cursor-pointer p-5 text-brand-primary font-medium text-sm hover:bg-bg transition-colors">
-                  <span>{faq.question}</span>
-                  <CaretRight weight="bold" className="w-4 h-4 text-text-muted group-open:rotate-90 transition-transform" />
-                </summary>
-                <div className="px-5 pb-5 text-sm text-text-muted leading-relaxed">
-                  {faq.answer}
-                </div>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Nearby Cities */}
       {nearby.length > 0 && (
         <>
           <WaveDivider variant="gentle" fromColor="#FFFFFF" toColor="#FDF8F0" />
@@ -179,10 +219,22 @@ export default async function CatGroomingCityPage({ params }: Props) {
 
       <WaveDivider variant="footer" fromColor={nearby.length > 0 ? "#FDF8F0" : "#FFFFFF"} toColor="#4ECDC4" />
 
-      {/* FAQPage Schema */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(cityFaqSchema(faqs)) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            serviceCityPageSchema(
+              listings,
+              cityName,
+              stateAbbr,
+              state,
+              city,
+              { name: "Cat Grooming", path: "/cat-grooming" },
+              hasListings ? faqs : undefined,
+              `Cat Groomers in ${cityName}, ${stateAbbr}`
+            )
+          ),
+        }}
       />
     </div>
   );

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
-import { CaretRight, BookOpen } from "@phosphor-icons/react/dist/ssr";
+import { BookOpen } from "@phosphor-icons/react/dist/ssr";
 import { getBlogPosts, getBlogCategories } from "@/lib/blog";
+import { blogListingSchema } from "@/lib/schema";
 import { BlogCard } from "@/components/blog-card";
 import { BlogCategoryFilter } from "@/components/blog-category-filter";
 import { NewsletterCta } from "@/components/newsletter-cta";
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
   title: "Blog | Grooming Tips, Guides & Pet Care",
   description:
     "Expert grooming tips, seasonal care guides, and pet care advice from PNW groomers. Keep your dog looking and feeling their best.",
+  alternates: { canonical: "/blog" },
   openGraph: {
     title: "Blog | Grooming Tips, Guides & Pet Care",
     description: "Expert grooming tips, seasonal care guides, and pet care advice from PNW groomers.",
@@ -42,8 +44,16 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const featuredPost = !category ? allPosts[0] : undefined;
   const gridPosts = featuredPost ? allPosts.slice(1) : allPosts;
 
+  const allPostsForSchema = getBlogPosts();
+  const jsonLd = blogListingSchema(allPostsForSchema);
+
   return (
     <div className="flex flex-col min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {/* Hero */}
       <section className="bg-bg py-14 md:py-20 relative overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10 text-center">

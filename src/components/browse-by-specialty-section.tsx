@@ -16,10 +16,10 @@ const SHOWN_SPECIALTY_SLUGS = [
 // Indices that get colored backgrounds: 1=teal, 3=amber, 4=teal
 function getCardStyle(index: number) {
   if (index === 1 || index === 4)
-    return { bg: "bg-brand-accent text-white", iconBg: "bg-white/20", link: "text-white/80 hover:text-white" };
+    return { bg: "bg-brand-accent text-brand-primary", iconBg: "bg-brand-primary/10", link: "text-brand-primary/70 hover:text-brand-primary" };
   if (index === 3)
     return { bg: "bg-brand-secondary text-brand-primary", iconBg: "bg-brand-primary/10", link: "text-brand-primary/70 hover:text-brand-primary" };
-  return { bg: "bg-white text-brand-primary border border-border", iconBg: "bg-brand-accent/10 text-brand-accent", link: "text-brand-accent hover:text-brand-accent" };
+  return { bg: "bg-white text-brand-primary border border-border", iconBg: "bg-brand-accent/10 text-brand-accent-ink", link: "text-brand-accent-ink hover:text-brand-accent-ink" };
 }
 
 export function BrowseBySpecialtySection() {
@@ -35,7 +35,7 @@ export function BrowseBySpecialtySection() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div className="md:flex-1" />
           <div className="text-left md:text-right max-w-lg">
-            <p className="text-xs font-semibold uppercase tracking-widest text-brand-accent mb-2">
+            <p className="text-xs font-semibold uppercase tracking-widest text-brand-accent-ink mb-2">
               Specialized Care
             </p>
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-brand-primary mb-4">
@@ -80,7 +80,7 @@ export function BrowseBySpecialtySection() {
         <div className="text-center mt-10">
           <Link
             href="/specialties"
-            className="inline-flex items-center gap-2 text-brand-primary font-semibold hover:text-brand-accent transition-colors"
+            className="inline-flex items-center gap-2 text-brand-primary font-semibold hover:text-brand-accent-ink transition-colors"
           >
             <span>View all specialties</span>
             <ArrowRight weight="bold" className="w-4 h-4" />

@@ -14,6 +14,11 @@ function getAdmin() {
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+const EXT_BY_MIME: Record<string, string> = {
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+};
 
 function validateFile(file: File): string | null {
   if (!ALLOWED_TYPES.includes(file.type)) {
@@ -64,8 +69,8 @@ export async function uploadPhoto(formData: FormData) {
   }
 
   const timestamp = Date.now();
-  const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
-  const path = `${listingId}/${timestamp}-${safeName}`;
+  const ext = EXT_BY_MIME[file.type] || "jpg";
+  const path = `${listingId}/${timestamp}.${ext}`;
 
   const { error: uploadError } = await admin.storage
     .from("groomer-photos")
@@ -91,8 +96,8 @@ export async function uploadPhoto(formData: FormData) {
   }
 
   revalidatePath(`/groomer/${listing.slug}`);
-  revalidatePath("/dashboard/photos");
-  return { success: true };
+  revalidatePath(`/dashboard/listing/${listing.slug}`);
+  return { success: true, url: urlData.publicUrl };
 }
 
 export async function deletePhoto(formData: FormData) {
@@ -130,7 +135,7 @@ export async function deletePhoto(formData: FormData) {
   if (dbError) return { error: "Failed to delete photo." };
 
   revalidatePath(`/groomer/${listing.slug}`);
-  revalidatePath("/dashboard/photos");
+  revalidatePath(`/dashboard/listing/${listing.slug}`);
   return { success: true };
 }
 
@@ -175,7 +180,7 @@ export async function deletePhotos(listingId: string, imageUrls: string[]) {
   if (dbError) return { error: "Failed to delete photos." };
 
   revalidatePath(`/groomer/${listing.slug}`);
-  revalidatePath("/dashboard/photos");
+  revalidatePath(`/dashboard/listing/${listing.slug}`);
   return { success: true, deleted: verified.length };
 }
 
@@ -206,7 +211,7 @@ export async function uploadLogo(formData: FormData) {
   }
 
   const timestamp = Date.now();
-  const ext = file.name.split(".").pop() || "jpg";
+  const ext = EXT_BY_MIME[file.type] || "jpg";
   const path = `${listingId}/logo-${timestamp}.${ext}`;
 
   const { error: uploadError } = await admin.storage
@@ -230,8 +235,8 @@ export async function uploadLogo(formData: FormData) {
   if (dbError) return { error: "Failed to save logo." };
 
   revalidatePath(`/groomer/${listing.slug}`);
-  revalidatePath("/dashboard/photos");
-  return { success: true };
+  revalidatePath(`/dashboard/listing/${listing.slug}`);
+  return { success: true, url: urlData.publicUrl };
 }
 
 export async function deleteLogo(formData: FormData) {
@@ -263,6 +268,6 @@ export async function deleteLogo(formData: FormData) {
   if (dbError) return { error: "Failed to remove logo." };
 
   revalidatePath(`/groomer/${listing.slug}`);
-  revalidatePath("/dashboard/photos");
+  revalidatePath(`/dashboard/listing/${listing.slug}`);
   return { success: true };
 }

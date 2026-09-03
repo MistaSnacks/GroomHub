@@ -5,6 +5,7 @@ export interface ServiceContent {
   intro: string;
   body: string[];
   tips: string[];
+  faqs?: Array<{ question: string; answer: string }>;
 }
 
 export const SERVICE_CONTENT: Record<string, ServiceContent> = {
@@ -21,6 +22,12 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       "Bring reference photos of the cut you want. Clear communication helps your groomer deliver the style you have in mind.",
       "Brush your dog at home between appointments to reduce matting, which can increase the cost and time of a full groom.",
     ],
+    faqs: [
+      { question: "What is included in a full groom?", answer: "A full groom typically includes a bath, blow-dry, haircut or trim, nail clipping, ear cleaning, and a sanitary trim. Many groomers also add teeth brushing and finishing touches like a bandana or cologne." },
+      { question: "How long does a full groom take?", answer: "Most full grooms take 2 to 4 hours depending on your dog's size, coat type, and condition. Large breeds or heavily matted dogs may take longer." },
+      { question: "How much does a full groom cost in the Pacific Northwest?", answer: "In Washington and Oregon, expect to pay $50 to $80 for small breeds, $70 to $110 for medium breeds, and $90 to $150 or more for large dogs. Prices vary by location and coat condition." },
+      { question: "How often should my dog get a full groom?", answer: "Most dogs benefit from a full groom every 4 to 8 weeks. Breeds with continuously growing coats (Poodles, Doodles, Shih Tzus) should go every 4 to 6 weeks to prevent matting." },
+    ],
   },
 
   "cat-grooming": {
@@ -35,6 +42,11 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       "Call ahead to confirm the groomer has cat-specific experience. A dog groomer who \"also does cats\" is not the same as a feline specialist.",
       "Keep your cat in a secure carrier during transport. Avoid feeding them for 2 hours before the appointment to reduce nausea.",
       "Start grooming your cat young if possible. Kittens that experience grooming early tend to handle it much better as adults.",
+    ],
+    faqs: [
+      { question: "Do cats need professional grooming?", answer: "Most short-haired cats groom themselves, but long-haired breeds like Persians, Maine Coons, and Ragdolls benefit from professional grooming every 6 to 10 weeks. Senior cats that have stopped self-grooming also need help." },
+      { question: "What is a lion cut for cats?", answer: "A lion cut involves shaving the body to a short length while leaving fur on the head, paws, and tail tip. It is popular for long-haired cats prone to matting or overheating." },
+      { question: "How much does cat grooming cost?", answer: "In the Pacific Northwest, cat grooming ranges from $60 to $100 for a bath and trim, and $80 to $150 for a full lion cut. Prices are higher than dog grooming because cats require specialized handling." },
     ],
   },
 
@@ -51,6 +63,11 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       "Ask your groomer about Dremel grinding if your dog has dark nails where the quick is hard to see.",
       "Frequent short trims are better than infrequent long ones. The quick recedes over time when nails are kept short.",
     ],
+    faqs: [
+      { question: "How often should I trim my dog's nails?", answer: "Most dogs need nail trims every 3 to 4 weeks. If you can hear clicking on hard floors, they are overdue. Dogs walking on pavement may need less frequent trims." },
+      { question: "Is Dremel grinding better than clipping?", answer: "Grinding produces a smoother finish and reduces the risk of cutting the quick, especially on dark-nailed dogs. Many groomers offer both options or a combination." },
+      { question: "How much does a nail trim cost?", answer: "Standalone nail trims in Washington and Oregon typically cost $10 to $25. Many groomers accept walk-ins for nail trims without a full appointment." },
+    ],
   },
 
   "dog-bath": {
@@ -65,6 +82,11 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       "Mention any skin sensitivities when booking. Good groomers stock hypoallergenic and medicated shampoo options.",
       "A bath with a high-velocity dry is the single best thing you can do for a shedding dog. It removes far more loose fur than brushing alone.",
       "If your dog gets muddy on PNW trails regularly, ask about a quick rinse or tidy-up service between full baths.",
+    ],
+    faqs: [
+      { question: "What is included in a professional dog bath?", answer: "A professional bath includes a warm water wash with breed-appropriate shampoo, conditioning, thorough rinsing, high-velocity blow-dry, and a full brush-out. Many groomers also include ear cleaning and nail trimming." },
+      { question: "How often should I bathe my dog?", answer: "Most dogs benefit from a professional bath every 4 to 6 weeks. Active outdoor dogs in the PNW may need baths more often due to rain and mud exposure." },
+      { question: "How much does a dog bath cost?", answer: "In the Pacific Northwest, expect to pay $30 to $50 for small dogs, $40 to $65 for medium dogs, and $55 to $85 for large breeds. Bath-only appointments are shorter than full grooms." },
     ],
   },
 
@@ -81,6 +103,11 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       "Mobile groomers often have smaller client lists, so if you find one you like, set up a recurring schedule to lock in your spot.",
       "Ask if the van uses a generator or requires an electrical hookup from your home. Most modern vans are fully self-contained.",
     ],
+    faqs: [
+      { question: "How does mobile dog grooming work?", answer: "A mobile groomer arrives at your home in a fully equipped van with a tub, dryer, and grooming table. Your dog is groomed one-on-one without other animals around, which reduces stress. Most appointments take 1.5 to 3 hours." },
+      { question: "Is mobile grooming more expensive than salon grooming?", answer: "Yes, mobile grooming typically costs 20 to 40 percent more than salon services due to fuel, vehicle costs, and the one-on-one attention. In the PNW, expect $80 to $130 for small to medium dogs and $120 to $180 for large dogs." },
+      { question: "How far in advance should I book a mobile groomer?", answer: "Mobile groomers are in high demand. Booking 2 to 4 weeks ahead is common, and 3 to 4 weeks during peak seasons like spring shedding and holidays." },
+    ],
   },
 
   "self-wash": {
@@ -95,6 +122,11 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       "Bring your own treats to keep your dog calm and reward good behavior in the tub.",
       "Use the high-velocity dryer provided. It removes loose undercoat far better than towel drying and is worth the extra few minutes.",
       "Check if the shop provides nail clippers or Dremels. Some self-wash stations include basic nail tools as part of the fee.",
+    ],
+    faqs: [
+      { question: "What does a self-wash station include?", answer: "Most self-wash stations provide an elevated tub, warm water, shampoo and conditioner, a high-velocity dryer, towels, and brushes. Some also include ear cleaning supplies and grooming tools." },
+      { question: "How much does a self-wash session cost?", answer: "Self-wash prices in the Pacific Northwest range from $12 to $25 per session regardless of dog size. Many shops offer punch cards or monthly memberships for frequent users." },
+      { question: "Do I need an appointment for a self-wash?", answer: "Most self-wash facilities accept walk-ins during business hours. No appointment is typically needed, though busy weekends may have a short wait." },
     ],
   },
 
@@ -111,6 +143,11 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       "Non-anesthetic cleaning works best for maintenance. If your dog has severe tartar or inflamed gums, see your veterinarian first.",
       "Ask about dental sprays or water additives you can use at home between professional cleanings.",
     ],
+    faqs: [
+      { question: "Is non-anesthetic teeth cleaning safe for dogs?", answer: "Yes, when performed by a trained technician. The dog stays awake while tartar is removed from visible tooth surfaces. It is not a replacement for veterinary dental work under anesthesia but helps maintain oral health between those visits." },
+      { question: "How much does teeth cleaning cost at a groomer?", answer: "As an add-on to a grooming appointment, teeth cleaning typically costs $10 to $25. Standalone sessions from a dedicated dental technician run $50 to $100." },
+      { question: "How often should my dog get teeth cleaning?", answer: "Non-anesthetic teeth cleaning every 2 to 3 months helps slow tartar buildup. Your veterinarian can advise on the right frequency based on your dog's dental health." },
+    ],
   },
 
   deshedding: {
@@ -125,6 +162,11 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       "Never shave a double-coated dog to reduce shedding. The undercoat protects against heat and cold, and shaving can permanently damage it.",
       "Schedule deshedding appointments in early spring and early fall to stay ahead of seasonal coat blows.",
       "Regular brushing at home between appointments extends the results. A 10-minute session twice a week makes a real difference.",
+    ],
+    faqs: [
+      { question: "What breeds need deshedding treatments?", answer: "Double-coated breeds benefit most: Huskies, Samoyeds, Golden Retrievers, German Shepherds, Corgis, Australian Shepherds, and similar breeds. These dogs have a dense undercoat that sheds heavily, especially in spring and fall." },
+      { question: "Can I shave my double-coated dog instead of deshedding?", answer: "No. Shaving a double-coated dog can permanently damage the coat and removes natural insulation against heat and cold. Professional deshedding removes loose undercoat without cutting the protective outer coat." },
+      { question: "How much does a deshedding treatment cost?", answer: "In Washington and Oregon, deshedding treatments range from $40 to $75 for medium dogs and $60 to $100 for large breeds, in addition to or instead of a standard bath." },
     ],
   },
 
@@ -141,6 +183,10 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       "After swimming or bath time, gently dry the inside of your dog's ears with a soft cloth to reduce moisture buildup.",
       "Ask your groomer whether ear plucking is appropriate for your breed. The practice is debated, and not all dogs benefit from it.",
     ],
+    faqs: [
+      { question: "How often should I clean my dog's ears?", answer: "Most dogs benefit from ear cleaning every 4 to 6 weeks, typically as part of a regular grooming appointment. Dogs with floppy ears or those that swim frequently may need more frequent cleaning." },
+      { question: "Is ear plucking necessary for my dog?", answer: "Ear plucking is debated among veterinarians and groomers. It is most commonly done for breeds like Poodles and Bichons that grow hair inside the ear canal. Ask your groomer and vet for breed-specific guidance." },
+    ],
   },
 
   "puppy-grooming": {
@@ -155,6 +201,11 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       "Handle your puppy's paws, ears, and mouth at home before the first appointment. This makes the groomer's job easier and less stressful for your pup.",
       "Choose a groomer who specifically offers puppy introduction sessions, not just a regular groom on a young dog.",
       "Do not expect a show-quality cut on the first visit. The priority is a calm, positive experience that builds trust.",
+    ],
+    faqs: [
+      { question: "When should I take my puppy for the first groom?", answer: "Most groomers recommend starting between 10 and 16 weeks of age, after your puppy has had at least two rounds of vaccinations. The goal is positive socialization, not a perfect haircut." },
+      { question: "How much does puppy grooming cost?", answer: "Puppy groom prices in Washington and Oregon typically range from $30 to $60. Sessions are shorter and less involved than adult grooms. Some groomers offer discounted multi-visit puppy packages." },
+      { question: "What should I do to prepare my puppy for grooming?", answer: "Handle your puppy's paws, ears, and mouth at home regularly before the first appointment. This gets them comfortable with being touched in sensitive areas and makes the groomer's job easier." },
     ],
   },
 
@@ -171,6 +222,10 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       "Tell your groomer about any flea preventatives your dog is currently taking to avoid product interactions.",
       "If your dog has flea allergy dermatitis (excessive scratching, hair loss, hot spots), see a vet before booking a medicated bath.",
     ],
+    faqs: [
+      { question: "Does a flea bath provide long-term protection?", answer: "No. Flea baths kill parasites on contact but do not prevent re-infestation. For ongoing protection, talk to your veterinarian about monthly flea and tick preventatives." },
+      { question: "How much does a flea treatment bath cost?", answer: "In the Pacific Northwest, flea treatment baths typically cost $30 to $60 on top of a regular bath or groom, depending on the products used and severity of the infestation." },
+    ],
   },
 
   "hand-stripping": {
@@ -185,6 +240,11 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       "Start hand stripping when your dog is young so they get accustomed to the process early.",
       "Ask your groomer about maintaining the coat between appointments with light carding (a less intensive form of undercoat removal).",
       "If you are unsure whether your breed needs hand stripping, ask a breed-specific groomer for an assessment before committing.",
+    ],
+    faqs: [
+      { question: "What is the difference between hand stripping and clipping?", answer: "Hand stripping pulls dead hairs from the root, allowing new wire-textured hairs to grow in. Clipping cuts the hair and leaves soft regrowth. Hand stripping preserves the coarse, weather-resistant coat texture that defines wire-coated breeds." },
+      { question: "What breeds need hand stripping?", answer: "Wire-coated breeds like Wire Fox Terriers, Schnauzers, Airedale Terriers, Border Terriers, and Irish Wolfhounds benefit from hand stripping to maintain proper coat texture." },
+      { question: "How much does hand stripping cost?", answer: "In Washington and Oregon, hand stripping costs $100 to $200 or more per session due to the time and expertise involved. Sessions are needed every 6 to 10 weeks." },
     ],
   },
 
@@ -201,6 +261,10 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       "Start with a small accent (like a colored tail or ear tips) to see how your dog handles the extra process time.",
       "Check the groomer's portfolio before booking. Creative grooming results vary greatly depending on skill level.",
     ],
+    faqs: [
+      { question: "Is creative grooming safe for dogs?", answer: "Yes, when done with pet-safe, veterinary-approved dyes. Human hair dye is toxic to animals. Reputable creative groomers use products specifically formulated for pets." },
+      { question: "What is Asian fusion grooming?", answer: "Asian fusion grooming originated in East Asia and emphasizes round, sculpted shapes and exaggerated proportions for a plush-toy look. It works best on breeds with enough coat length like Poodles and Bichons." },
+    ],
   },
 
   boarding: {
@@ -216,6 +280,10 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       "Bring your dog's own food, a familiar blanket, and a piece of clothing that smells like you to reduce stress.",
       "Ask if the facility separates dogs by size during group play. This is important for the safety of small dogs.",
     ],
+    faqs: [
+      { question: "How much does pet boarding cost in the Pacific Northwest?", answer: "Standard boarding runs $35 to $60 per night, and premium suites cost $55 to $100 per night. Holiday periods may carry surcharge fees. Many facilities offer grooming packages so your dog comes home clean." },
+      { question: "What vaccinations are required for boarding?", answer: "Most facilities require current DHLPP, rabies, and bordetella (kennel cough) vaccinations. Some also require a negative fecal test. Check with your specific facility for their requirements." },
+    ],
   },
 
   daycare: {
@@ -230,6 +298,11 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       "Request a tour and watch how the staff interacts with the dogs during group play before committing.",
       "Start with a half-day trial. Not every dog enjoys daycare, and a short first visit helps you gauge your dog's response.",
       "Make sure your dog is up to date on all required vaccinations, including bordetella (kennel cough), before the evaluation day.",
+    ],
+    faqs: [
+      { question: "How much does dog daycare cost?", answer: "Daily rates across the Pacific Northwest range from $25 to $50 per day. Multi-day packages and monthly memberships bring the per-day cost down. A typical 5-day weekly package runs $100 to $200." },
+      { question: "Is daycare good for all dogs?", answer: "Not all dogs enjoy group play. Most facilities require a temperament evaluation before the first day. Daycare works best for social, high-energy dogs that experience separation anxiety when left alone." },
+      { question: "What should I look for in a dog daycare?", answer: "Check the staff-to-dog ratio (1:10 to 1:15 is standard), vaccination requirements, how they separate dogs by size and temperament, and how they manage rest periods to prevent overstimulation." },
     ],
   },
 };

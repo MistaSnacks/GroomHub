@@ -1,99 +1,31 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
-import { CaretRight, MapPin, PawPrint, Park, MapTrifold, Storefront, TreeStructure, Question } from "@phosphor-icons/react/dist/ssr";
+import { notFound } from "next/navigation";
+import { CaretRight, MapPin, Park, MapTrifold, Storefront, TreeStructure, Question } from "@phosphor-icons/react/dist/ssr";
 import { CityListingsClient } from "@/components/city-listings-client";
-
-export const revalidate = 300;
-import { getListingsByCity, getCitiesByState, getCityBySlug, getFeaturedByCity } from "@/lib/supabase/queries";
+import { getListingsByCity, getCitiesByState, getCityBySlug, getFeaturedByCity, getCities } from "@/lib/supabase/queries";
 import { FeaturedSection } from "@/components/featured-section";
-import { stateNameFromSlug, stateAbbrFromSlug, buildCityPath } from "@/lib/geography";
+import { stateNameFromSlug, stateAbbrFromSlug, stateSlugFromAbbr, buildCityPath, getNearbyCities, isValidStateSlug } from "@/lib/geography";
+import { getMetroNeighbors } from "@/lib/metro-clusters";
+import { buildDogGroomingFaqs } from "@/lib/city-faqs";
 import { getEnrichedCityContent } from "@/lib/city-content";
-import { cityPageSchema, cityFaqSchema } from "@/lib/schema";
+import { cityPageSchema } from "@/lib/schema";
 import { WaveDivider } from "@/components/wave-divider";
 import { AdSlot } from "@/components/ad-slot";
 import { clampDescription, clampTitle } from "@/lib/seo-utils";
+import { CityStatsBlock } from "@/components/city-stats-block";
+import { CityPricingSection } from "@/components/city-pricing-section";
+import { getCityPricingBreakdown } from "@/lib/city-pricing";
 
-const SEATTLE_METRO = new Set([
-  "seattle", "bellevue", "redmond", "kirkland", "renton", "bothell",
-  "lynnwood", "shoreline", "burien", "edmonds", "sammamish",
-  "mercer island", "issaquah", "woodinville", "kenmore",
-]);
-const PORTLAND_METRO = new Set([
-  "portland", "beaverton", "tigard", "lake oswego", "gresham",
-  "hillsboro", "tualatin", "milwaukie", "oregon city", "west linn", "clackamas",
-]);
-const TACOMA_SOUTH_SOUND = new Set([
-  "tacoma", "lakewood", "puyallup", "federal way", "auburn",
-  "kent", "olympia", "lacey", "tumwater",
-]);
-const MIDSIZE_WA = new Set([
-  "spokane", "bellingham", "vancouver", "everett", "marysville",
-  "yakima", "tri-cities", "walla walla", "kennewick", "richland", "pasco",
-]);
-const MIDSIZE_OR = new Set([
-  "eugene", "salem", "bend", "corvallis", "medford",
-  "ashland", "albany", "springfield",
-]);
-const DRY_CLIMATE_CITIES = new Set([
-  "spokane", "yakima", "tri-cities", "kennewick", "richland", "pasco",
-  "walla walla", "bend", "medford", "ashland",
-]);
+export const revalidate = 300;
 
-function getCityPriceRange(cityName: string, stateAbbr: string): string {
-  const lower = cityName.toLowerCase();
-  if (SEATTLE_METRO.has(lower)) return "$60 to $120";
-  if (PORTLAND_METRO.has(lower)) return "$50 to $110";
-  if (TACOMA_SOUTH_SOUND.has(lower)) return "$45 to $100";
-  if (MIDSIZE_WA.has(lower)) return "$40 to $95";
-  if (MIDSIZE_OR.has(lower)) return "$40 to $90";
-  return "$35 to $85";
-}
-
-function buildCityFaqs(cityName: string, stateAbbr: string, groomerCount: number, parkCount: number) {
-  const stateName = stateAbbr === "WA" ? "Washington" : "Oregon";
-  const priceRange = getCityPriceRange(cityName, stateAbbr);
-  const lower = cityName.toLowerCase();
-  const isDry = DRY_CLIMATE_CITIES.has(lower);
-
-  // FAQ 2: grooming frequency varies by climate
-  const frequencyAnswer = isDry
-    ? "Most dogs should be professionally groomed every 4 to 8 weeks. Dogs with longer coats (Poodles, Shih Tzus, Goldendoodles) need grooming every 4 to 6 weeks. Short-haired breeds can go 8 to 12 weeks between appointments. In drier areas like " + cityName + ", there is less mud buildup, but dust and dry conditions can affect coat health. Regular brushing at home between visits helps prevent matting and keeps your dog's coat in good shape."
-    : "Most dogs should be professionally groomed every 4 to 8 weeks. Dogs with longer coats (Poodles, Shih Tzus, Goldendoodles) need grooming every 4 to 6 weeks. Short-haired breeds can go 8 to 12 weeks between appointments. In the Pacific Northwest, dogs often need grooming every 4 to 6 weeks during the rainy months (October through April) due to mud and damp conditions. Regular brushing at home between visits helps prevent matting.";
-
-  // FAQ 3: what to look for, varies by groomer count
-  let groomerCountDetail: string;
-  if (groomerCount >= 10) {
-    groomerCountDetail = `With ${groomerCount} groomers in ${cityName}, you have plenty of options to compare.`;
-  } else if (groomerCount >= 3) {
-    groomerCountDetail = `${cityName} has ${groomerCount} groomers, so consider expanding your search to nearby cities for more options.`;
-  } else {
-    const label = groomerCount === 1 ? "groomer" : "groomers";
-    groomerCountDetail = `While ${cityName} has ${groomerCount} ${label} listed, nearby cities offer additional options to consider.`;
-  }
-
-  return [
-    {
-      question: `How much does dog grooming cost in ${cityName}?`,
-      answer: `Dog grooming in ${cityName}, ${stateName} typically costs ${priceRange} for a standard bath and haircut, depending on your dog's size, breed, and coat condition. Prices may be higher for large breeds or dogs with matted fur. Compare ${groomerCount} groomers on GroomLocal to find the best value.`,
-    },
-    {
-      question: "How often should I groom my dog?",
-      answer: frequencyAnswer,
-    },
-    {
-      question: `What should I look for in a dog groomer in ${cityName}?`,
-      answer: `Look for groomers with positive reviews, proper certifications, and a clean facility. Ask about their experience with your dog's breed. A good groomer will discuss your preferences before starting and handle your dog with patience. ${groomerCountDetail} Each listing on GroomLocal includes service details and contact information.`,
-    },
-    {
-      question: `Are there mobile dog groomers in ${cityName}?`,
-      answer: `Yes, several groomers in ${cityName}, ${stateAbbr} offer mobile grooming services. Mobile groomers come to your home in a fully equipped van, which is convenient for busy pet owners or dogs that get anxious at salons. Check individual listings on GroomLocal for mobile availability.`,
-    },
-    {
-      question: "What grooming services do most groomers offer?",
-      answer: "Most professional groomers offer bath and blow-dry, haircut and styling, nail trimming, ear cleaning, teeth brushing, and de-shedding treatments. Many also provide add-on services like flea treatments, medicated baths, and anal gland expression. Breed-specific cuts are available at salons with experienced stylists.",
-    },
-  ];
+export async function generateStaticParams() {
+  const cities = await getCities();
+  return cities.slice(0, 30).map((c) => ({
+    state: stateSlugFromAbbr(c.state_abbr),
+    city: c.slug,
+  }));
 }
 
 interface CityPageProps {
@@ -102,11 +34,13 @@ interface CityPageProps {
 
 export async function generateMetadata({ params }: CityPageProps): Promise<Metadata> {
   const { state, city } = await params;
+  if (!isValidStateSlug(state)) notFound();
   const stateAbbr = stateAbbrFromSlug(state);
   const cityData = await getCityBySlug(city, stateAbbr);
+  const content = getEnrichedCityContent(stateAbbr, city);
+  if (!cityData && !content) notFound();
   const stateName = stateNameFromSlug(state);
   const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
-  const content = getEnrichedCityContent(stateAbbr, city);
 
   const groomerCount = cityData?.groomer_count ?? 0;
   // Prevent indexing of thin city pages with fewer than 3 listings
@@ -163,6 +97,7 @@ export async function generateMetadata({ params }: CityPageProps): Promise<Metad
 
 export default async function CityPage({ params }: CityPageProps) {
   const { state, city } = await params;
+  if (!isValidStateSlug(state)) notFound();
   const stateAbbr = stateAbbrFromSlug(state);
   const stateName = stateNameFromSlug(state);
 
@@ -173,11 +108,13 @@ export default async function CityPage({ params }: CityPageProps) {
     getFeaturedByCity(city, stateAbbr),
   ]);
 
-  const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
-  const nearby = relatedCities.filter((c) => c.slug !== city).slice(0, 6);
   const content = getEnrichedCityContent(stateAbbr, city);
+  if (!cityData && !content) notFound();
 
-  const faqs = buildCityFaqs(cityName, stateAbbr, listings.length, content?.dogParks?.length ?? 0);
+  const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
+  const nearby = getNearbyCities(city, relatedCities, getMetroNeighbors(city), 6);
+
+  const faqs = buildDogGroomingFaqs(cityName, stateAbbr, listings, content?.dogParks?.length ?? 0);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -207,9 +144,12 @@ export default async function CityPage({ params }: CityPageProps) {
               {content.intro}
             </p>
           )}
-          <p className="mt-2 text-xs text-text-muted/60">
-            Listings last updated: {new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" })}
-          </p>
+          <CityStatsBlock
+            groomerCount={listings.length}
+            metroCityCount={getMetroNeighbors(city).length + 1}
+            serviceCount={new Set(listings.flatMap((l) => l.service_tags ?? [])).size}
+            lastUpdated={new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+          />
         </div>
       </section>
 
@@ -397,6 +337,13 @@ export default async function CityPage({ params }: CityPageProps) {
           </section>
         </>
       )}
+
+      {/* Pricing Guide */}
+      <CityPricingSection
+        cityName={cityName}
+        pricing={getCityPricingBreakdown(cityName, "dog-grooming")}
+        serviceLabel="Dog Grooming"
+      />
 
       {/* FAQ Section */}
       <section className="bg-white py-10">

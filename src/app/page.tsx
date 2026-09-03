@@ -44,6 +44,13 @@ export default async function HomePage() {
 
   const cityCount = waCities.length + orCities.length;
 
+  const { "@context": _ws, ...websiteBody } = websiteSchema();
+  const { "@context": _org, ...orgBody } = organizationSchema();
+  const homepageJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [websiteBody, orgBody],
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* HERO SECTION */}
@@ -123,15 +130,7 @@ export default async function HomePage() {
 
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@graph": [
-              { "@type": "WebSite", name: "GroomLocal", url: "https://groomlocal.com", description: "Find the best dog groomers in Seattle, Tacoma, Portland, and across the Pacific Northwest." },
-              { "@type": "Organization", name: "GroomLocal", url: "https://groomlocal.com", logo: "https://groomlocal.com/icon.svg", description: "The Pacific Northwest's most trusted pet grooming directory.", areaServed: [{ "@type": "State", name: "Washington" }, { "@type": "State", name: "Oregon" }] },
-            ],
-          }),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageJsonLd) }}
       />
     </div>
   );

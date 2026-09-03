@@ -1,0 +1,266 @@
+"use client";
+
+import React, { useState, useMemo, useCallback } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { ListingCard } from "./listing-card";
+import { TagFilterBar } from "./tag-filter-bar";
+import { PawPrint, ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
+import { AdSlot } from "./ad-slot";
+import type { ListingCardData } from "@/lib/types";
+import type { PriceTag } from "@/lib/tags";
+
+const PAGE_SIZE = 36;
+
+interface CityListingsInnerProps {
+  listings: ListingCardData[];
+  heading: string;
+  preFilterService?: string;
+  preFilterSpecialty?: string;
+}
+
+function parseList(val: string | null): string[] {
+  if (!val) return [];
+  return val.split(",").filter(Boolean);
+}
+
+function serializeList(arr: string[]): string | null {
+  return arr.length > 0 ? arr.join(",") : null;
+}
+
+export function CityListingsInner({
+  listings,
+  heading,
+  preFilterService,
+  preFilterSpecialty,
+}: CityListingsInnerProps) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const urlServices = parseList(searchParams.get("services"));
+  const urlSpecialties = parseList(searchParams.get("specialties"));
+  const urlFeatures = parseList(searchParams.get("features"));
+  const urlPrice = searchParams.get("price") as PriceTag | null;
+  const urlSort = searchParams.get("sort") || "top-rated";
+
+  const [activeServiceTags, setActiveServiceTags] = useState<string[]>(
+    urlServices.length > 0 ? urlServices : preFilterService ? [preFilterService] : []
+  );
+  const [activeSpecialtyTags, setActiveSpecialtyTags] = useState<string[]>(
+    urlSpecialties.length > 0 ? urlSpecialties : preFilterSpecialty ? [preFilterSpecialty] : []
+  );
+  const [activeFeatureTags, setActiveFeatureTags] = useState<string[]>(urlFeatures);
+  const [activePriceTag, setActivePriceTag] = useState<PriceTag | null>(urlPrice);
+  const [sort, setSort] = useState(urlSort);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
+  const updateUrl = useCallback(
+    (updates: {
+      services?: string[];
+      specialties?: string[];
+      features?: string[];
+      price?: PriceTag | null;
+      sort?: string;
+    }) => {
+      const params = new URLSearchParams(searchParams.toString());
+
+      const services = updates.services ?? activeServiceTags;
+      const specialties = updates.specialties ?? activeSpecialtyTags;
+      const features = updates.features ?? activeFeatureTags;
+      const price = updates.price !== undefined ? updates.price : activePriceTag;
+      const sortVal = updates.sort ?? sort;
+
+      const svc = serializeList(services);
+      const spec = serializeList(specialties);
+      const feat = serializeList(features);
+
+      if (svc) params.set("services", svc);
+      else params.delete("services");
+      if (spec) params.set("specialties", spec);
+      else params.delete("specialties");
+      if (feat) params.set("features", feat);
+      else params.delete("features");
+      if (price) params.set("price", price);
+      else params.delete("price");
+      if (sortVal && sortVal !== "top-rated") params.set("sort", sortVal);
+      else params.delete("sort");
+
+      const qs = params.toString();
+      router.replace(qs ? `?${qs}` : "", { scroll: false });
+    },
+    [searchParams, router, activeServiceTags, activeSpecialtyTags, activeFeatureTags, activePriceTag, sort]
+  );
+
+  const filtered = useMemo(() => {
+    let result = [...listings];
+
+    if (activeServiceTags.length > 0) {
+      result = result.filter((l) =>
+        activeServiceTags.some((tag) => l.service_tags.includes(tag))
+      );
+    }
+
+    if (activeSpecialtyTags.length > 0) {
+      result = result.filter((l) =>
+        activeSpecialtyTags.some((tag) => l.specialty_tags.includes(tag))
+      );
+    }
+
+    if (activeFeatureTags.length > 0) {
+      result = result.filter((l) =>
+        activeFeatureTags.every((tag) => l.feature_tags.includes(tag))
+      );
+    }
+
+    if (activePriceTag) {
+      result = result.filter((l) => l.price_tag === activePriceTag);
+    }
+
+    switch (sort) {
+      case "top-rated":
+        result.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+        break;
+      case "most-reviewed":
+        result.sort((a, b) => (b.review_count ?? 0) - (a.review_count ?? 0));
+        break;
+      case "price-low":
+        result.sort((a, b) => (a.price_min ?? 0) - (b.price_min ?? 0));
+        break;
+      case "price-high":
+        result.sort((a, b) => (b.price_max ?? 0) - (a.price_max ?? 0));
+        break;
+    }
+
+    result.sort((a, b) => (b.is_featured ? 1 : 0) - (a.is_featured ? 1 : 0));
+
+    return result;
+  }, [listings, activeServiceTags, activeSpecialtyTags, activeFeatureTags, activePriceTag, sort]);
+
+  const visible = filtered.slice(0, visibleCount);
+  const hasMore = visibleCount < filtered.length;
+
+  const toggleIn = (arr: string[], item: string) =>
+    arr.includes(item) ? arr.filter((x) => x !== item) : [...arr, item];
+
+  const resetVisible = () => setVisibleCount(PAGE_SIZE);
+
+  return (
+    <div>
+      <TagFilterBar
+        resultCount={filtered.length}
+        heading={heading}
+        activeServiceTags={activeServiceTags}
+        activeSpecialtyTags={activeSpecialtyTags}
+        activeFeatureTags={activeFeatureTags}
+        activePriceTag={activePriceTag}
+        onServiceToggle={(slug) => {
+          const next = toggleIn(activeServiceTags, slug);
+          setActiveServiceTags(next);
+          updateUrl({ services: next });
+          resetVisible();
+        }}
+        onSpecialtyToggle={(slug) => {
+          const next = toggleIn(activeSpecialtyTags, slug);
+          setActiveSpecialtyTags(next);
+          updateUrl({ specialties: next });
+          resetVisible();
+        }}
+        onFeatureToggle={(slug) => {
+          const next = toggleIn(activeFeatureTags, slug);
+          setActiveFeatureTags(next);
+          updateUrl({ features: next });
+          resetVisible();
+        }}
+        onPriceToggle={(price) => {
+          const next = activePriceTag === price ? null : price;
+          setActivePriceTag(next);
+          updateUrl({ price: next });
+          resetVisible();
+        }}
+        onClearAll={() => {
+          const svc = preFilterService ? [preFilterService] : [];
+          const spec = preFilterSpecialty ? [preFilterSpecialty] : [];
+          setActiveServiceTags(svc);
+          setActiveSpecialtyTags(spec);
+          setActiveFeatureTags([]);
+          setActivePriceTag(null);
+          setSort("top-rated");
+          updateUrl({ services: svc, specialties: spec, features: [], price: null, sort: "top-rated" });
+          resetVisible();
+        }}
+        sort={sort}
+        setSort={(s) => {
+          setSort(s);
+          updateUrl({ sort: s });
+          resetVisible();
+        }}
+      />
+
+      <div className="mt-6">
+        {filtered.length === 0 ? (
+          <div className="text-center py-16 text-text-muted">
+            <PawPrint
+              weight="fill"
+              className="w-12 h-12 text-text-muted/30 mx-auto mb-3"
+            />
+            <p className="font-heading text-lg">No groomers match your filters</p>
+            <p className="text-sm mt-1">Try adjusting your filters above</p>
+
+            <div className="mt-8 pt-8 border-t border-border max-w-md mx-auto">
+              <p className="font-heading text-base font-semibold text-brand-primary mb-1">
+                Are you a groomer in this area?
+              </p>
+              <p className="text-sm text-text-muted mb-4">
+                Get your business listed for free and start connecting with local pet parents.
+              </p>
+              <div className="flex items-center justify-center gap-3">
+                <Link
+                  href="/get-listed"
+                  className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-brand-primary text-white text-sm font-semibold hover:bg-brand-primary/90 transition-colors"
+                >
+                  Get Listed Free
+                  <ArrowRight weight="bold" className="w-3.5 h-3.5" />
+                </Link>
+                <Link
+                  href="/for-groomers"
+                  className="inline-flex items-center px-5 py-2.5 rounded-full border border-border text-sm font-semibold text-brand-primary hover:bg-surface transition-colors"
+                >
+                  Learn More
+                </Link>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {visible.map((listing, i) => (
+                <React.Fragment key={listing.id || listing.slug}>
+                  <ListingCard listing={listing} index={i} variant="horizontal" />
+                  {(i + 1) % 6 === 0 && i < visible.length - 1 && (
+                    <div className="lg:col-span-2">
+                      <AdSlot slot={`city-results-${Math.floor(i / 6)}`} format="leaderboard" />
+                    </div>
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+            {hasMore && (
+              <div className="mt-8 text-center">
+                <button
+                  type="button"
+                  onClick={() => setVisibleCount((n) => n + PAGE_SIZE)}
+                  className="inline-flex items-center gap-2 rounded-full border border-border bg-white px-6 py-2.5 text-sm font-semibold text-brand-primary hover:border-brand-secondary/40 hover:bg-surface transition-colors"
+                >
+                  Load more
+                  <span className="text-text-muted font-medium">
+                    {visible.length} of {filtered.length}
+                  </span>
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}

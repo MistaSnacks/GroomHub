@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
     "Learn how GroomLocal collects, uses, and protects your personal information.",
+  alternates: { canonical: "/privacy" },
   openGraph: {
     title: "Privacy Policy",
     description: "Learn how GroomLocal collects, uses, and protects your personal information.",
