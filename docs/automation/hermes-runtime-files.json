@@ -84,12 +84,12 @@
       "sha256": "8e6d6232e40ab078a8cc5ddc32c2a0d353c2181ae8c8a4fdac17cc02e127a815"
     },
     {
-      "path": "scripts/image-providers/openai.py",
+      "path": "scripts/image-providers/gpt-image.py",
       "sha256": "37be5ea0240e5fa27b556cf2c4546d4300d97c5840efedd6b05414040c58b191"
     },
     {
       "path": "scripts/maui-blog-image.sh",
-      "sha256": "6c903dd243964d8c01a18cac3952fe9ce58a1f0fbb19602b4d5ed49223e903f9"
+      "sha256": "294c2f14e50943b49b9a72992c4bd03256d391e6c47ad2a95a1a42d099f2ba13"
     },
     {
       "path": "scripts/maui-compare-index.py",
@@ -121,7 +121,7 @@
     },
     {
       "path": "skills/hermes-blog-skill/references/setup.md",
-      "sha256": "ed90a6619e29efb00e132b1cc2100bac9252a981db1e3671fea9d8bdd4d4eb2e"
+      "sha256": "3fac987d153ae13e4c9c881ec39b4d7c3dc468d8bf5deec1035cddbea6d2cfe9"
     },
     {
       "path": "src/lib/grooming-guides.ts",

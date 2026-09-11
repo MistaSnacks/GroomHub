@@ -49,7 +49,7 @@ applying a new article. Never deploy the Git checkout wholesale.
 The image workflow uses `scripts/maui-blog-image.sh`,
 `scripts/maui-compare-index.py`, and `scripts/maui-remove-background.py`, or
 available image tools meeting the same appearance and export requirements.
-Both provider helpers are bundled at `scripts/image-providers/{gemini,openai}.py`;
+Both provider helpers are bundled at `scripts/image-providers/{gemini,gpt-image}.py`;
 no external `.claude` directory is needed. Their `uv` shebangs install declared
 dependencies. Supply image API keys through the process environment or the
 checkout's ignored `.env.local`. Provider defaults are preserved; the image-model

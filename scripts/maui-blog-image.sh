@@ -95,7 +95,7 @@ fi
 # === OpenAI variant via the gpt-image skill (approved reference) ===
 echo ""
 echo "→ Generating OpenAI variant via gpt-image skill (approved reference)..."
-GPT_SCRIPT="$SCRIPT_DIR/image-providers/openai.py"
+GPT_SCRIPT="$SCRIPT_DIR/image-providers/gpt-image.py"
 if [[ ! -x "$GPT_SCRIPT" ]]; then
   echo "  ! gpt-image skill not found or not executable at $GPT_SCRIPT" >&2
 else
