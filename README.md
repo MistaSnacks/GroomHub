@@ -34,3 +34,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Hermes Blog Skill
+
+Read [Hermes Blog Skill](skills/hermes-blog-skill/SKILL.md) for the weekly GroomLocal workflow: one new article, new approved Maui artwork, live SEO research, GTM tracking, and controlled publication. The package includes its supporting references and [setup requirements for another computer](skills/hermes-blog-skill/references/setup.md).
