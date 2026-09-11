@@ -1,0 +1,78 @@
+{
+  "checked_at": "2026-09-07",
+  "provider": "DataForSEO",
+  "location": "United States",
+  "language": "en",
+  "keywords": [
+    {
+      "keyword": "cat grooming cost",
+      "search_volume": 1000,
+      "collected": "2026-08-25 14:56:54 +00:00"
+    },
+    {
+      "keyword": "dog grooming anxiety",
+      "search_volume": 1000,
+      "collected": "2026-08-28 19:36:59 +00:00"
+    },
+    {
+      "keyword": "dog nail trimming cost",
+      "search_volume": 880,
+      "collected": "2026-08-29 06:10:40 +00:00"
+    },
+    {
+      "keyword": "goldendoodle grooming",
+      "search_volume": 2900,
+      "collected": "2026-08-29 03:34:54 +00:00"
+    },
+    {
+      "keyword": "how long does dog grooming take",
+      "search_volume": 590,
+      "collected": "2026-08-28 22:58:42 +00:00"
+    },
+    {
+      "keyword": "how often should you groom your dog",
+      "search_volume": 390,
+      "collected": "2026-08-24 00:42:28 +00:00"
+    },
+    {
+      "keyword": "how to choose a dog groomer",
+      "search_volume": 10,
+      "collected": "2026-08-21 21:44:32 +00:00"
+    },
+    {
+      "keyword": "mobile dog grooming cost",
+      "search_volume": 590,
+      "collected": "2026-08-20 12:41:05 +00:00"
+    },
+    {
+      "keyword": "puppy first grooming",
+      "search_volume": 210,
+      "collected": "2026-08-23 04:02:12 +00:00"
+    },
+    {
+      "keyword": "senior dog grooming",
+      "search_volume": 390,
+      "collected": "2026-08-28 20:56:44 +00:00"
+    },
+    {
+      "keyword": "severely matted dog",
+      "search_volume": 140,
+      "collected": "2026-08-17 20:28:14 +00:00"
+    },
+    {
+      "keyword": "summer dog grooming",
+      "search_volume": 10,
+      "collected": "2026-08-19 14:21:58 +00:00"
+    },
+    {
+      "keyword": "winter dog grooming",
+      "search_volume": 10,
+      "collected": "2026-08-20 19:09:31 +00:00"
+    }
+  ],
+  "limitations": [
+    "Third-party monthly estimates, not Search Console clicks or conversions.",
+    "No first-party Search Console data available in this audit.",
+    "Existing guides reviewed for accuracy and distinct intent; no ranking or rich-result guarantee."
+  ]
+}

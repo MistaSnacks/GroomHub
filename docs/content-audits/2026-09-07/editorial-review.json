@@ -1,0 +1,312 @@
+[
+  {
+    "slug": "cat-grooming-what-to-expect",
+    "word_count": 1932,
+    "sha256": "28be6eb3bd1b6bc8726c3a010deaef51985eb544b319d0ac204ff95bae7949b0",
+    "primary_sources": [
+      "https://nationalcatgroomers.com/",
+      "https://services.petsmart.com/content/grooming-faq",
+      "https://www.aspca.org/pet-care/cat-care/cat-grooming-tips",
+      "https://www.petco.com/s/cat-grooming-services"
+    ],
+    "internal_links": [
+      "/blog/choosing-the-right-groomer-for-your-pet",
+      "/cat-grooming",
+      "/get-quotes"
+    ]
+  },
+  {
+    "slug": "choosing-the-right-groomer-for-your-pet",
+    "word_count": 972,
+    "sha256": "d0ecda28dba5fee18029a2b102013558fb06db81c30e7ac9002376b810af7565",
+    "primary_sources": [
+      "https://nationaldoggroomers.com/"
+    ],
+    "internal_links": [
+      "/blog/dog-grooming-cost-seattle-portland-2026",
+      "/blog/goldendoodle-grooming-guide",
+      "/blog/grooming-anxious-dogs-stress-free-guide",
+      "/blog/how-long-does-dog-grooming-take",
+      "/blog/how-often-should-you-groom-your-dog",
+      "/dog-grooming",
+      "/dog-grooming/or/portland",
+      "/dog-grooming/wa/seattle",
+      "/get-quotes"
+    ]
+  },
+  {
+    "slug": "dog-grooming-cost-seattle-portland-2026",
+    "word_count": 1348,
+    "sha256": "a8463a554b584989a46842fd9ad32c8ef3d0b47425165ca1e6ed09e0b02ee999",
+    "primary_sources": [
+      "https://girldoggies.com/",
+      "https://pdxpetspa.com/",
+      "https://seattlecanineclub.com/services/dog-grooming-seattle/",
+      "https://www.fullmoongroom.com/",
+      "https://www.thegroomshoppdx.com/services"
+    ],
+    "internal_links": [
+      "/blog/choosing-the-right-groomer-for-your-pet",
+      "/blog/how-often-should-you-groom-your-dog",
+      "/blog/mobile-dog-grooming-cost-guide",
+      "/blog/severely-matted-dog-grooming-guide",
+      "/dog-grooming",
+      "/dog-grooming/or/portland",
+      "/dog-grooming/wa/seattle",
+      "/get-quotes"
+    ]
+  },
+  {
+    "slug": "dog-nail-trimming-cost-guide",
+    "word_count": 1409,
+    "sha256": "30d49570346950e2c7bb3998180193a2b247eb5316346d49617376b2ee500310",
+    "primary_sources": [
+      "https://girldoggies.com/",
+      "https://vcahospitals.com/know-your-pet/how-to-trim-a-dogs-nails",
+      "https://www.ohpawspdx.com/",
+      "https://www.petco.com/s/dog-nail-trimming-services"
+    ],
+    "internal_links": [
+      "/blog/dog-grooming-cost-seattle-portland-2026",
+      "/blog/grooming-anxious-dogs-stress-free-guide",
+      "/blog/mobile-dog-grooming-cost-guide",
+      "/dog-grooming",
+      "/dog-grooming/or/portland",
+      "/dog-grooming/wa/seattle",
+      "/get-quotes"
+    ]
+  },
+  {
+    "slug": "goldendoodle-grooming-guide",
+    "word_count": 1782,
+    "sha256": "6c56c82a85fb1af90532100925793f9dfbbf01610bd11f97467f5a4ef197784e",
+    "primary_sources": [
+      "https://aafa.org/allergies/types-of-allergies/pet-dog-cat-allergies/",
+      "https://vcahospitals.com/know-your-pet/grooming-and-coat-care-for-your-dog",
+      "https://www.akc.org/expert-advice/health/types-dog-brushes-shedding/",
+      "https://www.fullmoongroom.com/",
+      "https://www.tailswaggerpdx.com/services"
+    ],
+    "internal_links": [
+      "/blog/choosing-the-right-groomer-for-your-pet",
+      "/blog/dog-grooming-cost-seattle-portland-2026",
+      "/blog/how-often-should-you-groom-your-dog",
+      "/blog/mobile-dog-grooming-cost-guide",
+      "/blog/puppy-first-grooming-guide",
+      "/blog/rain-mud-fur-pnw-grooming-survival-guide",
+      "/blog/severely-matted-dog-grooming-guide",
+      "/blog/summer-dog-grooming-pnw",
+      "/dog-grooming",
+      "/get-quotes"
+    ]
+  },
+  {
+    "slug": "grooming-anxious-dogs-stress-free-guide",
+    "word_count": 1063,
+    "sha256": "2f73a675bccd0be197e1296021aa59c2e0d9c5cde40bf38bc0b1dd2653ac6436",
+    "primary_sources": [
+      "https://www.aaha.org/resources/2015-aaha-canine-and-feline-behavior-management-guidelines/changing-behaviors/",
+      "https://www.aaha.org/trends-magazine/publications/less-stress-and-better-outcomes-with-cooperative-care/"
+    ],
+    "internal_links": [
+      "/blog/choosing-the-right-groomer-for-your-pet",
+      "/blog/mobile-dog-grooming-cost-guide",
+      "/blog/severely-matted-dog-grooming-guide",
+      "/dog-grooming",
+      "/mobile-grooming"
+    ]
+  },
+  {
+    "slug": "how-long-does-dog-grooming-take",
+    "word_count": 1037,
+    "sha256": "9ad1825f0501a301b7a29a8b11f85bf28ab8d6178050834de3bdc499e8df3583",
+    "primary_sources": [
+      "https://services.petsmart.com/content/grooming-faq",
+      "https://services.petsmart.com/content/grooming-process",
+      "https://www.petco.com/s/dog-nail-trimming-services"
+    ],
+    "internal_links": [
+      "/blog/goldendoodle-grooming-guide",
+      "/blog/grooming-anxious-dogs-stress-free-guide",
+      "/blog/mobile-dog-grooming-cost-guide",
+      "/blog/puppy-first-grooming-guide",
+      "/blog/senior-dog-grooming-budget-guide",
+      "/blog/severely-matted-dog-grooming-guide",
+      "/dog-grooming",
+      "/mobile-grooming"
+    ]
+  },
+  {
+    "slug": "how-often-should-you-groom-your-dog",
+    "word_count": 1044,
+    "sha256": "c2290920e2b8707b74c0200abc57218459ecbb377355c099c72bc49414b188b0",
+    "primary_sources": [
+      "https://vcahospitals.com/know-your-pet/grooming-and-coat-care-for-your-dog",
+      "https://vcahospitals.com/know-your-pet/how-to-trim-a-dogs-nails",
+      "https://www.aspca.org/pet-care/dog-care/dog-grooming-tips"
+    ],
+    "internal_links": [
+      "/blog/dog-nail-trimming-cost-guide",
+      "/blog/goldendoodle-grooming-guide",
+      "/blog/grooming-anxious-dogs-stress-free-guide",
+      "/blog/pnw-seasonal-dog-grooming-guide",
+      "/blog/puppy-first-grooming-guide",
+      "/blog/rain-mud-fur-pnw-grooming-survival-guide",
+      "/blog/senior-dog-grooming-budget-guide",
+      "/dog-grooming"
+    ]
+  },
+  {
+    "slug": "mobile-dog-grooming-cost-guide",
+    "word_count": 1633,
+    "sha256": "da61438c631ccf5228abdf5bb2028232cafda103d8fa724f2a87fc9d0ceaed1d",
+    "primary_sources": [
+      "https://girldoggies.com/",
+      "https://www.fullmoongroom.com/",
+      "https://www.tailswaggerpdx.com/services",
+      "https://www.thegroomshoppdx.com/services"
+    ],
+    "internal_links": [
+      "/blog/dog-grooming-cost-seattle-portland-2026",
+      "/blog/goldendoodle-grooming-guide",
+      "/blog/grooming-anxious-dogs-stress-free-guide",
+      "/blog/how-long-does-dog-grooming-take",
+      "/blog/how-often-should-you-groom-your-dog",
+      "/blog/severely-matted-dog-grooming-guide",
+      "/get-quotes",
+      "/mobile-grooming",
+      "/mobile-grooming/or/portland",
+      "/mobile-grooming/wa/seattle"
+    ]
+  },
+  {
+    "slug": "pnw-seasonal-dog-grooming-guide",
+    "word_count": 910,
+    "sha256": "837d41420ba62b6cb1671a47ab73c70f81c16e1637d10c77dcfcca0caf767db8",
+    "primary_sources": [
+      "https://doh.wa.gov/community-and-environment/contaminants/cyanobacteria",
+      "https://www.akc.org/expert-advice/health/how-to-groom-a-dog/",
+      "https://www.aspca.org/pet-care/general-pet-care/cold-weather-safety-tips"
+    ],
+    "internal_links": [
+      "/blog/choosing-the-right-groomer-for-your-pet",
+      "/blog/dog-grooming-cost-seattle-portland-2026",
+      "/blog/how-often-should-you-groom-your-dog",
+      "/blog/rain-mud-fur-pnw-grooming-survival-guide",
+      "/blog/senior-dog-grooming-budget-guide",
+      "/blog/severely-matted-dog-grooming-guide",
+      "/blog/summer-dog-grooming-pnw",
+      "/blog/winter-grooming-tips-pnw-dogs",
+      "/dog-grooming/or",
+      "/dog-grooming/wa"
+    ]
+  },
+  {
+    "slug": "puppy-first-grooming-guide",
+    "word_count": 1052,
+    "sha256": "eb83619c979de51b2d0af84c1d45c2d84a02cf0ddb4b558fa71c0c4a9e4c5c6d",
+    "primary_sources": [
+      "https://services.petsmart.com/content/grooming-faq",
+      "https://www.avsab.org/wp-content/uploads/2019/01/Puppy-Socialization-Position-Statement-FINAL.pdf",
+      "https://www.petsmart.com/learning-center/pet-care/how-to-prepare-your-pet-for-grooming"
+    ],
+    "internal_links": [
+      "/blog/choosing-the-right-groomer-for-your-pet",
+      "/blog/dog-grooming-cost-seattle-portland-2026",
+      "/blog/goldendoodle-grooming-guide",
+      "/blog/grooming-anxious-dogs-stress-free-guide",
+      "/blog/how-long-does-dog-grooming-take",
+      "/dog-grooming"
+    ]
+  },
+  {
+    "slug": "rain-mud-fur-pnw-grooming-survival-guide",
+    "word_count": 911,
+    "sha256": "88b315aa7a29f110082cf11bb70807c679688936fd9d7809b755574dccdcf086",
+    "primary_sources": [
+      "https://vcahospitals.com/know-your-pet/ear-cleaning-in-dogs",
+      "https://vcahospitals.com/know-your-pet/hot-spots-in-dogs",
+      "https://www.akc.org/expert-advice/health/how-to-groom-a-dog/"
+    ],
+    "internal_links": [
+      "/blog/goldendoodle-grooming-guide",
+      "/blog/how-often-should-you-groom-your-dog",
+      "/blog/pnw-seasonal-dog-grooming-guide",
+      "/blog/severely-matted-dog-grooming-guide",
+      "/dog-grooming",
+      "/mobile-grooming"
+    ]
+  },
+  {
+    "slug": "senior-dog-grooming-budget-guide",
+    "word_count": 1057,
+    "sha256": "d41b40e62da58e79e22df1ffb26daf74a1506aca57c691ba9140d5c87970582d",
+    "primary_sources": [
+      "https://vcahospitals.com/know-your-pet/ear-cleaning-in-dogs",
+      "https://www.aaha.org/resources/2023-aaha-senior-care-guidelines-for-dogs-and-cats/",
+      "https://www.aaha.org/resources/aging-with-grace-how-to-support-your-senior-pet/"
+    ],
+    "internal_links": [
+      "/blog/choosing-the-right-groomer-for-your-pet",
+      "/blog/dog-grooming-cost-seattle-portland-2026",
+      "/blog/dog-nail-trimming-cost-guide",
+      "/blog/mobile-dog-grooming-cost-guide",
+      "/dog-grooming",
+      "/mobile-grooming"
+    ]
+  },
+  {
+    "slug": "severely-matted-dog-grooming-guide",
+    "word_count": 1115,
+    "sha256": "4b2cff5dd3284406546d687a9417251bfbface927269049ba8744e34ea9b16e4",
+    "primary_sources": [
+      "https://vcahospitals.com/know-your-pet/grooming-and-coat-care-for-your-dog",
+      "https://www.aspca.org/news/haircut-could-save-life-preventing-your-pets-coat-matting",
+      "https://www.aspca.org/sites/default/files/upload/images/pet_grooming_tips_flyer.pdf"
+    ],
+    "internal_links": [
+      "/blog/dog-grooming-cost-seattle-portland-2026",
+      "/blog/goldendoodle-grooming-guide",
+      "/blog/how-often-should-you-groom-your-dog",
+      "/blog/rain-mud-fur-pnw-grooming-survival-guide",
+      "/dog-grooming"
+    ]
+  },
+  {
+    "slug": "summer-dog-grooming-pnw",
+    "word_count": 808,
+    "sha256": "52dbfacde772b2565349f032b2e616f171dfc468c812ab8587af19c96fc71771",
+    "primary_sources": [
+      "https://doh.wa.gov/community-and-environment/contaminants/cyanobacteria/faqs",
+      "https://www.airnow.gov/publications/wildfire-guide-factsheets/wildfire-smoke-protect-your-pets/",
+      "https://www.akc.org/expert-advice/health/at-home-grooming-tips-summer/",
+      "https://www.aspca.org/pet-care/general-pet-care/hot-weather-safety-tips"
+    ],
+    "internal_links": [
+      "/blog/choosing-the-right-groomer-for-your-pet",
+      "/blog/goldendoodle-grooming-guide",
+      "/blog/how-long-does-dog-grooming-take",
+      "/blog/pnw-seasonal-dog-grooming-guide",
+      "/dog-grooming/or/portland",
+      "/dog-grooming/wa/seattle",
+      "/mobile-grooming"
+    ]
+  },
+  {
+    "slug": "winter-grooming-tips-pnw-dogs",
+    "word_count": 863,
+    "sha256": "c4660dd7941af2145821cf186983cafbbd4923ec674e6161a9429456d8aa0c5c",
+    "primary_sources": [
+      "https://www.aaha.org/resources/aging-with-grace-how-to-support-your-senior-pet/",
+      "https://www.aspca.org/pet-care/general-pet-care/cold-weather-safety-tips"
+    ],
+    "internal_links": [
+      "/blog/dog-nail-trimming-cost-guide",
+      "/blog/how-often-should-you-groom-your-dog",
+      "/blog/pnw-seasonal-dog-grooming-guide",
+      "/blog/rain-mud-fur-pnw-grooming-survival-guide",
+      "/blog/severely-matted-dog-grooming-guide",
+      "/dog-grooming"
+    ]
+  }
+]

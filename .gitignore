@@ -64,3 +64,8 @@ get_roles.sql
 .superpowers/
 .vscode/
 /public/maui-assets/_compare/
+
+# Local editorial runs and Python caches (runtime source remains tracked for handoff)
+/output/
+__pycache__/
+*.py[cod]

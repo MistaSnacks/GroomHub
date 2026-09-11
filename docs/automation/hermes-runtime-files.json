@@ -1,0 +1,131 @@
+{
+  "captured_on": "2026-09-11",
+  "purpose": "Temporary runtime transfer; keep tracked until the receiving machine confirms its pull.",
+  "policy_note": "Shared policy uses checkout-relative output. Keep an existing installation's absolute policy/output history intact.",
+  "files": [
+    {
+      "path": ".gitignore",
+      "sha256": "6ab32b12caae89b7f2c9bf9b24df4fbb7abf38e4bac02c426e530cfcafb8997a"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "f0d894e42dc4a5f76d2436b2d5b2ca2ca52ce0e0c520fec1c4a62500b6f3d3c0"
+    },
+    {
+      "path": "docs/automation/content-inventory.json",
+      "sha256": "77cd6fe6590f233ca673a4459b7e435cfd54fa62bc902735c8164021a3e76ca6"
+    },
+    {
+      "path": "docs/automation/weekly-guides-policy.json",
+      "sha256": "73e87db43bffb57cb9cc1c0f2d67867c6ed600813880b92a8859787c83927fd2"
+    },
+    {
+      "path": "docs/automation/weekly-guides.md",
+      "sha256": "233420301da61a018a3f4df4bea707f7a9662249fa95b9c3aef98ab26b2019e1"
+    },
+    {
+      "path": "docs/content-audits/2026-09-07/content-checks.json",
+      "sha256": "0257f5cd57ead947b15046a8c9ac92259de011c35cc1569590229636f35dc184"
+    },
+    {
+      "path": "docs/content-audits/2026-09-07/editorial-review.json",
+      "sha256": "5565393d0612314aedd91133b01fa717cfc60a3386520e7c5ae05c23540f921f"
+    },
+    {
+      "path": "docs/content-audits/2026-09-07/image-optimizer-incident.md",
+      "sha256": "496e492f61a41586b5152b8878e84351aae6ef147ece8c03030c1a7a158f2944"
+    },
+    {
+      "path": "docs/content-audits/2026-09-07/report.md",
+      "sha256": "b77cebdd7ef3bc1a671c7e934eb023790dded20453d4b2f9de2e23789e8fa5b6"
+    },
+    {
+      "path": "docs/content-audits/2026-09-07/seo-evidence.json",
+      "sha256": "abe6003241b09f39c7506e91ee950951b25cb1afe9e592c8b20ce29a534c84cf"
+    },
+    {
+      "path": "docs/maui/STYLE-STANDARD.md",
+      "sha256": "a55c6074ede38642ae15d4f09ceb4cb590f9984fc932446d6805fdc1521aaf25"
+    },
+    {
+      "path": "docs/maui/approved-reference/bath-v2.png",
+      "sha256": "5fef4c54418bd4403bd883e988622e8ae0487cb2d3b31bd4d1c485c89cc3add7"
+    },
+    {
+      "path": "docs/maui/approved-reference/blow-dry-v2.png",
+      "sha256": "9fad64ee6ce999f55a9296321f684e36c69d4f41c144985b4e8c9a2d8bf6bd53"
+    },
+    {
+      "path": "docs/maui/approved-reference/brushing-v2.png",
+      "sha256": "b9ad67e1de64f667e4eb55f5de30757b582c6ee7e024ce26afa4c76272e26aac"
+    },
+    {
+      "path": "docs/maui/approved-reference/cat-costume-v2.png",
+      "sha256": "98c74a188beb0bb549f5424bb4b828b7504ef290b29568a16b7ee4b363e83092"
+    },
+    {
+      "path": "docs/maui/approved-reference/nail-clip-v2.png",
+      "sha256": "abcc4def9da523951ffd955e1526dba8fcef21d84a44612ccf9296fa4227bce8"
+    },
+    {
+      "path": "docs/maui/approved-reference/table-v2.png",
+      "sha256": "1980a97047363f6225238b1368acb6005d8061d0c06cd97f9d3b5932334f7b46"
+    },
+    {
+      "path": "docs/maui/transparency-seeds.json",
+      "sha256": "63699cf05c79e9c196adc2a07b614aa08e250ad96eee61fb7d5569382fd80076"
+    },
+    {
+      "path": "public/maui-assets/MAUI-BASE-PROMPT.md",
+      "sha256": "dde7fd4c5d6f0faa2a48f1583daa295499aac0d7492970124cda2c0cde987d16"
+    },
+    {
+      "path": "scripts/image-providers/gemini.py",
+      "sha256": "8e6d6232e40ab078a8cc5ddc32c2a0d353c2181ae8c8a4fdac17cc02e127a815"
+    },
+    {
+      "path": "scripts/image-providers/openai.py",
+      "sha256": "37be5ea0240e5fa27b556cf2c4546d4300d97c5840efedd6b05414040c58b191"
+    },
+    {
+      "path": "scripts/maui-blog-image.sh",
+      "sha256": "6c903dd243964d8c01a18cac3952fe9ce58a1f0fbb19602b4d5ed49223e903f9"
+    },
+    {
+      "path": "scripts/maui-compare-index.py",
+      "sha256": "ebef8c527b3924f712bd7654732dc96bf6b4b88acea213fabf887e37a4695a9a"
+    },
+    {
+      "path": "scripts/maui-remove-background.py",
+      "sha256": "f4c5810c26133194fb4aa2f5beb6dad4309df42bb13f28fcf16fa1ca5609f4a0"
+    },
+    {
+      "path": "scripts/publish-weekly-guide.py",
+      "sha256": "342d704ae52ca515d42576389f54da885d0af77d71b796cf851a4904238bfdcb"
+    },
+    {
+      "path": "scripts/verify-weekly-guide.mjs",
+      "sha256": "bb29b94a89fb102a493a21bd468a7b96869d8b1cb7f6ad53f69512084cea879c"
+    },
+    {
+      "path": "scripts/weekly-guides-preflight.py",
+      "sha256": "0610dd8473ea6c362081b3a4472e27f9e4b4d1527d1f43d933d48d3f59864e29"
+    },
+    {
+      "path": "skills/hermes-blog-skill/SKILL.md",
+      "sha256": "14d2011124ff99ca6a8d5993bd568919e12f202f79e6b6dbc52704a01bc6dc48"
+    },
+    {
+      "path": "skills/hermes-blog-skill/references/maui-image.md",
+      "sha256": "4e1caad500127459821913f65aa62783c8dc69bc517969d3fba2ab64da81a4ed"
+    },
+    {
+      "path": "skills/hermes-blog-skill/references/setup.md",
+      "sha256": "ed90a6619e29efb00e132b1cc2100bac9252a981db1e3671fea9d8bdd4d4eb2e"
+    },
+    {
+      "path": "src/lib/grooming-guides.ts",
+      "sha256": "987cb07257f8291279898844ff073255e5e38fd51c48d335c01f0d7002ffcf05"
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "groomer-apron": {
+    "seeds": [
+      [
+        0.17797,
+        0.66241
+      ],
+      [
+        0.65922,
+        0.68396
+      ],
+      [
+        0.4589,
+        0.7901
+      ]
+    ],
+    "tolerance": 85
+  },
+  "van-cost": {
+    "seeds": [
+      [
+        0.83719,
+        0.75579
+      ]
+    ],
+    "tolerance": 85
+  },
+  "mobile-van": {
+    "seeds": [
+      [
+        0.85874,
+        0.70551
+      ]
+    ],
+    "tolerance": 85
+  },
+  "summer": {
+    "seeds": [
+      [
+        0.59617,
+        0.50678
+      ],
+      [
+        0.58739,
+        0.7518
+      ]
+    ]
+  },
+  "rain-mud": {
+    "seeds": [
+      [
+        0.59138,
+        0.47566
+      ]
+    ]
+  },
+  "puppy": {
+    "seeds": [
+      [
+        0.52674,
+        0.75738
+      ]
+    ]
+  },
+  "grooming-cost": {
+    "tolerance": 38
+  },
+  "mobile-hero": {
+    "lower_tolerance": {
+      "y": 0.72,
+      "tolerance": 85
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "mode": "publish",
+  "model": "gpt-5.6-luna",
+  "provider": "openai-codex",
+  "base_url": null,
+  "schedule": "0 9 * * 1",
+  "timezone": "America/Los_Angeles",
+  "maximum_articles_per_run": 1,
+  "content_mode": "new_only",
+  "require_new_maui_image": true,
+  "new_content_authorized_on": "2026-09-07",
+  "output_root": "output/groomlocal-weekly",
+  "publication_authorized": true,
+  "resolved_endpoint": "https://chatgpt.com/backend-api/codex",
+  "publication_authorized_on": "2026-09-05",
+  "gtm_project": "groomlocal",
+  "gtm_tracking_required": true,
+  "publisher": "scripts/publish-weekly-guide.py"
+}

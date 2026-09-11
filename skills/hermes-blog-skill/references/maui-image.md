@@ -31,7 +31,7 @@ From the project root, the existing helper is:
 scripts/maui-blog-image.sh <slug> "<scene description>"
 ```
 
-It reads `public/maui-assets/MAUI-BASE-PROMPT.md`, references `docs/maui/approved-reference/brushing-v2.png`, and invokes the installed Gemini and OpenAI image helpers. It writes candidates to `public/maui-assets/_compare/<slug>/` and refreshes the comparison index. These candidates use a solid cream background as generation masters. Do not force white backgrounds or claim that PNG encoding alone supplies transparency.
+It reads `public/maui-assets/MAUI-BASE-PROMPT.md`, references `docs/maui/approved-reference/brushing-v2.png`, and invokes the bundled Gemini and OpenAI image helpers in `scripts/image-providers/`. It writes candidates to `public/maui-assets/_compare/<slug>/` and refreshes the comparison index. These candidates use a solid cream background as generation masters. Do not force white backgrounds or claim that PNG encoding alone supplies transparency.
 
 Inspect the actual outputs, not just the helper's completion message. If one provider fails, report which candidate exists; do not promise an unverified fallback. Do not repeatedly generate variants without addressing a concrete failure. If a comparison preview is already running, use its actual URL rather than assuming port 3001. Preserve any user-requested variant selection before proceeding.
 

@@ -2,7 +2,7 @@
 
 This package preserves the GroomLocal Hermes workflow as of September 11, 2026,
 including the September 7 requirement for new articles and new Maui artwork.
-It shares instructions and fixed visual references. It does not install a
+It shares instructions, runtime scripts, policy, and fixed visual references. It does not install a
 scheduler, transfer credentials, or configure publishing on the other computer.
 
 ## Read or install
@@ -13,10 +13,13 @@ installation's skills directory, retaining `references/` and its PNG files.
 Use the skill name `hermes-blog-skill` or display title **Hermes Blog Skill**.
 Reading the skill does not require running a job.
 
-Run repository commands from the GroomLocal checkout root. Do not reuse the
-original Mac's absolute paths. Configure the output directory for the destination
-machine in its existing weekly-guides policy. Resolve relative output paths from
-the checkout root. Keep run artifacts outside tracked source or locally ignored.
+Pull `main` in the full GroomHub checkout, not just the skill directory. The
+runtime scripts and policy live at the repository paths below. Run commands from
+the checkout root. The shared policy writes to `output/groomlocal-weekly/`, which
+is ignored by Git; both preflight and publisher resolve it from the checkout
+root, even when called from another directory. Absolute output paths remain
+supported for existing installations. Do not replace an existing machine's
+policy or move its pending runs merely to match this shared default.
 
 ## Runtime prerequisites for executing the workflow
 
@@ -29,18 +32,42 @@ Check these files before an editorial run:
 - `src/lib/grooming-guides.ts`
 - Current MDX articles under `src/content/blog/` and applicable `AGENTS.md` rules
 
-The publishing helpers and topic index were local, uncommitted runtime files when
-this documentation package was exported. A clone of the documentation branch
-alone may not contain them. If they are missing, the bot can read and plan from
-this skill, but must report the missing runtime before attempting the controlled
-editorial run. Obtain the current maintained runtime rather than inventing a
-replacement publisher or deploying the checkout wholesale.
+These runtime files are now included in `main` for the September 11 handoff.
+The exact handoff paths are in `docs/automation/hermes-runtime-files.json`.
+Install Python 3.11 or newer, Node.js compatible with the repository's Next.js
+version, Git, `uv`, and the Vercel CLI. Run `npm ci` in the checkout to install
+the existing locked JavaScript dependencies used by the verifier. Use a Unix
+shell (or WSL on Windows) for the shell image helper.
 
-The image workflow additionally uses `scripts/maui-blog-image.sh` and
-`scripts/maui-remove-background.py`, or available image tools that meet the same
-appearance and export requirements. Inspect the helpers' arguments and installed
-dependencies before running them. Preserve their required runtimes, including
-`uv` when declared by a helper.
+The Git checkout is not a complete snapshot of the latest deployed site.
+Read `docs/automation/content-inventory.json` alongside local MDX to avoid
+duplicating guides or drafts missing from the checkout. Its entries are coverage
+exclusions, not proof of publication; reconcile them with current live pages and
+GTM. The controlled publisher reconstructs current production source before
+applying a new article. Never deploy the Git checkout wholesale.
+
+The image workflow uses `scripts/maui-blog-image.sh`,
+`scripts/maui-compare-index.py`, and `scripts/maui-remove-background.py`, or
+available image tools meeting the same appearance and export requirements.
+Both provider helpers are bundled at `scripts/image-providers/{gemini,openai}.py`;
+no external `.claude` directory is needed. Their `uv` shebangs install declared
+dependencies. Supply image API keys through the process environment or the
+checkout's ignored `.env.local`. Provider defaults are preserved; the image-model
+comparison did not change the weekly default. The bundled OpenAI helper retains
+its existing Image 2 to 1.5 organization-verification fallback and reports the
+actual model used. Inspect helper arguments before execution.
+
+Run the extractor with its dependencies, for example:
+
+```bash
+uv run --with numpy --with scipy --with Pillow python scripts/maui-remove-background.py --help
+```
+
+Its `--sources` JSON is an array of `{ "scene": "new-slug", "source":
+"output/groomlocal-weekly/<run>/artwork/master.png" }`; source paths are relative
+to the checkout or absolute. `--output` must be a run-local directory. Optional
+`--seeds` maps scene names to reviewed normalized `[x, y]` coordinate lists.
+Inspect the generated numbered region diagnostic before selecting enclosed gaps.
 
 Bundled visual references correspond to these repository locations:
 
@@ -84,3 +111,11 @@ For a missing preflight helper, stop before the run. For a scheduler path reject
 with an installed helper, use the direct-execution fallback in `SKILL.md` only
 when the environment permits it. Reading the package never requires changing
 credentials, schedules, or permissions.
+
+## Temporary Git handoff
+
+The user requested these runtime files stay tracked until the other machine has
+pulled them. After transfer is confirmed, any later removal from tracking must
+preserve local copies first. `.gitignore` alone does not untrack committed files;
+`git rm --cached` affects future checkouts and may remove clean copies on another
+machine's next pull. The transfer commit remains available in Git history.

@@ -7,12 +7,11 @@
 # Outputs to: public/maui-assets/_compare/<slug>/{gemini,openai}.png
 # Updates:    public/maui-assets/_compare/index.html (auto-generated index)
 #
-# Reference image: public/maui-assets/00-maui-main.png
-# Base prompt:     pulled from public/maui-assets/MAUI-PROMPT-GUIDE.md
+# Reference image: docs/maui/approved-reference/brushing-v2.png
+# Base prompt:     pulled from public/maui-assets/MAUI-BASE-PROMPT.md
 #
-# After review, promote winner with:
-#   mv public/maui-assets/_compare/<slug>/{gemini,openai}.png \
-#      public/maui-assets/maui-<slug>-blog.png
+# After review, retain the opaque master and extract a true RGBA site derivative.
+# Follow docs/maui/STYLE-STANDARD.md; never promote a cream-background candidate directly.
 set -euo pipefail
 
 if [[ $# -lt 2 ]]; then
@@ -31,12 +30,9 @@ ASSETS="$PROJECT/public/maui-assets"
 OUT="$ASSETS/_compare/$SLUG"
 GUIDE="$ASSETS/MAUI-BASE-PROMPT.md"
 
-# Multi-reference style anchor: 3 images covering varied poses (sitting, standing,
-# costume) so the model averages style without locking onto a single pose. This is
-# the fix for "all generations come back in the anchor's pose" — single reference
-# = pose lock-in; multi-reference = style transfer with pose freedom.
+# The owner-approved appearance anchor is fixed; old scene art is never a style authority.
 REFS=(
-  "$ASSETS/maui-anxious-dog-grooming-blog.png" # SINGLE canonical style anchor — no multi-ref averaging
+  "$PROJECT/docs/maui/approved-reference/brushing-v2.png"
 )
 REF_ARGS=()
 for r in "${REFS[@]}"; do
@@ -46,15 +42,18 @@ done
 mkdir -p "$OUT"
 
 # Load env (GEMINI_API_KEY + OPENAI_API_KEY from .env.local)
+# Only the two image API keys are needed. Sourcing the whole file breaks on
+# unquoted values that contain spaces, so read just these keys.
 if [[ -f "$PROJECT/.env.local" ]]; then
-  set -a
-  source "$PROJECT/.env.local"
-  set +a
+  for key in GEMINI_API_KEY OPENAI_API_KEY GOOGLE_API_KEY; do
+    val=$( (grep -E "^${key}=" "$PROJECT/.env.local" || true) | head -1 | cut -d= -f2- | sed -e 's/^"//' -e 's/"$//' -e "s/^'//" -e "s/'$//")
+    [[ -n "$val" ]] && export "$key=$val"
+  done
 fi
 # Map GEMINI_API_KEY → GOOGLE_API_KEY for the ads skill's google-genai path
 export GOOGLE_API_KEY="${GEMINI_API_KEY:-${GOOGLE_API_KEY:-}}"
 
-# Extract the BASE PROMPT block from MAUI-PROMPT-GUIDE.md
+# Extract the BASE PROMPT block from MAUI-BASE-PROMPT.md
 # Format in the guide is:
 #   MAUI BASE PROMPT:
 #   ---
@@ -80,31 +79,30 @@ Scene: $SCENE"
 GEMINI_OUT="$OUT/gemini.png"
 OPENAI_OUT="$OUT/openai.png"
 
-# === Gemini variant via the new gemini-image skill (multi-ref) ===
+# === Gemini variant via the new gemini-image skill (approved reference) ===
 echo ""
-echo "→ Generating Gemini variant via gemini-image skill (multi-ref)..."
-GEMINI_SCRIPT="$HOME/.claude/skills/gemini-image/scripts/generate.py"
+echo "→ Generating Gemini variant via gemini-image skill (approved reference)..."
+GEMINI_SCRIPT="$SCRIPT_DIR/image-providers/gemini.py"
 if [[ ! -x "$GEMINI_SCRIPT" ]]; then
   echo "  ! gemini-image skill not found or not executable at $GEMINI_SCRIPT" >&2
 else
   "$GEMINI_SCRIPT" "$PROMPT" \
     --output "$GEMINI_OUT" \
     --ratio 1:1 \
-    "${REF_ARGS[@]}" \
-    --force-white-bg 2>&1 | sed 's/^/  /' || echo "  ! Gemini gen failed"
+    "${REF_ARGS[@]}" 2>&1 | sed 's/^/  /' || echo "  ! Gemini gen failed"
 fi
 
-# === OpenAI variant via the gpt-image skill (multi-ref) ===
+# === OpenAI variant via the gpt-image skill (approved reference) ===
 echo ""
-echo "→ Generating OpenAI variant via gpt-image skill (multi-ref)..."
-GPT_SCRIPT="$HOME/.claude/skills/gpt-image/scripts/generate.py"
+echo "→ Generating OpenAI variant via gpt-image skill (approved reference)..."
+GPT_SCRIPT="$SCRIPT_DIR/image-providers/openai.py"
 if [[ ! -x "$GPT_SCRIPT" ]]; then
   echo "  ! gpt-image skill not found or not executable at $GPT_SCRIPT" >&2
 else
   "$GPT_SCRIPT" "$PROMPT" \
     --output "$OPENAI_OUT" \
     "${REF_ARGS[@]}" \
-    --background opaque --quality high --force-white-bg 2>&1 | sed 's/^/  /' || echo "  ! OpenAI gen failed"
+    --background opaque --quality high 2>&1 | sed 's/^/  /' || echo "  ! OpenAI gen failed"
 fi
 
 # === Convert any JPEG-content .png files to true PNG (Gemini sometimes returns JPEG bytes) ===
@@ -132,5 +130,5 @@ ls -la "$OUT" 2>/dev/null
 echo ""
 echo "Review: http://localhost:3001/maui-assets/_compare/index.html"
 echo ""
-echo "Promote winner once you've picked:"
-echo "  mv \"$OUT/<gemini|openai>.png\" \"$ASSETS/maui-$SLUG-blog.png\""
+echo "Before site use, extract and verify a true RGBA PNG. See docs/maui/STYLE-STANDARD.md."
+echo "Keep this opaque generation master. Extract and verify RGBA before site use; see docs/maui/STYLE-STANDARD.md."
