@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PortableContent, CmsSections } from "@/components/cms-content";
 import { SnackboxOverlay } from "@/lib/cms/Overlay";
+import { stegaClean } from "@/lib/cms/sdk";
 import { imageUrl } from "@/lib/cms/content";
 import { draftMode } from "next/headers";
 import { CaretRight, CalendarBlank, Clock, Tag } from "@phosphor-icons/react/dist/ssr";
@@ -38,29 +39,30 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!post) return {};
 
   const ogImage = imageUrl(post.seo?.image) || post.image || "/og-image.png";
-  const desc = clampDescription(post.seo?.description || post.excerpt);
+  const title = stegaClean(post.seo?.title || post.title);
+  const desc = clampDescription(stegaClean(post.seo?.description || post.excerpt));
 
   return {
-    title: post.seo?.title || post.title,
+    title,
     description: desc,
     robots: post.seo?.noIndex || (await draftMode()).isEnabled ? {index:false,follow:true} : undefined,
     alternates: {
       canonical: `/blog/${post.slug}`,
     },
     openGraph: {
-      title: post.seo?.title || post.title,
+      title,
       description: desc,
       type: "article",
       url: `/blog/${post.slug}`,
       siteName: "GroomLocal",
       publishedTime: post.date,
       modifiedTime: post.dateModified || post.date,
-      authors: [post.author.name],
-      images: [{ url: ogImage, width: 1200, height: 630, alt: post.title }],
+      authors: [stegaClean(post.author.name)],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: stegaClean(post.seo?.imageAlt || post.title) }],
     },
     twitter: {
       card: "summary_large_image",
-      title: post.seo?.title || post.title,
+      title,
       description: desc,
       images: [ogImage],
     },

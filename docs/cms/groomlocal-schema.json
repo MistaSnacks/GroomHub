@@ -4,7 +4,7 @@
   ],
   "collections": [
     {
-      "help": "Save new articles as drafts. Keep established slugs and publication dates when importing. Publish after checking facts, SEO, links, and Maui artwork. SEO fields record decisions; they do not run DataForSEO automatically. Hermes must choose a new, nonoverlapping topic and generate new Maui artwork. The Next.js CMS connection is pending: publishing here does not yet update groomlocal.com.",
+      "help": "Save new articles as drafts. Published guides now appear on groomlocal.com without a code deployment. Preserve established slugs and meaningful dates. Check facts, SEO, links, preview, and every Maui image before publishing. SEO fields record decisions; they do not run DataForSEO automatically. Hermes creates new, nonoverlapping articles with new Maui artwork. Artwork review is an editorial workflow requirement, not a server-enforced Publish restriction.",
       "kind": "collection",
       "page": "/blog",
       "type": "blogPost",
@@ -346,7 +346,7 @@
       "publishable": true
     },
     {
-      "help": "Guide browser topics. Once connected, adding topics will not require a code change.",
+      "help": "Topics populate the live guide browser. Add a topic and assign published articles to it without changing code.",
       "kind": "collection",
       "page": "/blog",
       "type": "guideTopic",

@@ -11,7 +11,7 @@ If an existing receiving Hermes job loads `groomlocal-weekly-guides`, explicitly
 Required checkout resources:
 
 - `AGENTS.md`, `docs/automation/weekly-guides-policy.json`, `docs/automation/content-inventory.json`, current `src/content/blog/`, and the latest `docs/content-audits/`.
-- `docs/cms/groomlocal-schema.json` and `docs/cms/snackbox-handoff.md`.
+- `docs/cms/groomlocal-schema.json`, `docs/cms/snackbox-handoff.md`, and `docs/cms/live-verification.json`.
 - `docs/maui/STYLE-STANDARD.md`, `docs/maui/approved-reference/*.png`, `public/maui-assets/MAUI-BASE-PROMPT.md`.
 - For command-line image generation: `scripts/maui-blog-image.sh`, `scripts/maui-compare-index.py`, `scripts/image-providers/{gemini,gpt-image}.py`.
 - For transparent export: `scripts/maui-remove-background.py`. The existing `docs/maui/transparency-seeds.json` is only for its matching reviewed scenes; new scenes need their own inspected gaps.
@@ -42,7 +42,7 @@ Suggested receiving-job prompt:
 
 > Use hermes-blog-skill for GroomLocal. Run its bundled CMS preflight against the GroomHub checkout. Reconcile CMS drafts/published posts, the existing MDX inventory, live pages and GTM. Research at most one new nonoverlapping guide with DataForSEO, generate new Maui art, and save a Snackbox draft. Complete the file and separate visual quality gates for every image. Publish through Snackbox MCP only in authorized publish mode after the CMS-to-site connection and draft preview have been verified. Never use the legacy MDX/Vercel publisher or update existing guides. Track both GTM cards and verify the live URL before marking live. Do not alter credentials, schedules, models, unrelated code or send messages.
 
-First run should verify connections read-only, then draft. The schema alone is not the live-site integration. See [publication readiness](snackbox-publishing.md) for the remaining frontend work and required proof before a publish-mode run can proceed.
+First run should verify connections read-only, then draft. The schema alone is not the live-site integration. See [publication readiness](snackbox-publishing.md) for the verified blog connection and the current checks required before a publish-mode run can proceed.
 
 ## Verify the package
 

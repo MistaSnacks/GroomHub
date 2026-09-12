@@ -5,15 +5,15 @@ Schema snapshot: `docs/cms/groomlocal-schema.json` in the checkout; always read 
 
 ## Current handoff state
 
-September 12, 2026: project and editorial schema created; five guide topics and Camren McMath's author record seeded. Existing articles still come from local MDX. **The Next.js CMS reader, preview route, image host configuration and revalidation webhook are not connected yet.** CMS Publish is not evidence of a live GroomLocal article. Keep work in draft until an implementing developer verifies the connection. Do not fall back to a code deployment from this skill.
+September 12, 2026: all 18 existing guides, five topics, three author profiles and 27 original images are migrated. The Next.js CMS reader, draft preview, image configuration and authenticated revalidation are live. New-slug rendering was verified without rebuilding, and a CMS SEO edit reached groomlocal.com on the same deployment. See `docs/cms/live-verification.json` and `docs/cms/snackbox-handoff.md`. Recheck current availability and your article's actual preview before publishing. Marketing/home/navigation schemas are not yet connected to frontend copy.
 
-The implementation handoff must verify: CMS published reads for articles/listings/topics/related posts/RSS/sitemap; stable existing slugs and dates; new slugs reachable without rebuilding; safe Portable Text rendering; draft preview hidden from public readers; served asset variants allowed by Next Image; authenticated cache invalidation; and a CMS edit visible on the site without a new deployment. `check_site_setup.allOk` is necessary but alone does not prove the blog actually reads CMS content. Retain that end-to-end verification evidence and recheck current availability before publication.
+The connection verification covers: CMS published reads for articles/listings/topics/related posts/RSS/sitemap; stable existing slugs and dates; new slugs reachable without rebuilding; safe Portable Text rendering; draft preview hidden from public readers; served asset variants allowed by Next Image; authenticated cache invalidation; and a CMS edit visible on the site without a new deployment. `check_site_setup.allOk` is necessary but alone does not prove the blog actually reads CMS content. Retain that end-to-end verification evidence and recheck current availability before publication.
 
 ## Draft data
 
 Use fluent `query` JSON with `type: "blogPost"`, `perspective: "published"` or `"draft"`, `limit: 100`, and `offset: 0`. Query both perspectives. Draft perspective overlays saved drafts on published documents; it is not a draft-only list. Also query each perspective with `filters: [{"op":"eq","path":"_hidden","value":true}]` so hidden documents are coverage exclusions too.
 
-There are two pagination layers: the tool's top-level `offset`/`page.nextOffset` drains a size-limited MCP response **within the same fluent query**. After draining that response, advance `fluent.offset` by the number of documents in that database batch and query again until the batch is shorter than `fluent.limit`. `page.complete: true` alone does not prove the database inventory is exhausted. Deduplicate coverage by document ID and slug. Reconcile against the checkout's MDX, content inventory, live site and GTM; CMS is initially empty of the existing 18 articles, so an empty CMS collection does not mean a topic is new. Choose one distinct intent and slug. Query `guideTopic` and `author`; reuse their real IDs.
+There are two pagination layers: the tool's top-level `offset`/`page.nextOffset` drains a size-limited MCP response **within the same fluent query**. After draining that response, advance `fluent.offset` by the number of documents in that database batch and query again until the batch is shorter than `fluent.limit`. `page.complete: true` alone does not prove the database inventory is exhausted. Deduplicate coverage by document ID and slug. Reconcile against the checkout's MDX, content inventory, live site and GTM; the existing 18 articles are imported, but an empty or incomplete query still does not establish a new topic. Choose one distinct intent and slug. Query `guideTopic` and `author`; reuse their real IDs.
 
 Create with an explicit draft perspective, stable ID (for example `blog-<slug>`), locale `default` and stable `operationId`. `create_documents` defaults must never decide publication status.
 
@@ -52,6 +52,12 @@ Create with an explicit draft perspective, stable ID (for example `blog-<slug>`)
 This is a shape example, not content to publish. Portable Text supports `normal`, `h2`, `h3`, strong/em marks and link annotations; do not submit raw MDX or executable JavaScript. Use `sections` for ordered illustrations, callouts and tables **after** `body`; split the article accordingly rather than duplicating or shuffling text. Populate SEO description, tags, source links and the research record from actual evidence. Do not force a search volume when the API returned none.
 
 Call `get_document` with draft perspective before every update, then `save_draft` with its `expectedRevision`. Preserve unrelated edits. Save the document ID/revision and draft editor URL in `cms-draft.json`. The usual Studio editor path is `/admin/groomlocal/blogPost/<id>`; use a returned/observed editor URL if the platform changes it.
+
+## Preview and date formats
+
+Use **Edit on site** from the project overview, switch to **Browse**, open the guide, then use **Edit** or **Page content**. The ordinary editor's “On your site” frame displays published content; it is not proof of draft preview. Authenticated draft previews carry `noindex`; public verification can use a clean browser session or `?sbx-public=1`. End the editing session with **Done** after verification.
+
+CMS `datetime` fields (including `reviewedOn`) currently accept `YYYY-MM-DDTHH:mm`, with no seconds or timezone suffix. Keep unambiguous ISO timestamps in local evidence; format the CMS review time in Pacific time and state the timezone in the review summary. Date-only publication fields use `YYYY-MM-DD`.
 
 ## Quality and publication gates
 

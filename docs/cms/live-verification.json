@@ -1,0 +1,67 @@
+{
+  "verified_on": "2026-09-12",
+  "site": "https://groomlocal.com",
+  "project": "groomlocal",
+  "implementation_commit": "40f70585e382687ab44ac4b1e03ce3702ea22ee8",
+  "site_setup": {
+    "allOk": true,
+    "siteUrl": true,
+    "reachable": true,
+    "webhook": true,
+    "secret": true,
+    "framing": true
+  },
+  "migration": {
+    "articles": 18,
+    "topics": 5,
+    "authors": 3,
+    "images": 27,
+    "image_bytes_unchanged": true,
+    "rgba_transparency_verified": true,
+    "rendered_content_parity_articles": 18
+  },
+  "new_slug_test": {
+    "deployment": "dpl_BxvoLraPkjbXgwBQfC2FsGJuEjHD",
+    "before_publish": 404,
+    "after_publish": 200,
+    "no_code_deployment": true,
+    "temporary_document_deleted": true,
+    "after_cleanup": 404
+  },
+  "preview": {
+    "authenticated_saved_draft_seen": true,
+    "anonymous_draft_excluded": true,
+    "draft_noindex": true,
+    "public_view_query_excludes_draft": true,
+    "homepage_editor_bootstrap_verified": true
+  },
+  "live_publication": {
+    "checked_at": "2026-09-12T17:12:00Z",
+    "url": "https://groomlocal.com/blog/dog-halloween-costume-ideas",
+    "description": "Find 10 dog Halloween costume ideas for 2026, plus fit checks, simple alternatives, and tips to keep your dog comfortable.",
+    "status": 200,
+    "deployment_before": "dpl_7bjf3HQ89gUrt6v1KbDArEatctFk",
+    "deployment_after": "dpl_7bjf3HQ89gUrt6v1KbDArEatctFk",
+    "commit": "40f70585e382687ab44ac4b1e03ce3702ea22ee8",
+    "no_code_deployment": true
+  },
+  "regression_checks": {
+    "guide_navigation_and_related_tests": 4,
+    "structured_renderer_tests": 2,
+    "rss_articles": 18,
+    "rss_image_enclosures": 18,
+    "sitemap_guide_urls": 18,
+    "mobile_width": 390,
+    "desktop_width": 1440,
+    "ear_guide_image_loads": true,
+    "horizontal_overflow": false,
+    "production_build": "pass",
+    "targeted_lint": "pass",
+    "typescript": "pass"
+  },
+  "limits": [
+    "Marketing/home/navigation/settings content remains in code.",
+    "Maui approval is a skill workflow gate, not a platform-enforced publishing rule.",
+    "Local Hermes configuration and installed skill were not changed."
+  ]
+}

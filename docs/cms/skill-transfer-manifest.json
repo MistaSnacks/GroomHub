@@ -17,11 +17,15 @@
     },
     {
       "path": "docs/cms/groomlocal-schema.json",
-      "sha256": "473c0c1c3ec37104eac9b93f6480e1ff90c3669544e3be3513841f1ae309e513"
+      "sha256": "4445ee4dff4feb884edb80cdc9fc663fa6fad949dbf99778a84892e08ff6bafc"
+    },
+    {
+      "path": "docs/cms/live-verification.json",
+      "sha256": "c076fff0735e13daf7cded711627b0c0806b84f752f5fa06894792ef014fd69b"
     },
     {
       "path": "docs/cms/snackbox-handoff.md",
-      "sha256": "8961a4acaf37f5c9dc9df24af29920252f56e25e2eccc33bdf1e8d0b1e989682"
+      "sha256": "7838e120207a8eb23182782159fc0ad54eaac7b2c3b238504239501bc060b108"
     },
     {
       "path": "docs/content-audits/2026-09-07/content-checks.json",
@@ -113,11 +117,19 @@
     },
     {
       "path": "skills/hermes-blog-skill/SKILL.md",
-      "sha256": "75e7233fab5852dc2038f463fe483231a3b1cd0b04e3dc88a75131ec93b88cea"
+      "sha256": "ff5bf464fbd695c6d80fbbdbc5ada7e231f9aa842566ad9459843a1e5c6030bc"
     },
     {
       "path": "skills/hermes-blog-skill/references/2026-09-07-run-notes.md",
       "sha256": "ecf04785ddb768e963413b96793059052a12618502f6375a6301f5f0f5bc8d80"
+    },
+    {
+      "path": "skills/hermes-blog-skill/references/maui-image.md",
+      "sha256": "283da88a54780f375f72c18513f06569add4ac58c6a9c4f72854df382883f159"
+    },
+    {
+      "path": "skills/hermes-blog-skill/references/maui-quality.md",
+      "sha256": "7cf81b8e36d7f5536d42085e3d647f51dafcc93acf238a64aab13d8b75971370"
     },
     {
       "path": "skills/hermes-blog-skill/references/maui/MAUI-BASE-PROMPT.md",
@@ -152,14 +164,6 @@
       "sha256": "1980a97047363f6225238b1368acb6005d8061d0c06cd97f9d3b5932334f7b46"
     },
     {
-      "path": "skills/hermes-blog-skill/references/maui-image.md",
-      "sha256": "283da88a54780f375f72c18513f06569add4ac58c6a9c4f72854df382883f159"
-    },
-    {
-      "path": "skills/hermes-blog-skill/references/maui-quality.md",
-      "sha256": "7cf81b8e36d7f5536d42085e3d647f51dafcc93acf238a64aab13d8b75971370"
-    },
-    {
       "path": "skills/hermes-blog-skill/references/post-promotion-verification.md",
       "sha256": "b2e685869dbe8a0ae74a87a1a5bc1176d7975792240259bbbb862f89bd845f68"
     },
@@ -169,11 +173,11 @@
     },
     {
       "path": "skills/hermes-blog-skill/references/setup.md",
-      "sha256": "23e4918c572a172449744e56edd6922504322a64f43271de1d5c30d8898f3577"
+      "sha256": "5760165d0eb4aad0f1fdab6e0aed116c32e2bdc02eb425094574f2e6216c8934"
     },
     {
       "path": "skills/hermes-blog-skill/references/snackbox-publishing.md",
-      "sha256": "d42c37d04916de095633b5a8d7b041b28161c187619f66730339ce2c9dc67a7c"
+      "sha256": "f3f942b98d8ab1275414438e8aa3f2441bf58ed048c41b73338ad4f250842b1d"
     },
     {
       "path": "skills/hermes-blog-skill/references/tools.md",
@@ -269,7 +273,7 @@
     },
     {
       "path": "src/lib/grooming-guides.ts",
-      "sha256": "987cb07257f8291279898844ff073255e5e38fd51c48d335c01f0d7002ffcf05"
+      "sha256": "426556e4905f9b9fac7b9e6084b8c08513bf36e8d7f2d5cdfbdb3a6d1ffe26ec"
     }
   ]
 }
