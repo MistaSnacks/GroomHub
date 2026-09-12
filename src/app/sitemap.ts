@@ -85,7 +85,7 @@ export default async function sitemap(args: {
     }));
 
     // Blog posts
-    const blogPages: MetadataRoute.Sitemap = getBlogPosts().map((post) => ({
+    const blogPages: MetadataRoute.Sitemap = (await getBlogPosts(undefined, true)).filter(post=>!post.seo?.noIndex).map((post) => ({
       url: `${BASE_URL}/blog/${post.slug}`,
       lastModified: new Date(post.dateModified || post.date),
       changeFrequency: "monthly" as const,

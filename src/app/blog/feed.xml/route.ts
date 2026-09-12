@@ -11,40 +11,49 @@ const ENCLOSURE_TYPES: Record<string, string> = {
   ".webp": "image/webp",
 };
 
-function enclosureTag(image: string | null): string {
+const xml = (value: string) => value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const cdata = (value: string) => value.replace(/\]\]>/g, "]]]]><![CDATA[>");
+
+async function enclosureTag(image: string | null): Promise<string> {
   if (!image) return "";
-
-  const pathname = image.split(/[?#]/)[0];
-  const ext = path.extname(pathname).toLowerCase();
-  const type = ENCLOSURE_TYPES[ext];
+  const url = new URL(image, BASE_URL);
+  const type = ENCLOSURE_TYPES[path.extname(url.pathname).toLowerCase()];
   if (!type) return "";
-
-  const publicPath = path.join(process.cwd(), "public", pathname.replace(/^\//, ""));
-  if (!fs.existsSync(publicPath)) return "";
-
-  const length = fs.statSync(publicPath).size;
-  return `<enclosure url="${BASE_URL}${image.replace(/&/g, "&amp;").replace(/"/g, "&quot;")}" type="${type}" length="${length}" />`;
+  let length: number;
+  if (url.origin === BASE_URL) {
+    const publicPath = path.join(process.cwd(), "public", url.pathname);
+    if (!fs.existsSync(publicPath)) return "";
+    length = fs.statSync(publicPath).size;
+  } else {
+    if (url.protocol !== "https:" || url.hostname !== "media.snackboxcms.com") return "";
+    try {
+      const response = await fetch(url, {method:"HEAD", redirect:"error", signal:AbortSignal.timeout(5000), next:{revalidate:86400}});
+      length = Number(response.headers.get("content-length"));
+      if (!response.ok || !Number.isSafeInteger(length) || length <= 0) return "";
+    } catch { return ""; }
+  }
+  return `<enclosure url="${xml(url.href)}" type="${type}" length="${length}" />`;
 }
 
 export async function GET() {
-  const posts = getBlogPosts();
+  const posts = await getBlogPosts(undefined, true);
 
-  const items = posts
-    .map((post) => {
+  const items = (await Promise.all(posts.filter(post=>!post.seo?.noIndex)
+    .map(async (post) => {
       const pubDate = new Date(post.date).toUTCString();
-      const imageTag = enclosureTag(post.image);
+      const imageTag = await enclosureTag(post.image);
 
       return `    <item>
-      <title><![CDATA[${post.title}]]></title>
+      <title><![CDATA[${cdata(post.title)}]]></title>
       <link>${BASE_URL}/blog/${post.slug}</link>
       <guid isPermaLink="true">${BASE_URL}/blog/${post.slug}</guid>
-      <description><![CDATA[${post.excerpt}]]></description>
+      <description><![CDATA[${cdata(post.excerpt)}]]></description>
       <pubDate>${pubDate}</pubDate>
-      <dc:creator><![CDATA[${post.author.name}]]></dc:creator>
-      <category>${post.category}</category>
+      <dc:creator><![CDATA[${cdata(post.author.name)}]]></dc:creator>
+      <category>${xml(post.category)}</category>
       ${imageTag}
     </item>`;
-    })
+    })))
     .join("\n");
 
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
@@ -63,7 +72,7 @@ ${items}
   return new Response(feed, {
     headers: {
       "Content-Type": "application/rss+xml; charset=utf-8",
-      "Cache-Control": "public, max-age=3600, s-maxage=3600",
+      "Cache-Control": "public, max-age=0, must-revalidate",
     },
   });
 }

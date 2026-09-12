@@ -58,8 +58,9 @@ export const GUIDE_TOPICS = [
 export function getGuideListing<T extends BlogPostMeta>(
   posts: T[],
   filters: { topic?: string | string[]; category?: string | string[] },
+  topics = GUIDE_TOPICS,
 ) {
-  const topic = GUIDE_TOPICS.find((item) => item.id === filters.topic);
+  const topic = topics.find((item) => item.id === filters.topic);
   const category = !topic && typeof filters.category === "string"
     && posts.some((post) => post.category === filters.category)
     ? filters.category

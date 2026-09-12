@@ -1,32 +1,28 @@
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
-import { GUIDE_TOPICS } from "./grooming-guides";
+import { cache } from "react";
+import { readCollection, imageUrl, plainText, sectionText, type CmsAsset, type CmsSection, type CmsSeo, type PortableBlock } from "./cms/content";
+import { stegaClean } from "./cms/sdk";
 
-export interface BlogAuthor {
-  name: string;
-  avatar: string | null;
-  bio: string;
-}
-
+export interface BlogAuthor { name: string; avatar: string | null; bio: string }
 export interface BlogPostMeta {
-  slug: string;
-  title: string;
-  excerpt: string;
-  category: string;
-  author: BlogAuthor;
-  date: string;
-  dateModified: string | null;
-  readTime: string;
-  image: string | null;
-  tags: string[];
+  slug: string; title: string; excerpt: string; category: string; author: BlogAuthor;
+  date: string; dateModified: string | null; readTime: string; image: string | null;
+  tags: string[]; topic?: string; imageAlt?: string;
 }
-
 export interface BlogPostFull extends BlogPostMeta {
-  content: string; // raw MDX content (no frontmatter)
+  id: string; content: string; body: PortableBlock[]; sections: CmsSection[]; seo?: CmsSeo;
+  relatedSlugs?: string[];
 }
-
-const CONTENT_DIR = path.join(process.cwd(), "src/content/blog");
+interface CmsPost {
+  _id: string; slug: string; title: string; excerpt?: string; category?: string;
+  authorBio?: string;
+  author?: {_id?: string; name?: string; bio?: string; avatar?: CmsAsset};
+  topic?: {slug?: string}; date?: string; dateModified?: string; readTime?: string;
+  heroImage?: CmsAsset; heroAlt?: string; tags?: string[]; body?: PortableBlock[];
+  sections?: CmsSection[]; seo?: CmsSeo; relatedGuides?: {slug?: string}[];
+}
+export interface GuideTopic { id: string; title: string; subtitle: string; slugs: string[] }
+const POST_INCLUDES = ["heroImage", "author", "topic", "seo.image", "relatedGuides", "sections.*.image"];
+const clean = (value: string | undefined) => stegaClean(value || "");
 
 const CATEGORIES: Record<string, string> = {
   "grooming-tips": "Grooming Tips",
@@ -35,64 +31,37 @@ const CATEGORIES: Record<string, string> = {
   "cat-care": "Cat Care",
 };
 
-function readAllPosts(): BlogPostFull[] {
-  const files = fs.readdirSync(CONTENT_DIR).filter((f) => f.endsWith(".mdx"));
 
-  return files.map((filename) => {
-    const raw = fs.readFileSync(path.join(CONTENT_DIR, filename), "utf-8");
-    const { data, content } = matter(raw);
+export const getBlogPosts = cache(async (category?: string, publishedOnly = false): Promise<BlogPostFull[]> => {
+  const [records, authors] = await Promise.all([
+    readCollection<CmsPost>("blogPost", POST_INCLUDES, publishedOnly),
+    readCollection<{_id:string; avatar?:CmsAsset}>("author", ["avatar"], publishedOnly),
+  ]);
+  const portraits = new Map(authors.map(author=>[author._id,imageUrl(author.avatar)]));
+  const posts = records.map(p => ({
+    id: p._id, slug: clean(p.slug), title: p.title || "Untitled guide", excerpt: p.excerpt || "",
+    category: clean(p.category), topic: clean(p.topic?.slug),
+    author: {name: p.author?.name || "GroomLocal", bio: p.authorBio || p.author?.bio || "", avatar: portraits.get(p.author?._id || "") || null},
+    date: clean(p.date), dateModified: clean(p.dateModified) || null,
+    readTime: p.readTime || `${Math.max(1, Math.ceil((plainText(p.body)+sectionText(p.sections)).split(/\s+/).length / 220))} min read`,
+    image: imageUrl(p.heroImage), imageAlt: p.heroAlt || p.title,
+    tags: p.tags || [], body: p.body || [], sections: p.sections || [], seo: p.seo,
+    content: plainText(p.body)+"\n"+sectionText(p.sections),
+    relatedSlugs: p.relatedGuides?.map(r=>clean(r.slug)).filter(Boolean),
+  })).filter(p=>/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(p.slug));
+  posts.sort((a,b)=>new Date(b.date).getTime()-new Date(a.date).getTime() || a.slug.localeCompare(b.slug));
+  return category ? posts.filter(p=>p.category===category) : posts;
+});
 
-    return {
-      slug: data.slug ?? filename.replace(/\.mdx$/, ""),
-      title: data.title ?? "",
-      excerpt: data.excerpt ?? "",
-      category: data.category ?? "",
-      author: {
-        name: data.author?.name ?? "",
-        avatar: data.author?.avatar ?? null,
-        bio: data.author?.bio ?? "",
-      },
-      date: data.date ?? "",
-      dateModified: data.dateModified ?? null,
-      readTime: data.readTime ?? "",
-      image: data.image ?? null,
-      tags: data.tags ?? [],
-      content,
-    };
-  });
-}
+export const getGuideTopics = cache(async (): Promise<GuideTopic[]> => {
+  const [topics, posts] = await Promise.all([readCollection<{slug:string;title:string;description:string}>("guideTopic"),getBlogPosts()]);
+  return topics.map(t=>({id:clean(t.slug), title:t.title, subtitle:t.description, slugs:posts.filter(p=>p.topic===clean(t.slug)).map(p=>p.slug)}));
+});
 
-// Cache posts in module scope (re-reads on dev server restart in prod)
-let _cache: BlogPostFull[] | null = null;
-function getPosts(): BlogPostFull[] {
-  if (process.env.NODE_ENV === "development") {
-    return readAllPosts();
-  }
-  if (!_cache) {
-    _cache = readAllPosts();
-  }
-  return _cache;
-}
-
-export function getBlogPosts(category?: string): BlogPostFull[] {
-  const sorted = [...getPosts()].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
-  if (category) {
-    return sorted.filter((p) => p.category === category);
-  }
-  return sorted;
-}
-
-export function getBlogPostBySlug(slug: string): BlogPostFull | undefined {
-  return getPosts().find((p) => p.slug === slug);
-}
-
-export function getBlogCategories(): { slug: string; label: string }[] {
-  const usedCategories = new Set(getPosts().map((p) => p.category));
-  return Object.entries(CATEGORIES)
-    .filter(([slug]) => usedCategories.has(slug))
-    .map(([slug, label]) => ({ slug, label }));
+export async function getBlogPostBySlug(slug: string) { return (await getBlogPosts()).find(p=>p.slug===slug); }
+export async function getBlogCategories() {
+  const used = new Set((await getBlogPosts()).map(p=>p.category));
+  return Object.entries(CATEGORIES).filter(([slug])=>used.has(slug)).map(([slug,label])=>({slug,label}));
 }
 
 export function getCategoryLabel(slug: string): string {
@@ -113,30 +82,14 @@ export function formatBlogDate(
   });
 }
 
-export function getRelatedPosts(
-  currentSlug: string,
-  limit = 3
-): BlogPostFull[] {
-  const current = getBlogPostBySlug(currentSlug);
-  if (!current) return getBlogPosts().slice(0, limit);
 
-  const topicSlugs = new Set(
-    GUIDE_TOPICS.filter((topic) => topic.slugs.includes(currentSlug))
-      .flatMap((topic) => topic.slugs),
-  );
-  const sharedTags = (post: BlogPostMeta) =>
-    post.tags.filter((tag) => current.tags.includes(tag)).length;
-
-  return getBlogPosts()
-    .filter((p) => p.slug !== currentSlug)
-    .sort((a, b) => {
-      const topicMatch = Number(topicSlugs.has(b.slug)) - Number(topicSlugs.has(a.slug));
-      if (topicMatch) return topicMatch;
-      const tagMatch = sharedTags(b) - sharedTags(a);
-      if (tagMatch) return tagMatch;
-      const aMatch = a.category === current.category ? 1 : 0;
-      const bMatch = b.category === current.category ? 1 : 0;
-      return bMatch - aMatch;
-    })
-    .slice(0, limit);
+export async function getRelatedPosts(currentSlug: string, limit = 3): Promise<BlogPostFull[]> {
+  const posts = await getBlogPosts();
+  const current = posts.find(p=>p.slug===currentSlug);
+  if (!current) return posts.slice(0,limit);
+  const rank = (p: BlogPostFull) => (current.relatedSlugs?.includes(p.slug) ? 1000 : 0)
+    + (p.topic && p.topic === current.topic ? 100 : 0)
+    + p.tags.filter(t=>current.tags.includes(t)).length * 5
+    + Number(p.category === current.category);
+  return posts.filter(p=>p.slug!==currentSlug).sort((a,b)=>rank(b)-rank(a)).slice(0,limit);
 }

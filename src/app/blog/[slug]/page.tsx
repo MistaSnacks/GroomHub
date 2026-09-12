@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { MDXRemote } from "next-mdx-remote/rsc";
+import { PortableContent, CmsSections } from "@/components/cms-content";
+import { SnackboxOverlay } from "@/lib/cms/Overlay";
+import { imageUrl } from "@/lib/cms/content";
+import { draftMode } from "next/headers";
 import { CaretRight, CalendarBlank, Clock, Tag } from "@phosphor-icons/react/dist/ssr";
 import {
   getBlogPostBySlug,
@@ -16,34 +19,36 @@ import { BlogCard } from "@/components/blog-card";
 import { AuthorBio } from "@/components/author-bio";
 import { AdSlot, ADS_ENABLED } from "@/components/ad-slot";
 import { WaveDivider } from "@/components/wave-divider";
-import { mdxComponents } from "@/components/mdx-components";
-import remarkGfm from "remark-gfm";
 import { clampDescription } from "@/lib/seo-utils";
+
+// New CMS slugs render on demand without another deployment.
+export const dynamicParams = true;
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  return getBlogPosts().map((p) => ({ slug: p.slug }));
+  return (await getBlogPosts(undefined, true)).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = getBlogPostBySlug(slug);
+  const post = await getBlogPostBySlug(slug);
   if (!post) return {};
 
-  const ogImage = post.image || "/og-image.png";
-  const desc = clampDescription(post.excerpt);
+  const ogImage = imageUrl(post.seo?.image) || post.image || "/og-image.png";
+  const desc = clampDescription(post.seo?.description || post.excerpt);
 
   return {
-    title: post.title,
+    title: post.seo?.title || post.title,
     description: desc,
+    robots: post.seo?.noIndex || (await draftMode()).isEnabled ? {index:false,follow:true} : undefined,
     alternates: {
       canonical: `/blog/${post.slug}`,
     },
     openGraph: {
-      title: post.title,
+      title: post.seo?.title || post.title,
       description: desc,
       type: "article",
       url: `/blog/${post.slug}`,
@@ -55,7 +60,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: post.title,
+      title: post.seo?.title || post.title,
       description: desc,
       images: [ogImage],
     },
@@ -64,11 +69,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogArticlePage({ params }: Props) {
   const { slug } = await params;
-  const post = getBlogPostBySlug(slug);
+  const post = await getBlogPostBySlug(slug);
 
   if (!post) notFound();
 
-  const related = getRelatedPosts(slug, 3);
+  const related = await getRelatedPosts(slug, 3);
   const categoryLabel = getCategoryLabel(post.category);
   const wordCount = post.content.trim().split(/\s+/).filter(Boolean).length;
 
@@ -80,6 +85,7 @@ export default async function BlogArticlePage({ params }: Props) {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <SnackboxOverlay documents={[{docId:post.id,title:post.title}]} />
       {/* JSON-LD */}
       <script
         type="application/ld+json"
@@ -88,13 +94,13 @@ export default async function BlogArticlePage({ params }: Props) {
             wordCount,
             articleSection: categoryLabel,
             keywords: post.tags,
-          })),
+          })).replace(/</g, "\\u003c"),
         }}
       />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbSchema(breadcrumbs)),
+          __html: JSON.stringify(breadcrumbSchema(breadcrumbs)).replace(/</g, "\\u003c"),
         }}
       />
 
@@ -143,7 +149,7 @@ export default async function BlogArticlePage({ params }: Props) {
               <div className="flex justify-center md:justify-end items-end h-full w-full mt-8 md:mt-0">
                 <Image
                   src={post.image}
-                  alt={post.title}
+                  alt={post.imageAlt || post.title}
                   width={700}
                   height={700}
                   priority
@@ -164,11 +170,8 @@ export default async function BlogArticlePage({ params }: Props) {
       <article className="bg-white py-10 flex-1">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="prose-custom space-y-6">
-            <MDXRemote
-              source={post.content}
-              components={mdxComponents}
-              options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
-            />
+            <PortableContent blocks={post.body} />
+            <CmsSections sections={post.sections} />
           </div>
 
           {/* Tags */}

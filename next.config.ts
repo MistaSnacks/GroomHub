@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
       { pathname: "/maui-characters/**", search: "?v=maui-20260904-alpha1" },
     ],
     remotePatterns: [
+      { protocol: "https", hostname: "media.snackboxcms.com", pathname: "/groomlocal/**" },
       {
         protocol: "https",
         hostname: "images.unsplash.com",
@@ -66,7 +67,7 @@ const nextConfig: NextConfig = {
       {
         source: "/(.*)",
         headers: [
-          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "Content-Security-Policy", value: "frame-ancestors 'self' https://snackboxcms.com" },
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           {
@@ -79,6 +80,13 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      ...["dashboard", "admin", "claim", "login", "signup", "auth"].map(route => ({
+        source: `/${route}/:path*`,
+        headers: [
+          {key:"Content-Security-Policy",value:"frame-ancestors 'self'"},
+          {key:"X-Frame-Options",value:"SAMEORIGIN"},
+        ],
+      })),
     ];
   },
 };

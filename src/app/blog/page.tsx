@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BookOpen } from "@phosphor-icons/react/dist/ssr";
-import { getBlogPosts, getCategoryLabel } from "@/lib/blog";
-import { GUIDE_TOPICS, getGuideListing } from "@/lib/grooming-guides";
+import { getBlogPosts, getCategoryLabel, getGuideTopics } from "@/lib/blog";
+import { getGuideListing } from "@/lib/grooming-guides";
 import { blogListingSchema } from "@/lib/schema";
 import { BlogCard } from "@/components/blog-card";
 import { NewsletterCta } from "@/components/newsletter-cta";
@@ -35,8 +35,8 @@ interface BlogPageProps {
 
 export default async function BlogPage({ searchParams }: BlogPageProps) {
   const sp = await searchParams;
-  const allPostsForSchema = getBlogPosts();
-  const { topic, category, posts } = getGuideListing(allPostsForSchema, sp);
+  const [allPostsForSchema, topics] = await Promise.all([getBlogPosts(), getGuideTopics()]);
+  const { topic, category, posts } = getGuideListing(allPostsForSchema, sp, topics);
   const title = topic?.title ?? (category ? getCategoryLabel(category) : "All grooming guides");
   const jsonLd = blogListingSchema(allPostsForSchema);
 
@@ -44,7 +44,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     <div className="flex flex-col min-h-screen">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
 
       {/* Hero */}
@@ -82,7 +82,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             >
               All guides ({allPostsForSchema.length})
             </Link>
-            {GUIDE_TOPICS.map((item) => (
+            {topics.map((item) => (
               <Link
                 key={item.id}
                 href={`/blog?topic=${item.id}#guides`}

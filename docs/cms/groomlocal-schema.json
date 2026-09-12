@@ -4,14 +4,11 @@
   ],
   "collections": [
     {
+      "help": "Save new articles as drafts. Keep established slugs and publication dates when importing. Publish after checking facts, SEO, links, and Maui artwork. SEO fields record decisions; they do not run DataForSEO automatically. Hermes must choose a new, nonoverlapping topic and generate new Maui artwork. The Next.js CMS connection is pending: publishing here does not yet update groomlocal.com.",
       "kind": "collection",
+      "page": "/blog",
       "type": "blogPost",
       "title": "Blogs & Grooming Guides",
-      "page": "/blog",
-      "docPage": "/blog/:slug",
-      "publishable": true,
-      "orderable": false,
-      "help": "Save new articles as drafts. Keep established slugs and publication dates when importing. Publish after checking facts, SEO, links, and Maui artwork. SEO fields record decisions; they do not run DataForSEO automatically. Hermes must choose a new, nonoverlapping topic and generate new Maui artwork. The Next.js CMS connection is pending: publishing here does not yet update groomlocal.com.",
       "fields": [
         {
           "name": "title",
@@ -33,30 +30,36 @@
           "required": true
         },
         {
+          "to": "guideTopic",
           "name": "topic",
           "type": "reference",
           "title": "Guide topic",
-          "to": "guideTopic",
           "required": true
         },
         {
           "name": "category",
           "type": "select",
           "title": "Category",
-          "required": true,
           "options": [
             "grooming-tips",
             "guides",
             "seasonal",
             "cat-care"
-          ]
+          ],
+          "required": true
         },
         {
+          "to": "author",
           "name": "author",
           "type": "reference",
           "title": "Author",
-          "to": "author",
           "required": true
+        },
+        {
+          "name": "authorBio",
+          "type": "text",
+          "title": "Article author bio",
+          "description": "Optional article-specific biography. Preserves original attribution during migration; the author profile is the fallback."
         },
         {
           "name": "date",
@@ -96,10 +99,6 @@
           "description": "Headings, paragraphs, links, and lists. Cite factual sources and link to helpful site pages."
         },
         {
-          "name": "sections",
-          "type": "list",
-          "title": "Additional illustrated sections",
-          "description": "Optional ordered sections after the body. Images, callouts, and tables without executable MDX.",
           "of": {
             "type": "object",
             "fields": [
@@ -107,14 +106,14 @@
                 "name": "kind",
                 "type": "select",
                 "title": "Section style",
-                "required": true,
+                "default": "text",
                 "options": [
                   "text",
                   "illustration",
                   "callout",
                   "table"
                 ],
-                "default": "text"
+                "required": true
               },
               {
                 "name": "heading",
@@ -147,43 +146,47 @@
                 "title": "Table",
                 "fields": [
                   {
-                    "name": "headings",
-                    "type": "list",
-                    "title": "Column headings",
                     "of": {
                       "type": "text"
-                    }
+                    },
+                    "name": "headings",
+                    "type": "list",
+                    "title": "Column headings"
                   },
                   {
-                    "name": "rows",
-                    "type": "list",
-                    "title": "Rows",
                     "of": {
                       "type": "object",
                       "fields": [
                         {
-                          "name": "cells",
-                          "type": "list",
-                          "title": "Cells",
                           "of": {
                             "type": "text"
-                          }
+                          },
+                          "name": "cells",
+                          "type": "list",
+                          "title": "Cells"
                         }
                       ]
-                    }
+                    },
+                    "name": "rows",
+                    "type": "list",
+                    "title": "Rows"
                   }
                 ]
               }
             ]
-          }
+          },
+          "name": "sections",
+          "type": "list",
+          "title": "Additional illustrated sections",
+          "description": "Optional ordered sections after the body. Images, callouts, and tables without executable MDX."
         },
         {
-          "name": "tags",
-          "type": "list",
-          "title": "Tags",
           "of": {
             "type": "text"
-          }
+          },
+          "name": "tags",
+          "type": "list",
+          "title": "Tags"
         },
         {
           "name": "seo",
@@ -222,9 +225,6 @@
           ]
         },
         {
-          "name": "sources",
-          "type": "list",
-          "title": "Factual sources",
           "of": {
             "type": "object",
             "fields": [
@@ -246,13 +246,15 @@
                 "title": "Checked on"
               }
             ]
-          }
+          },
+          "name": "sources",
+          "type": "list",
+          "title": "Factual sources"
         },
         {
           "name": "research",
           "type": "object",
           "title": "SEO research record",
-          "description": "Evidence, not an automatic checker. Do not store credentials or private notes.",
           "fields": [
             {
               "name": "primaryKeyword",
@@ -284,16 +286,17 @@
               "type": "text",
               "title": "How this differs from existing guides"
             }
-          ]
+          ],
+          "description": "Evidence, not an automatic checker. Do not store credentials or private notes."
         },
         {
+          "of": {
+            "to": "blogPost",
+            "type": "reference"
+          },
           "name": "relatedGuides",
           "type": "list",
-          "title": "Related guides",
-          "of": {
-            "type": "reference",
-            "to": "blogPost"
-          }
+          "title": "Related guides"
         },
         {
           "name": "artworkReview",
@@ -304,13 +307,13 @@
               "name": "status",
               "type": "select",
               "title": "Artwork review",
-              "required": true,
+              "default": "pending",
               "options": [
                 "pending",
                 "approved",
                 "needs-fixes"
               ],
-              "default": "pending"
+              "required": true
             },
             {
               "name": "imageSha256",
@@ -337,16 +340,17 @@
           ],
           "description": "Hermes must verify approval against the current hero image and every inline image before publishing. Pending or changed artwork remains a draft."
         }
-      ]
+      ],
+      "docPage": "/blog/:slug",
+      "orderable": false,
+      "publishable": true
     },
     {
+      "help": "Guide browser topics. Once connected, adding topics will not require a code change.",
       "kind": "collection",
+      "page": "/blog",
       "type": "guideTopic",
       "title": "Guide Topics",
-      "page": "/blog",
-      "orderable": true,
-      "publishable": true,
-      "help": "Guide browser topics. Once connected, adding topics will not require a code change.",
       "fields": [
         {
           "name": "title",
@@ -366,16 +370,16 @@
           "title": "Short description",
           "required": true
         }
-      ]
+      ],
+      "orderable": true,
+      "publishable": true
     },
     {
+      "help": "Use actual author attribution. Do not invent qualifications or professional relationships.",
       "kind": "collection",
+      "page": "/blog",
       "type": "author",
       "title": "Authors",
-      "page": "/blog",
-      "orderable": true,
-      "publishable": true,
-      "help": "Use actual author attribution. Do not invent qualifications or professional relationships.",
       "fields": [
         {
           "name": "name",
@@ -405,17 +409,16 @@
           "type": "text",
           "title": "Portrait description"
         }
-      ]
+      ],
+      "orderable": true,
+      "publishable": true
     },
     {
+      "help": "Editorial copy for About, For Groomers, and service introductions. Keep existing route slugs. Home has its own section. Layouts and application behavior stay in Next.js. Frontend connection is pending.",
       "kind": "collection",
+      "page": "/",
       "type": "page",
       "title": "Marketing Pages",
-      "page": "/",
-      "docPage": "/:slug",
-      "orderable": true,
-      "publishable": true,
-      "help": "Editorial copy for About, For Groomers, and service introductions. Keep existing route slugs. Home has its own section. Layouts and application behavior stay in Next.js. Frontend connection is pending.",
       "fields": [
         {
           "name": "title",
@@ -450,9 +453,6 @@
           "title": "Page content"
         },
         {
-          "name": "sections",
-          "type": "list",
-          "title": "Page sections",
           "of": {
             "type": "object",
             "fields": [
@@ -498,16 +498,19 @@
                 ]
               }
             ]
-          }
+          },
+          "name": "sections",
+          "type": "list",
+          "title": "Page sections"
         },
         {
+          "of": {
+            "to": "faq",
+            "type": "reference"
+          },
           "name": "faqs",
           "type": "list",
-          "title": "FAQs",
-          "of": {
-            "type": "reference",
-            "to": "faq"
-          }
+          "title": "FAQs"
         },
         {
           "name": "seo",
@@ -545,15 +548,17 @@
             }
           ]
         }
-      ]
+      ],
+      "docPage": "/:slug",
+      "orderable": true,
+      "publishable": true
     },
     {
+      "help": "Homepage editorial copy. Counts, groomer cards, cities, and search results continue to come from GroomLocal's database. Frontend connection is pending.",
       "kind": "singleton",
+      "page": "/",
       "type": "homePage",
       "title": "Homepage",
-      "page": "/",
-      "publishable": false,
-      "help": "Homepage editorial copy. Counts, groomer cards, cities, and search results continue to come from GroomLocal's database. Frontend connection is pending.",
       "fields": [
         {
           "name": "title",
@@ -598,9 +603,6 @@
           ]
         },
         {
-          "name": "sections",
-          "type": "list",
-          "title": "Section copy",
           "of": {
             "type": "object",
             "fields": [
@@ -629,7 +631,10 @@
                 "title": "Introduction"
               }
             ]
-          }
+          },
+          "name": "sections",
+          "type": "list",
+          "title": "Section copy"
         },
         {
           "name": "seo",
@@ -667,15 +672,14 @@
             }
           ]
         }
-      ]
+      ],
+      "publishable": false
     },
     {
+      "help": "Reusable answers for marketing pages. Only render FAQ structured data when the same content is visible on the page.",
       "kind": "collection",
       "type": "faq",
       "title": "Frequently Asked Questions",
-      "orderable": true,
-      "publishable": true,
-      "help": "Reusable answers for marketing pages. Only render FAQ structured data when the same content is visible on the page.",
       "fields": [
         {
           "name": "question",
@@ -693,22 +697,22 @@
           "name": "audience",
           "type": "select",
           "title": "Audience",
+          "default": "both",
           "options": [
             "pet-parents",
             "groomers",
             "both"
-          ],
-          "default": "both"
+          ]
         }
-      ]
+      ],
+      "orderable": true,
+      "publishable": true
     },
     {
+      "help": "Upload true RGBA PNGs. Verify on teal/dark: four limbs, complete edges, approved face/proportions, red MAUI bandana. Preserve the fixed September 2026 references. New Hermes blogs require a newly generated scene; this library does not authorize recycling old artwork.",
       "kind": "collection",
       "type": "mauiIllustration",
       "title": "Maui Illustration Library",
-      "orderable": false,
-      "publishable": true,
-      "help": "Upload true RGBA PNGs. Verify on teal/dark: four limbs, complete edges, approved face/proportions, red MAUI bandana. Preserve the fixed September 2026 references. New Hermes blogs require a newly generated scene; this library does not authorize recycling old artwork.",
       "fields": [
         {
           "name": "title",
@@ -770,13 +774,13 @@
               "name": "status",
               "type": "select",
               "title": "Artwork review",
-              "required": true,
+              "default": "pending",
               "options": [
                 "pending",
                 "approved",
                 "needs-fixes"
               ],
-              "default": "pending"
+              "required": true
             },
             {
               "name": "imageSha256",
@@ -802,9 +806,12 @@
             }
           ]
         }
-      ]
+      ],
+      "orderable": false,
+      "publishable": true
     },
     {
+      "help": "Navigation labels and destinations. Preserve working URLs. Account actions and directory filters remain application controls. Frontend connection is pending.",
       "kind": "collection",
       "type": "navItem",
       "title": "Navigation",
@@ -823,16 +830,15 @@
           "name": "placement",
           "type": "select",
           "title": "Menu location",
+          "default": "header",
           "options": [
             "header",
             "footer"
-          ],
-          "default": "header"
+          ]
         }
       ],
       "orderable": true,
-      "publishable": true,
-      "help": "Navigation labels and destinations. Preserve working URLs. Account actions and directory filters remain application controls. Frontend connection is pending."
+      "publishable": true
     },
     {
       "kind": "singleton",
@@ -896,6 +902,7 @@
       ]
     },
     {
+      "help": "Reserved for a future contact-form connection. Current GroomLocal forms still use the existing application. Email notifications are not enabled.",
       "kind": "intake",
       "type": "contactMessage",
       "title": "Contact messages",
@@ -915,8 +922,7 @@
           "type": "text",
           "required": true
         }
-      ],
-      "help": "Reserved for a future contact-form connection. Current GroomLocal forms still use the existing application. Email notifications are not enabled."
+      ]
     },
     {
       "kind": "singleton",

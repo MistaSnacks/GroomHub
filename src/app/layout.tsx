@@ -3,6 +3,7 @@ import { Fredoka, Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
+import { SnackboxScript } from "@/lib/cms/Overlay";
 import { SiteFooter } from "@/components/site-footer";
 import { getCities } from "@/lib/supabase/queries";
 
@@ -66,6 +67,7 @@ export default async function RootLayout({
         <main className="flex-1 flex flex-col">{children}</main>
         <SiteFooter />
         <Analytics />
+        <SnackboxScript />
       </body>
     </html>
   );

@@ -1,43 +1,45 @@
 import assert from "node:assert/strict";
-import { test } from "node:test";
-import { getBlogPosts, getRelatedPosts } from "../src/lib/blog";
-import { GUIDE_TOPICS, getGuideListing } from "../src/lib/grooming-guides";
+import { test, before } from "node:test";
+import { getBlogPosts, getRelatedPosts, getGuideTopics, type BlogPostFull, type GuideTopic } from "../src/lib/blog";
+import { getGuideListing } from "../src/lib/grooming-guides";
 
-const posts = getBlogPosts();
+let posts: BlogPostFull[];
+let topics: GuideTopic[];
+before(async()=>{ [posts, topics] = await Promise.all([getBlogPosts(undefined,true),getGuideTopics()]); });
 
 test("every published guide belongs to exactly one populated topic", () => {
-  const slugs = GUIDE_TOPICS.flatMap((topic) => topic.slugs);
+  const slugs = topics.flatMap((topic) => topic.slugs);
   assert.equal(new Set(slugs).size, slugs.length);
   assert.deepEqual([...slugs].sort(), posts.map((post) => post.slug).sort());
-  for (const topic of GUIDE_TOPICS) {
+  for (const topic of topics) {
     assert.ok(topic.slugs.length > 0);
   }
 });
 
 test("topic navigation replaces legacy categories and All restores every guide", () => {
-  for (const topic of GUIDE_TOPICS) {
-    const result = getGuideListing(posts, { topic: topic.id, category: "cat-care" });
+  for (const topic of topics) {
+    const result = getGuideListing(posts, { topic: topic.id, category: "cat-care" }, topics);
     assert.equal(result.category, undefined);
     assert.deepEqual(result.posts.map((post) => post.slug).sort(), [...topic.slugs].sort());
   }
-  assert.deepEqual(getGuideListing(posts, {}).posts, posts);
-  assert.deepEqual(getGuideListing(posts, { category: "cat-care" }).posts.map((post) => post.slug), ["cat-grooming-what-to-expect"]);
+  assert.deepEqual(getGuideListing(posts, {}, topics).posts, posts);
+  assert.deepEqual(getGuideListing(posts, { category: "cat-care" }, topics).posts, posts.filter(post=>post.category === "cat-care"));
   for (const filters of [
     { topic: "unknown" },
     { category: "unknown" },
     { topic: ["cost-pricing", "breed-guides"], category: ["guides", "cat-care"] },
   ]) {
-    assert.deepEqual(getGuideListing(posts, filters).posts, posts);
+    assert.deepEqual(getGuideListing(posts, filters, topics).posts, posts);
   }
 });
 
-test("every article has unique suggestions, excludes itself, and prioritizes its topic", () => {
+test("every article has unique suggestions, excludes itself, and prioritizes its topic", async () => {
   for (const post of posts) {
-    const related = getRelatedPosts(post.slug);
+    const related = await getRelatedPosts(post.slug);
     assert.equal(related.length, 3);
     assert.equal(new Set(related.map((item) => item.slug)).size, 3);
     assert.ok(related.every((item) => item.slug !== post.slug));
-    const peers = GUIDE_TOPICS.find((topic) => topic.slugs.includes(post.slug))!
+    const peers = topics.find((topic) => topic.slugs.includes(post.slug))!
       .slugs.filter((slug) => slug !== post.slug);
     assert.ok(related.slice(0, Math.min(3, peers.length)).every((item) => peers.includes(item.slug)));
   }
@@ -47,7 +49,7 @@ const baseUrl = process.env.GUIDES_TEST_URL;
 test("rendered routes show exactly the selected guides and visible suggestions", { skip: !baseUrl }, async () => {
   const routes = [
     { query: "", filters: {} },
-    ...GUIDE_TOPICS.map((topic) => ({ query: `?topic=${topic.id}`, filters: { topic: topic.id } })),
+    ...topics.map((topic) => ({ query: `?topic=${topic.id}`, filters: { topic: topic.id } })),
     { query: "?category=cat-care", filters: { category: "cat-care" } },
     { query: "?topic=cost-pricing&category=cat-care", filters: { topic: "cost-pricing", category: "cat-care" } },
     { query: "?topic=unknown&category=unknown", filters: { topic: "unknown", category: "unknown" } },
@@ -63,12 +65,12 @@ test("rendered routes show exactly the selected guides and visible suggestions",
     const section = html.match(/<section id="guides"[\s\S]*?<\/section>/)?.[0];
     assert.ok(section, query);
     assert.doesNotMatch(section, /opacity:\s*0(?:[;"}])/, `Hidden results: ${query}`);
-    assert.deepEqual(cardSlugs(section), getGuideListing(posts, filters).posts.map((post) => post.slug));
+    assert.deepEqual(cardSlugs(section), getGuideListing(posts, filters, topics).posts.map((post) => post.slug));
     const nav = section.match(/<nav aria-label="Guide topics"[\s\S]*?<\/nav>/)?.[0];
     assert.ok(nav);
     assert.ok(nav.includes('href="/blog#guides"'));
     assert.doesNotMatch(nav, /category=/);
-    for (const topic of GUIDE_TOPICS) {
+    for (const topic of topics) {
       assert.ok(nav.includes(`href="/blog?topic=${topic.id}#guides"`));
     }
   }
@@ -78,6 +80,6 @@ test("rendered routes show exactly the selected guides and visible suggestions",
     assert.ok(heading >= 0, post.slug);
     const related = html.slice(heading, html.indexOf("</section>", heading));
     assert.doesNotMatch(related, /opacity:\s*0(?:[;"}])/, `Hidden suggestions: ${post.slug}`);
-    assert.deepEqual(cardSlugs(related), getRelatedPosts(post.slug).map((item) => item.slug));
+    assert.deepEqual(cardSlugs(related), (await getRelatedPosts(post.slug)).map((item) => item.slug));
   }
 });
