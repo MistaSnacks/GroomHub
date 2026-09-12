@@ -11,3 +11,6 @@ outreach
 *.log
 *.mp4
 *.tsbuildinfo
+
+# Preserved opaque source artwork is not needed by the site build.
+docs/maui/opaque-masters

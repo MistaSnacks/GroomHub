@@ -1,0 +1,2147 @@
+{
+  "checkedAt": "2026-09-04 America/Los_Angeles",
+  "keywordData": {
+    "id": "09050630-1424-0607-0000-5cc5a6a5f978",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "items": [
+      {
+        "keyword": "cat grooming cost",
+        "volume": 1000,
+        "volumeUpdated": "2026-08-25 14:56:54 +00:00",
+        "advertisingCompetition": "LOW",
+        "trend": {
+          "quarterly": -23,
+          "yearly": -23
+        },
+        "searchIntent": "informational"
+      },
+      {
+        "keyword": "dog grooming cost",
+        "volume": 3600,
+        "volumeUpdated": "2026-08-29 00:42:23 +00:00",
+        "advertisingCompetition": "LOW",
+        "trend": {
+          "monthly": 22,
+          "quarterly": 50,
+          "yearly": 83
+        },
+        "searchIntent": "informational"
+      },
+      {
+        "keyword": "dog grooming for anxious dogs",
+        "volume": 320,
+        "volumeUpdated": "2026-08-28 16:28:56 +00:00",
+        "advertisingCompetition": "LOW",
+        "trend": {
+          "monthly": -18,
+          "yearly": -18
+        },
+        "searchIntent": "commercial"
+      },
+      {
+        "keyword": "dog grooming tipping",
+        "volume": 880,
+        "volumeUpdated": "2026-08-23 10:47:32 +00:00",
+        "advertisingCompetition": "LOW",
+        "trend": {
+          "monthly": -28,
+          "yearly": -28
+        },
+        "searchIntent": "commercial"
+      },
+      {
+        "keyword": "dog nail trimming cost",
+        "volume": 880,
+        "volumeUpdated": "2026-08-29 06:10:40 +00:00",
+        "advertisingCompetition": "LOW",
+        "trend": {
+          "monthly": 14,
+          "quarterly": 14,
+          "yearly": 14
+        },
+        "searchIntent": "informational"
+      },
+      {
+        "keyword": "goldendoodle grooming",
+        "volume": 2900,
+        "volumeUpdated": "2026-08-29 03:34:54 +00:00",
+        "advertisingCompetition": "LOW",
+        "trend": {
+          "monthly": 22,
+          "quarterly": 83
+        },
+        "searchIntent": "transactional"
+      },
+      {
+        "keyword": "how long does dog grooming take",
+        "volume": 590,
+        "volumeUpdated": "2026-08-28 22:58:42 +00:00",
+        "advertisingCompetition": "LOW",
+        "searchIntent": "informational"
+      },
+      {
+        "keyword": "how often should you groom your dog",
+        "volume": 390,
+        "volumeUpdated": "2026-08-24 00:42:28 +00:00",
+        "advertisingCompetition": "LOW",
+        "trend": {
+          "yearly": -19
+        },
+        "searchIntent": "informational"
+      },
+      {
+        "keyword": "how to choose a dog groomer",
+        "volume": 10,
+        "volumeUpdated": "2026-08-21 21:44:32 +00:00",
+        "advertisingCompetition": "LOW",
+        "trend": {
+          "yearly": -67
+        },
+        "searchIntent": "informational"
+      },
+      {
+        "keyword": "matted dog grooming",
+        "volume": 110,
+        "volumeUpdated": "2026-08-29 08:21:57 +00:00",
+        "advertisingCompetition": "MEDIUM",
+        "trend": {
+          "monthly": -18,
+          "yearly": 100
+        },
+        "searchIntent": "commercial"
+      },
+      {
+        "keyword": "mobile dog grooming cost",
+        "volume": 590,
+        "volumeUpdated": "2026-08-20 12:41:05 +00:00",
+        "advertisingCompetition": "MEDIUM",
+        "searchIntent": "informational"
+      },
+      {
+        "keyword": "puppy first grooming",
+        "volume": 210,
+        "volumeUpdated": "2026-08-23 04:02:12 +00:00",
+        "advertisingCompetition": "LOW",
+        "trend": {
+          "quarterly": 86,
+          "yearly": 50
+        },
+        "searchIntent": "informational"
+      },
+      {
+        "keyword": "winter dog grooming",
+        "volume": 10,
+        "volumeUpdated": "2026-08-20 19:09:31 +00:00",
+        "advertisingCompetition": "MEDIUM",
+        "searchIntent": "informational"
+      }
+    ]
+  },
+  "rankings": {
+    "totalCount": 176,
+    "items": [
+      {
+        "keyword": "canine paradigm llc silverton",
+        "volume": 70,
+        "rank": 6,
+        "url": "https://groomlocal.com/groomer/the-purple-pet-lady-silverton",
+        "checkedAt": "2026-07-20 18:24:51 +00:00"
+      },
+      {
+        "keyword": "the groomery port orchard wa",
+        "volume": 50,
+        "rank": 7,
+        "url": "https://groomlocal.com/groomer/the-groomery",
+        "checkedAt": "2026-07-26 14:31:00 +00:00"
+      },
+      {
+        "keyword": "groom reaper",
+        "volume": 40,
+        "rank": 8,
+        "url": "https://groomlocal.com/dog-grooming/or/keizer?services=full-groom",
+        "checkedAt": "2026-08-16 06:24:44 +00:00"
+      },
+      {
+        "keyword": "how much does mobile grooming cost",
+        "volume": 70,
+        "rank": 9,
+        "url": "https://groomlocal.com/blog/mobile-dog-grooming-cost-guide",
+        "checkedAt": "2026-07-19 14:44:16 +00:00"
+      },
+      {
+        "keyword": "misfits design pet spa",
+        "volume": 70,
+        "rank": 9,
+        "url": "https://groomlocal.com/dog-grooming/or/keizer?services=full-groom",
+        "checkedAt": "2026-07-18 22:02:29 +00:00"
+      },
+      {
+        "keyword": "keizer dog grooming",
+        "volume": 90,
+        "rank": 10,
+        "url": "https://groomlocal.com/dog-grooming/or/keizer?services=full-groom",
+        "checkedAt": "2026-08-12 15:14:40 +00:00"
+      },
+      {
+        "keyword": "how much do mobile dog groomers charge",
+        "volume": 70,
+        "rank": 12,
+        "url": "https://groomlocal.com/blog/mobile-dog-grooming-cost-guide",
+        "checkedAt": "2026-07-19 14:48:16 +00:00"
+      },
+      {
+        "keyword": "how much does a mobile dog groomer cost",
+        "volume": 40,
+        "rank": 12,
+        "url": "https://groomlocal.com/blog/mobile-dog-grooming-cost-guide",
+        "checkedAt": "2026-08-16 01:26:42 +00:00"
+      },
+      {
+        "keyword": "how much is mobile dog grooming near me",
+        "volume": 40,
+        "rank": 12,
+        "url": "https://groomlocal.com/blog/mobile-dog-grooming-cost-guide",
+        "checkedAt": "2026-08-16 01:16:50 +00:00"
+      },
+      {
+        "keyword": "dog grooming keizer oregon",
+        "volume": 90,
+        "rank": 13,
+        "url": "https://groomlocal.com/dog-grooming/or/keizer?services=full-groom",
+        "checkedAt": "2026-07-16 11:12:44 +00:00"
+      },
+      {
+        "keyword": "mobile dog wash prices",
+        "volume": 590,
+        "rank": 13,
+        "url": "https://groomlocal.com/blog/mobile-dog-grooming-cost-guide",
+        "checkedAt": "2026-07-01 05:44:51 +00:00"
+      },
+      {
+        "keyword": "paw spa lakewood wa",
+        "volume": 50,
+        "rank": 13,
+        "url": "https://groomlocal.com/dog-grooming/wa/lakewood?services=nail-care",
+        "checkedAt": "2026-07-27 08:14:29 +00:00"
+      },
+      {
+        "keyword": "the bath house pet salon",
+        "volume": 320,
+        "rank": 13,
+        "url": "https://groomlocal.com/groomer/the-bath-house-pet-salon-tacoma",
+        "checkedAt": "2026-07-04 13:23:48 +00:00"
+      },
+      {
+        "keyword": "dog groomers price list",
+        "volume": 170,
+        "rank": 15,
+        "url": "https://groomlocal.com/blog/dog-grooming-cost-seattle-portland-2026",
+        "checkedAt": "2026-07-09 15:59:21 +00:00"
+      },
+      {
+        "keyword": "pet supplies plus kennewick",
+        "volume": 590,
+        "rank": 15,
+        "url": "https://groomlocal.com/groomer/pet-supplies-plus-kennewick-grooming-kennewick",
+        "checkedAt": "2026-08-02 22:03:16 +00:00"
+      },
+      {
+        "keyword": "tiki dog salon",
+        "volume": 50,
+        "rank": 15,
+        "url": "https://groomlocal.com/groomer/aloha-tiki-tails-graham",
+        "checkedAt": "2026-07-26 13:54:48 +00:00"
+      },
+      {
+        "keyword": "cost of mobile dog grooming near me",
+        "volume": 50,
+        "rank": 17,
+        "url": "https://groomlocal.com/blog/mobile-dog-grooming-cost-guide",
+        "checkedAt": "2026-08-13 03:39:17 +00:00"
+      },
+      {
+        "keyword": "tiki tails auburn wa",
+        "volume": 110,
+        "rank": 17,
+        "url": "https://groomlocal.com/groomer/aloha-tiki-tails-graham",
+        "checkedAt": "2026-07-12 11:08:21 +00:00"
+      },
+      {
+        "keyword": "groombuggy prices",
+        "volume": 70,
+        "rank": 18,
+        "url": "https://groomlocal.com/blog/mobile-dog-grooming-cost-guide",
+        "checkedAt": "2026-07-16 04:02:02 +00:00"
+      },
+      {
+        "keyword": "mobile grooming cost",
+        "volume": 90,
+        "rank": 18,
+        "url": "https://groomlocal.com/blog/mobile-dog-grooming-cost-guide",
+        "checkedAt": "2026-07-13 02:13:19 +00:00"
+      },
+      {
+        "keyword": "tiki tails dog salon auburn wa",
+        "volume": 110,
+        "rank": 18,
+        "url": "https://groomlocal.com/groomer/aloha-tiki-tails-graham",
+        "checkedAt": "2026-07-12 11:07:46 +00:00"
+      },
+      {
+        "keyword": "pet supplies kennewick",
+        "volume": 40,
+        "rank": 20,
+        "url": "https://groomlocal.com/groomer/pet-supplies-plus-kennewick-grooming-kennewick",
+        "checkedAt": "2026-08-13 00:28:47 +00:00"
+      },
+      {
+        "keyword": "how much is mobile grooming",
+        "volume": 40,
+        "rank": 21,
+        "url": "https://groomlocal.com/blog/mobile-dog-grooming-cost-guide",
+        "checkedAt": "2026-08-16 01:17:42 +00:00"
+      },
+      {
+        "keyword": "mobile dog grooming cost",
+        "volume": 590,
+        "rank": 21,
+        "url": "https://groomlocal.com/blog/mobile-dog-grooming-cost-guide",
+        "checkedAt": "2026-08-02 22:24:39 +00:00"
+      },
+      {
+        "keyword": "dog grooming in lakewood wa",
+        "volume": 90,
+        "rank": 22,
+        "url": "https://groomlocal.com/dog-grooming/wa/lakewood?services=nail-care",
+        "checkedAt": "2026-07-16 11:12:40 +00:00"
+      },
+      {
+        "keyword": "dog grooming newberg oregon",
+        "volume": 90,
+        "rank": 22,
+        "url": "https://groomlocal.com/groomer/ark-pet-rescue-grooming-salon-newberg",
+        "checkedAt": "2026-08-12 16:00:59 +00:00"
+      },
+      {
+        "keyword": "barkbus cost",
+        "volume": 50,
+        "rank": 23,
+        "url": "https://groomlocal.com/blog/mobile-dog-grooming-cost-guide",
+        "checkedAt": "2026-08-14 15:45:02 +00:00"
+      },
+      {
+        "keyword": "dog groomer price list",
+        "volume": 170,
+        "rank": 23,
+        "url": "https://groomlocal.com/blog/dog-grooming-cost-seattle-portland-2026",
+        "checkedAt": "2026-07-09 15:59:16 +00:00"
+      },
+      {
+        "keyword": "pet supplies nail trim",
+        "volume": 40,
+        "rank": 23,
+        "url": "https://groomlocal.com/groomer/pet-supplies-plus-kennewick-grooming-kennewick",
+        "checkedAt": "2026-08-14 18:13:36 +00:00"
+      },
+      {
+        "keyword": "how much does mobile pet grooming cost",
+        "volume": 40,
+        "rank": 25,
+        "url": "https://groomlocal.com/blog/mobile-dog-grooming-cost-guide",
+        "checkedAt": "2026-08-16 02:02:58 +00:00"
+      }
+    ]
+  },
+  "serps": {
+    "serp:dog grooming cost": {
+      "status": "Ok.",
+      "items": [
+        {
+          "type": "ai_overview",
+          "rank_group": 1,
+          "rank_absolute": 1,
+          "page": 1,
+          "markdown": "![How Much Does Dog Grooming Cost? - Whole Dog Journal](https://api.dataforseo.com/cdn/i/09050630-1424-0139-0000-65a0fa3c1382:4)\nDog grooming costs typically range from `$40 to $200+ per session` , depending on your dog's size, coat, and specific service needs.[](https://www.youtube.com/watch?v=QzRtTEtmKCY&t=165) [[1]](https://www.youtube.com/watch?v=QzRtTEtmKCY&t=165)[[2]](https://www.moego.pet/blog/how-much-is-dog-grooming-2026)\n\nAverage Prices by Size\n\n- **Small dogs (under 20 lbs):** $25–$50 for a basic bath; $35–$75 for a full haircut.\n- **Medium dogs (20–50 lbs):** $50–$75 for a bath; $50–$125 for a full groom.\n- **Large dogs (50–80 lbs):** $75–$125 for a bath; $75–$160 for a full groom.\n- **Extra-large/Giant breeds (80+ lbs):** $125–$200+ for a bath or full package.[](https://www.moego.pet/blog/how-much-is-dog-grooming-2026) [[1]](https://www.moego.pet/blog/how-much-is-dog-grooming-2026)[[2]](https://www.animalo.com/blog/dog-grooming-prices-complete-guide)\n\nCommon Add-On Services\n\n- **Nail trim or grind:** $10–$20\n- **Teeth brushing:** $10–$15\n- **Ear cleaning:** $10–$12\n- **De-shedding treatment:** $25+[](https://www.campbowwow.com/albuquerque/services-pricing/dog-grooming/) [[1]](https://www.campbowwow.com/albuquerque/services-pricing/dog-grooming/)[[2]](https://dogoasis.com/grooming-pricing)[[3]](https://www.petparadise.com/grooming.htm)[[4]](https://www.carecredit.com/well-u/pet-care/dog-grooming-cost/)\n\nIf you share your dog's **breed or weight** and your **general location** , I can give you a more accurate price estimate.",
+          "items": [
+            {
+              "type": "ai_overview_element",
+              "text": "Dog grooming costs typically range from $40 to $200+ per session, depending on your dog's size, coat, and specific service needs.",
+              "markdown": "![How Much Does Dog Grooming Cost? - Whole Dog Journal](https://api.dataforseo.com/cdn/i/09050630-1424-0139-0000-65a0fa3c1382:2)\nDog grooming costs typically range from `$40 to $200+ per session` , depending on your dog's size, coat, and specific service needs.[](https://www.youtube.com/watch?v=QzRtTEtmKCY&t=165) [[1]](https://www.youtube.com/watch?v=QzRtTEtmKCY&t=165)[[2]](https://www.moego.pet/blog/how-much-is-dog-grooming-2026)",
+              "images": [
+                {
+                  "type": "images_element",
+                  "alt": "How Much Does Dog Grooming Cost? - Whole Dog Journal",
+                  "image_url": "https://api.dataforseo.com/cdn/i/09050630-1424-0139-0000-65a0fa3c1382:3"
+                }
+              ],
+              "references": [
+                {
+                  "type": "ai_overview_reference",
+                  "source": "YouTube",
+                  "domain": "www.youtube.com",
+                  "url": "https://www.youtube.com/watch?v=QzRtTEtmKCY&t=165",
+                  "title": "The Real Cost of Dog Grooming in the U.S. (And How Often to Go)",
+                  "text": "The Real Cost of Dog Grooming in the U.S. (And How Often to Go) i'm going to show a little show and share all right so what we're ..."
+                },
+                {
+                  "type": "ai_overview_reference",
+                  "source": "MoeGo",
+                  "domain": "www.moego.pet",
+                  "url": "https://www.moego.pet/blog/how-much-is-dog-grooming-2026",
+                  "title": "How Much Is Dog Grooming? Costs, Factors & Price Tips - MoeGo",
+                  "text": "Quick Answer: What Is the Average Cost of Dog Grooming? In 2026, typical dog grooming prices fall within these ranges: * Basic Bat..."
+                }
+              ]
+            },
+            {
+              "type": "ai_overview_element",
+              "title": "Average Prices by Size",
+              "text": "Small dogs (under 20 lbs): $25–$50 for a basic bath; $35–$75 for a full haircut. Medium dogs (20–50 lbs): $50–$75 for a bath; $50–$125 for a full groom. Large dogs (50–80 lbs): $75–$125 for a bath; $75–$160 for a full groom. Extra-large/Giant breeds (80+ lbs): $125–$200+ for a bath or full package.",
+              "markdown": "- **Small dogs (under 20 lbs):** $25–$50 for a basic bath; $35–$75 for a full haircut.\n- **Medium dogs (20–50 lbs):** $50–$75 for a bath; $50–$125 for a full groom.\n- **Large dogs (50–80 lbs):** $75–$125 for a bath; $75–$160 for a full groom.\n- **Extra-large/Giant breeds (80+ lbs):** $125–$200+ for a bath or full package.[](https://www.moego.pet/blog/how-much-is-dog-grooming-2026) [[1]](https://www.moego.pet/blog/how-much-is-dog-grooming-2026)[[2]](https://www.animalo.com/blog/dog-grooming-prices-complete-guide)",
+              "references": [
+                {
+                  "type": "ai_overview_reference",
+                  "source": "MoeGo",
+                  "domain": "www.moego.pet",
+                  "url": "https://www.moego.pet/blog/how-much-is-dog-grooming-2026",
+                  "title": "How Much Is Dog Grooming? Costs, Factors & Price Tips - MoeGo",
+                  "text": "Quick Answer: What Is the Average Cost of Dog Grooming? In 2026, typical dog grooming prices fall within these ranges: * Basic Bat..."
+                },
+                {
+                  "type": "ai_overview_reference",
+                  "source": "www.animalo.com",
+                  "domain": "www.animalo.com",
+                  "url": "https://www.animalo.com/blog/dog-grooming-prices-complete-guide",
+                  "title": "Dog Grooming Prices 2026: $40–$120 by Breed & Size - Animalo",
+                  "text": "Table_title: Average Dog Grooming Prices by Breed (2026) Table_content: | Breed / size | Full groom | Bath & tidy | | --- | --- | ..."
+                }
+              ]
+            },
+            {
+              "type": "ai_overview_element",
+              "title": "Common Add-On Services",
+              "text": "Nail trim or grind: $10–$20 Teeth brushing: $10–$15 Ear cleaning: $10–$12 De-shedding treatment: $25+",
+              "markdown": "- **Nail trim or grind:** $10–$20\n- **Teeth brushing:** $10–$15\n- **Ear cleaning:** $10–$12\n- **De-shedding treatment:** $25+[](https://www.campbowwow.com/albuquerque/services-pricing/dog-grooming/) [[1]](https://www.campbowwow.com/albuquerque/services-pricing/dog-grooming/)[[2]](https://dogoasis.com/grooming-pricing)[[3]](https://www.petparadise.com/grooming.htm)[[4]](https://www.carecredit.com/well-u/pet-care/dog-grooming-cost/)",
+              "references": [
+                {
+                  "type": "ai_overview_reference",
+                  "source": "Camp Bow Wow",
+                  "domain": "www.campbowwow.com",
+                  "url": "https://www.campbowwow.com/albuquerque/services-pricing/dog-grooming/",
+                  "title": "Dog Grooming in Albuquerque | Dog Care Services - Camp Bow Wow",
+                  "text": "Table_title: Dog Grooming Pricing Table_content: | Other Services | Price | | --- | --- | | Nail Grind Helps smooth rough edges an..."
+                },
+                {
+                  "type": "ai_overview_reference",
+                  "source": "dogoasis.com",
+                  "domain": "dogoasis.com",
+                  "url": "https://dogoasis.com/grooming-pricing",
+                  "title": "Grooming Pricing - Dog Oasis BE",
+                  "text": "Grooming a la Carte/add-ons * Deep Conditioning. $ 10 - $20. * Brush Out. $ 15 - $20. * Double Bath. $ 20 - $30. * Poodle Poms. $ ..."
+                },
+                {
+                  "type": "ai_overview_reference",
+                  "source": "Pet Paradise",
+                  "domain": "www.petparadise.com",
+                  "url": "https://www.petparadise.com/grooming.htm",
+                  "title": "Pamper your Pet with Dog Grooming & Cat Grooming - Pet Paradise",
+                  "text": "Dog Grooming Service Add-Ons * Nail Trim — $10. * Nail Dremeling — $15. * Ear Cleaning — $10. * Teeth Brushing — $15. * Blueberry ..."
+                },
+                {
+                  "type": "ai_overview_reference",
+                  "source": "CareCredit",
+                  "domain": "www.carecredit.com",
+                  "url": "https://www.carecredit.com/well-u/pet-care/dog-grooming-cost/",
+                  "title": "Dog Grooming Costs: Average Pricing for Common Services - CareCredit",
+                  "text": "Table_title: Average Costs for Professional Dog Grooming Table_content: | Grooming service | Cost | | --- | --- | | Bath (shampoo ..."
+                }
+              ]
+            },
+            {
+              "type": "ai_overview_element",
+              "text": "If you share your dog's breed or weight and your general location, I can give you a more accurate price estimate.",
+              "markdown": "If you share your dog's **breed or weight** and your **general location** , I can give you a more accurate price estimate."
+            }
+          ],
+          "references": [
+            {
+              "type": "ai_overview_reference",
+              "source": "YouTube",
+              "domain": "www.youtube.com",
+              "url": "https://www.youtube.com/watch?v=QzRtTEtmKCY&t=165",
+              "title": "The Real Cost of Dog Grooming in the U.S. (And How Often to Go)",
+              "text": "The Real Cost of Dog Grooming in the U.S. (And How Often to Go) i'm going to show a little show and share all right so what we're ..."
+            },
+            {
+              "type": "ai_overview_reference",
+              "source": "Camp Bow Wow",
+              "domain": "www.campbowwow.com",
+              "url": "https://www.campbowwow.com/albuquerque/services-pricing/dog-grooming/",
+              "title": "Dog Grooming in Albuquerque | Dog Care Services - Camp Bow Wow",
+              "text": "Table_title: Dog Grooming Pricing Table_content: | Other Services | Price | | --- | --- | | Nail Grind Helps smooth rough edges an..."
+            },
+            {
+              "type": "ai_overview_reference",
+              "source": "dogoasis.com",
+              "domain": "dogoasis.com",
+              "url": "https://dogoasis.com/grooming-pricing",
+              "title": "Grooming Pricing - Dog Oasis BE",
+              "text": "Grooming a la Carte/add-ons * Deep Conditioning. $ 10 - $20. * Brush Out. $ 15 - $20. * Double Bath. $ 20 - $30. * Poodle Poms. $ ..."
+            },
+            {
+              "type": "ai_overview_reference",
+              "source": "MoeGo",
+              "domain": "www.moego.pet",
+              "url": "https://www.moego.pet/blog/how-much-is-dog-grooming-2026",
+              "title": "How Much Is Dog Grooming? Costs, Factors & Price Tips - MoeGo",
+              "text": "Quick Answer: What Is the Average Cost of Dog Grooming? In 2026, typical dog grooming prices fall within these ranges: * Basic Bat..."
+            },
+            {
+              "type": "ai_overview_reference",
+              "source": "CareCredit",
+              "domain": "www.carecredit.com",
+              "url": "https://www.carecredit.com/well-u/pet-care/dog-grooming-cost/",
+              "title": "Dog Grooming Costs: Average Pricing for Common Services - CareCredit",
+              "text": "Table_title: Average Costs for Professional Dog Grooming Table_content: | Grooming service | Cost | | --- | --- | | Bath (shampoo ..."
+            },
+            {
+              "type": "ai_overview_reference",
+              "source": "Pet Paradise",
+              "domain": "www.petparadise.com",
+              "url": "https://www.petparadise.com/grooming.htm",
+              "title": "Pamper your Pet with Dog Grooming & Cat Grooming - Pet Paradise",
+              "text": "Dog Grooming Service Add-Ons * Nail Trim — $10. * Nail Dremeling — $15. * Ear Cleaning — $10. * Teeth Brushing — $15. * Blueberry ..."
+            },
+            {
+              "type": "ai_overview_reference",
+              "source": "www.animalo.com",
+              "domain": "www.animalo.com",
+              "url": "https://www.animalo.com/blog/dog-grooming-prices-complete-guide",
+              "title": "Dog Grooming Prices 2026: $40–$120 by Breed & Size - Animalo",
+              "text": "Table_title: Average Dog Grooming Prices by Breed (2026) Table_content: | Breed / size | Full groom | Bath & tidy | | --- | --- | ..."
+            }
+          ]
+        },
+        {
+          "type": "organic",
+          "rank_group": 1,
+          "rank_absolute": 2,
+          "page": 1,
+          "domain": "www.petco.com",
+          "title": "Petco Dog Grooming: Dog Baths, Haircuts, Nail Trimming",
+          "url": "https://www.petco.com/s/dog-grooming?srsltid=AfmBOorIjpuYBJAdocjPdFdqwM_Qi5eWO7t8jBwAWnGTmYtyIf0n2ll5",
+          "breadcrumb": "https://www.petco.com › dog-grooming",
+          "website_name": "Petco",
+          "description": "Dog grooming starts at $24 for a bath and $46 for a bath & haircut, but pricing varies by dog size. of dog and service selected.",
+          "highlighted": [
+            "24 for a bath and $46 for a bath & haircut"
+          ]
+        },
+        {
+          "type": "people_also_ask",
+          "rank_group": 1,
+          "rank_absolute": 3,
+          "page": 1,
+          "items": [
+            {
+              "type": "people_also_ask_element",
+              "title": "How much should I pay for a dog groom?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            },
+            {
+              "type": "people_also_ask_element",
+              "title": "How much do you tip a $70 dog groomer?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            },
+            {
+              "type": "people_also_ask_element",
+              "title": "How much to groom a 30 lb dog?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            },
+            {
+              "type": "people_also_ask_element",
+              "title": "Is a $5 dollar tip good for a dog groomer?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            },
+            {
+              "type": "people_also_ask_element",
+              "title": "Do dog groomers expect a tip?",
+              "seed_question": "Is a $5 dollar tip good for a dog groomer?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            },
+            {
+              "type": "people_also_ask_element",
+              "title": "Are you supposed to tip groomers at PetSmart?",
+              "seed_question": "Is a $5 dollar tip good for a dog groomer?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "organic",
+          "rank_group": 2,
+          "rank_absolute": 4,
+          "page": 1,
+          "domain": "www.reddit.com",
+          "title": "How much do you pay for a regular grooming service?",
+          "url": "https://www.reddit.com/r/dogs/comments/1b997yt/how_much_do_you_pay_for_a_regular_grooming_service/",
+          "breadcrumb": "10+ comments  ·  2 years ago",
+          "website_name": "Reddit · r/dogs",
+          "description": "I am having a discussion with my wife about how expensive is this place that she insists to keep taking our dog for grooming. Our dog is a 1yold, 12lb ...",
+          "links": [
+            {
+              "type": "link_element",
+              "title": "How much should I pay for dog grooming in the OC ...",
+              "url": "https://www.reddit.com/r/orangecounty/comments/1nre37a/how_much_should_i_pay_for_dog_grooming_in_the_oc/",
+              "domain": "www.reddit.com"
+            },
+            {
+              "type": "link_element",
+              "title": "How much would you charge? More info in ...",
+              "url": "https://www.reddit.com/r/doggrooming/comments/llacsq/how_much_would_you_charge_more_info_in_comments/",
+              "domain": "www.reddit.com"
+            },
+            {
+              "type": "link_element",
+              "title": "More results from www.reddit.com",
+              "url": "https://www.google.com/search?q=dog+grooming+cost+site:www.reddit.com&sca_esv=c424c8dd2b5a25c5&hl=en&gl=US&sxsrf=APpeQnv7MwwUYzgBDxfXN8GyYgZBci2Z-Q:1788589859349&sa=X&ved=2ahUKEwj2i9y56NaWAxULhf0HHV60M-MQrQIoAnoECCoQAw",
+              "domain": "www.google.com"
+            }
+          ]
+        },
+        {
+          "type": "organic",
+          "rank_group": 3,
+          "rank_absolute": 5,
+          "page": 1,
+          "domain": "www.campbowwow.com",
+          "title": "Dog Grooming in Albuquerque | Dog Care Services",
+          "url": "https://www.campbowwow.com/albuquerque/services-pricing/dog-grooming/",
+          "breadcrumb": "https://www.campbowwow.com › albuquerque › dog-gr...",
+          "website_name": "Camp Bow Wow",
+          "description": "$34.00 Basic Bath: Small (11lbs-35lbs) $37.00 Basic Bath: Medium (36lbs-60lbs) $40.00 Basic Bath: Large (61lbs-90lbs) Monthly $10.00 Brush Out $15.00",
+          "highlighted": [
+            "34.00 Basic Bath: Small (11lbs-35lbs"
+          ]
+        },
+        {
+          "type": "organic",
+          "rank_group": 4,
+          "rank_absolute": 6,
+          "page": 1,
+          "domain": "www.thumbtack.com",
+          "title": "2025 Dog Grooming Prices | Get Estimates",
+          "url": "https://www.thumbtack.com/p/dog-grooming-prices",
+          "breadcrumb": "https://www.thumbtack.com › dog-grooming-prices",
+          "website_name": "Thumbtack",
+          "description": "Oct 16, 2025 — On average, dog grooming costs between $79-$136 per session, per dog. National average cost $104 Low-end average cost service.",
+          "pre_snippet": "10/16/2025 00:00:00",
+          "price": {
+            "current": 79,
+            "max_value": 136,
+            "currency": "USD",
+            "is_price_range": true,
+            "displayed_price": "$79.00 to $136.00"
+          },
+          "highlighted": [
+            "79-$136 per session, per dog"
+          ],
+          "timestamp": "2025-10-16 00:00:00 +00:00"
+        },
+        {
+          "type": "organic",
+          "rank_group": 5,
+          "rank_absolute": 7,
+          "page": 1,
+          "domain": "dogoasis.com",
+          "title": "Grooming Pricing - Dog Oasis BE",
+          "url": "https://dogoasis.com/grooming-pricing",
+          "breadcrumb": "https://dogoasis.com › grooming-pricing",
+          "website_name": "dogoasis.com",
+          "description": "01 - 15 lbs $34 16 - 27 lbs. An additional $2 per pound applies for weights over 100 lbs. $60 16 - 27 lbs An additional $2 per pound … 27 lbs $85 28 - 38 lbs $ ..."
+        },
+        {
+          "type": "organic",
+          "rank_group": 6,
+          "rank_absolute": 8,
+          "page": 1,
+          "domain": "petsmartways.com",
+          "title": "PetSmart Grooming Prices & Packages for 2026",
+          "url": "https://petsmartways.com/petsmart-grooming-prices/",
+          "breadcrumb": "https://petsmartways.com › petsmart-grooming-prices",
+          "website_name": "petsmartways.com",
+          "description": "PetSmart grooming costs $30-$85 for a bath and $45-$120 for a full groom. Full 2026 price list by dog size, nail trim prices, packages and add-ons.",
+          "highlighted": [
+            "30-$85 for a bath and $45-$120 for a full groom"
+          ]
+        },
+        {
+          "type": "organic",
+          "rank_group": 7,
+          "rank_absolute": 9,
+          "page": 1,
+          "domain": "www.barkfetchrun.com",
+          "title": "How Much is Dog Grooming in Miami? Your 2026 Cost Guide",
+          "url": "https://www.barkfetchrun.com/how-much-is-dog-grooming-in-miami/",
+          "breadcrumb": "https://www.barkfetchrun.com › how-much-is-dog-gro...",
+          "website_name": "Dogtown Coconut Grove",
+          "description": "Generally speaking, you can expect to pay anywhere from $50 for a basic bath on a small dog to over $150 for a full haircut on a large, double-coated breed. Read more",
+          "highlighted": [
+            "50 for a basic bath on a small dog"
+          ]
+        },
+        {
+          "type": "organic",
+          "rank_group": 8,
+          "rank_absolute": 10,
+          "page": 1,
+          "domain": "tidydog.pet",
+          "title": "Nashville Dog Grooming Pricing",
+          "url": "https://tidydog.pet/how-much-does-dog-grooming-cost-in-nashville/",
+          "breadcrumb": "https://tidydog.pet › Helpful Dog Grooming Info",
+          "website_name": "TidyDog",
+          "description": "Nov 26, 2024 — Basic Grooming: $50 – $100 (includes bath, brushing, nail trimming, ear cleaning). Full Grooming Package: $60 – $200 (includes all basic ... Read more",
+          "pre_snippet": "11/26/2024 00:00:00",
+          "rating": {
+            "rating_type": "Max5",
+            "value": 4.4,
+            "votes_count": 453,
+            "rating_max": 5
+          },
+          "highlighted": [
+            "Basic Grooming: $50 – $100"
+          ],
+          "timestamp": "2024-11-26 00:00:00 +00:00"
+        },
+        {
+          "type": "organic",
+          "rank_group": 9,
+          "rank_absolute": 11,
+          "page": 1,
+          "domain": "www.petropolis.com",
+          "title": "How Much Does Dog Grooming Cost in St. Louis?",
+          "url": "https://www.petropolis.com/dog-grooming-costs-in-st-louis/",
+          "breadcrumb": "https://www.petropolis.com › Blog",
+          "website_name": "Petropolis: Empowered Pet Care",
+          "description": "Discover how much dog grooming costs in St. Louis and what factors influence pricing. Read our guide to properly budget for your dog.",
+          "highlighted": [
+            "how much dog grooming costs in St. Louis"
+          ]
+        },
+        {
+          "type": "related_searches",
+          "rank_group": 1,
+          "rank_absolute": 12,
+          "page": 1,
+          "items": [
+            "Dog grooming cost near me",
+            "Dog grooming cost texas",
+            "Dog grooming near me",
+            "Dog grooming cost Petco",
+            "Dog grooming cost PetSmart",
+            "PetSmart grooming",
+            "Average dog grooming prices by breed",
+            "Mobile dog grooming cost"
+          ]
+        }
+      ]
+    },
+    "serp:goldendoodle grooming": {
+      "status": "Ok.",
+      "items": [
+        {
+          "type": "ai_overview",
+          "rank_group": 1,
+          "rank_absolute": 1,
+          "page": 1,
+          "asynchronous_ai_overview": true
+        },
+        {
+          "type": "people_also_ask",
+          "rank_group": 1,
+          "rank_absolute": 3,
+          "page": 1,
+          "items": [
+            {
+              "type": "people_also_ask_element",
+              "title": "How often are Goldendoodles supposed to be groomed?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            },
+            {
+              "type": "people_also_ask_element",
+              "title": "What is the best groom cut for a Goldendoodle?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            },
+            {
+              "type": "people_also_ask_element",
+              "title": "At what age should a Goldendoodle get their first haircut?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            },
+            {
+              "type": "people_also_ask_element",
+              "title": "Are Goldendoodles hard to groom?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            },
+            {
+              "type": "people_also_ask_element",
+              "title": "Are boy or girl Goldendoodles better?",
+              "seed_question": "Are Goldendoodles hard to groom?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            },
+            {
+              "type": "people_also_ask_element",
+              "title": "Why do groomers charge extra for doodles?",
+              "seed_question": "Are Goldendoodles hard to groom?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "organic",
+          "rank_group": 1,
+          "rank_absolute": 4,
+          "page": 1,
+          "domain": "shop.welovedoodles.com",
+          "title": "Goldendoodle Dog Grooming Guide",
+          "url": "https://shop.welovedoodles.com/pages/goldendoodle-dog-grooming-guide?srsltid=AfmBOorj6HMIs7Pvn8rDuZXIS8RsNk9vJS7012r4xd3D-1SaQZnNcK6V",
+          "breadcrumb": "https://shop.welovedoodles.com › pages › goldendoodle-...",
+          "website_name": "We Love Doodles",
+          "description": "Maintenance Schedule · Brushing: 2-3 times per week · Professional Grooming: Every 8-12 weeks · Bathing: Every 6-8 weeks · Nail Trimming: Every 3-4 weeks ... Read more",
+          "highlighted": [
+            "Brushing: 2-3 times per week"
+          ]
+        },
+        {
+          "type": "organic",
+          "rank_group": 2,
+          "rank_absolute": 5,
+          "page": 1,
+          "domain": "designerpawssalon.com",
+          "title": "Goldendoodle Grooming Guide: Haircuts, Brushing & Coat ...",
+          "url": "https://designerpawssalon.com/goldendoodle-grooming-guide-coat-care-haircuts-and-brushing-tips/",
+          "breadcrumb": "https://designerpawssalon.com › Grooming",
+          "website_name": "Designer Paws Salon",
+          "description": "Apr 13, 2026 — A professional grooming appointment every 4 to 6 weeks is the standard for Goldendoodles. Waiting longer than 6 weeks almost always results in ... Read more",
+          "pre_snippet": "04/13/2026 00:00:00",
+          "highlighted": [
+            "A professional grooming appointment every 4 to 6 weeks"
+          ],
+          "timestamp": "2026-04-13 00:00:00 +00:00"
+        },
+        {
+          "type": "organic",
+          "rank_group": 3,
+          "rank_absolute": 6,
+          "page": 1,
+          "domain": "www.teddypuppies.com",
+          "title": "Grooming a Goldendoodle",
+          "url": "https://www.teddypuppies.com/post/teddypuppies",
+          "breadcrumb": "https://www.teddypuppies.com › post › teddypuppies",
+          "website_name": "Teddy Puppies",
+          "description": "May 23, 2022 — Before you attempt cutting your doodle's hair you need to thoroughly comb and brush with a dematting slicker comb and then bathe and blow dry ...",
+          "pre_snippet": "05/23/2022 00:00:00",
+          "highlighted": [
+            "thoroughly comb and brush with a dematting slicker comb"
+          ],
+          "timestamp": "2022-05-23 00:00:00 +00:00"
+        },
+        {
+          "type": "organic",
+          "rank_group": 4,
+          "rank_absolute": 7,
+          "page": 1,
+          "domain": "www.reddit.com",
+          "title": "Goldendoodle Grooming",
+          "url": "https://www.reddit.com/r/Goldendoodles/comments/1ahkz8y/goldendoodle_grooming/",
+          "breadcrumb": "20+ comments  ·  2 years ago",
+          "website_name": "Reddit · r/Goldendoodles",
+          "description": "My groomer requires all doodles be on a 4 week grooming schedule or she won't take them as clients. And I love my groomer so he goes every 4 ... Read more",
+          "highlighted": [
+            "My groomer requires all doodles be on a 4 week grooming schedule"
+          ]
+        },
+        {
+          "type": "organic",
+          "rank_group": 5,
+          "rank_absolute": 9,
+          "page": 1,
+          "domain": "www.goldendoodleassociation.com",
+          "title": "Grooming FAQ - Goldendoodle Association of North America",
+          "url": "https://www.goldendoodleassociation.com/grooming-faq/",
+          "breadcrumb": "https://www.goldendoodleassociation.com › Blog",
+          "website_name": "Goldendoodle Association of North America (GANA)",
+          "description": "Mar 14, 2023 — Get expert grooming tips for your Goldendoodle, including how often to brush, bathe, The typical price range is between $75 and $200. You can ...",
+          "pre_snippet": "03/14/2023 00:00:00",
+          "highlighted": [
+            "how often to brush, bathe"
+          ],
+          "timestamp": "2023-03-14 00:00:00 +00:00"
+        },
+        {
+          "type": "organic",
+          "rank_group": 6,
+          "rank_absolute": 10,
+          "page": 1,
+          "domain": "www.mosapetsparesort.com",
+          "title": "Golden Doodle Grooming 101Cary",
+          "url": "https://www.mosapetsparesort.com/post/golden-doodle-grooming-101-fluff-curls-and-everything-in-between",
+          "breadcrumb": "https://www.mosapetsparesort.com › post › golden-doo...",
+          "website_name": "MOSA Pet Spa Resort & Boutique",
+          "description": "Apr 15, 2025 — At MOSA Pet Spa & Resort, we recommend a grooming schedule every 4 to 6 weeks for Golden Doodles. Most Doodles do best with a bath every 4 to 6 ...",
+          "pre_snippet": "04/15/2025 00:00:00",
+          "highlighted": [
+            "grooming schedule every 4 to 6 weeks"
+          ],
+          "timestamp": "2025-04-15 00:00:00 +00:00"
+        },
+        {
+          "type": "organic",
+          "rank_group": 7,
+          "rank_absolute": 11,
+          "page": 1,
+          "domain": "timberidgegoldendoodles.com",
+          "title": "How To Groom A Goldendoodle",
+          "url": "https://timberidgegoldendoodles.com/doodle-haircuts/how-to-groom-a-goldendoodle/",
+          "breadcrumb": "https://timberidgegoldendoodles.com › doodle-haircuts",
+          "website_name": "Timberidge Goldendoodles",
+          "description": "Use you dog clippers and a #10 blade to trim your dog's belly, behind, and under the ears. Doing a maintenance trim will help decrease the frequency of your ... Read more",
+          "highlighted": [
+            "Use you dog clippers and a #10 blade to trim your dog's belly, behind, and under the ears"
+          ]
+        },
+        {
+          "type": "related_searches",
+          "rank_group": 1,
+          "rank_absolute": 12,
+          "page": 1,
+          "items": [
+            "Goldendoodle grooming near me",
+            "Goldendoodle grooming Chart",
+            "Goldendoodle grooming styles",
+            "Mini goldendoodle grooming",
+            "Goldendoodle grooming cost",
+            "Goldendoodle grooming kit",
+            "How to groom a Goldendoodle puppy",
+            "How to groom a goldendoodle face"
+          ]
+        }
+      ]
+    },
+    "serp:cat grooming cost": {
+      "status": "Ok.",
+      "items": [
+        {
+          "type": "ai_overview",
+          "rank_group": 1,
+          "rank_absolute": 1,
+          "page": 1,
+          "asynchronous_ai_overview": true
+        },
+        {
+          "type": "organic",
+          "rank_group": 1,
+          "rank_absolute": 2,
+          "page": 1,
+          "domain": "services.petsmart.com",
+          "title": "Dog Grooming & Cat Grooming Services | PetSmart",
+          "url": "https://services.petsmart.com/grooming",
+          "breadcrumb": "https://services.petsmart.com › grooming",
+          "website_name": "PetSmart",
+          "description": "Prices may vary by store, breed, coat condition & service time. Pet age, health & vaccination requirements apply. Subject to availability. Read more",
+          "highlighted": [
+            "Prices may vary by store, breed, coat condition & service time"
+          ]
+        },
+        {
+          "type": "people_also_ask",
+          "rank_group": 1,
+          "rank_absolute": 3,
+          "page": 1,
+          "items": [
+            {
+              "type": "people_also_ask_element",
+              "title": "How much does it usually cost to get your cat groomed?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            },
+            {
+              "type": "people_also_ask_element",
+              "title": "How much does a haircut for a cat cost?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            },
+            {
+              "type": "people_also_ask_element",
+              "title": "Is it a good idea to get your cat groomed?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            },
+            {
+              "type": "people_also_ask_element",
+              "title": "How much is normal grooming for a cat?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            },
+            {
+              "type": "people_also_ask_element",
+              "title": "How often should indoor cats be groomed?",
+              "seed_question": "How much is normal grooming for a cat?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            },
+            {
+              "type": "people_also_ask_element",
+              "title": "Why are cat groomers so expensive?",
+              "seed_question": "How much is normal grooming for a cat?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "organic",
+          "rank_group": 2,
+          "rank_absolute": 4,
+          "page": 1,
+          "domain": "happycatgrooming.com",
+          "title": "Services & Prices",
+          "url": "https://happycatgrooming.com/services-prices/",
+          "breadcrumb": "https://happycatgrooming.com › services-prices",
+          "website_name": "Happy Cat Grooming",
+          "description": "Brush, & Nails. Short Hair starting at $73 Long Hair starting at $95. Short Hair starting at $90 Long Hair starting at $111 ・ $110 Long Hair starting at $120 ...",
+          "highlighted": [
+            "Short Hair starting at $73"
+          ]
+        },
+        {
+          "type": "organic",
+          "rank_group": 3,
+          "rank_absolute": 5,
+          "page": 1,
+          "domain": "www.facebook.com",
+          "title": "What is the standard pricing for cat grooming?",
+          "url": "https://www.facebook.com/groups/1542021025906490/posts/25025522663796329/",
+          "breadcrumb": "20+ comments  ·  8 months ago",
+          "website_name": "Facebook · Groomers Helping Groomers",
+          "description": "For those of you who groom cats, can you please give me an idea of pricing? I have recently started doing cats and was matching the price of another groomer ...",
+          "links": [
+            {
+              "type": "link_element",
+              "title": "What is a good price for cat grooming? - Facebook",
+              "url": "https://www.facebook.com/groups/1542021025906490/posts/25800206549661266/",
+              "domain": "www.facebook.com"
+            },
+            {
+              "type": "link_element",
+              "title": "How much to charge for cat grooming in Riverside, California?",
+              "url": "https://www.facebook.com/groups/groomersrock/posts/26036013206076866/",
+              "domain": "www.facebook.com"
+            },
+            {
+              "type": "link_element",
+              "title": "More results from www.facebook.com",
+              "url": "https://www.google.com/search?q=cat+grooming+cost+site:www.facebook.com&sca_esv=9ba93acd6ca82055&hl=en&gl=US&sa=X&ved=2ahUKEwiw19q46NaWAxWTvokEHZ08DZgQrQIoAnoECDgQAw",
+              "domain": "www.google.com"
+            }
+          ]
+        },
+        {
+          "type": "organic",
+          "rank_group": 4,
+          "rank_absolute": 7,
+          "page": 1,
+          "domain": "www.petco.com",
+          "title": "Cat Grooming Services",
+          "url": "https://www.petco.com/s/cat-grooming-services?srsltid=AfmBOooHUn7RfU6AHAd7bFzhfds_Cp-zkhhLghJgWBc7_V_sXLes2dXv",
+          "breadcrumb": "https://www.petco.com › ... › Grooming › Cat Grooming",
+          "website_name": "Petco",
+          "description": "Estimate pricing based on your Cat* · Short hair bath Only. $70 · Short hair Bath + Cut. $90 · Long hair bath only. $80 · Long Hair Bath + Cut. $100. Read more",
+          "highlighted": [
+            "Short hair bath Only. $70"
+          ]
+        },
+        {
+          "type": "organic",
+          "rank_group": 5,
+          "rank_absolute": 8,
+          "page": 1,
+          "domain": "www.thumbtack.com",
+          "title": "Cat groomers near Los Angeles, CA",
+          "url": "https://www.thumbtack.com/ca/los-angeles/cat-grooming",
+          "breadcrumb": "https://www.thumbtack.com › CA › Los Angeles",
+          "website_name": "Thumbtack",
+          "description": "The national average price for cat grooming is $50-$70. a bath and brush for shorthair cats may be $15, $20 for medium-hair cats, and $25 for a longhair.",
+          "highlighted": [
+            "price",
+            "cat grooming"
+          ]
+        },
+        {
+          "type": "organic",
+          "rank_group": 6,
+          "rank_absolute": 9,
+          "page": 1,
+          "domain": "seattlecanineclub.com",
+          "title": "Is Cat Grooming Worth It? Understanding Costs & Benefits",
+          "url": "https://seattlecanineclub.com/is-cat-grooming-worth-it-understanding-costs-benefits/",
+          "breadcrumb": "https://seattlecanineclub.com › Cats › Grooming",
+          "website_name": "Seattle Canine Club",
+          "description": "Feb 13, 2025 — In Seattle, expect to pay $30-$150 depending on the service. Nail trims start at $30, short-coat baths at $100, and full grooms with haircuts ...",
+          "pre_snippet": "02/13/2025 00:00:00",
+          "highlighted": [
+            "30-$150"
+          ],
+          "timestamp": "2025-02-13 00:00:00 +00:00"
+        },
+        {
+          "type": "organic",
+          "rank_group": 7,
+          "rank_absolute": 10,
+          "page": 1,
+          "domain": "www.airtasker.com",
+          "title": "How Much Does Cat Grooming Cost in 2025",
+          "url": "https://www.airtasker.com/us/costs/cat-grooming/cat-grooming-cost/",
+          "breadcrumb": "https://www.airtasker.com › US › Costs › Cat Grooming",
+          "website_name": "Airtasker",
+          "description": "Apr 16, 2025 — The average cost of cat grooming ranges from $50 to $120, depending on the grooming type, cat breed, and coat condition.",
+          "pre_snippet": "04/16/2025 00:00:00",
+          "highlighted": [
+            "50 to $120"
+          ],
+          "timestamp": "2025-04-16 00:00:00 +00:00"
+        },
+        {
+          "type": "organic",
+          "rank_group": 8,
+          "rank_absolute": 11,
+          "page": 1,
+          "domain": "brooklynpetspa.com",
+          "title": "Cat Grooming Cost in Brooklyn: Pricing Guide & What's ...",
+          "url": "https://brooklynpetspa.com/understanding-cat-grooming-cost-brooklyn/",
+          "breadcrumb": "https://brooklynpetspa.com › cat",
+          "website_name": "Brooklyn Pet Spa",
+          "description": "Cat grooming in Brooklyn costs $50-$150+ depending on your cat's needs, coat condition, and the services you choose. Basic grooming is cheaper. Specialty ... Read more",
+          "highlighted": [
+            "50-$150"
+          ]
+        },
+        {
+          "type": "related_searches",
+          "rank_group": 1,
+          "rank_absolute": 13,
+          "page": 1,
+          "items": [
+            "Cat grooming cost near me",
+            "Cat grooming near me",
+            "Cat grooming cost per month",
+            "Professional cat grooming cost",
+            "Mobile cat grooming cost",
+            "Cat grooming cost Petco",
+            "PetSmart cat grooming cost",
+            "PetSmart grooming prices"
+          ]
+        }
+      ]
+    },
+    "mobile-serp": {
+      "status": "Ok.",
+      "items": [
+        {
+          "type": "ai_overview",
+          "rank_group": 1,
+          "rank_absolute": 1,
+          "page": 1,
+          "asynchronous_ai_overview": true
+        },
+        {
+          "type": "organic",
+          "rank_group": 1,
+          "rank_absolute": 2,
+          "page": 1,
+          "domain": "www.reddit.com",
+          "title": "Mobile grooming prices : r/doggrooming",
+          "url": "https://www.reddit.com/r/doggrooming/comments/5w1zp3/mobile_grooming_prices/",
+          "breadcrumb": "9 comments  ·  9 years ago",
+          "website_name": "Reddit · r/doggrooming",
+          "description": "In my area the average cost of a groom at a salon for a dog less than 15 lbs is about $50 and over 60lbs is $85 and up, and the mobile groomers ... Read more",
+          "highlighted": [
+            "about $50"
+          ],
+          "links": [
+            {
+              "type": "link_element",
+              "title": "How much do you pay for mobile dog grooming and ...",
+              "url": "https://www.reddit.com/r/Maltese/comments/xrhenz/how_much_do_you_pay_for_mobile_dog_grooming_and/",
+              "domain": "www.reddit.com"
+            },
+            {
+              "type": "link_element",
+              "title": "How much do you charge for mobile grooming? : r ...",
+              "url": "https://www.reddit.com/r/doggrooming/comments/15aj6a5/how_much_do_you_charge_for_mobile_grooming/",
+              "domain": "www.reddit.com"
+            },
+            {
+              "type": "link_element",
+              "title": "More results from www.reddit.com",
+              "url": "https://www.google.com/search?q=mobile+dog+grooming+cost+site:www.reddit.com&sca_esv=9ba93acd6ca82055&hl=en&gl=US&sxsrf=APpeQnt57K5LTzG1lT5HRl6t1IOPQqSR9Q:1788589912406&sa=X&ved=2ahUKEwjrwoHT6NaWAxVd8rsIHbCUEBYQrQIoAnoECCoQAw",
+              "domain": "www.google.com"
+            }
+          ]
+        },
+        {
+          "type": "people_also_ask",
+          "rank_group": 1,
+          "rank_absolute": 3,
+          "page": 1,
+          "items": [
+            {
+              "type": "people_also_ask_element",
+              "title": "Are mobile pet groomers more expensive?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            },
+            {
+              "type": "people_also_ask_element",
+              "title": "How much do you tip a $70 dog groomer?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            },
+            {
+              "type": "people_also_ask_element",
+              "title": "What are the disadvantages of mobile pet grooming?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            },
+            {
+              "type": "people_also_ask_element",
+              "title": "How much to groom a 30 lb dog?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            },
+            {
+              "type": "people_also_ask_element",
+              "title": "How much does it cost to groom your dog at Tractor Supply?",
+              "seed_question": "How much to groom a 30 lb dog?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            },
+            {
+              "type": "people_also_ask_element",
+              "title": "What are the red flags for dog grooming?",
+              "seed_question": "How much to groom a 30 lb dog?",
+              "expanded_element": [
+                {
+                  "type": "people_also_ask_ai_overview_expanded_element",
+                  "asynchronous_ai_overview": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "organic",
+          "rank_group": 2,
+          "rank_absolute": 4,
+          "page": 1,
+          "domain": "wagntails.com",
+          "title": "Breaking Down Mobile Dog Grooming Prices",
+          "url": "https://wagntails.com/breaking-down-mobile-dog-grooming-prices/",
+          "breadcrumb": "https://wagntails.com › Uncategorized",
+          "website_name": "Wag'n Tails",
+          "description": "Sep 27, 2023 — On average, mobile pet groomers charge around $130 per dog. But mobile dog grooming prices can vary based on a number of factors. To determine ... Read more",
+          "pre_snippet": "09/27/2023 00:00:00",
+          "highlighted": [
+            "around $130 per dog"
+          ],
+          "timestamp": "2023-09-27 00:00:00 +00:00"
+        },
+        {
+          "type": "organic",
+          "rank_group": 3,
+          "rank_absolute": 5,
+          "page": 1,
+          "domain": "www.rainbowgroomers.com",
+          "title": "Mobile Pet Grooming Pricing & Packages",
+          "url": "https://www.rainbowgroomers.com/pricing",
+          "breadcrumb": "https://www.rainbowgroomers.com › pricing",
+          "website_name": "Rainbow Grooming",
+          "description": "​​At Rainbow, prices are based on your dog's size and coat type—because that's what truly affects how much time, care, and skill each groom takes. Read more",
+          "highlighted": [
+            "prices are based on your dog's size and coat type"
+          ]
+        },
+        {
+          "type": "organic",
+          "rank_group": 4,
+          "rank_absolute": 6,
+          "page": 1,
+          "domain": "www.facebook.com",
+          "title": "How do mobile pet groomers work and what are their prices?",
+          "url": "https://www.facebook.com/groups/548974998586256/posts/3033823020101429/",
+          "breadcrumb": "20+ comments  ·  1 year ago",
+          "website_name": "Facebook · We Live in Lakeland & I Have Questions",
+          "description": "I have questions about the mobile dog groomers out there? Are the prices the same as a traditional groomer? More? Less? Do they groom them in their vehicle ...",
+          "links": [
+            {
+              "type": "link_element",
+              "title": "Average cost for mobile dog grooming services? - Facebook",
+              "url": "https://www.facebook.com/groups/214165523254138/posts/1367949704542375/",
+              "domain": "www.facebook.com"
+            },
+            {
+              "type": "link_element",
+              "title": "What is the ballpark cost for a mobile groomer? Someone who ...",
+              "url": "https://www.facebook.com/groups/4200098158/posts/10163885982678159/",
+              "domain": "www.facebook.com"
+            },
+            {
+              "type": "link_element",
+              "title": "More results from www.facebook.com",
+              "url": "https://www.google.com/search?q=mobile+dog+grooming+cost+site:www.facebook.com&sca_esv=9ba93acd6ca82055&hl=en&gl=US&sxsrf=APpeQnt57K5LTzG1lT5HRl6t1IOPQqSR9Q:1788589912406&sa=X&ved=2ahUKEwjrwoHT6NaWAxVd8rsIHbCUEBYQrQIoAnoECEQQAw",
+              "domain": "www.google.com"
+            }
+          ]
+        },
+        {
+          "type": "organic",
+          "rank_group": 5,
+          "rank_absolute": 7,
+          "page": 1,
+          "domain": "www.raisethewuffdoggrooming.com",
+          "title": "PRICING | Raise The Wuff",
+          "url": "https://www.raisethewuffdoggrooming.com/pricing",
+          "breadcrumb": "https://www.raisethewuffdoggrooming.com › pricing",
+          "website_name": "Raise The Wuff | Mobile Dog Grooming",
+          "description": "Add-On services · Teeth Brushing (brighten your dog's smile).................$20.00 · ​ · Nail Trimming (manual or grinding)..............................$15.00. Read more",
+          "highlighted": [
+            "dog's"
+          ]
+        },
+        {
+          "type": "organic",
+          "rank_group": 6,
+          "rank_absolute": 8,
+          "page": 1,
+          "domain": "seattlecanineclub.com",
+          "title": "Mobile Dog Grooming Seattle: Top Services Compared",
+          "url": "https://seattlecanineclub.com/mobile-dog-grooming-seattle/",
+          "breadcrumb": "https://seattlecanineclub.com › Grooming",
+          "website_name": "Seattle Canine Club",
+          "description": "Jan 9, 2026 — Mobile dog grooming in Seattle typically ranges from $100-250 for a full groom, depending on your dog's size, coat type, and condition. Most ... Read more",
+          "pre_snippet": "01/09/2026 00:00:00",
+          "highlighted": [
+            "100-250 for a full groom"
+          ],
+          "timestamp": "2026-01-09 00:00:00 +00:00"
+        },
+        {
+          "type": "organic",
+          "rank_group": 7,
+          "rank_absolute": 9,
+          "page": 1,
+          "domain": "ocpupscouts.com",
+          "title": "How Much Does Mobile Grooming Cost in Orange County?",
+          "url": "https://ocpupscouts.com/how-much-does-mobile-grooming-cost-in-orange-county/",
+          "breadcrumb": "https://ocpupscouts.com › Blog",
+          "website_name": "OC Pup Scouts",
+          "description": "Mobile grooming costs range from $50 to $200, depending on the services and dog size. This includes basic services like bathing and brushing, with additional ... Read more",
+          "highlighted": [
+            "50 to $200"
+          ]
+        },
+        {
+          "type": "organic",
+          "rank_group": 8,
+          "rank_absolute": 10,
+          "page": 1,
+          "domain": "www.luckydogmobilegroomers.com",
+          "title": "How Much Does Mobile Dog Grooming Cost? A ...",
+          "url": "https://www.luckydogmobilegroomers.com/how-much-does-mobile-dog-grooming-cost-a-comprehensive-guide/",
+          "breadcrumb": "https://www.luckydogmobilegroomers.com › how-muc...",
+          "website_name": "Lucky Dog Mobile Groomers",
+          "description": "Jun 26, 2025 — One of the most important factors that can affect the cost of mobile dog grooming is the size and breed of your dog. Larger dogs have more hair, ... Read more",
+          "pre_snippet": "06/26/2025 00:00:00",
+          "highlighted": [
+            "cost",
+            "mobile dog grooming"
+          ],
+          "links": [
+            {
+              "type": "link_element",
+              "title": "How Mobile Dog Grooming...",
+              "url": "https://www.luckydogmobilegroomers.com/how-much-does-mobile-dog-grooming-cost-a-comprehensive-guide/#:~:text=How%20Mobile%20Dog%20Grooming%20Works",
+              "domain": "www.luckydogmobilegroomers.com"
+            },
+            {
+              "type": "link_element",
+              "title": "Grooming Needs And Services...",
+              "url": "https://www.luckydogmobilegroomers.com/how-much-does-mobile-dog-grooming-cost-a-comprehensive-guide/#:~:text=Grooming%20Needs%20and%20Services%20Required",
+              "domain": "www.luckydogmobilegroomers.com"
+            },
+            {
+              "type": "link_element",
+              "title": "Comparing Mobile Dog...",
+              "url": "https://www.luckydogmobilegroomers.com/how-much-does-mobile-dog-grooming-cost-a-comprehensive-guide/#:~:text=Comparing%20Mobile%20Dog%20Grooming%20to%20Traditional%20Grooming%20Salons",
+              "domain": "www.luckydogmobilegroomers.com"
+            }
+          ],
+          "timestamp": "2025-06-26 00:00:00 +00:00"
+        },
+        {
+          "type": "organic",
+          "rank_group": 9,
+          "rank_absolute": 11,
+          "page": 1,
+          "domain": "barking-dogs.com",
+          "title": "Mobile Grooming",
+          "url": "https://barking-dogs.com/mobile-grooming/",
+          "breadcrumb": "https://barking-dogs.com › mobile-grooming",
+          "website_name": "Barking Dogs Self-Wash & Grooming",
+          "description": "Haircut – Full Groom · Under 20lbs – $110-120 · 21-30lbs – $110-120 · 31-40lbs – $120-130 · 41-50lbs – $130-140 · 51-60lbs – $140-150 · 61-70lbs – $150-160 · 71-80lbs ... Read more",
+          "highlighted": [
+            "Haircut – Full Groom"
+          ],
+          "links": [
+            {
+              "type": "link_element",
+              "title": "Our Mobile",
+              "url": "https://barking-dogs.com/mobile-grooming/#:~:text=Our%20Mobile,-Dog%20Grooming%20Services",
+              "domain": "barking-dogs.com"
+            },
+            {
+              "type": "link_element",
+              "title": "Bath, Brush & Tidy",
+              "url": "https://barking-dogs.com/mobile-grooming/#:~:text=Bath%2C%20Brush%20%26%20Tidy,-Deep-Coat%20%26%20Skin",
+              "domain": "barking-dogs.com"
+            },
+            {
+              "type": "link_element",
+              "title": "Haircut -- Full Groom",
+              "url": "https://barking-dogs.com/mobile-grooming/#:~:text=Haircut%20--%20Full%20Groom",
+              "domain": "barking-dogs.com"
+            }
+          ]
+        },
+        {
+          "type": "related_searches",
+          "rank_group": 1,
+          "rank_absolute": 12,
+          "page": 1,
+          "items": [
+            "Mobile dog grooming cost reddit",
+            "Mobile dog grooming prices near me",
+            "Mobile dog grooming cost per hour",
+            "Mobile dog grooming cost texas",
+            "Mobile dog grooming cost california",
+            "Cheap mobile dog grooming near me prices",
+            "How much do Mobile dog groomers make",
+            "Zoomin Groomin prices usa reviews complaints"
+          ]
+        }
+      ]
+    }
+  },
+  "llmGoogle": {
+    "id": "09050631-1424-0637-0000-bebea7a6881f",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "items": []
+  },
+  "llmChatGPT": {
+    "id": "09050631-1424-0638-0000-b4e6cb64b4ae",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "items": [
+      {
+        "total": {
+          "location": [
+            {
+              "type": "group_element",
+              "key": "2840",
+              "mentions": 21,
+              "ai_search_volume": 1954
+            }
+          ],
+          "language": [
+            {
+              "type": "group_element",
+              "key": "en",
+              "mentions": 21,
+              "ai_search_volume": 1954
+            }
+          ],
+          "platform": [
+            {
+              "type": "group_element",
+              "key": "chat_gpt",
+              "mentions": 21,
+              "ai_search_volume": 1954
+            }
+          ],
+          "sources_domain": [
+            {
+              "type": "group_element",
+              "key": "groomlocal.com",
+              "mentions": 8,
+              "ai_search_volume": 1089
+            },
+            {
+              "type": "group_element",
+              "key": "smalldogguides.com",
+              "mentions": 8,
+              "ai_search_volume": 672
+            },
+            {
+              "type": "group_element",
+              "key": "www.ourpetgroomer.com",
+              "mentions": 5,
+              "ai_search_volume": 536
+            }
+          ],
+          "search_results_domain": [
+            {
+              "type": "group_element",
+              "key": "www.petcarebooker.com",
+              "mentions": 9,
+              "ai_search_volume": 819
+            },
+            {
+              "type": "group_element",
+              "key": "www.airtasker.com",
+              "mentions": 8,
+              "ai_search_volume": 843
+            },
+            {
+              "type": "group_element",
+              "key": "www.petplace.com",
+              "mentions": 8,
+              "ai_search_volume": 594
+            }
+          ],
+          "brand_entities_title": [
+            {
+              "type": "group_element",
+              "key": "Napa Paw Spa",
+              "mentions": 2,
+              "ai_search_volume": 348
+            },
+            {
+              "type": "group_element",
+              "key": "Fluff'N Buff",
+              "mentions": 2,
+              "ai_search_volume": 348
+            },
+            {
+              "type": "group_element",
+              "key": "Cuong's Mobile Pet Grooming",
+              "mentions": 2,
+              "ai_search_volume": 348
+            }
+          ],
+          "brand_entities_category": [
+            {
+              "type": "group_element",
+              "key": "local_business",
+              "mentions": 4,
+              "ai_search_volume": 439
+            }
+          ]
+        },
+        "items": [
+          {
+            "key": "https://groomlocal.com/blog/mobile-dog-grooming-cost-guide?utm_source=chatgpt.com",
+            "location": [
+              {
+                "type": "group_element",
+                "key": "2840",
+                "mentions": 5,
+                "ai_search_volume": 585
+              }
+            ],
+            "language": [
+              {
+                "type": "group_element",
+                "key": "en",
+                "mentions": 5,
+                "ai_search_volume": 585
+              }
+            ],
+            "platform": [
+              {
+                "type": "group_element",
+                "key": "chat_gpt",
+                "mentions": 5,
+                "ai_search_volume": 585
+              }
+            ],
+            "sources_domain": [
+              {
+                "type": "group_element",
+                "key": "groomlocal.com",
+                "mentions": 5,
+                "ai_search_volume": 585
+              },
+              {
+                "type": "group_element",
+                "key": "www.reddit.com",
+                "mentions": 1,
+                "ai_search_volume": 225
+              },
+              {
+                "type": "group_element",
+                "key": "themobiledog.com",
+                "mentions": 1,
+                "ai_search_volume": 174
+              }
+            ],
+            "search_results_domain": [
+              {
+                "type": "group_element",
+                "key": "www.airtasker.com",
+                "mentions": 4,
+                "ai_search_volume": 516
+              },
+              {
+                "type": "group_element",
+                "key": "www.petworks.com",
+                "mentions": 3,
+                "ai_search_volume": 411
+              },
+              {
+                "type": "group_element",
+                "key": "ourpetgroomer.com",
+                "mentions": 3,
+                "ai_search_volume": 411
+              }
+            ],
+            "brand_entities_title": [
+              {
+                "type": "group_element",
+                "key": "Napa Paw Spa",
+                "mentions": 1,
+                "ai_search_volume": 174
+              },
+              {
+                "type": "group_element",
+                "key": "Fluff'N Buff",
+                "mentions": 1,
+                "ai_search_volume": 174
+              },
+              {
+                "type": "group_element",
+                "key": "Cuong's Mobile Pet Grooming",
+                "mentions": 1,
+                "ai_search_volume": 174
+              }
+            ],
+            "brand_entities_category": [
+              {
+                "type": "group_element",
+                "key": "local_business",
+                "mentions": 2,
+                "ai_search_volume": 243
+              }
+            ]
+          },
+          {
+            "key": "https://houndjunkie.com/dog-groomers-cost-2025-guide/?utm_source=chatgpt.com",
+            "location": [
+              {
+                "type": "group_element",
+                "key": "2840",
+                "mentions": 2,
+                "ai_search_volume": 184
+              }
+            ],
+            "language": [
+              {
+                "type": "group_element",
+                "key": "en",
+                "mentions": 2,
+                "ai_search_volume": 184
+              }
+            ],
+            "platform": [
+              {
+                "type": "group_element",
+                "key": "chat_gpt",
+                "mentions": 2,
+                "ai_search_volume": 184
+              }
+            ],
+            "sources_domain": [
+              {
+                "type": "group_element",
+                "key": "houndjunkie.com",
+                "mentions": 2,
+                "ai_search_volume": 184
+              },
+              {
+                "type": "group_element",
+                "key": "www.ourpetgroomer.com",
+                "mentions": 1,
+                "ai_search_volume": 131
+              },
+              {
+                "type": "group_element",
+                "key": "smalldogguides.com",
+                "mentions": 1,
+                "ai_search_volume": 131
+              }
+            ],
+            "search_results_domain": [
+              {
+                "type": "group_element",
+                "key": "www.petplace.com",
+                "mentions": 2,
+                "ai_search_volume": 184
+              },
+              {
+                "type": "group_element",
+                "key": "www.petcarebooker.com",
+                "mentions": 2,
+                "ai_search_volume": 184
+              },
+              {
+                "type": "group_element",
+                "key": "www.airtasker.com",
+                "mentions": 2,
+                "ai_search_volume": 184
+              }
+            ]
+          },
+          {
+            "key": "https://ourpetgroomer.com/mobile-pet-groomers/cost-guide/?utm_source=chatgpt.com",
+            "location": [
+              {
+                "type": "group_element",
+                "key": "2840",
+                "mentions": 2,
+                "ai_search_volume": 168
+              }
+            ],
+            "language": [
+              {
+                "type": "group_element",
+                "key": "en",
+                "mentions": 2,
+                "ai_search_volume": 168
+              }
+            ],
+            "platform": [
+              {
+                "type": "group_element",
+                "key": "chat_gpt",
+                "mentions": 2,
+                "ai_search_volume": 168
+              }
+            ],
+            "sources_domain": [
+              {
+                "type": "group_element",
+                "key": "smalldogguides.com",
+                "mentions": 2,
+                "ai_search_volume": 168
+              },
+              {
+                "type": "group_element",
+                "key": "ourpetgroomer.com",
+                "mentions": 2,
+                "ai_search_volume": 168
+              },
+              {
+                "type": "group_element",
+                "key": "www.ourpetgroomer.com",
+                "mentions": 1,
+                "ai_search_volume": 131
+              }
+            ],
+            "search_results_domain": [
+              {
+                "type": "group_element",
+                "key": "www.petplace.com",
+                "mentions": 2,
+                "ai_search_volume": 168
+              },
+              {
+                "type": "group_element",
+                "key": "www.petcarebooker.com",
+                "mentions": 2,
+                "ai_search_volume": 168
+              },
+              {
+                "type": "group_element",
+                "key": "www.nahf.org",
+                "mentions": 2,
+                "ai_search_volume": 168
+              }
+            ]
+          },
+          {
+            "key": "https://smalldogguides.com/are-mobile-dog-groomers-more-expensive/?utm_source=chatgpt.com",
+            "location": [
+              {
+                "type": "group_element",
+                "key": "2840",
+                "mentions": 2,
+                "ai_search_volume": 168
+              }
+            ],
+            "language": [
+              {
+                "type": "group_element",
+                "key": "en",
+                "mentions": 2,
+                "ai_search_volume": 168
+              }
+            ],
+            "platform": [
+              {
+                "type": "group_element",
+                "key": "chat_gpt",
+                "mentions": 2,
+                "ai_search_volume": 168
+              }
+            ],
+            "sources_domain": [
+              {
+                "type": "group_element",
+                "key": "smalldogguides.com",
+                "mentions": 2,
+                "ai_search_volume": 168
+              },
+              {
+                "type": "group_element",
+                "key": "ourpetgroomer.com",
+                "mentions": 2,
+                "ai_search_volume": 168
+              },
+              {
+                "type": "group_element",
+                "key": "www.ourpetgroomer.com",
+                "mentions": 1,
+                "ai_search_volume": 131
+              }
+            ],
+            "search_results_domain": [
+              {
+                "type": "group_element",
+                "key": "www.petplace.com",
+                "mentions": 2,
+                "ai_search_volume": 168
+              },
+              {
+                "type": "group_element",
+                "key": "www.petcarebooker.com",
+                "mentions": 2,
+                "ai_search_volume": 168
+              },
+              {
+                "type": "group_element",
+                "key": "www.nahf.org",
+                "mentions": 2,
+                "ai_search_volume": 168
+              }
+            ]
+          },
+          {
+            "key": "https://www.ourpetgroomer.com/blog/mobile-vs-salon-grooming?utm_source=chatgpt.com",
+            "location": [
+              {
+                "type": "group_element",
+                "key": "2840",
+                "mentions": 2,
+                "ai_search_volume": 143
+              }
+            ],
+            "language": [
+              {
+                "type": "group_element",
+                "key": "en",
+                "mentions": 2,
+                "ai_search_volume": 143
+              }
+            ],
+            "platform": [
+              {
+                "type": "group_element",
+                "key": "chat_gpt",
+                "mentions": 2,
+                "ai_search_volume": 143
+              }
+            ],
+            "sources_domain": [
+              {
+                "type": "group_element",
+                "key": "www.ourpetgroomer.com",
+                "mentions": 2,
+                "ai_search_volume": 143
+              },
+              {
+                "type": "group_element",
+                "key": "smalldogguides.com",
+                "mentions": 1,
+                "ai_search_volume": 131
+              },
+              {
+                "type": "group_element",
+                "key": "ourpetgroomer.com",
+                "mentions": 1,
+                "ai_search_volume": 131
+              }
+            ],
+            "search_results_domain": [
+              {
+                "type": "group_element",
+                "key": "www.petworks.com",
+                "mentions": 2,
+                "ai_search_volume": 143
+              },
+              {
+                "type": "group_element",
+                "key": "www.airtasker.com",
+                "mentions": 2,
+                "ai_search_volume": 143
+              },
+              {
+                "type": "group_element",
+                "key": "www.wagntails.com",
+                "mentions": 1,
+                "ai_search_volume": 131
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "llmPresence": {
+    "id": "09050632-1424-0635-0000-ca00c7df5741",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "items": [
+      {
+        "total": {
+          "location": [
+            {
+              "type": "group_element",
+              "key": "2840",
+              "mentions": 25,
+              "ai_search_volume": 5530
+            }
+          ],
+          "language": [
+            {
+              "type": "group_element",
+              "key": "en",
+              "mentions": 25,
+              "ai_search_volume": 5530
+            }
+          ],
+          "platform": [
+            {
+              "type": "group_element",
+              "key": "google",
+              "mentions": 25,
+              "ai_search_volume": 5530
+            }
+          ],
+          "sources_domain": [
+            {
+              "type": "group_element",
+              "key": "groomlocal.com",
+              "mentions": 25,
+              "ai_search_volume": 5530
+            },
+            {
+              "type": "group_element",
+              "key": "www.reddit.com",
+              "mentions": 18,
+              "ai_search_volume": 3220
+            },
+            {
+              "type": "group_element",
+              "key": "www.kansascity.com",
+              "mentions": 14,
+              "ai_search_volume": 2400
+            },
+            {
+              "type": "group_element",
+              "key": "www.petco.com",
+              "mentions": 12,
+              "ai_search_volume": 4530
+            },
+            {
+              "type": "group_element",
+              "key": "www.animalo.com",
+              "mentions": 11,
+              "ai_search_volume": 4320
+            },
+            {
+              "type": "group_element",
+              "key": "www.soggydoggiesgrooming.com",
+              "mentions": 8,
+              "ai_search_volume": 600
+            },
+            {
+              "type": "group_element",
+              "key": "www.facebook.com",
+              "mentions": 8,
+              "ai_search_volume": 590
+            },
+            {
+              "type": "group_element",
+              "key": "wagntails.com",
+              "mentions": 8,
+              "ai_search_volume": 560
+            },
+            {
+              "type": "group_element",
+              "key": "ocpupscouts.com",
+              "mentions": 7,
+              "ai_search_volume": 550
+            },
+            {
+              "type": "group_element",
+              "key": "seattlecanineclub.com",
+              "mentions": 7,
+              "ai_search_volume": 540
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "authority": {
+    "id": "09050632-1424-0347-0000-a14b8b95e5d8",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "items": [
+      {
+        "target": "groomlocal.com",
+        "rank": 63
+      },
+      {
+        "target": "wagntails.com",
+        "rank": 222
+      },
+      {
+        "target": "rainbowgroomers.com",
+        "rank": 118
+      },
+      {
+        "target": "raisethewuffdoggrooming.com",
+        "rank": 228
+      },
+      {
+        "target": "seattlecanineclub.com",
+        "rank": 224
+      }
+    ]
+  }
+}

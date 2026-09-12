@@ -1,3 +1,4 @@
+import { listingPriceLabel } from "@/lib/listing-price";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -171,7 +172,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto w-full min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Main Content */}
           <div className="flex-1 min-w-0 space-y-8">
@@ -181,12 +182,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                 <div>
                   <div className="flex flex-wrap items-center gap-2 mb-2">
                     {(() => {
-                      let displayBadges: Badge[] = listing.badges || [];
-                      if (listing.subscription_tier === "premium") {
-                        displayBadges = Array.from(new Set(["best-in-show", "paw-verified", ...displayBadges])) as Badge[];
-                      } else if (listing.subscription_tier === "featured") {
-                        displayBadges = Array.from(new Set(["paw-verified", ...displayBadges])) as Badge[];
-                      }
+                      const displayBadges: Badge[] = listing.badges || [];
                       return displayBadges.map((badge) => (
                         <BadgePill key={badge} badge={badge} size="md" />
                       ));
@@ -222,23 +218,11 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                   </span>
                 )}
                 {listing.website ? (
-                  listing.owner_id ? (
-                    <a
-                      href={listing.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-brand-accent hover:underline"
-                    >
-                      <Globe weight="bold" className="h-4 w-4" />
-                      Website
-                      <ArrowSquareOut weight="bold" className="h-3 w-3" />
-                    </a>
-                  ) : (
-                    <span className="flex items-center gap-1.5 text-text-muted">
-                      <Globe weight="bold" className="h-4 w-4" />
-                      {listing.website.replace(/https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
-                    </span>
-                  )
+                  <a href={listing.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-brand-accent hover:underline">
+                    <Globe weight="bold" className="h-4 w-4 shrink-0" />
+                    {/^https?:\/\/(?:www\.|m\.)?facebook\.com(?:\/|$)/i.test(listing.website) ? "Facebook page" : "Website"}
+                    <ArrowSquareOut weight="bold" className="h-3 w-3 shrink-0" />
+                  </a>
                 ) : (
                   <span className="flex items-center gap-1.5 text-text-muted/50">
                     <Globe weight="bold" className="h-4 w-4" />
@@ -290,13 +274,13 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
               ) : (
                 <span className="inline-flex items-center gap-1.5 text-xs text-brand-secondary font-medium">
                   <ShieldCheck weight="fill" className="w-3.5 h-3.5" />
-                  Verified owner
+                  Owner confirmed
                 </span>
               )}
             </div>
 
             {/* Gallery */}
-            <div className="rounded-2xl border border-border bg-white p-6">
+            {usableListingImages(listing.images).length > 0 && <div className="rounded-2xl border border-border bg-white p-6">
               <h2 className="font-heading text-xl font-semibold text-brand-primary mb-4">
                 Gallery
               </h2>
@@ -336,7 +320,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                   ))
                 )}
               </div>
-            </div>
+            </div>}
 
             {/* Services (normalized tags) */}
             <div className="rounded-2xl border border-border bg-white p-6">
@@ -405,8 +389,8 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
               <h2 className="font-heading text-xl font-semibold text-brand-primary mb-4">
                 About {listing.name}
               </h2>
-              <p className="text-sm text-text-muted leading-relaxed mb-4">
-                {listing.description}
+              <p className="text-sm text-text-muted leading-relaxed mb-4 [overflow-wrap:anywhere]">
+                {listing.description || "Contact this groomer to confirm services, availability, and pricing."}
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {listing.year_established > 0 && (
@@ -425,13 +409,13 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                 )}
                 <div className="rounded-xl bg-surface p-3 text-center">
                   <CurrencyDollar weight="fill" className="h-4 w-4 text-brand-accent mx-auto mb-1" />
-                  <p className="text-xs text-text-muted">Starting at</p>
+                  <p className="text-xs text-text-muted">Pricing</p>
                   {listing.price_min > 0 ? (
                     <p className="text-sm font-semibold text-brand-primary">
-                      ${listing.price_min} - ${listing.price_max}
+                      {listingPriceLabel(listing)}
                     </p>
                   ) : (
-                    <p className="text-sm font-semibold text-brand-primary">{listing.price_range || "$$"}</p>
+                    <p className="text-sm font-semibold text-brand-primary">{/^\${1,4}$/.test(listing.price_range || "") ? listing.price_range : "Ask for a quote"}</p>
                   )}
                 </div>
               </div>
@@ -444,9 +428,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                   Pricing
                 </h2>
                 <div className="flex items-baseline gap-2 mb-2">
-                  <span className="text-2xl font-bold text-brand-primary">${listing.price_min}</span>
-                  <span className="text-text-muted">to</span>
-                  <span className="text-2xl font-bold text-brand-primary">${listing.price_max}</span>
+                  <span className="text-2xl font-bold text-brand-primary">{listingPriceLabel(listing)}</span>
                 </div>
                 <p className="text-sm text-text-muted">
                   Prices vary by breed, coat type, and services requested. Contact {listing.name} for an exact quote.
@@ -495,7 +477,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
           </div>
 
           {/* Sidebar */}
-          <div className="lg:w-[340px] flex-shrink-0">
+          <div className="min-w-0 lg:w-[340px] flex-shrink-0">
             <div className="sticky top-24 space-y-4">
 
               {/* Premium Contact Form */}
@@ -527,21 +509,12 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                     </p>
                   )}
                   {listing.website ? (
-                    listing.owner_id ? (
-                      <p className="flex items-center gap-2">
-                        <Globe weight="bold" className="w-4 h-4 shrink-0" />
-                        <a href={listing.website} target="_blank" rel="noopener noreferrer" className="text-brand-accent hover:underline truncate">
-                          {listing.website.replace(/https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
-                        </a>
-                      </p>
-                    ) : (
-                      <p className="flex items-center gap-2 text-text-muted">
-                        <Globe weight="bold" className="w-4 h-4 shrink-0" />
-                        <span className="truncate">
-                          {listing.website.replace(/https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
-                        </span>
-                      </p>
-                    )
+                    <p className="flex min-w-0 items-center gap-2">
+                      <Globe weight="bold" className="w-4 h-4 shrink-0" />
+                      <a href={listing.website} target="_blank" rel="noopener noreferrer" className="min-w-0 text-brand-accent hover:underline break-all">
+                        {listing.website.replace(/https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
+                      </a>
+                    </p>
                   ) : (
                     <p className="flex items-center gap-2 text-text-muted/50">
                       <Globe weight="bold" className="w-4 h-4 shrink-0" />
@@ -619,14 +592,14 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
               )}
 
               {/* Trust Points */}
-              <div className="rounded-2xl border border-border bg-white p-5">
+              {(listing.owner_id || listing.year_established > 0 || listing.team_size > 0) && <div className="rounded-2xl border border-border bg-white p-5">
                 <h3 className="font-heading text-sm font-semibold text-brand-primary mb-3">
                   Why Pet Parents Trust Them
                 </h3>
                 <ul className="space-y-2">
-                  {listing.is_paw_verified && (
+                  {listing.owner_id && (
                     <li className="flex items-center gap-2 text-sm text-text-muted">
-                      <span className="text-success">&#10003;</span> Paw-Verified Business
+                      <span className="text-success">&#10003;</span> Owner confirmed listing
                     </li>
                   )}
                   {listing.year_established > 0 && (
@@ -640,7 +613,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                     </li>
                   )}
                 </ul>
-              </div>
+              </div>}
 
               {/* Claim CTA Card - only show if unclaimed */}
               {!listing.owner_id && (

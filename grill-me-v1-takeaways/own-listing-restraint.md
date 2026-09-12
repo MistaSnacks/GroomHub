@@ -24,3 +24,20 @@ Own grooming business listing gets the same treatment as any other claimed Free 
 - Once 10-20 other groomers have claimed and the directory has real traffic
 - At that point, own listing blends in as one of many
 - Can quietly upgrade then without it being obvious
+
+## Revision 2026-09-04: reverted and re-featuring rules
+
+Sarah's Groomingdale's had drifted to `premium` + `is_featured` (homepage and Lakewood top spot). Reverted to `free`, unfeatured, on 2026-09-04. It stays claimed with the Owner Confirmed badge and a complete profile, which is the intended demo.
+
+Rules for moving it back up later:
+1. Only as a Sponsored seat on the same terms as any sponsor: same $49 price, actually recorded, same "Sponsored" label, same rules. Never a free spot, a badge, or a sort tweak.
+2. Trigger: at least 10 other claimed listings AND at least 3 paying sponsors elsewhere on the site, so it is never the first or only Sponsored listing.
+3. Never take a seat in a city where a paying sponsor is on the waitlist. A seat she holds is one that cannot be sold there.
+
+### Trigger implementation (2026-09-04)
+- `business_listings.sponsor_paid_until` (timestamptz, admin-only, protected by the privileged-columns trigger). A listing counts as a **paying sponsor** only while this is in the future. Beta/free Premium does not count.
+- The house listing slug lives only in the `HOUSE_LISTING_SLUG` env var (Vercel prod + .env.local), never in the repo or DB schema.
+- `src/lib/refeature-trigger.ts` computes: other claimed >= 10, paying sponsors elsewhere >= 3, house not currently sponsored.
+- Admin dashboard (`/admin/dashboard`) shows a "House listing re-feature trigger" card with live counts.
+- Daily Vercel cron (`vercel.json`, 15:00 UTC) hits `/api/cron/refeature-check` with `CRON_SECRET`; emails `LISTING_NOTIFY_EMAIL` while conditions are met and the house listing is still free.
+- To record a paid sponsor: `update business_listings set subscription_tier='premium', is_featured=true, sponsor_paid_until='<paid-through>' where slug='<sponsor>'`.

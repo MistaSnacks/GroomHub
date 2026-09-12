@@ -6,7 +6,7 @@ import { ListingCard } from "./listing-card";
 import { TagFilterBar } from "./tag-filter-bar";
 import { PawPrint, ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
-import { AdSlot } from "./ad-slot";
+import { AdSlot, ADS_ENABLED } from "./ad-slot";
 import type { ListingCardData } from "@/lib/types";
 import type { PriceTag } from "@/lib/tags";
 
@@ -124,7 +124,7 @@ export function CityListingsInner({
         result.sort((a, b) => (b.review_count ?? 0) - (a.review_count ?? 0));
         break;
       case "price-low":
-        result.sort((a, b) => (a.price_min ?? 0) - (b.price_min ?? 0));
+        result.sort((a, b) => (a.price_min > 0 ? a.price_min : Infinity) - (b.price_min > 0 ? b.price_min : Infinity));
         break;
       case "price-high":
         result.sort((a, b) => (b.price_max ?? 0) - (a.price_max ?? 0));
@@ -236,7 +236,7 @@ export function CityListingsInner({
               {visible.map((listing, i) => (
                 <React.Fragment key={listing.id || listing.slug}>
                   <ListingCard listing={listing} index={i} variant="horizontal" />
-                  {(i + 1) % 6 === 0 && i < visible.length - 1 && (
+                  {ADS_ENABLED && (i + 1) % 6 === 0 && i < visible.length - 1 && (
                     <div className="lg:col-span-2">
                       <AdSlot slot={`city-results-${Math.floor(i / 6)}`} format="leaderboard" />
                     </div>

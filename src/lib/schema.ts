@@ -140,7 +140,7 @@ export function localBusinessSchema(listing: NormalizedListing) {
       priceSpecification: {
         "@type": "PriceSpecification",
         minPrice: listing.price_min,
-        ...(typeof listing.price_max === "number" && listing.price_max > 0
+        ...(typeof listing.price_max === "number" && listing.price_max > listing.price_min
           ? { maxPrice: listing.price_max }
           : {}),
         priceCurrency: "USD",
@@ -426,14 +426,14 @@ export function blogListingSchema(
 ) {
   const breadcrumb = breadcrumbSchema([
     { name: "Home", href: "/" },
-    { name: "Blog", href: "/blog" },
+    { name: "Grooming Guides", href: "/blog" },
   ]);
 
   const { "@context": _bc, ...breadcrumbBody } = breadcrumb;
 
   const collectionPage = {
     "@type": "CollectionPage",
-    name: "GroomLocal Blog",
+    name: "GroomLocal Grooming Guides",
     description:
       "Expert grooming tips, seasonal care guides, and pet care advice from PNW groomers.",
     url: `${BASE_URL}/blog`,
@@ -458,34 +458,5 @@ export function blogListingSchema(
   return {
     "@context": "https://schema.org",
     "@graph": [breadcrumbBody, collectionPage],
-  };
-}
-
-export function resourcesPageSchema(
-  posts: { title: string; slug: string; excerpt: string; date: string }[]
-) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: "Pet Owner Resources",
-    description:
-      "Grooming guides organized by what you need: getting started, costs, special situations, seasonal care, and breed-specific tips.",
-    url: `${BASE_URL}/resources`,
-    publisher: {
-      "@type": "Organization",
-      name: "GroomLocal",
-      url: BASE_URL,
-      logo: {
-        "@type": "ImageObject",
-        url: `${BASE_URL}/icon.svg`,
-      },
-    },
-    hasPart: posts.map((post) => ({
-      "@type": "Article",
-      headline: post.title,
-      url: `${BASE_URL}/blog/${post.slug}`,
-      datePublished: post.date,
-      description: post.excerpt,
-    })),
   };
 }

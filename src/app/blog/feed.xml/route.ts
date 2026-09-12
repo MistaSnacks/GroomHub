@@ -14,15 +14,16 @@ const ENCLOSURE_TYPES: Record<string, string> = {
 function enclosureTag(image: string | null): string {
   if (!image) return "";
 
-  const ext = path.extname(image).toLowerCase();
+  const pathname = image.split(/[?#]/)[0];
+  const ext = path.extname(pathname).toLowerCase();
   const type = ENCLOSURE_TYPES[ext];
   if (!type) return "";
 
-  const publicPath = path.join(process.cwd(), "public", image.replace(/^\//, ""));
+  const publicPath = path.join(process.cwd(), "public", pathname.replace(/^\//, ""));
   if (!fs.existsSync(publicPath)) return "";
 
   const length = fs.statSync(publicPath).size;
-  return `<enclosure url="${BASE_URL}${image}" type="${type}" length="${length}" />`;
+  return `<enclosure url="${BASE_URL}${image.replace(/&/g, "&amp;").replace(/"/g, "&quot;")}" type="${type}" length="${length}" />`;
 }
 
 export async function GET() {
@@ -49,7 +50,7 @@ export async function GET() {
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
-    <title>GroomLocal Blog</title>
+    <title>GroomLocal Grooming Guides</title>
     <link>${BASE_URL}/blog</link>
     <description>Expert grooming tips, seasonal care guides, and pet care advice from PNW groomers.</description>
     <language>en-us</language>

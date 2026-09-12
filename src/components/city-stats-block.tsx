@@ -8,7 +8,7 @@ interface CityStatsBlockProps {
 }
 
 const stats = [
-  { key: "groomers", icon: PawPrint, label: "Verified Groomers" },
+  { key: "groomers", icon: PawPrint, label: "Listed Groomers" },
   { key: "cities", icon: MapPin, label: "Nearby Cities" },
   { key: "services", icon: Scissors, label: "Services Available" },
   { key: "updated", icon: CalendarBlank, label: "Last Updated" },

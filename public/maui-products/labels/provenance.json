@@ -1,0 +1,142 @@
+{
+ "note": "Square alpha-bbox crops of verified transparent site exports, for bottle labels and deck circle inserts. Not appearance sources.",
+ "generated": "2026-09-05",
+ "items": {
+  "main": {
+   "source": "public/maui-assets/00-maui-main.png",
+   "sourceSha256": "850fb85afa867a0252557e5148e103f814e260cc3861fb62c08bd89a232c9c04",
+   "bbox": [
+    239,
+    169,
+    1110,
+    1050
+   ],
+   "crop": [
+    189,
+    124,
+    1159,
+    1094
+   ],
+   "output": "public/maui-products/labels/main.png"
+  },
+  "bath": {
+   "source": "public/maui-assets/01-maui-bath.png",
+   "sourceSha256": "0d42995bc9722d5ef2941834235869c09f6bf94e10caefaec2d5737ca5c1c736",
+   "bbox": [
+    133,
+    67,
+    1088,
+    1146
+   ],
+   "crop": [
+    17,
+    13,
+    1203,
+    1199
+   ],
+   "output": "public/maui-products/labels/bath.png"
+  },
+  "brushing": {
+   "source": "public/maui-assets/05-maui-sitting-pretty.png",
+   "sourceSha256": "12c495eceb98a8ee511bf141d2a298c6baa0f80b4925e9063f71de1cb282ca2e",
+   "bbox": [
+    154,
+    153,
+    1163,
+    1049
+   ],
+   "crop": [
+    103,
+    46,
+    1213,
+    1155
+   ],
+   "output": "public/maui-products/labels/brushing.png"
+  },
+  "towel": {
+   "source": "public/maui-assets/06-maui-towel-head-standing.png",
+   "sourceSha256": "7df76a7446631fa34c6838a60f2d134dd6bc52cf339287577356d65263afa638",
+   "bbox": [
+    211,
+    90,
+    984,
+    1120
+   ],
+   "crop": [
+    31,
+    38,
+    1164,
+    1171
+   ],
+   "output": "public/maui-products/labels/towel.png"
+  },
+  "waving": {
+   "source": "public/maui-assets/18-maui-fresh-bath-waving.png",
+   "sourceSha256": "dc8244c22179b9df9291e6167ee80b4290315aa413c778ea9b631c957dabe14b",
+   "bbox": [
+    184,
+    165,
+    1097,
+    1072
+   ],
+   "crop": [
+    138,
+    116,
+    1142,
+    1120
+   ],
+   "output": "public/maui-products/labels/waving.png"
+  },
+  "blow-dry": {
+   "source": "public/maui-assets/07-maui-blow-dry.png",
+   "sourceSha256": "8f86cfc50cbddf15d2e166fabca69fc1ec02c32c698753aa51c2d65aa28016ed",
+   "bbox": [
+    27,
+    195,
+    1189,
+    1060
+   ],
+   "crop": [
+    -31,
+    -11,
+    1247,
+    1266
+   ],
+   "output": "public/maui-products/labels/blow-dry.png"
+  },
+  "puppy": {
+   "source": "public/maui-assets/maui-puppy-first-groom-blog.png",
+   "sourceSha256": "c2cafa49bd5c0a0231459753495438fac70b3e64ee092629b6029d55ce07e09f",
+   "bbox": [
+    211,
+    130,
+    989,
+    1131
+   ],
+   "crop": [
+    49,
+    79,
+    1150,
+    1181
+   ],
+   "output": "public/maui-products/labels/puppy.png"
+  },
+  "towel-hearts": {
+   "source": "public/maui-assets/16-maui-towel-head-hearts.png",
+   "sourceSha256": "f28559df6bc6d81dd34a23e582e872378e51cb8b548bf01901cc0d4521b2552f",
+   "bbox": [
+    189,
+    97,
+    1041,
+    1136
+   ],
+   "crop": [
+    43,
+    45,
+    1186,
+    1187
+   ],
+   "output": "public/maui-products/labels/towel-hearts.png"
+  }
+ }
+}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowRight, CheckCircle } from "@phosphor-icons/react/dist/ssr";
+import { safeRedirectPath } from "@/lib/safe-redirect";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -18,32 +19,35 @@ function resetErrorMessage(code: string | undefined): string | null {
 async function updatePassword(formData: FormData) {
     "use server";
 
+    const nextPath = safeRedirectPath(formData.get("next"));
+    const suffix = `&next=${encodeURIComponent(nextPath)}`;
     const password = formData.get("password")?.toString() ?? "";
     const confirm = formData.get("confirm")?.toString() ?? "";
 
     if (password !== confirm) {
-        redirect("/reset-password?error=mismatch");
+        redirect(`/reset-password?error=mismatch${suffix}`);
     }
     if (password.length < 8) {
-        redirect("/reset-password?error=short");
+        redirect(`/reset-password?error=short${suffix}`);
     }
 
     const supabase = await createClient();
     const { error } = await supabase.auth.updateUser({ password });
 
     if (error) {
-        redirect("/reset-password?error=failed");
+        redirect(`/reset-password?error=failed${suffix}`);
     }
 
-    redirect("/reset-password?success=1");
+    redirect(`/reset-password?success=1${suffix}`);
 }
 
 export default async function ResetPasswordPage({
     searchParams,
 }: {
-    searchParams: Promise<{ error?: string; success?: string }>;
+    searchParams: Promise<{ error?: string; success?: string; next?: string }>;
 }) {
-    const { error, success } = await searchParams;
+    const { error, success, next } = await searchParams;
+    const nextPath = safeRedirectPath(next);
 
     if (success) {
         return (
@@ -57,10 +61,10 @@ export default async function ResetPasswordPage({
                         Your password has been reset. You can now use it to sign in.
                     </p>
                     <Link
-                        href="/dashboard"
+                        href={nextPath}
                         className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-6 py-3 text-sm font-bold text-white hover:bg-brand-primary/90 transition-all"
                     >
-                        Go to Dashboard
+                        Continue
                         <ArrowRight weight="bold" className="w-4 h-4" />
                     </Link>
                 </div>
@@ -84,6 +88,7 @@ export default async function ResetPasswordPage({
 
                 <div className="bg-white rounded-2xl border border-border p-8 shadow-sm">
                     <form action={updatePassword} className="space-y-4">
+                        <input type="hidden" name="next" value={nextPath} />
                         {errorMessage && (
                             <div className="p-3 text-sm text-[#C2185B] bg-[#FCE4EC] rounded-xl border border-[#F48FB1]">
                                 {errorMessage}

@@ -10,7 +10,7 @@ const badgeConfig: Record<
     className: "badge-best font-semibold text-brand-primary flex items-center gap-1",
   },
   "paw-verified": {
-    label: <><SealCheck weight="fill" className="w-3.5 h-3.5 text-brand-accent shrink-0" /> Paw-Verified</>,
+    label: <><SealCheck weight="fill" className="w-3.5 h-3.5 text-brand-accent shrink-0" /> Owner Confirmed</>,
     className: "badge-verified font-semibold flex items-center gap-1",
   },
   "top-rated": {

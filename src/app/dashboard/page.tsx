@@ -6,8 +6,7 @@ import { StatusBanner } from "./status-banner";
 
 const tierColors: Record<string, string> = {
   free: "bg-border text-text-muted",
-  standard: "bg-blue-100 text-blue-700",
-  featured: "bg-brand-accent/15 text-brand-accent",
+  basic: "bg-brand-accent/15 text-brand-accent",
   premium: "bg-brand-secondary/15 text-brand-secondary",
 };
 

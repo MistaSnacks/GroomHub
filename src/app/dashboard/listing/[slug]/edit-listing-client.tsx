@@ -49,6 +49,9 @@ interface EditListingClientProps {
   phone: string;
   email: string;
   website: string;
+  bookingUrl: string;
+  priceMin: number;
+  priceMax: number;
   address: string;
   city: string;
   state: string;
@@ -84,6 +87,9 @@ export function EditListingClient(props: EditListingClientProps) {
   const [phone, setPhone] = useState(props.phone);
   const [email, setEmail] = useState(props.email);
   const [website, setWebsite] = useState(props.website);
+  const [bookingUrl, setBookingUrl] = useState(props.bookingUrl);
+  const [priceMin, setPriceMin] = useState(props.priceMin > 0 ? String(props.priceMin) : "");
+  const [priceMax, setPriceMax] = useState(props.priceMax > 0 ? String(props.priceMax) : "");
   const [address, setAddress] = useState(props.address);
   const [city, setCity] = useState(props.city);
   const [state, setState] = useState(props.state);
@@ -560,6 +566,26 @@ export function EditListingClient(props: EditListingClientProps) {
           </div>
         </div>
       </div>
+
+      <section className="rounded-2xl border border-border bg-white p-6 space-y-5">
+        <h2 className="font-heading text-xl font-semibold text-brand-primary">Pricing &amp; Booking</h2>
+        <div>
+          <label htmlFor="edit-booking-url" className="block text-sm font-medium text-brand-primary mb-2">Booking or appointment request link</label>
+          <input id="edit-booking-url" name="booking_url" type="url" value={bookingUrl} onChange={e => setBookingUrl(e.target.value)} placeholder="https://your-salon.com/book" className="w-full rounded-xl border border-border px-3 py-2 text-sm" />
+          <p className="mt-2 text-xs text-text-muted">Link directly to your appointment page. Leave blank if customers should call. Put social profiles in your website field.</p>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label htmlFor="edit-price-min" className="block text-sm font-medium text-brand-primary mb-2">Starting grooming price ($)</label>
+            <input id="edit-price-min" name="price_min" type="number" min="1" step="1" value={priceMin} onChange={e => setPriceMin(e.target.value)} placeholder="Ask for a quote" className="w-full rounded-xl border border-border px-3 py-2 text-sm" />
+          </div>
+          <div>
+            <label htmlFor="edit-price-max" className="block text-sm font-medium text-brand-primary mb-2">Maximum grooming price ($, optional)</label>
+            <input id="edit-price-max" name="price_max" type="number" min={priceMin || "1"} step="1" value={priceMax} onChange={e => setPriceMax(e.target.value)} placeholder="No fixed maximum" className="w-full rounded-xl border border-border px-3 py-2 text-sm" />
+          </div>
+        </div>
+        <p className="text-xs text-text-muted">Use current bath or grooming prices, excluding nail-only services, add-ons, discounts, and gift cards. Leave both prices blank for individual quotes. A starting price without a maximum appears as “From $…”.</p>
+      </section>
 
       {/* ─── Gallery Section ─── */}
       <div className="rounded-2xl border border-border bg-white p-6">

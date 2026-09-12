@@ -13,7 +13,14 @@ const FORMAT_STYLES: Record<string, string> = {
   banner: "w-full min-h-[60px]",
 };
 
+/**
+ * Display ads are hidden until traffic justifies them (decision: grill-me ad-slots-strategy.md).
+ * Set NEXT_PUBLIC_SHOW_ADS=true to render placeholders / ad units again.
+ */
+export const ADS_ENABLED = process.env.NEXT_PUBLIC_SHOW_ADS === "true";
+
 export function AdSlot({ slot = "default", format = "inline", className = "" }: AdSlotProps) {
+  if (!ADS_ENABLED) return null;
   return (
     <div
       data-ad-slot={slot}

@@ -54,7 +54,6 @@ export default async function sitemap(args: {
       { url: `${BASE_URL}/get-listed`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.5 },
       { url: `${BASE_URL}/get-quotes`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.5 },
       { url: `${BASE_URL}/blog`, lastModified: STATIC_LASTMOD, changeFrequency: "weekly", priority: 0.7 },
-      { url: `${BASE_URL}/resources`, lastModified: STATIC_LASTMOD, changeFrequency: "weekly", priority: 0.7 },
       { url: `${BASE_URL}/about`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.4 },
       { url: `${BASE_URL}/contact`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.4 },
       { url: `${BASE_URL}/privacy`, lastModified: STATIC_LASTMOD, changeFrequency: "yearly", priority: 0.2 },

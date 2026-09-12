@@ -1,0 +1,30 @@
+{
+  "scene": "grooming-duration",
+  "generator": "built-in image_gen",
+  "prompt": "docs/maui/duration-repair-prompt.txt",
+  "reference": "docs/maui/approved-reference/brushing-v2.png",
+  "source": "docs/maui/opaque-masters/grooming-duration-v2.png",
+  "asset": "public/maui-assets/maui-grooming-duration-blog.png",
+  "sha256": "88bf704dd894a80b5476e86b0fa752f01e36d702e0cb1170a8d73401a73c3add",
+  "size": [
+    1254,
+    1254
+  ],
+  "version": "maui-duration-20260904-v2",
+  "checks": [
+    "Natural seated pose with two front legs and two rear haunches; no clock-holding arm",
+    "Clock rests on separate stand",
+    "Visual review on teal and dark passed",
+    "RGBA alpha verified; all edges transparent",
+    "All fully opaque foreground RGB values preserved during background extraction",
+    "Production build passed, 115 pages",
+    "Local and live blog use new version",
+    "Live PNG bytes match approved export",
+    "Local and live optimized images preserve transparency"
+  ],
+  "status": "live",
+  "deployment": "dpl_bEj37XDJXePSxMvfSUXQxdd6yNK8",
+  "baseline": "dpl_HEERbLGfZp1fq9acpjXhJ7cgfird",
+  "url": "https://groomlocal.com/blog/how-long-does-dog-grooming-take",
+  "local": "http://localhost:3005/blog/how-long-does-dog-grooming-take"
+}

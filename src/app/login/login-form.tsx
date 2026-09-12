@@ -62,7 +62,7 @@ export function LoginForm({ redirectTo, authError }: LoginFormProps) {
 
     const supabase = createClient();
     const { error: resetErr } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${location.origin}/auth/callback?next=/reset-password`,
+      redirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(`/reset-password?next=${encodeURIComponent(safeRedirectPath(redirectTo))}`)}`,
     });
 
     setLoading(false);
@@ -96,6 +96,7 @@ export function LoginForm({ redirectTo, authError }: LoginFormProps) {
         </label>
         <input
           type="email"
+          autoComplete="email"
           id="login-email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -120,6 +121,7 @@ export function LoginForm({ redirectTo, authError }: LoginFormProps) {
         </div>
         <input
           type="password"
+          autoComplete="current-password"
           id="login-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}

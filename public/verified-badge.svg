@@ -38,7 +38,7 @@
   </g>
 
   <!-- Text: VERIFIED -->
-  <text x="82" y="34" font-family="'Inter', system-ui, sans-serif" font-weight="800" font-size="12" fill="#FFFFFF" letter-spacing="2" opacity="0.9">VERIFIED ON</text>
+  <text x="82" y="34" font-family="'Inter', system-ui, sans-serif" font-weight="800" font-size="12" fill="#FFFFFF" letter-spacing="2" opacity="0.9">LISTED ON</text>
   
   <!-- Text: GroomLocal -->
   <text x="81" y="58" font-family="'Fredoka', system-ui, sans-serif" font-weight="700" font-size="24" fill="#FFFFFF">Groom<tspan fill="#FF7E67">Local</tspan></text>

@@ -45,7 +45,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
         <p className="text-sm text-text-muted text-center mt-6">
           Don&apos;t have an account?{" "}
-          <Link href="/signup" className="font-semibold text-brand-primary hover:text-brand-accent transition-colors">
+          <Link href={`/signup?redirect=${encodeURIComponent(nextPath)}`} className="font-semibold text-brand-primary hover:text-brand-accent transition-colors">
             Sign up
           </Link>
         </p>

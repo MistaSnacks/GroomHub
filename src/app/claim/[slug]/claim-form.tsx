@@ -11,7 +11,7 @@ interface ClaimFormProps {
 }
 
 type Mode = "signup" | "signin";
-type Status = "idle" | "loading" | "confirm-email";
+type Status = "idle" | "loading" | "confirm-email" | "reset-sent";
 
 export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
     const router = useRouter();
@@ -78,12 +78,14 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
         if (!email) return;
         setResending(true);
         const supabase = createClient();
-        await supabase.auth.resend({
+        const { error: resendError } = await supabase.auth.resend({
             type: "signup",
             email,
             options: { emailRedirectTo: redirectUrl },
         });
         setResending(false);
+        if (resendError) { setError(resendError.message); return; }
+        setError(null);
         setResent(true);
         setTimeout(() => setResent(false), 5000);
     };
@@ -95,14 +97,14 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
         }
         const supabase = createClient();
         const { error: resetErr } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: `${location.origin}/auth/callback?next=/reset-password`,
+            redirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(`/reset-password?next=/claim/${listingSlug}/plans`)}`,
         });
         if (resetErr) {
             setError(resetErr.message);
             return;
         }
         setError(null);
-        setStatus("confirm-email");
+        setStatus("reset-sent");
     };
 
     const onSubmit = async (e: React.FormEvent) => {
@@ -135,7 +137,7 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
     };
 
     // Confirmation email sent state
-    if (status === "confirm-email") {
+    if (status === "confirm-email" || status === "reset-sent") {
         return (
             <div className="space-y-4">
                 <div className="flex flex-col items-center text-center p-4 rounded-xl bg-[#E8F5E9] border border-[#A5D6A7]">
@@ -144,11 +146,13 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
                         Check your inbox
                     </p>
                     <p className="text-sm text-[#2E7D32]/80">
-                        We sent a verification link to <strong>{email}</strong>. Click it to continue claiming {listingName}.
+                        {status === "reset-sent" ? <>If an account exists for <strong>{email}</strong>, you will receive a password reset link. Set a new password to continue claiming {listingName}.</> : <>Check <strong>{email}</strong> for a verification link to continue claiming {listingName}. If you already have an account, return to sign in.</>}
                     </p>
                 </div>
 
+                {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
                 <div className="flex flex-col gap-2">
+                    {status === "confirm-email" && (
                     <button
                         onClick={handleResendConfirmation}
                         disabled={resending || resent}
@@ -156,7 +160,7 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
                     >
                         <ArrowCounterClockwise weight="bold" className="w-3.5 h-3.5" />
                         {resent ? "Sent! Check your inbox" : resending ? "Resending..." : "Resend verification email"}
-                    </button>
+                    </button>)}
 
                     <button
                         onClick={() => {
@@ -165,7 +169,7 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
                         }}
                         className="text-xs text-text-muted hover:text-brand-primary transition-colors"
                     >
-                        Use a different email
+                        Back to sign in or change email
                     </button>
                 </div>
             </div>
@@ -212,6 +216,7 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
                 </label>
                 <input
                     type="email"
+                    autoComplete="email"
                     id="claim-email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -238,6 +243,7 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
                 </div>
                 <input
                     type="password"
+                    autoComplete={mode === "signup" ? "new-password" : "current-password"}
                     name="password"
                     id="claim-password"
                     value={password}

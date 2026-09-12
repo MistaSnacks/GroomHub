@@ -56,8 +56,17 @@ export function QuoteWizard() {
     notes: "",
   });
 
+  const sizes = form.petType === "cat" ? [
+    { value: "small", label: "Small", desc: "Under 10 lbs" },
+    { value: "medium", label: "Medium", desc: "10–15 lbs" },
+    { value: "large", label: "Large", desc: "Over 15 lbs" },
+  ] : petSizes;
+  const servicesForPet = form.petType === "cat"
+    ? serviceOptions.filter(s => !["Puppy First Groom", "Creative Grooming / Color"].includes(s))
+    : serviceOptions;
+
   const updateForm = (field: string, value: string | string[]) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
+    setForm((prev) => ({ ...prev, ...(field === "petType" && value !== prev.petType ? { petSize: "", services: [] } : {}), [field]: value }));
     setError("");
   };
 
@@ -135,9 +144,10 @@ export function QuoteWizard() {
           Pawsome! You&apos;re all set!
         </h2>
         <p className="text-text-muted max-w-md mx-auto mb-2">
-          We&apos;ll forward your request to local groomers in{" "}
-          <strong>{form.city || "your area"}</strong>. They can reach out
-          when they have availability.
+          We&apos;ve received your request. During our beta, GroomLocal reviews
+          each request by hand and shares it with matching groomers in{" "}
+          <strong>{form.city || "your area"}</strong>. Groomers reply directly
+          if they have availability, so response times vary.
         </p>
         <p className="text-sm text-text-muted">
           {form.petName && (
@@ -234,7 +244,7 @@ export function QuoteWizard() {
                 type="text"
                 value={form.petBreed}
                 onChange={(e) => updateForm("petBreed", e.target.value)}
-                placeholder="e.g. Goldendoodle"
+                placeholder={form.petType === "cat" ? "e.g. Domestic shorthair" : "e.g. Goldendoodle"}
                 className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent"
               />
             </div>
@@ -245,7 +255,7 @@ export function QuoteWizard() {
               Size
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              {petSizes.map((size) => (
+              {sizes.map((size) => (
                 <button
                   key={size.value}
                   onClick={() => updateForm("petSize", size.value)}
@@ -269,13 +279,13 @@ export function QuoteWizard() {
       {step === 1 && (
         <div className="space-y-6">
           <h3 className="font-[family-name:var(--font-fredoka)] text-2xl font-semibold text-brand-primary">
-            What does {form.petName || "your pup"} need?
+            What does {form.petName || "your pet"} need?
           </h3>
           <p className="text-sm text-text-muted">
             Select all that apply. Groomers will customize their quotes.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            {serviceOptions.map((service) => (
+            {servicesForPet.map((service) => (
               <button
                 key={service}
                 onClick={() => toggleService(service)}

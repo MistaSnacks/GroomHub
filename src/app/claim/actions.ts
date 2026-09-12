@@ -2,11 +2,14 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
+import { LISTING_REDIRECTS, PUBLIC_EXCLUDED_SLUGS } from "@/lib/listing-review";
 
 export async function processClaim(formData: FormData) {
-    const slug = formData.get("slug") as string;
+    const requestedSlug = formData.get("slug") as string;
+    const slug = LISTING_REDIRECTS[requestedSlug] || requestedSlug;
+    if (PUBLIC_EXCLUDED_SLUGS.includes(slug)) redirect("/get-listed");
 
     if (!slug) {
         redirect(`/get-listed`);
@@ -60,6 +63,7 @@ export async function processClaim(formData: FormData) {
         redirect(`/claim/${slug}/plans?error=claim-failed`);
     }
 
+    updateTag("listings");
     revalidatePath(`/groomer/${slug}`);
     revalidatePath(`/claim/${slug}`);
     revalidatePath("/dashboard");

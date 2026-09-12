@@ -37,7 +37,7 @@ export function HomeHero({ totalCount }: HomeHeroProps) {
                         </h1>
 
                         <p className="text-text-muted text-lg md:text-xl max-w-xl mb-10 mx-auto lg:mx-0 font-medium">
-                            {totalCount}+ verified groomers across Washington & Oregon. Search, compare, and book with confidence.
+                            {totalCount}+ listed groomers across Washington & Oregon. Search, compare, and book with confidence.
                         </p>
 
                         <motion.div

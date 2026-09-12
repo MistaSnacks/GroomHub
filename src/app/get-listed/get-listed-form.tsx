@@ -20,12 +20,17 @@ export function GetListedForm() {
     setErrorMsg("");
 
     startTransition(async () => {
+      try {
       const result = await submitListing(formData);
       if (result.ok) {
         setStatus("success");
       } else {
         setStatus("error");
         setErrorMsg(result.error || "Something went wrong.");
+      }
+      } catch {
+        setStatus("error");
+        setErrorMsg("Unable to submit right now. Your entries are still here; please try again.");
       }
     });
   }

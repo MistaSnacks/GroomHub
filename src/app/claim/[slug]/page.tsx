@@ -68,13 +68,13 @@ export default async function ClaimPage({
             Hello, {listing.name}!
           </h1>
           <p className="text-lg text-text-muted">
-            Take control of your business info, get a Verified badge on your listing, and start connecting with local pet parents.
+            Take control of your business info, add an Owner Confirmed badge on your listing, and start connecting with local pet parents.
           </p>
 
           {/* Founding member callout */}
           <div className="mt-6 inline-flex items-center gap-2 bg-brand-accent/10 border border-brand-accent/20 rounded-full px-5 py-2">
             <span className="text-sm font-semibold text-brand-accent">Founding Member Offer</span>
-            <span className="text-sm text-text-muted">All Premium features free during beta</span>
+            <span className="text-sm text-text-muted">Free listing, no credit card required</span>
           </div>
         </div>
       </section>
@@ -88,7 +88,7 @@ export default async function ClaimPage({
           <div className="grid md:grid-cols-2 gap-8 items-start">
 
             {/* Left: Summary card */}
-            <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm sticky top-24">
+            <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm md:sticky md:top-24">
               <div className="flex items-start gap-4 mb-6">
                 <div className="w-16 h-16 rounded-xl overflow-hidden bg-brand-secondary/20 flex items-center justify-center shrink-0 relative">
                   {heroImage ? (
@@ -115,7 +115,7 @@ export default async function ClaimPage({
                   </li>
                   <li className="flex gap-2 text-sm text-text">
                     <Check weight="bold" className="w-4 h-4 text-brand-accent mt-0.5 shrink-0" />
-                    <span>Get a <strong className="text-brand-accent">Verified</strong> badge on your listing card</span>
+                    <span>Get a <strong className="text-brand-accent">Owner Confirmed</strong> badge on your listing card</span>
                   </li>
                   <li className="flex gap-2 text-sm text-text">
                     <Check weight="bold" className="w-4 h-4 text-brand-accent mt-0.5 shrink-0" />

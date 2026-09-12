@@ -53,10 +53,10 @@ export function FeaturedListingBanner({ listing }: FeaturedListingBannerProps) {
                 )}
               </span>
             )}
-            {listing.is_paw_verified && (
+            {listing.owner_id && (
               <span className="flex items-center gap-0.5 text-xs text-brand-accent-ink">
                 <CheckCircle weight="fill" className="w-3 h-3" />
-                Verified
+                Owner confirmed
               </span>
             )}
           </div>

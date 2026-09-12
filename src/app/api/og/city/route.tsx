@@ -123,7 +123,7 @@ export async function GET(req: NextRequest) {
                 fontWeight: 600,
               }}
             >
-              {`${count} Verified Groomers`}
+              {`${count} Listed Groomers`}
             </div>
             <span style={{ fontSize: "18px", color: "#94A3B8", marginLeft: "16px" }}>
               {stateName}

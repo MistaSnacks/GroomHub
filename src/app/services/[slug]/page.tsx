@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { CaretRight, Scissors, MapPin, Question } from "@phosphor-icons/react/dist/ssr";
 import { CityListingsClient } from "@/components/city-listings-client";
-import { getListingsByServiceTag } from "@/lib/supabase/queries";
+import { getListingsByServiceTag, canonicalCitySlug } from "@/lib/supabase/queries";
 import {
   SERVICE_TAGS,
   isValidServiceSlug,
@@ -67,11 +67,12 @@ function groupByStateAndCity(listings: NormalizedListing[]) {
     if (!l.city || l.city === "Unknown") continue;
     if (!stateMap.has(l.state)) stateMap.set(l.state, new Map());
     const cityMap = stateMap.get(l.state)!;
-    const existing = cityMap.get(l.city_slug);
+    const citySlug = canonicalCitySlug(l.city_slug);
+    const existing = cityMap.get(citySlug);
     if (existing) {
       existing.count++;
     } else {
-      cityMap.set(l.city_slug, { name: l.city, count: 1 });
+      cityMap.set(citySlug, { name: l.city, count: 1 });
     }
   }
 

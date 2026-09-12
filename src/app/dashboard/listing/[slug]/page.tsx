@@ -65,6 +65,9 @@ export default async function EditListingPage({ params, searchParams }: EditList
         phone={listing.phone}
         email={listing.email || ""}
         website={listing.website || ""}
+        bookingUrl={listing.booking_url || ""}
+        priceMin={listing.price_min}
+        priceMax={listing.price_max}
         address={listing.address}
         city={listing.city}
         state={listing.state}

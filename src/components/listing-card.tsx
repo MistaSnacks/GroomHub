@@ -1,3 +1,4 @@
+import { listingPriceLabel } from "@/lib/listing-price";
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, ArrowRight, CheckCircle, ImageSquare } from "@phosphor-icons/react/dist/ssr";
@@ -5,7 +6,7 @@ import { BadgePill } from "./badge-pill";
 import { ListingImage } from "./listing-image";
 import { getServiceLabel, getSpecialtyLabel } from "@/lib/tags";
 import { isUsableListingImage } from "@/lib/images";
-import type { BusinessListing, ListingCardData, NormalizedListing, Badge } from "@/lib/types";
+import type { BusinessListing, ListingCardData, NormalizedListing } from "@/lib/types";
 import { TrackedWebsiteLink } from "./tracked-website-link";
 
 type CardListing = BusinessListing | NormalizedListing | ListingCardData;
@@ -39,13 +40,9 @@ export function ListingCard({ listing, index = 0, compact = false, variant = "ve
     return <HorizontalCard listing={listing} normalized={normalized} serviceTags={serviceTags} specialtyTags={specialtyTags} hasImage={hasImage} index={index} />;
   }
 
-  // Derive premium badges dynamically if subscription_tier is present
-  let displayBadges = listing.badges || [];
-  if (listing.subscription_tier === "premium") {
-    displayBadges = Array.from(new Set(["best-in-show", "paw-verified", ...displayBadges])) as Badge[];
-  } else if (listing.subscription_tier === "featured") {
-    displayBadges = Array.from(new Set(["paw-verified", ...displayBadges])) as Badge[];
-  }
+  // Paid placement is disclosed with a "Sponsored" label. Badges are never derived from payment.
+  const isSponsored = listing.subscription_tier === "premium";
+  const displayBadges = listing.badges || [];
 
   // Vertical variant (existing behavior)
   const rotations = ['rotate-1', '-rotate-1', 'rotate-1', '-rotate-1', 'rotate-1', '-rotate-1'];
@@ -91,20 +88,23 @@ export function ListingCard({ listing, index = 0, compact = false, variant = "ve
             </div>
             <div className="shrink-0 text-right">
               {(listing.price_min || listing.price_max) && listing.price_min > 0 ? (
-                <div className="text-sm font-semibold text-text">${listing.price_min} - ${listing.price_max}</div>
+                <div className="text-sm font-semibold text-text">{listingPriceLabel(listing)}</div>
               ) : (
-                <div className="text-sm font-semibold text-text">{listing.price_range || "$$"}</div>
+                <div className="text-sm font-semibold text-text">{/^\${1,4}$/.test(listing.price_range || "") ? listing.price_range : "Ask for a quote"}</div>
               )}
               {listing.owner_id && (
                 <div className="flex items-center gap-0.5 text-brand-accent-ink text-xs mt-0.5 justify-end">
                   <CheckCircle weight="fill" className="w-3 h-3" />
-                  <span>Verified</span>
+                  <span>Owner confirmed</span>
                 </div>
               )}
             </div>
           </div>
 
           {/* Badges */}
+          {isSponsored && (
+            <div className="mb-2"><span className="inline-flex items-center rounded-full border border-border bg-bg px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-text-muted">Sponsored</span></div>
+          )}
           {displayBadges.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-3">
               {displayBadges.map((badge) => (
@@ -179,7 +179,7 @@ export function ListingCard({ listing, index = 0, compact = false, variant = "ve
               View Profile
               <ArrowRight weight="bold" className="w-3 h-3 ml-1" />
             </Link>
-            {listing.website && listing.owner_id && (
+            {listing.website && (
               <TrackedWebsiteLink
                 href={listing.website}
                 listingId={listing.id}
@@ -244,21 +244,16 @@ function HorizontalCard({
               {listing.name}
             </h3>
 
-            {(listing.owner_id || (listing.badges && listing.badges.length > 0)) && (
+            {(listing.owner_id || listing.subscription_tier === "premium" || (listing.badges && listing.badges.length > 0)) && (
               <div className="flex flex-wrap items-center gap-1.5">
+                {listing.subscription_tier === "premium" && (<span className="inline-flex items-center rounded-full border border-border bg-bg px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-text-muted">Sponsored</span>)}
                 {listing.owner_id && (
                   <span className="inline-flex items-center gap-0.5 text-brand-accent-ink text-xs font-medium">
                     <CheckCircle weight="fill" className="w-3.5 h-3.5" />
-                    Verified
+                    Owner confirmed
                   </span>
                 )}
-                {(() => {
-                  let hBadges = listing.badges || [];
-                  if (listing.subscription_tier === "premium") hBadges = Array.from(new Set(["best-in-show", "paw-verified", ...hBadges])) as Badge[];
-                  else if (listing.subscription_tier === "featured") hBadges = Array.from(new Set(["paw-verified", ...hBadges])) as Badge[];
-
-                  return hBadges.map((badge) => <BadgePill key={badge} badge={badge} />);
-                })()}
+                {(listing.badges || []).map((badge) => <BadgePill key={badge} badge={badge} />)}
               </div>
             )}
           </div>
@@ -271,7 +266,7 @@ function HorizontalCard({
             </div>
             {(listing.price_min > 0) && (
               <span className="text-xs font-semibold text-text">
-                ${listing.price_min}-${listing.price_max}
+                {listingPriceLabel(listing)}
               </span>
             )}
           </div>

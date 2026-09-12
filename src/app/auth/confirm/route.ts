@@ -30,5 +30,5 @@ export async function GET(request: Request) {
         }
     }
 
-    return NextResponse.redirect(`${origin}/login?error=Could not verify email`)
+    return NextResponse.redirect(`${origin}/login?error=Could not verify email&redirect=${encodeURIComponent(next)}`)
 }

@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { GUIDE_TOPICS } from "./grooming-guides";
 
 export interface BlogAuthor {
   name: string;
@@ -119,9 +120,20 @@ export function getRelatedPosts(
   const current = getBlogPostBySlug(currentSlug);
   if (!current) return getBlogPosts().slice(0, limit);
 
+  const topicSlugs = new Set(
+    GUIDE_TOPICS.filter((topic) => topic.slugs.includes(currentSlug))
+      .flatMap((topic) => topic.slugs),
+  );
+  const sharedTags = (post: BlogPostMeta) =>
+    post.tags.filter((tag) => current.tags.includes(tag)).length;
+
   return getBlogPosts()
     .filter((p) => p.slug !== currentSlug)
     .sort((a, b) => {
+      const topicMatch = Number(topicSlugs.has(b.slug)) - Number(topicSlugs.has(a.slug));
+      if (topicMatch) return topicMatch;
+      const tagMatch = sharedTags(b) - sharedTags(a);
+      if (tagMatch) return tagMatch;
       const aMatch = a.category === current.category ? 1 : 0;
       const bMatch = b.category === current.category ? 1 : 0;
       return bMatch - aMatch;

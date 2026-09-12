@@ -18,8 +18,7 @@ interface ClaimedListing {
 
 const tierColors: Record<string, string> = {
   premium: "bg-amber-100 text-amber-800",
-  featured: "bg-teal-100 text-teal-800",
-  standard: "bg-blue-100 text-blue-800",
+  basic: "bg-teal-100 text-teal-800",
   free: "bg-gray-100 text-gray-600",
 };
 

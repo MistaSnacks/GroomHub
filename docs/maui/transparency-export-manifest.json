@@ -1,0 +1,469 @@
+[
+  {
+    "scene": "main",
+    "source": "docs/maui/opaque-masters/main.png",
+    "sourceSha256": "0aa3c078b1b18292a364bc3f7b45a88c3f18a147c9d90a45b600279dea32be73",
+    "sha256": "850fb85afa867a0252557e5148e103f814e260cc3861fb62c08bd89a232c9c04",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.7235,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/00-maui-main.png",
+      "public/maui-characters/00-maui-main.png"
+    ]
+  },
+  {
+    "scene": "bath",
+    "source": "docs/maui/opaque-masters/bath.png",
+    "sourceSha256": "5fef4c54418bd4403bd883e988622e8ae0487cb2d3b31bd4d1c485c89cc3add7",
+    "sha256": "0d42995bc9722d5ef2941834235869c09f6bf94e10caefaec2d5737ca5c1c736",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.5913,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/01-maui-bath.png",
+      "public/maui-characters/01-maui-bath.png",
+      "public/maui-assets/10-maui-bath-alt.png",
+      "public/maui-characters/10-maui-bath-alt.png"
+    ]
+  },
+  {
+    "scene": "ear-cleaning",
+    "source": "docs/maui/opaque-masters/ear-cleaning.png",
+    "sourceSha256": "404f877dee622d6f5f6883d5b5db4f045320e2303d404fbeab5b95e56c8db537",
+    "sha256": "23dd1242b7c0321d584c00308906717d4436f8dcd12e3d331d4f369f18b55882",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.6431,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/02-maui-ear-cleaning.png",
+      "public/maui-characters/02-maui-ear-cleaning.png",
+      "public/maui-assets/11-maui-ear-cleaning-alt.png",
+      "public/maui-characters/11-maui-ear-cleaning-alt.png"
+    ]
+  },
+  {
+    "scene": "nail-clip",
+    "source": "docs/maui/opaque-masters/nail-clip.png",
+    "sourceSha256": "abcc4def9da523951ffd955e1526dba8fcef21d84a44612ccf9296fa4227bce8",
+    "sha256": "4418c77bf3e3ab048905117adff72d10440a3b6522ba00fdc8a8f089cbb2d58e",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.6621,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/03-maui-nail-clip.png",
+      "public/maui-characters/03-maui-nail-clip.png",
+      "public/maui-assets/12-maui-nail-clip-alt.png",
+      "public/maui-characters/12-maui-nail-clip-alt.png"
+    ]
+  },
+  {
+    "scene": "table",
+    "source": "docs/maui/opaque-masters/table.png",
+    "sourceSha256": "1980a97047363f6225238b1368acb6005d8061d0c06cd97f9d3b5932334f7b46",
+    "sha256": "180a02066b8c2b62bfa3e43a71a7357aa4c1d38e75644562b544bc337e486ecb",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.6848,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/04-maui-nail-trim-table.png",
+      "public/maui-characters/04-maui-nail-trim-table.png",
+      "public/maui-assets/13-maui-nail-trim-table-alt.png",
+      "public/maui-characters/13-maui-nail-trim-table-alt.png"
+    ]
+  },
+  {
+    "scene": "brushing",
+    "source": "docs/maui/opaque-masters/brushing.png",
+    "sourceSha256": "b9ad67e1de64f667e4eb55f5de30757b582c6ee7e024ce26afa4c76272e26aac",
+    "sha256": "12c495eceb98a8ee511bf141d2a298c6baa0f80b4925e9063f71de1cb282ca2e",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.6929,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/05-maui-sitting-pretty.png",
+      "public/maui-characters/05-maui-sitting-pretty.png",
+      "public/maui-assets/14-maui-sitting-pretty-alt.png",
+      "public/maui-characters/14-maui-sitting-pretty-alt.png"
+    ]
+  },
+  {
+    "scene": "towel-standing",
+    "source": "docs/maui/opaque-masters/towel-standing.png",
+    "sourceSha256": "9de229c806796d3c934af2a82a9e325c47217c49348557dfa2eea3658ea55dc6",
+    "sha256": "7df76a7446631fa34c6838a60f2d134dd6bc52cf339287577356d65263afa638",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.6874,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/06-maui-towel-head-standing.png",
+      "public/maui-characters/06-maui-towel-head-standing.png",
+      "public/maui-assets/15-maui-towel-head-standing-alt.png",
+      "public/maui-characters/15-maui-towel-head-standing-alt.png"
+    ]
+  },
+  {
+    "scene": "blow-dry",
+    "source": "docs/maui/opaque-masters/blow-dry.png",
+    "sourceSha256": "9fad64ee6ce999f55a9296321f684e36c69d4f41c144985b4e8c9a2d8bf6bd53",
+    "sha256": "8f86cfc50cbddf15d2e166fabca69fc1ec02c32c698753aa51c2d65aa28016ed",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.6965,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/07-maui-blow-dry.png",
+      "public/maui-characters/07-maui-blow-dry.png"
+    ]
+  },
+  {
+    "scene": "playing-ball",
+    "source": "docs/maui/opaque-masters/playing-ball.png",
+    "sourceSha256": "b0dcd38ef7ea942b45264a3f516ce8ea6a4cfac59b34fb22962933d97d3a6038",
+    "sha256": "85db5f98e90cb63bf0485723b9b2a37f37b4df3d74d45f19df591d84dd09229b",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.7209,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/08-maui-playing-ball.png",
+      "public/maui-characters/08-maui-playing-ball.png",
+      "public/maui-assets/17-maui-playing-ball-alt.png",
+      "public/maui-characters/17-maui-playing-ball-alt.png"
+    ]
+  },
+  {
+    "scene": "cat-costume",
+    "source": "docs/maui/opaque-masters/cat-costume.png",
+    "sourceSha256": "98c74a188beb0bb549f5424bb4b828b7504ef290b29568a16b7ee4b363e83092",
+    "sha256": "723fa7b8abc234c964fbb5308c4a28c4c24fcf845b761ddbdcec0408123dc6c7",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.6333,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/09-maui-cat-costume.png",
+      "public/maui-characters/09-maui-cat-costume.png",
+      "public/maui-assets/maui-cat-grooming-blog.png"
+    ]
+  },
+  {
+    "scene": "towel-hearts",
+    "source": "docs/maui/opaque-masters/towel-hearts.png",
+    "sourceSha256": "f963556a96856fbd7cb365b290594dffc48651857850da2f2c69a2de66a38582",
+    "sha256": "f28559df6bc6d81dd34a23e582e872378e51cb8b548bf01901cc0d4521b2552f",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.6725,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/16-maui-towel-head-hearts.png",
+      "public/maui-characters/16-maui-towel-head-hearts.png",
+      "public/maui-assets/19-maui-towel-head-hearts-new.png"
+    ]
+  },
+  {
+    "scene": "fresh-bath-waving",
+    "source": "docs/maui/opaque-masters/fresh-bath-waving.png",
+    "sourceSha256": "d6d887ad856c17b9a35bffe6e1bd0ec42de3b673ed1be0c53d17a6f4931a894a",
+    "sha256": "dc8244c22179b9df9291e6167ee80b4290315aa413c778ea9b631c957dabe14b",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.6675,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/18-maui-fresh-bath-waving.png",
+      "public/maui-characters/18-maui-fresh-bath-waving.png"
+    ]
+  },
+  {
+    "scene": "grooming-cost",
+    "source": "docs/maui/source-edits/grooming-cost-four-limbs-20260907.png",
+    "sourceSha256": "43a36baa7d4e03b24def08d8676139b37981123dcb98707b8f5eac6a38ef719b",
+    "sha256": "ec5eeedae2b3d9c287be1b8edf81c59f25709d7c902bceadb5307fef14e77b99",
+    "size": [
+      1254,
+      1254
+    ],
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/maui-grooming-cost-blog.png"
+    ],
+    "correction": "Removed raised fifth limb; September 7, 2026",
+    "transparentFraction": 0.6693
+  },
+  {
+    "scene": "grooming-frequency",
+    "source": "docs/maui/opaque-masters/grooming-frequency.png",
+    "sourceSha256": "adbd41118eaf946887777732c01549330ac9af555c071c71bdf5f70180a9271f",
+    "sha256": "37fd912e761f7101eb5949d698822ebccefd1c14dc837bae86035d2393a3ba26",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.6656,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/maui-grooming-frequency-blog.png"
+    ]
+  },
+  {
+    "scene": "choosing-groomer",
+    "source": "docs/maui/opaque-masters/choosing-groomer.png",
+    "sourceSha256": "a0465bfc568a82c68deaa3677c626c0e43c9744edbc4be2c854606118ffc3ba6",
+    "sha256": "edc677b2d21315a28277c00685172b874e196eba7ab41e36a185277ff8ad9385",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.6597,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/maui-choosing-groomer-blog.png"
+    ]
+  },
+  {
+    "scene": "goldendoodle",
+    "source": "docs/maui/opaque-masters/goldendoodle.png",
+    "sourceSha256": "7ddecc0d881ac5b43d0a838b5c33b853f885b5cbbc1c4dd0276d46cd425266ea",
+    "sha256": "3a3b964ca5dd3db1e52e15da24bc447326382da8eab62fb3ccb6b863556407c8",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.7386,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/maui-goldendoodle-grooming-guide-blog.png"
+    ]
+  },
+  {
+    "scene": "rain-mud",
+    "source": "docs/maui/opaque-masters/rain-mud.png",
+    "sourceSha256": "9d6c8e92f666a6ebd472d62ef056868bc4692f0cb7db9759f43550a66da92cde",
+    "sha256": "ea761e4123573ba4119a6c705e56993afac095cdea4c6bb1cb7473b2ea832303",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.6628,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/maui-rain-mud-blog.png"
+    ]
+  },
+  {
+    "scene": "seasonal",
+    "source": "docs/maui/opaque-masters/seasonal.png",
+    "sourceSha256": "fa22105ae6dc857233dc1cb76a818cb7fd434626382c8f47751ea9e4ba237a87",
+    "sha256": "79b0716ef8866647af2ffc2a27175403b9b8580d2c928e2e477fd938d7196c31",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.715,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/maui-pnw-seasonal-blog.png"
+    ]
+  },
+  {
+    "scene": "winter",
+    "source": "docs/maui/opaque-masters/winter.png",
+    "sourceSha256": "a8440b99aaac711820f8812b0485384697745ce838a373f1d0b9f03df0fe334b",
+    "sha256": "f8dfcac3eedbdc676f493dfb881d4ec4f1a17652d16415b933f3e150a2808727",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.6789,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/maui-winter-grooming-blog.png",
+      "public/maui-assets/maui-winter-uploaded.png"
+    ]
+  },
+  {
+    "scene": "senior",
+    "source": "docs/maui/opaque-masters/senior.png",
+    "sourceSha256": "890acdd25374d7ca0bd07ebe4a7ec6cd0a25d07a99ac2d740139f91f6102be63",
+    "sha256": "e3c876498509f7c7e0f98abef84d821e5a00c3ba90467b72dc6d5bdb17f83e8d",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.6879,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/maui-senior-dog-grooming-blog.png"
+    ]
+  },
+  {
+    "scene": "anxious",
+    "source": "docs/maui/opaque-masters/anxious.png",
+    "sourceSha256": "d230276176b54856784a33e8c3e75e28c3762739bdd77efe7fd62198835bb6e4",
+    "sha256": "28ef72d60686cdc63185e99b763a8655d0f231008255736356a7452a331ecded",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.6341,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/maui-anxious-dog-grooming-blog.png"
+    ]
+  },
+  {
+    "scene": "matted",
+    "source": "docs/maui/opaque-masters/matted.png",
+    "sourceSha256": "9fe3350dce8bc88a7378369a426a9643cc36c598ac2076f2f74f5b5f10e4cf46",
+    "sha256": "f864b9479715af0ee1e6f34dc20859a566e7560e23a6fa8412e1519d4b385b2e",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.7384,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/maui-matted-dog-grooming-blog.png"
+    ]
+  },
+  {
+    "scene": "puppy",
+    "source": "docs/maui/opaque-masters/puppy.png",
+    "sourceSha256": "63f7350914b6ff918972554e5810169dee9c937d33944727325715a37e5dd9a0",
+    "sha256": "c2cafa49bd5c0a0231459753495438fac70b3e64ee092629b6029d55ce07e09f",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.681,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/maui-puppy-first-groom-blog.png"
+    ]
+  },
+  {
+    "scene": "groomer-apron",
+    "source": "docs/maui/opaque-masters/groomer-apron.png",
+    "sourceSha256": "d454aad18b4acf26f5291c066f2ed96cd7d621a5bde0c6dbabbdd72f836c1897",
+    "sha256": "f46c1dec0c9b5304e43b9a22a1c9ec6991e754922fa194e8d3423be2b490c803",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.5289,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/maui-groomer-apron-signature.png",
+      "public/maui-assets/maui-groomer-apron-chibi.png"
+    ]
+  },
+  {
+    "scene": "van-cost",
+    "source": "docs/maui/opaque-masters/van-cost.png",
+    "sourceSha256": "ee6312f51b450fc7836cf86e246097c7603757616a0df8faa97dcd246307a36a",
+    "sha256": "2ebb9aa3f6f07ac6203a56dfc3f5f1e5875630107ecefd9997092221180b60ef",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.6517,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/maui-grooming-van-cost-chibi.png"
+    ]
+  },
+  {
+    "scene": "mobile-van",
+    "source": "docs/maui/opaque-masters/mobile-van.png",
+    "sourceSha256": "abf2d72a0f1b9f3b7219dcaa6e5867f6aadbb97a709023b6c8e4965beeba358f",
+    "sha256": "c256133958c4ce13ba26954d1ca2647cdce6f2b3fb7d516281598289d17398ca",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.5184,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/maui-mobile-grooming-cost-blog.png"
+    ]
+  },
+  {
+    "scene": "mobile-hero",
+    "source": "docs/maui/opaque-masters/mobile-hero.png",
+    "sourceSha256": "5fef0337eb1ce92e765aac02426188433708172a8555f39c6d1de18bb31c7201",
+    "sha256": "db0f9334aff4856051355817521309ca4d96929c2e716c0a59939aacbd2b2ec3",
+    "size": [
+      1730,
+      909
+    ],
+    "transparentFraction": 0.4092,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/maui-mobile-grooming-vector-hero.png",
+      "public/maui-assets/maui-mobile-grooming-pixel-hero.png"
+    ]
+  },
+  {
+    "scene": "summer",
+    "source": "docs/maui/opaque-masters/summer.png",
+    "sourceSha256": "1ae508b8093c07dad37e8baa47635ebb57b7f1ac8db86164c48a63765b9a08e7",
+    "sha256": "467ad48f07b68332266c0ff24072e27c09e3f195a314ea45315cb06555902d48",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.5801,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/maui-summer-grooming-blog.png"
+    ]
+  },
+  {
+    "scene": "grooming-duration",
+    "source": "docs/maui/opaque-masters/grooming-duration-v2.png",
+    "sourceSha256": "fedd8bc90bf16ec96ecf9d11e644fc1ccd89b74f712bb46a25968eddf3ac0414",
+    "sha256": "88bf704dd894a80b5476e86b0fa752f01e36d702e0cb1170a8d73401a73c3add",
+    "size": [
+      1254,
+      1254
+    ],
+    "transparentFraction": 0.7173,
+    "opaqueRgbPreserved": true,
+    "targets": [
+      "public/maui-assets/maui-grooming-duration-blog.png"
+    ]
+  }
+]

@@ -76,6 +76,17 @@ export const mdxComponents: MDXComponents = {
     />
   ),
   hr: () => <hr className="border-border my-8" />,
+  // Inline illustrations (Maui scenes) are transparent PNGs; keep them modest and centered.
+  img: ({ src, alt }) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={typeof src === "string" ? src : ""}
+      alt={alt ?? ""}
+      loading="lazy"
+      decoding="async"
+      className="mx-auto my-4 block w-[200px] sm:w-[240px] h-auto drop-shadow-md"
+    />
+  ),
   table: (props) => (
     <div className="overflow-x-auto my-4">
       <table

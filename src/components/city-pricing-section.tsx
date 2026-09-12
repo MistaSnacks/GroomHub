@@ -1,4 +1,4 @@
-import { Dog, Cat, Van } from "@phosphor-icons/react/dist/ssr";
+import { Dog, Cat } from "@phosphor-icons/react/dist/ssr";
 import type { PricingBreakdown } from "@/lib/city-pricing";
 
 interface CityPricingSectionProps {
@@ -14,6 +14,19 @@ const SIZE_CONFIG = [
 ];
 
 export function CityPricingSection({ cityName, pricing, serviceLabel }: CityPricingSectionProps) {
+  if (serviceLabel.toLowerCase().includes("cat")) {
+    return (
+      <section className="bg-white py-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="font-heading text-2xl font-semibold text-brand-primary mb-2">Cat Grooming Prices in {cityName}</h2>
+          <div className="rounded-xl border border-border bg-bg/50 p-5">
+            <Cat weight="duotone" className="w-8 h-8 text-brand-secondary mb-2" />
+            <p className="text-sm text-text-muted">Ask your groomer for a quote based on your cat&apos;s coat, matting, handling needs, and the services requested. Confirm what is included and any additional charges before booking.</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
   return (
     <section className="bg-white py-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

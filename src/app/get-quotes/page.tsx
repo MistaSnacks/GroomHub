@@ -4,11 +4,11 @@ import { QuoteWizard } from "@/components/quote-wizard";
 export const metadata: Metadata = {
   title: "Get Grooming Quotes",
   description:
-    "Tell us about your pet and we'll forward your request to local groomers. Free, fast, and no commitment.",
+    "Tell us about your pet. Our team reviews requests during beta and helps you find local grooming options. No booking or response is guaranteed.",
   alternates: { canonical: "/get-quotes" },
   openGraph: {
     title: "Get Grooming Quotes",
-    description: "Tell us about your pet and we'll forward your request to local groomers. Free, fast, and no commitment.",
+    description: "Tell us about your pet. Our team reviews requests during beta and helps you find local grooming options. No booking or response is guaranteed.",
     type: "website",
     url: "/get-quotes",
     siteName: "GroomLocal",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Get Grooming Quotes",
-    description: "Tell us about your pet and we'll forward your request to local groomers. Free, fast, and no commitment.",
+    description: "Tell us about your pet. Our team reviews requests during beta and helps you find local grooming options. No booking or response is guaranteed.",
     images: ["/og-image.png"],
   },
 };
@@ -32,7 +32,7 @@ export default function GetQuotesPage() {
             Get <span className="text-brand-accent">free</span> grooming quotes 🐾
           </h1>
           <p className="text-text-muted text-lg">
-            Tell us about your pet and we&apos;ll forward your request to local groomers. Free, fast, no obligation.
+            Tell us about your pet. During beta, our team reviews your request and helps you find local grooming options. Submitting a request does not book an appointment.
           </p>
         </div>
       </section>
@@ -41,9 +41,9 @@ export default function GetQuotesPage() {
       <div className="bg-surface border-b border-border">
         <div className="container mx-auto py-5 px-4 flex flex-wrap gap-6 justify-center">
           {[
-            { icon: "🛡️", title: 'Local directory groomers', desc: "We'll share your request with groomers near you." },
-            { icon: "⏱️", title: 'Forwarded promptly', desc: 'Groomers in your area are notified when you submit.' },
-            { icon: "⭐", title: 'Compare and choose', desc: 'Pick the best offer. No pressure, no obligation.' },
+            { icon: "🛡️", title: 'Local directory groomers', desc: "Tell us what care you need and where." },
+            { icon: "⏱️", title: 'Reviewed by our team', desc: 'Requests are reviewed manually during beta.' },
+            { icon: "⭐", title: 'Compare and choose', desc: 'Availability and responses are not guaranteed.' },
           ].map(({ icon, title, desc }) => (
             <div key={title} className="flex items-center gap-3">
               <span className="text-xl">{icon}</span>

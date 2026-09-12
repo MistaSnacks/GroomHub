@@ -23,7 +23,7 @@ export const BRAND = {
   site: "https://groomlocal.com",
   // Base Maui — the waving hero mascot (same asset the homepage hero uses via
   // MauiMascot). Transparent PNG, shown as a standing figure, not circle-cropped.
-  mauiUrl: "https://groomlocal.com/maui-assets/00-maui-main.png",
+  mauiUrl: "https://groomlocal.com/maui-assets/00-maui-main.png?v=maui-20260904-alpha1",
   headingFont: "'Trebuchet MS',Helvetica,Arial,sans-serif",
   bodyFont: "'Segoe UI',Helvetica,Arial,sans-serif",
 } as const;

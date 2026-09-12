@@ -14,7 +14,7 @@ export default function Error({
     <div className="min-h-[70vh] flex items-center justify-center bg-bg px-4">
       <div className="text-center max-w-md">
         <MauiMascot
-          src="/maui-assets/05-maui-sitting-pretty.png"
+          src="/maui-assets/05-maui-sitting-pretty.png?v=maui-20260904-alpha1"
           size={160}
           animation="float"
           interactive={false}

@@ -10,32 +10,32 @@ import { pricingTiers } from "@/lib/pricing";
 
 const faqs = [
   {
-    q: "Can I start for free?",
-    a: "Absolutely! Our Free tier gets your business listed with name, address, phone, and one photo. Upgrade anytime to unlock more features. No pressure, no leash attached.",
+    q: "Is the Free listing really free?",
+    a: "Yes. Your free listing includes your website, booking link, hours, services, pricing, and up to 10 photos. It is not a trial and it does not expire.",
   },
   {
     q: "Why should I claim my listing if my business is already shown?",
-    a: "Claiming gives you control. You can update your business hours, add a website link, upload photos, and respond to reviews. Plus, upgrading to a Standard tier removes competitor ads from your profile page.",
+    a: "Claiming gives you control. You can correct your hours, add a booking link, upload photos, and receive inquiries from pet parents. Claimed listings show an Owner Confirmed badge so people know the details come from you.",
   },
   {
-    q: "What does Paw-Verified mean?",
-    a: "Paw-Verified businesses have confirmed their identity, location, and credentials through our verification process. It's a trust signal that tells pet parents you're the real deal. Available on Featured and Premium tiers.",
+    q: "What does Owner Confirmed mean?",
+    a: "It means the business owner has claimed the listing and manages its details. It is not a safety inspection or a credential check, and it is never for sale. Free and Sponsored listings show the exact same badge.",
   },
   {
-    q: 'How does the "Best in Show" badge work?',
-    a: "Best in Show is our top-tier premium badge available exclusively for Premium tier members. It gives your listing a golden shimmer effect and places you at the absolute #1 spot in search results in your area.",
+    q: "What does Sponsored mean?",
+    a: "Sponsored businesses pay for a labeled spot at the top of their city page, limited to three per city. The Sponsored label is always visible. Payment never changes your badge or where you appear in the regular list.",
   },
   {
     q: "Can I cancel anytime?",
-    a: "Yes! No contracts, no cancellation fees. You can downgrade or cancel at any time. Your listing stays active on the Free tier even after cancelling a paid plan.",
+    a: "Yes. Sponsored is month to month with no contract or cancellation fee. Your listing stays on Free with everything intact.",
   },
   {
-    q: "What is the direct booking integration?",
-    a: 'Featured and Premium members get a "Book Now" button on their profile. Clients can request appointments or book directly through your existing scheduling software, straight from your directory listing.',
+    q: "Can pet parents book through GroomLocal?",
+    a: "Add your booking link to your free listing and pet parents book through your existing scheduling software, straight from your profile.",
   },
   {
     q: "Do you offer discounts for annual billing?",
-    a: "Yes! Switch to annual billing and save 2 months free on any paid plan. That's exactly $120 saved per year on our Premium tier.",
+    a: "The listed annual rate is $41 per month ($492 per year), a $96 saving compared with twelve monthly payments. Contact us to confirm availability and billing terms.",
   },
 ];
 
@@ -72,7 +72,7 @@ export function PricingPageClient({ featuredCounts }: PricingPageClientProps) {
               Simple, <span className="text-brand-secondary">transparent</span> pricing
             </h1>
             <p className="text-text-muted text-lg mb-8">
-              Start free. Upgrade when you&apos;re ready to grow. No hidden fees, no lock-in.
+              Claim your free listing today. Contact us to confirm Sponsored availability and billing terms; claiming a listing does not reserve a paid spot.
             </p>
 
             {/* Billing toggle */}
@@ -95,7 +95,7 @@ export function PricingPageClient({ featuredCounts }: PricingPageClientProps) {
               >
                 Annual
                 <span className="text-[10px] bg-brand-accent/15 text-brand-accent px-2 py-0.5 rounded-full font-bold">
-                  Save 2mo
+                  Save $96/yr
                 </span>
               </button>
             </div>
@@ -108,7 +108,7 @@ export function PricingPageClient({ featuredCounts }: PricingPageClientProps) {
       {/* Pricing Cards */}
       <section className="bg-white py-12 md:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AnimatedSection variant="stagger" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <AnimatedSection variant="stagger" className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {pricingTiers.map((tier) => {
               const displayPrice = isAnnual ? tier.annualPrice : tier.price;
               const isFeatured = tier.isPopular;
@@ -181,10 +181,10 @@ export function PricingPageClient({ featuredCounts }: PricingPageClientProps) {
                     </ul>
 
                     <Link
-                      href="/get-listed"
+                      href={tier.slug === "free" ? "/get-listed" : "/contact"}
                       className={`block text-center rounded-full py-3 px-6 text-sm font-bold transition-all ${ctaBg}`}
                     >
-                      {tier.ctaText}
+                      {tier.slug === "free" ? tier.ctaText : "Ask About Sponsorship"}
                     </Link>
                   </div>
                 </AnimatedItem>

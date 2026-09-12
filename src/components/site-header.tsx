@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { List, X } from "@phosphor-icons/react/dist/ssr";
 import { NavDropdown } from "./nav-dropdown";
 import type { CityWithCount } from "@/lib/types";
@@ -16,6 +16,7 @@ interface SiteHeaderProps {
 
 export function SiteHeader({ cities = [] }: SiteHeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [authReady, setAuthReady] = useState(false);
@@ -56,6 +57,12 @@ export function SiteHeader({ cities = [] }: SiteHeaderProps) {
 
   return (
     <header
+      onKeyDown={(event) => {
+        if (event.key === "Escape" && mobileOpen) {
+          setMobileOpen(false);
+          menuButton.current?.focus();
+        }
+      }}
       className={`sticky top-0 z-50 transition-all duration-300 ${scrolled
         ? "bg-bg/95 backdrop-blur-md shadow-sm py-0"
         : isHome
@@ -81,21 +88,15 @@ export function SiteHeader({ cities = [] }: SiteHeaderProps) {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden xl:flex items-center gap-6">
             <NavDropdown label="Cities" type="cities" cities={cities} />
             <NavDropdown label="Services" type="services" />
             <NavDropdown label="Specialties" type="specialties" />
             <Link
-              href="/resources"
-              className="text-sm font-medium text-text-muted hover:text-brand-primary transition-colors"
-            >
-              Resources
-            </Link>
-            <Link
               href="/blog"
               className="text-sm font-medium text-text-muted hover:text-brand-primary transition-colors"
             >
-              Blog
+              Grooming Guides
             </Link>
             <Link
               href="/about"
@@ -112,7 +113,7 @@ export function SiteHeader({ cities = [] }: SiteHeaderProps) {
           </nav>
 
           {/* Desktop CTA */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden xl:flex items-center gap-3">
             <div className="flex items-center justify-end min-w-[148px]">
               {!authReady ? (
                 <span className="inline-block h-5 w-28" aria-hidden="true" />
@@ -161,8 +162,10 @@ export function SiteHeader({ cities = [] }: SiteHeaderProps) {
           {/* Mobile menu toggle */}
           <button
             type="button"
-            className="md:hidden p-2 rounded-lg text-brand-primary hover:bg-brand-primary/5 transition-colors"
+            className="xl:hidden p-2 rounded-lg text-brand-primary hover:bg-brand-primary/5 transition-colors"
             onClick={() => setMobileOpen(!mobileOpen)}
+            ref={menuButton}
+            aria-controls="mobile-navigation"
             aria-expanded={mobileOpen}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
           >
@@ -176,7 +179,7 @@ export function SiteHeader({ cities = [] }: SiteHeaderProps) {
 
         {/* Mobile Nav */}
         {mobileOpen && (
-          <div className="md:hidden border-t border-brand-primary/10 py-4 space-y-1 bg-bg/95 backdrop-blur-md rounded-b-2xl">
+          <div id="mobile-navigation" className="max-h-[calc(100dvh-80px)] overflow-y-auto xl:hidden border-t border-brand-primary/10 py-4 space-y-1 bg-bg/95 backdrop-blur-md rounded-b-2xl">
             <div className="px-3 py-2">
               <p className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2">Browse Cities</p>
               <div className="space-y-1">
@@ -204,18 +207,11 @@ export function SiteHeader({ cities = [] }: SiteHeaderProps) {
                 Specialties
               </Link>
               <Link
-                href="/resources"
-                className="block rounded-lg px-3 py-2.5 text-sm font-medium text-brand-primary/70 hover:text-brand-primary hover:bg-brand-primary/5 transition-colors"
-                onClick={() => setMobileOpen(false)}
-              >
-                Resources
-              </Link>
-              <Link
                 href="/blog"
                 className="block rounded-lg px-3 py-2.5 text-sm font-medium text-brand-primary/70 hover:text-brand-primary hover:bg-brand-primary/5 transition-colors"
                 onClick={() => setMobileOpen(false)}
               >
-                Blog
+                Grooming Guides
               </Link>
               <Link
                 href="/about"

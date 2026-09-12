@@ -1,0 +1,27 @@
+{
+  "status": "live",
+  "url": "https://groomlocal.com",
+  "deployment": "dpl_bEj37XDJXePSxMvfSUXQxdd6yNK8",
+  "baseline": "dpl_HEERbLGfZp1fq9acpjXhJ7cgfird",
+  "scenes": 29,
+  "assetPaths": 60,
+  "imageVersion": "maui-20260904-alpha1",
+  "background": "True PNG transparency",
+  "checks": [
+    "All 29 cutouts visually reviewed on teal and dark surfaces",
+    "All 60 local and deployment asset hashes match validated transparent exports",
+    "All fully opaque foreground RGB values match immutable source artwork",
+    "Original dimensions and transparent canvas edges verified for every scene",
+    "Webpack local and Turbopack production builds passed, 115 pages",
+    "All 29 unique live image files match local SHA-256 and decode with transparency",
+    "Live home/blog/for-groomers responses contain new image URLs",
+    "Live Next.js optimized image preserves PNG transparency"
+  ],
+  "limitations": [
+    "No browser available for live visual viewport inspection"
+  ],
+  "preservedMasters": "docs/maui/opaque-masters/",
+  "showcase": "../output/maui-transparent/showcase.html",
+  "latestChange": "Regenerated duration blog Maui with seated anatomy and freestanding clock",
+  "latestChangeReport": "duration-repair-report.json"
+}

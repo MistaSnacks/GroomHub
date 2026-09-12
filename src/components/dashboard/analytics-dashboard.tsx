@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { getDashboardAnalytics, getUserSignups } from "@/app/admin/dashboard/actions";
+import { RefeatureTriggerCard } from "./refeature-trigger-card";
 import {
     AreaChart,
     Area,
@@ -157,6 +158,8 @@ export function AnalyticsDashboard() {
                     )
                 )}
             </div>
+
+            <RefeatureTriggerCard />
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-6">
                 <KPICard

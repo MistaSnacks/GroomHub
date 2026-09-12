@@ -63,10 +63,10 @@ export default async function ClaimSuccessPage({
                         Welcome, Founding Member!
                     </h1>
                     <p className="text-lg text-text-muted mb-4">
-                        You now have full control over <strong className="text-brand-primary">{listing.name}</strong>. Your listing now shows a Verified badge to pet parents.
+                        You now have full control over <strong className="text-brand-primary">{listing.name}</strong>. Your listing now shows an Owner Confirmed badge to pet parents.
                     </p>
                     <p className="text-sm text-text-muted mb-8 max-w-md mx-auto">
-                        As a founding member, all Premium features are yours free for 90 days. We just ask for two small things: a link to GroomLocal on your website, and a one-line testimonial about your experience.
+                        Your free listing includes profile editing, photos, and contact inquiries. Start by checking your contact details so pet parents reach the right place.
                     </p>
 
                     <div className="bg-white rounded-2xl border border-border p-6 shadow-sm mb-8 text-left max-w-sm mx-auto">
@@ -82,7 +82,7 @@ export default async function ClaimSuccessPage({
                             </li>
                             <li className="flex gap-2 text-sm text-text-muted">
                                 <div className="w-6 h-6 rounded-full bg-brand-accent/20 flex items-center justify-center text-brand-accent font-bold text-xs shrink-0 mt-0.5">3</div>
-                                Add the GroomLocal badge to your website (below)
+                                Optional: add the GroomLocal badge to your website (below)
                             </li>
                         </ul>
                     </div>
@@ -106,7 +106,7 @@ export default async function ClaimSuccessPage({
                 </div>
             </section>
 
-            {/* Growth & Marketing Section: High Value Local Link Building */}
+            {/* Optional badge for owners who want to show their profile is owner-managed */}
             <section className="bg-white py-16 border-t border-border mt-8">
                 <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
                     <div className="flex flex-col md:flex-row items-center gap-10">
@@ -115,17 +115,14 @@ export default async function ClaimSuccessPage({
                                 Add your GroomLocal badge
                             </h2>
                             <p className="text-text-muted mb-2">
-                                Paste this badge on your website (footer, about page, or sidebar) to show clients you are a verified local business. It also helps your search ranking by creating a trusted backlink.
-                            </p>
-                            <p className="text-sm text-brand-accent font-medium mb-6">
-                                This is part of your founding member agreement to keep Premium features free.
+                                Paste this badge on your website (footer, about page, or sidebar) to let clients know your GroomLocal profile is managed by you. This is completely optional.
                             </p>
                             <CopyBadge listingSlug={slug} />
                         </div>
                         <div className="w-full md:w-1/3 flex justify-center order-first md:order-last">
                             <div className="relative w-48 h-48 bg-bg rounded-full flex items-center justify-center border-4 border-white shadow-lg">
                                 {/* Using a placeholder or existing Maui image here to make it friendly */}
-                                <img src="/maui-assets/14-maui-sitting-pretty-alt.png" alt="Maui the Mascot" className="w-36 h-36 object-contain" />
+                                <img src="/maui-assets/14-maui-sitting-pretty-alt.png?v=maui-20260904-alpha1" alt="Maui the Mascot" className="w-36 h-36 object-contain" />
                             </div>
                         </div>
                     </div>

@@ -49,14 +49,15 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
           {post.excerpt}
         </p>
 
-        <div className="flex items-center gap-4 text-xs text-text-muted">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-text-muted">
           <span className="flex items-center gap-1">
             <CalendarBlank weight="bold" className="w-3.5 h-3.5" />
-            {formatBlogDate(post.date, {
+            {post.dateModified && post.dateModified !== post.date ? "Updated " : ""}
+            <time dateTime={post.dateModified || post.date}>{formatBlogDate(post.dateModified || post.date, {
               month: "short",
               day: "numeric",
               year: "numeric",
-            })}
+            })}</time>
           </span>
           <span className="flex items-center gap-1">
             <Clock weight="bold" className="w-3.5 h-3.5" />

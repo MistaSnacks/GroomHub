@@ -1,0 +1,201 @@
+{
+  "halloween-slinky-dog": {
+    "provider": "openai",
+    "candidate": "public/maui-assets/_compare/halloween-slinky-dog-v2/openai.png",
+    "master": "docs/maui/opaque-masters/halloween-slinky-dog.png",
+    "reference": "docs/maui/approved-reference/brushing-v2.png",
+    "base_prompt": "public/maui-assets/MAUI-BASE-PROMPT.md",
+    "scene": "Maui dressed as Slinky Dog from Toy Story, one complete dog: a soft brown Slinky Dog hood with long floppy brown ears on his head, a green collar, and a shiny metal spring coil wrapped snugly around the middle of his torso like a wide belt of coils, so the coil covers his belly and back while his front legs, rear legs, and fluffy cream tail all belong to the same single body. He stands on all four paws in a happy pose, tail up. Red MAUI bandana visible at the neck above the green collar.",
+    "generated": "2026-09-07",
+    "article": "dog-halloween-costume-ideas",
+    "revision": "v2 per owner feedback (hot dog looked odd, spider too scary, Scooby uncanny, Slinky coil should cover body)"
+  },
+  "halloween-pumpkin": {
+    "provider": "openai",
+    "candidate": "public/maui-assets/_compare/halloween-pumpkin/openai.png",
+    "master": "docs/maui/opaque-masters/halloween-pumpkin.png",
+    "reference": "docs/maui/approved-reference/brushing-v2.png",
+    "base_prompt": "public/maui-assets/MAUI-BASE-PROMPT.md",
+    "scene": "Maui wearing a plush orange jack-o-lantern pumpkin costume: a round soft pumpkin body wrapped around his torso with a carved smiling face on the belly, and a small green stem-and-leaf cap sitting on top of his head between his floppy ears. He sits upright happily with all four paws showing below the pumpkin, tail out, big smile. Red MAUI bandana visible at the neck.",
+    "generated": "2026-09-07",
+    "article": "dog-halloween-costume-ideas"
+  },
+  "halloween-dinosaur": {
+    "provider": "openai",
+    "candidate": "public/maui-assets/_compare/halloween-dinosaur/openai.png",
+    "master": "docs/maui/opaque-masters/halloween-dinosaur.png",
+    "reference": "docs/maui/approved-reference/brushing-v2.png",
+    "base_prompt": "public/maui-assets/MAUI-BASE-PROMPT.md",
+    "scene": "Maui wearing a green dinosaur hoodie costume: a soft green hood with cartoon dino eyes on top of his head, a row of darker green triangular spikes running down his back to a stubby dinosaur tail sleeve, and light green belly panel. He stands on all four paws with one front paw lifted in a playful mock roar, mouth open in a happy grin. Red MAUI bandana visible at the neck below the hood.",
+    "generated": "2026-09-07",
+    "article": "dog-halloween-costume-ideas"
+  },
+  "halloween-hot-dog": {
+    "provider": "openai",
+    "candidate": "public/maui-assets/_compare/halloween-hot-dog-v3/openai.png",
+    "master": "docs/maui/opaque-masters/halloween-hot-dog.png",
+    "reference": "docs/maui/approved-reference/brushing-v2.png",
+    "extra_reference": null,
+    "base_prompt": "public/maui-assets/MAUI-BASE-PROMPT.md",
+    "scene": "Maui wearing a hot dog costume that sits on his back like a saddle, exactly like a store-bought pet hot dog costume: two long puffy tan bun halves running lengthwise along each side of his body from his shoulders to his hips, a plump reddish-brown sausage lying between them along his spine, and a wavy yellow mustard squiggle on top of the sausage. A thin strap passes under his belly. His head, neck, all four legs, and fluffy tail are completely free of the costume. Three-quarter side view, standing on all four paws, looking toward the viewer with a big happy grin. Red MAUI bandana visible at the neck.",
+    "generated": "2026-09-07",
+    "article": "dog-halloween-costume-ideas",
+    "revision": "v3: scene rewritten from real product photos (Target/Walmart hot dog saddle, Halloween Express Spider Pup)"
+  },
+  "halloween-ghost": {
+    "provider": "openai",
+    "candidate": "public/maui-assets/_compare/halloween-ghost/openai.png",
+    "master": "docs/maui/opaque-masters/halloween-ghost.png",
+    "reference": "docs/maui/approved-reference/brushing-v2.png",
+    "base_prompt": "public/maui-assets/MAUI-BASE-PROMPT.md",
+    "scene": "Maui wearing a soft white ghost cape costume: a fluffy white sherpa cape draped over his back with a wavy scalloped hem and the word BOO stitched in black letters on the side, plus an oversized white ghost hood with two round black eye spots sitting on top of his head so his own face still shows. He sits upright with all four paws visible, tail peeking out from under the cape, big happy smile. Red MAUI bandana visible at the neck.",
+    "generated": "2026-09-07",
+    "article": "dog-halloween-costume-ideas"
+  },
+  "halloween-spider": {
+    "provider": "openai",
+    "candidate": "public/maui-assets/_compare/halloween-spider-v3ref/openai.png",
+    "master": "docs/maui/opaque-masters/halloween-spider.png",
+    "reference": "docs/maui/approved-reference/brushing-v2.png",
+    "extra_reference": "scratchpad/ref/hex-spiderpup.jpg (Halloween Express Spider Pup product photo, second reference for costume shape only)",
+    "base_prompt": "public/maui-assets/MAUI-BASE-PROMPT.md",
+    "scene": "Maui wearing a cute fuzzy spider dog costume like a store-bought pet costume: a soft black faux-fur vest over his back, a fluffy black hood sitting on top of his head with three big round white googly eyes on the hood, and eight short soft black plush spider legs with orange fuzzy pom-pom tips sticking out to the sides of the vest, four on each side, drooping playfully. Silly and friendly, not scary. His own smiling cream face shows fully under the hood. Standing on all four paws, tail out. Red MAUI bandana clearly visible at the neck.",
+    "generated": "2026-09-07",
+    "article": "dog-halloween-costume-ideas",
+    "revision": "v3: scene rewritten from real product photos (Target/Walmart hot dog saddle, Halloween Express Spider Pup)"
+  },
+  "halloween-skeleton": {
+    "provider": "openai",
+    "candidate": "public/maui-assets/_compare/halloween-skeleton/openai.png",
+    "master": "docs/maui/opaque-masters/halloween-skeleton.png",
+    "reference": "docs/maui/approved-reference/brushing-v2.png",
+    "base_prompt": "public/maui-assets/MAUI-BASE-PROMPT.md",
+    "scene": "Maui wearing a black skeleton hoodie costume: a snug black pullover with glowing white cartoon rib bones and spine printed down the back and sides, and a black hood with a white skull print resting on top of his head so his own face shows. He stands on all four paws in a playful pose, tail out, big happy grin. Red MAUI bandana visible at the neck over the hoodie collar.",
+    "generated": "2026-09-07",
+    "article": "dog-halloween-costume-ideas"
+  },
+  "halloween-pokemon": {
+    "provider": "gemini",
+    "candidate": "public/maui-assets/_compare/halloween-pokemon/gemini.png",
+    "master": "docs/maui/opaque-masters/halloween-pokemon.png",
+    "reference": "docs/maui/approved-reference/brushing-v2.png",
+    "base_prompt": "public/maui-assets/MAUI-BASE-PROMPT.md",
+    "scene": "Maui wearing a yellow Pikachu hoodie costume: a bright yellow pullover with a yellow hood that has two tall pointed Pikachu ears with black tips, two round red circles on the cheeks of the hood, and a yellow lightning-bolt shaped tail attached at the back. His own face shows under the hood. He sits upright happily with all four paws visible. Red MAUI bandana visible at the neck over the hoodie.",
+    "generated": "2026-09-07",
+    "article": "dog-halloween-costume-ideas"
+  },
+  "halloween-scooby-doo": {
+    "provider": "openai",
+    "candidate": "public/maui-assets/_compare/halloween-scooby-doo-v2/openai.png",
+    "master": "docs/maui/opaque-masters/halloween-scooby-doo.png",
+    "reference": "docs/maui/approved-reference/brushing-v2.png",
+    "base_prompt": "public/maui-assets/MAUI-BASE-PROMPT.md",
+    "scene": "Maui wearing a simple Scooby-Doo costume: a soft brown hoodie with two floppy brown hood ears and a few black spots on the back, worn with the hood down around his shoulders so his whole fluffy cream face and floppy ears show clearly, plus a blue collar with a yellow diamond SD tag hanging below his red MAUI bandana. He sits upright with all four paws visible and tail out, big goofy happy smile.",
+    "generated": "2026-09-07",
+    "article": "dog-halloween-costume-ideas",
+    "revision": "v2 per owner feedback (hot dog looked odd, spider too scary, Scooby uncanny, Slinky coil should cover body)"
+  },
+  "halloween-cow": {
+    "provider": "gemini",
+    "candidate": "public/maui-assets/_compare/halloween-cow/gemini.png",
+    "master": "docs/maui/opaque-masters/halloween-cow.png",
+    "reference": "docs/maui/approved-reference/brushing-v2.png",
+    "base_prompt": "public/maui-assets/MAUI-BASE-PROMPT.md",
+    "scene": "Maui wearing a shaggy Highland cow costume: a fluffy tan-and-brown long-haired cow body draped over his back with a tan hood that has two curved cream horns and two small rounded cow ears, and a tuft of shaggy fringe over his brow. His own face shows under the hood. He sits upright with all four paws visible and tail out, big happy smile. Red MAUI bandana visible at the neck.",
+    "generated": "2026-09-07",
+    "article": "dog-halloween-costume-ideas"
+  },
+  "halloween-dolly-tribute": {
+    "provider": "openai",
+    "candidate": "public/maui-assets/_compare/halloween-dolly-tribute/openai.png",
+    "master": "docs/maui/opaque-masters/halloween-dolly-tribute.png",
+    "reference": "docs/maui/approved-reference/brushing-v2.png",
+    "base_prompt": "public/maui-assets/MAUI-BASE-PROMPT.md",
+    "scene": "Maui in a sweet Dolly Parton tribute look: a big curly blonde wig with soft bouncy curls sitting on top of his head between his floppy ears, a small pink rhinestone-trimmed cowboy hat perched on the wig, and a sparkly pink sequin bandana scarf tied loosely below his usual red MAUI bandana. He sits upright with all four paws visible and tail out, gentle happy smile, eyes bright. Warm and affectionate, not comedic.",
+    "generated": "2026-09-07",
+    "article": "dog-halloween-costume-ideas"
+  },
+  "halloween-jake-the-dog": {
+    "provider": "openai",
+    "candidate": "public/maui-assets/_compare/halloween-jake-the-dog/openai.png",
+    "master": "docs/maui/opaque-masters/halloween-jake-the-dog.png",
+    "reference": "docs/maui/approved-reference/brushing-v2.png",
+    "base_prompt": "public/maui-assets/MAUI-BASE-PROMPT.md",
+    "scene": "Maui wearing a Jake the Dog costume from Adventure Time: a bright yellow-orange pullover body suit with a yellow hood that has two simple round dog ears and big cartoon eyes drawn on it, his own face showing under the hood. He sits upright in a relaxed happy pose with all four paws visible and tail out, big friendly grin. Red MAUI bandana clearly visible at the neck over the yellow suit.",
+    "generated": "2026-09-07",
+    "article": "dog-halloween-costume-ideas"
+  },
+  "halloween-spider-man": {
+    "status": "not generated",
+    "reason": "Both Gemini and OpenAI refused the Spider-Man pet costume prompt (safety/moderation block, 2026-09-07). Article mention is text only.",
+    "article": "dog-halloween-costume-ideas"
+  },
+  "halloween-slinky-dog-v1": {
+    "provider": "openai",
+    "candidate": "public/maui-assets/_compare/halloween-slinky-dog/openai.png",
+    "master": "docs/maui/opaque-masters/halloween-slinky-dog-v1.png",
+    "reference": "docs/maui/approved-reference/brushing-v2.png",
+    "base_prompt": "public/maui-assets/MAUI-BASE-PROMPT.md",
+    "scene": "Maui dressed as Slinky Dog from Toy Story: a soft brown Slinky Dog hood with long floppy brown ears over his head, a green collar, and a coiled metal spring slinky wrapped around his middle so his front half and back half are joined by the coil. He stands on all four paws in a playful mid-stride, looking back over his shoulder at the bouncing coil with a big happy grin. Red MAUI bandana visible at the neck above the green collar.",
+    "generated": "2026-09-07",
+    "article": "dog-halloween-costume-ideas",
+    "status": "superseded 2026-09-07 after owner review"
+  },
+  "halloween-hot-dog-v1": {
+    "provider": "openai",
+    "candidate": "public/maui-assets/_compare/halloween-hot-dog/openai.png",
+    "master": "docs/maui/opaque-masters/halloween-hot-dog-v1.png",
+    "reference": "docs/maui/approved-reference/brushing-v2.png",
+    "base_prompt": "public/maui-assets/MAUI-BASE-PROMPT.md",
+    "scene": "Maui wearing a hot dog costume: a soft tan hot dog bun wrapped around his middle with a reddish-brown sausage top and a wavy yellow mustard stripe running along it. A small red plush ketchup bottle toy sits by his front paws. He sits upright proudly with all four paws visible, tail wagging, big happy smile. Red MAUI bandana visible at the neck in front of the bun.",
+    "generated": "2026-09-07",
+    "article": "dog-halloween-costume-ideas",
+    "status": "superseded 2026-09-07 after owner review"
+  },
+  "halloween-spider-v1": {
+    "provider": "openai",
+    "candidate": "public/maui-assets/_compare/halloween-spider/openai.png",
+    "master": "docs/maui/opaque-masters/halloween-spider-v1.png",
+    "reference": "docs/maui/approved-reference/brushing-v2.png",
+    "base_prompt": "public/maui-assets/MAUI-BASE-PROMPT.md",
+    "scene": "Maui wearing a fuzzy black spider costume: a round furry black spider body strapped over his back with eight bendable black spider legs, four sticking out on each side, and two small googly eyes on the spider body behind his head. He stands on all four of his own paws, looking cheerful, tail out. Red MAUI bandana clearly visible at the neck in front of the spider body.",
+    "generated": "2026-09-07",
+    "article": "dog-halloween-costume-ideas",
+    "status": "superseded 2026-09-07 after owner review"
+  },
+  "halloween-scooby-doo-v1": {
+    "provider": "gemini",
+    "candidate": "public/maui-assets/_compare/halloween-scooby-doo/gemini.png",
+    "master": "docs/maui/opaque-masters/halloween-scooby-doo-v1.png",
+    "reference": "docs/maui/approved-reference/brushing-v2.png",
+    "base_prompt": "public/maui-assets/MAUI-BASE-PROMPT.md",
+    "scene": "Maui wearing a Scooby-Doo costume: a soft brown hood with floppy brown ears and a few black spots, a brown body wrap with black spots on the back, and a blue collar with a yellow diamond tag that reads SD. His own face shows under the hood. He stands on all four paws in a goofy happy pose, tail up, big grin. Red MAUI bandana visible at the neck above the blue collar.",
+    "generated": "2026-09-07",
+    "article": "dog-halloween-costume-ideas",
+    "status": "superseded 2026-09-07 after owner review"
+  },
+  "halloween-hot-dog-v2": {
+    "provider": "openai",
+    "candidate": "public/maui-assets/_compare/halloween-hot-dog-v2/openai.png",
+    "master": "docs/maui/opaque-masters/halloween-hot-dog-v2.png",
+    "reference": "docs/maui/approved-reference/brushing-v2.png",
+    "base_prompt": "public/maui-assets/MAUI-BASE-PROMPT.md",
+    "scene": "Maui wearing a classic hot dog costume: a soft tan bun costume that wraps fully around his torso with the two bun halves on his left and right sides, a reddish-brown sausage running along the top of his back between the bun halves, and a wavy yellow mustard zigzag on the sausage. His head, all four paws and his fluffy tail stick out of the costume. He sits upright looking proud and happy, no other props. Red MAUI bandana visible at the neck in front of the bun.",
+    "generated": "2026-09-07",
+    "article": "dog-halloween-costume-ideas",
+    "revision": "v2 per owner feedback (hot dog looked odd, spider too scary, Scooby uncanny, Slinky coil should cover body)",
+    "status": "superseded 2026-09-07 after second owner review"
+  },
+  "halloween-spider-v2": {
+    "provider": "openai",
+    "candidate": "public/maui-assets/_compare/halloween-spider-v2/openai.png",
+    "master": "docs/maui/opaque-masters/halloween-spider-v2.png",
+    "reference": "docs/maui/approved-reference/brushing-v2.png",
+    "base_prompt": "public/maui-assets/MAUI-BASE-PROMPT.md",
+    "scene": "Maui wearing a cute plush spider costume: a small round soft black plush spider body sitting on his back like a little backpack, with eight short chubby plush legs, four curling gently down each side, and two big round friendly cartoon eyes with a tiny smile on the plush spider. The spider is cuddly and kid-friendly, not realistic or scary. Maui stands on all four paws with a happy grin, tail out. Red MAUI bandana clearly visible at the neck.",
+    "generated": "2026-09-07",
+    "article": "dog-halloween-costume-ideas",
+    "revision": "v2 per owner feedback (hot dog looked odd, spider too scary, Scooby uncanny, Slinky coil should cover body)",
+    "status": "superseded 2026-09-07 after second owner review"
+  }
+}

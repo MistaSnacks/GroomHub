@@ -258,7 +258,7 @@ export type FeatureTagSlug = (typeof FEATURE_TAG_SLUGS)[number];
 export const FEATURE_TAG_LABELS: Record<FeatureTagSlug, string> = {
   "walk-ins-welcome": "Walk-Ins Welcome",
   "transparent-pricing": "Transparent Pricing",
-  "paw-verified": "Paw-Verified",
+  "paw-verified": "Owner Confirmed",
   "vaccinations-required": "Vaccinations Required",
 };
 

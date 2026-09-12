@@ -1,0 +1,48 @@
+{
+  "id": "7d9933d99b17",
+  "name": "groomlocal-weekly-guides",
+  "prompt": "Run the GroomLocal weekly editorial workflow using groomlocal-weekly-guides. First run python3 scripts/weekly-guides-preflight.py from the project root and require a valid inventory and mode. User clarified September 7, 2026: Codex maintains old guides; Hermes creates at most one genuinely NEW nonoverlapping article with a newly generated topic-specific Maui illustration. Do not update, retitle, duplicate an old article or reuse/rename an existing image. Read the latest audit and compare existing coverage. Synchronize pending GTM writes, track the run on the explicit groomlocal marketing and recurring agent-tasks boards as the skill requires; keep the recurring task in preparing. Research, write, generate and visually verify new Maui artwork, then use scripts/publish-weekly-guide.py with --new and --asset in publish mode. Only mark live after verifying the canonical URL. If required research, tracking, image generation, or verification fails, report the concrete blocker. Never deploy the dirty checkout, alter unrelated files, credentials or schedules, or send external messages.",
+  "skills": [
+    "groomlocal-weekly-guides"
+  ],
+  "skill": "groomlocal-weekly-guides",
+  "model": "gpt-5.6-luna",
+  "provider": "openai-codex",
+  "base_url": null,
+  "script": null,
+  "context_from": null,
+  "schedule": {
+    "kind": "cron",
+    "expr": "0 9 * * 1",
+    "display": "0 9 * * 1"
+  },
+  "schedule_display": "0 9 * * 1",
+  "repeat": {
+    "times": null,
+    "completed": 1
+  },
+  "enabled": true,
+  "state": "scheduled",
+  "paused_at": null,
+  "paused_reason": null,
+  "created_at": "2026-09-04T23:45:23.257172-07:00",
+  "next_run_at": "2026-09-14T09:00:00-07:00",
+  "last_run_at": "2026-09-07T09:16:36.820046-07:00",
+  "last_status": "ok",
+  "last_error": null,
+  "last_delivery_error": null,
+  "deliver": "local",
+  "origin": null,
+  "enabled_toolsets": [
+    "terminal",
+    "file",
+    "web",
+    "vision",
+    "skills",
+    "mcp-dataforseo",
+    "mcp-exa",
+    "mcp-firecrawl",
+    "mcp-gtm-board"
+  ],
+  "workdir": "/Users/admin/GroomingBook Directory/pnw-grooming-directory"
+}

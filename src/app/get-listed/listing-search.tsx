@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { MagnifyingGlass, MapPin, ArrowRight, Spinner } from "@phosphor-icons/react";
 
@@ -16,13 +16,20 @@ export function ListingSearch() {
   const [results, setResults] = useState<GroomerResult[]>([]);
   const [searched, setSearched] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const requestId = useRef(0);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => { requestId.current++; if (timerRef.current) clearTimeout(timerRef.current); }, []);
 
   const search = useCallback((q: string) => {
     if (timerRef.current) clearTimeout(timerRef.current);
+    const id = ++requestId.current;
+    setError(false);
 
     if (q.length < 2) {
       setResults([]);
+      setLoading(false);
       setSearched(false);
       return;
     }
@@ -31,7 +38,9 @@ export function ListingSearch() {
     timerRef.current = setTimeout(async () => {
       try {
         const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+        if (!res.ok) throw new Error("Search unavailable");
         const data = await res.json();
+        if (id !== requestId.current) return;
         setResults(
           (data.groomers || []).slice(0, 5).map((g: GroomerResult) => ({
             slug: g.slug,
@@ -42,10 +51,12 @@ export function ListingSearch() {
         );
         setSearched(true);
       } catch {
+        if (id !== requestId.current) return;
         setResults([]);
-        setSearched(true);
+        setSearched(false);
+        setError(true);
       } finally {
-        setLoading(false);
+        if (id === requestId.current) setLoading(false);
       }
     }, 300);
   }, []);
@@ -80,6 +91,8 @@ export function ListingSearch() {
           <Spinner className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted animate-spin" />
         )}
       </div>
+
+      {error && <p role="alert" className="mt-3 text-sm text-red-700">Search is temporarily unavailable. Please try again before submitting a new business.</p>}
 
       {searched && results.length > 0 && (
         <div className="mt-3 space-y-1.5">

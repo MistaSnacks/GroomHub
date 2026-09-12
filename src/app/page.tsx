@@ -9,7 +9,7 @@ import { ListingCard } from "@/components/listing-card";
 import { PremiumPlaceholderCard } from "@/components/premium-placeholder-card";
 import { PromoFindGroomers } from "@/components/promo-find-groomers";
 import { PromoClaimListing } from "@/components/promo-claim-listing";
-import { AdSlot } from "@/components/ad-slot";
+import { AdSlot, ADS_ENABLED } from "@/components/ad-slot";
 import { WaveDivider } from "@/components/wave-divider";
 
 export const revalidate = 300;
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "GroomLocal | Find Dog Groomers in the PNW",
     description:
-      "Find the best dog groomer in Seattle, Tacoma, Portland and the Pacific Northwest. 1,177+ verified groomer listings with services, pricing, and contact info.",
+      "Find the best dog groomer in Seattle, Tacoma, Portland and the Pacific Northwest. 1,177+ groomer listings with services, pricing, and contact info.",
     type: "website",
     url: "https://groomlocal.com",
     siteName: "GroomLocal",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "GroomLocal | Find Dog Groomers in the PNW",
     description:
-      "Find the best dog groomer in Seattle, Tacoma, Portland and the Pacific Northwest. 1,177+ verified groomer listings with services, pricing, and contact info.",
+      "Find the best dog groomer in Seattle, Tacoma, Portland and the Pacific Northwest. 1,177+ groomer listings with services, pricing, and contact info.",
     images: ["/og-image.png"],
   },
 };
@@ -72,10 +72,13 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
           <div className="text-center mb-12">
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-brand-primary mb-4">
-              Premium Groomers in the PNW
+              Featured Groomers in the PNW
+              <span className="ml-3 inline-flex items-center align-middle rounded-full border border-border bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-text-muted">
+                Sponsored
+              </span>
             </h2>
             <p className="text-text-muted text-lg max-w-2xl mx-auto">
-              Discover top-rated, paw-verified grooming salons that pet parents trust the most.
+              Discover local grooming salons with hours, services, and pricing in one place.
             </p>
           </div>
 
@@ -119,12 +122,14 @@ export default async function HomePage() {
       {/* BROWSE BY CITY */}
       <BrowseByCitySection waCities={waCities} orCities={orCities} />
 
-      {/* Homepage bottom ad */}
-      <section className="bg-white py-6">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AdSlot slot="homepage-bottom" format="leaderboard" />
-        </div>
-      </section>
+      {/* Homepage bottom ad (hidden unless NEXT_PUBLIC_SHOW_ADS=true) */}
+      {ADS_ENABLED && (
+        <section className="bg-white py-6">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <AdSlot slot="homepage-bottom" format="leaderboard" />
+          </div>
+        </section>
+      )}
 
       <WaveDivider variant="footer" fromColor="#FFFFFF" toColor="#4ECDC4" />
 

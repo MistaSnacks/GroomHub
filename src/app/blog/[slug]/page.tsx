@@ -14,9 +14,8 @@ import {
 import { blogPostSchema, breadcrumbSchema } from "@/lib/schema";
 import { BlogCard } from "@/components/blog-card";
 import { AuthorBio } from "@/components/author-bio";
-import { AdSlot } from "@/components/ad-slot";
+import { AdSlot, ADS_ENABLED } from "@/components/ad-slot";
 import { WaveDivider } from "@/components/wave-divider";
-import { AnimatedSection, AnimatedItem } from "@/components/animated-section";
 import { mdxComponents } from "@/components/mdx-components";
 import remarkGfm from "remark-gfm";
 import { clampDescription } from "@/lib/seo-utils";
@@ -75,7 +74,7 @@ export default async function BlogArticlePage({ params }: Props) {
 
   const breadcrumbs = [
     { name: "Home", href: "/" },
-    { name: "Blog", href: "/blog" },
+    { name: "Grooming Guides", href: "/blog" },
     { name: post.title, href: `/blog/${post.slug}` },
   ];
 
@@ -108,7 +107,7 @@ export default async function BlogArticlePage({ params }: Props) {
               <nav className="flex flex-wrap items-center gap-1.5 text-xs text-slate-700 mb-5 font-semibold tracking-wide">
                 <Link href="/" className="hover:text-slate-900 transition-colors">Home</Link>
                 <CaretRight weight="bold" className="w-3 h-3 text-slate-500" />
-                <Link href="/blog" className="hover:text-slate-900 transition-colors">Blog</Link>
+                <Link href="/blog" className="hover:text-slate-900 transition-colors">Grooming Guides</Link>
                 <CaretRight weight="bold" className="w-3 h-3 text-slate-500" />
                 <span className="text-slate-900 truncate max-w-[200px]">{post.title}</span>
               </nav>
@@ -122,9 +121,12 @@ export default async function BlogArticlePage({ params }: Props) {
               </h1>
 
               <div className="flex flex-wrap items-center gap-4 text-sm text-slate-600">
-                <span className="flex items-center gap-1.5">
+                <span className="flex flex-wrap items-center gap-1.5">
                   <CalendarBlank weight="bold" className="w-4 h-4" />
-                  {formatBlogDate(post.date)}
+                  <span>Published <time dateTime={post.date}>{formatBlogDate(post.date)}</time></span>
+                  {post.dateModified && post.dateModified !== post.date && (
+                    <span> · Updated <time dateTime={post.dateModified}>{formatBlogDate(post.dateModified)}</time></span>
+                  )}
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Clock weight="bold" className="w-4 h-4" />
@@ -191,10 +193,12 @@ export default async function BlogArticlePage({ params }: Props) {
             <AuthorBio author={post.author} />
           </div>
 
-          {/* In-article ad */}
-          <div className="mt-8">
-            <AdSlot slot="blog-article" format="leaderboard" />
-          </div>
+          {/* In-article ad (hidden unless NEXT_PUBLIC_SHOW_ADS=true) */}
+          {ADS_ENABLED && (
+            <div className="mt-8">
+              <AdSlot slot="blog-article" format="leaderboard" />
+            </div>
+          )}
         </div>
       </article>
 
@@ -207,16 +211,11 @@ export default async function BlogArticlePage({ params }: Props) {
             <h2 className="font-heading text-2xl font-semibold text-brand-primary mb-6">
               Related Articles
             </h2>
-            <AnimatedSection
-              variant="stagger"
-              className="grid grid-cols-1 md:grid-cols-3 gap-6"
-            >
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {related.map((rPost) => (
-                <AnimatedItem key={rPost.slug}>
-                  <BlogCard post={rPost} />
-                </AnimatedItem>
+                <BlogCard key={rPost.slug} post={rPost} />
               ))}
-            </AnimatedSection>
+            </div>
           </div>
         </section>
       )}

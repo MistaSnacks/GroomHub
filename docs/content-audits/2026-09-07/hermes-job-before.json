@@ -1,0 +1,48 @@
+{
+  "id": "7d9933d99b17",
+  "name": "groomlocal-weekly-guides",
+  "prompt": "Run the GroomLocal weekly editorial workflow. User authorized recurring GTM tracking and verified publication on September 5, 2026. Follow the groomlocal-weekly-guides skill and current preflight mode. First sync any pending published-run GTM updates, then create/update a card in the explicit groomlocal project before research. Also update the permanent recurring card on the groomlocal agent-tasks board (task_id weekly-groomlocal-grooming-guide-mondays-9am-pt-7725) at the start of the run and again after publication, appending this run to output.runs as described in the skill; keep it in the preparing column (shown as IN PROGRESS) by passing column preparing, never pass status started or completed for it. Choose at most one worthwhile new or substantially improved guide, verify sources and Maui artwork, and in publish mode use scripts/publish-weekly-guide.py. Update the GTM card with the verified live URL only after publication succeeds. If a required check or GTM tracking fails, save a specific blocked report without publishing. Never deploy the dirty checkout, alter unrelated files, schedule jobs, or send external messages.",
+  "skills": [
+    "groomlocal-weekly-guides"
+  ],
+  "skill": "groomlocal-weekly-guides",
+  "model": "gpt-5.6-luna",
+  "provider": "openai-codex",
+  "base_url": null,
+  "script": "/Users/admin/GroomingBook Directory/pnw-grooming-directory/scripts/weekly-guides-preflight.py",
+  "context_from": null,
+  "schedule": {
+    "kind": "cron",
+    "expr": "0 9 * * 1",
+    "display": "0 9 * * 1"
+  },
+  "schedule_display": "0 9 * * 1",
+  "repeat": {
+    "times": null,
+    "completed": 1
+  },
+  "enabled": true,
+  "state": "scheduled",
+  "paused_at": null,
+  "paused_reason": null,
+  "created_at": "2026-09-04T23:45:23.257172-07:00",
+  "next_run_at": "2026-09-14T09:00:00-07:00",
+  "last_run_at": "2026-09-07T09:16:36.820046-07:00",
+  "last_status": "ok",
+  "last_error": null,
+  "last_delivery_error": null,
+  "deliver": "local",
+  "origin": null,
+  "enabled_toolsets": [
+    "terminal",
+    "file",
+    "web",
+    "vision",
+    "skills",
+    "mcp-dataforseo",
+    "mcp-exa",
+    "mcp-firecrawl",
+    "mcp-gtm-board"
+  ],
+  "workdir": "/Users/admin/GroomingBook Directory/pnw-grooming-directory"
+}

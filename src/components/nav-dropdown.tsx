@@ -28,7 +28,17 @@ export function NavDropdown({ label, type, cities = [] }: NavDropdownProps) {
   }, []);
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative"
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          setOpen(false);
+          ref.current?.querySelector("button")?.focus();
+        }
+      }}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setOpen(false);
+      }}
+    >
       <button
         type="button"
         onClick={() => setOpen(!open)}

@@ -36,7 +36,7 @@ const features = [
   {
     icon: Users,
     title: "Reach More Pet Parents",
-    desc: "Thousands of local pet owners searching for groomers in your area every month.",
+    desc: "Make your business discoverable to pet owners searching in your area.",
     colored: false,
   },
   {
@@ -55,7 +55,7 @@ const features = [
   {
     icon: ShieldCheck,
     title: "Build Trust with Badges",
-    desc: 'Earn "Paw-Verified" and "Best in Show" badges that make pet parents choose you.',
+    desc: 'Show an "Owner Confirmed" badge so pet parents know your details come straight from you.',
     colored: true,
     color: "amber" as const,
   },
@@ -75,7 +75,7 @@ const steps = [
   {
     step: "3",
     title: "Get Found",
-    desc: "Your listing goes live instantly. Pet owners in your area can now find and contact you.",
+    desc: "Existing listings stay visible while you claim them. New business submissions are reviewed before publication, usually within 48 hours.",
   },
 ];
 
@@ -95,7 +95,7 @@ export default function ForGroomersPage() {
                 <span className="text-brand-secondary italic">Grow your business.</span>
               </h1>
               <p className="text-lg text-text-muted mb-8 max-w-xl mx-auto lg:mx-0">
-                Join hundreds of PNW groomers who are finding new clients, building their reputation, and growing their business every day.
+                Help local pet parents discover your business, explore your services, and contact you directly.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                 <Link
@@ -119,7 +119,7 @@ export default function ForGroomersPage() {
             </div>
 
             <div className="flex-1 flex justify-center">
-              <MauiMascot src="/maui-assets/14-maui-sitting-pretty-alt.png" size={360} animation="float" priority />
+              <MauiMascot src="/maui-assets/14-maui-sitting-pretty-alt.png?v=maui-20260904-alpha1" size={360} animation="float" priority />
             </div>
           </div>
         </div>
@@ -209,7 +209,7 @@ export default function ForGroomersPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col md:flex-row items-center gap-12">
             <div className="flex-1 flex justify-center -mb-8">
-              <MauiMascot src="/maui-assets/14-maui-sitting-pretty-alt.png" size={320} animation="float" />
+              <MauiMascot src="/maui-assets/14-maui-sitting-pretty-alt.png?v=maui-20260904-alpha1" size={320} animation="float" />
             </div>
             <div className="flex-[1.5] text-center md:text-left text-white">
               <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4">

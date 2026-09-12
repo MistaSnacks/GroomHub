@@ -2,9 +2,8 @@
 export const BETA_MODE = true;
 
 export const TIER_LIMITS = {
-  free: { photos: 3, logo: true, services: true, specialties: true, hours: true, contactForm: true },
-  standard: { photos: 10, logo: true, services: true, specialties: true, hours: true, contactForm: true },
-  featured: { photos: 50, logo: true, services: true, specialties: true, hours: true, contactForm: true },
+  free: { photos: 10, logo: true, services: true, specialties: true, hours: true, contactForm: true },
+  basic: { photos: 10, logo: true, services: true, specialties: true, hours: true, contactForm: true },
   premium: { photos: 50, logo: true, services: true, specialties: true, hours: true, contactForm: true },
 } as const;
 

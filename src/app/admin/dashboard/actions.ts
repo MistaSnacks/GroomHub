@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { requireAdmin } from "@/lib/admin";
+import { getRefeatureTriggerStatus } from "@/lib/refeature-trigger";
 
 export async function getUserSignups(days: number) {
     if (!(await requireAdmin())) {
@@ -218,4 +219,12 @@ export async function getDashboardAnalytics(days: number) {
         topSearches,
         kpis
     };
+}
+
+
+export async function getRefeatureTrigger() {
+    if (!(await requireAdmin())) {
+        throw new Error("Unauthorized");
+    }
+    return getRefeatureTriggerStatus();
 }

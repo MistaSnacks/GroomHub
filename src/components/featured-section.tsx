@@ -18,6 +18,9 @@ export function FeaturedSection({ listings, cityName }: FeaturedSectionProps) {
         <h2 className="font-heading text-xl font-semibold text-brand-primary">
           Featured Groomers in {cityName}
         </h2>
+        <span className="inline-flex items-center rounded-full border border-border bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-text-muted">
+          Sponsored
+        </span>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">

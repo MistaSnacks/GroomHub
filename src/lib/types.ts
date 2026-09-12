@@ -43,7 +43,7 @@ export interface BusinessListing {
   booking_url?: string;
   logo_url?: string;
   owner_id?: string;
-  subscription_tier?: "free" | "standard" | "featured" | "premium";
+  subscription_tier?: "free" | "basic" | "premium";
   claimed_at?: string;
   updated_at?: string | null;
 }
@@ -70,7 +70,7 @@ export interface ListingCardData {
   price_max: number;
   owner_id?: string;
   badges: Badge[];
-  subscription_tier?: "free" | "standard" | "featured" | "premium";
+  subscription_tier?: "free" | "basic" | "premium";
   service_tags: string[];
   specialty_tags: string[];
   feature_tags: string[];

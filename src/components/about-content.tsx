@@ -72,7 +72,7 @@ export function AboutContent({ metrics }: AboutContentProps) {
             <motion.div variants={itemVariants} className="w-full md:w-2/5 flex justify-center">
               <div className="relative">
                 <div className="absolute inset-0 bg-brand-accent/20 rounded-full blur-3xl -z-10" />
-                <MauiMascot src="/maui-assets/08-maui-playing-ball.png" size={320} animation="float" priority />
+                <MauiMascot src="/maui-assets/08-maui-playing-ball.png?v=maui-20260904-alpha1" size={320} animation="float" priority />
               </div>
             </motion.div>
 
@@ -211,7 +211,7 @@ export function AboutContent({ metrics }: AboutContentProps) {
             <motion.div variants={itemVariants} className="w-full md:w-1/2 flex justify-center">
               <div className="relative">
                 <div className="absolute inset-0 bg-brand-secondary/20 rounded-full blur-3xl -z-10" />
-                <MauiMascot src="/maui-assets/05-maui-sitting-pretty.png" size={320} animation="bounce" />
+                <MauiMascot src="/maui-assets/05-maui-sitting-pretty.png?v=maui-20260904-alpha1" size={320} animation="bounce" />
               </div>
             </motion.div>
           </motion.div>

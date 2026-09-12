@@ -16,7 +16,7 @@ export function CopyBadge({ listingSlug }: CopyBadgeProps) {
     const profileUrl = `${siteUrl}/groomer/${listingSlug}`;
     const badgeUrl = `${siteUrl}/verified-badge.svg`;
 
-    const htmlSnippet = `<a href="${profileUrl}" target="_blank" rel="noopener noreferrer">\n  <img src="${badgeUrl}" alt="Verified on GroomLocal" width="240" height="80" style="width:240px;height:80px;" />\n</a>`;
+    const htmlSnippet = `<a href="${profileUrl}" target="_blank" rel="sponsored noopener noreferrer">\n  <img src="${badgeUrl}" alt="Listed on GroomLocal" width="240" height="80" style="width:240px;height:80px;" />\n</a>`;
 
     const handleCopy = async () => {
         try {
@@ -33,7 +33,7 @@ export function CopyBadge({ listingSlug }: CopyBadgeProps) {
             <div className="mb-6 flex justify-center">
                 {/* Visual Preview */}
                 <a href={profileUrl} target="_blank" rel="noopener noreferrer" className="inline-block hover:opacity-90 transition-opacity">
-                    <img src="/verified-badge.svg" alt="Verified on GroomLocal" width={240} height={80} className="w-[240px] h-[80px]" />
+                    <img src="/verified-badge.svg" alt="Listed on GroomLocal" width={240} height={80} className="w-[240px] h-[80px]" />
                 </a>
             </div>
 
@@ -65,7 +65,7 @@ export function CopyBadge({ listingSlug }: CopyBadgeProps) {
                     />
                 </div>
                 <p className="text-xs text-text-muted mt-3 text-center">
-                    Paste this code anywhere on your website (like your footer or about page) to show potential clients you&apos;re a verified local business.
+                    Paste this code anywhere on your website (like your footer or about page) to let clients know your GroomLocal profile is managed by you. The link is tagged rel=&quot;sponsored&quot; per Google&apos;s guidelines for partner links.
                 </p>
             </div>
         </div>

@@ -2,7 +2,8 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
+import { parseListingCommerce } from "@/lib/listing-commerce";
 import { redirect } from "next/navigation";
 
 function getAdmin() {
@@ -81,6 +82,7 @@ export async function unclaimListing(formData: FormData) {
   }
 
   revalidatePath("/dashboard");
+  updateTag("listings");
   revalidatePath(`/groomer/${slug}`);
   redirect("/dashboard");
 }
@@ -207,6 +209,9 @@ export async function updateListing(formData: FormData) {
     return { error: "Hours must be an array of day objects." };
   }
 
+  const commerce = parseListingCommerce(formData);
+  if (commerce.error) return { error: commerce.error };
+
   const { user } = await requireUser();
   await requireOwnership(slug, user.id);
 
@@ -215,11 +220,12 @@ export async function updateListing(formData: FormData) {
     .from("business_listings")
     .update({
       name,
-      description: description || null,
-      short_description: short_description || null,
-      phone: phone || null,
+      description,
+      short_description,
+      phone,
       email: email || null,
       website: websiteResult.value,
+      ...commerce.patch,
       ...(address ? { address } : {}),
       ...(city ? { city, city_slug: slugifyCity(city) } : {}),
       ...(state ? { state } : {}),
@@ -238,6 +244,7 @@ export async function updateListing(formData: FormData) {
     return { error: "Failed to update listing" };
   }
 
+  updateTag("listings");
   revalidatePath(`/groomer/${slug}`);
   revalidatePath(`/dashboard/listing/${slug}`);
   revalidatePath("/dashboard");

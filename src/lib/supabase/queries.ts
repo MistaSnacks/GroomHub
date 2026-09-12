@@ -1,3 +1,4 @@
+import { PUBLIC_EXCLUDED_FILTER } from "../listing-review";
 import { unstable_cache } from "next/cache";
 import { supabase } from "./client";
 import { normalizeTags } from "../tags";
@@ -13,6 +14,10 @@ import { getMetroNeighbors, FEATURED_SPOTS_PER_CITY } from "../metro-clusters";
 export const LISTINGS_CACHE_TAG = "listings";
 
 // ─── Tag Normalization at Query Time ────────────────────
+function cleanListingDescription(value: string): string {
+  return (value || "").replace(/Drag to change, click to remove/gi, "").trim();
+}
+
 function withTags(listing: BusinessListing): NormalizedListing {
   const tags = normalizeTags({
     services: listing.services,
@@ -23,7 +28,7 @@ function withTags(listing: BusinessListing): NormalizedListing {
     walk_ins_accepted: listing.walk_ins_accepted,
     vaccination_required: listing.vaccination_required,
   });
-  return { ...listing, ...tags };
+  return { ...listing, description: cleanListingDescription(listing.description), short_description: cleanListingDescription(listing.short_description), ...tags };
 }
 
 function withTagsAll(listings: BusinessListing[]): NormalizedListing[] {
@@ -77,7 +82,7 @@ function dedupeBySlug(listings: NormalizedListing[]): NormalizedListing[] {
 
 // ─── Hierarchy Sorting Guarantee ─────────────────────────
 // This guarantees that paying users get the visibility value they paid for.
-const TIER_WEIGHT = { premium: 4, featured: 3, standard: 2, free: 1 } as const;
+const TIER_WEIGHT = { premium: 3, basic: 2, free: 1 } as const;
 
 function applyHierarchy(listings: NormalizedListing[]): NormalizedListing[] {
   return listings.sort((a, b) => {
@@ -103,6 +108,7 @@ export async function getListingsByCity(
   let query = supabase
     .from("business_listings")
     .select("*")
+    .not("slug", "in", PUBLIC_EXCLUDED_FILTER)
     .in("city_slug", citySlugVariants(citySlug, stateAbbr));
 
   if (stateAbbr) {
@@ -113,7 +119,7 @@ export async function getListingsByCity(
 
   if (error) {
     console.error("getListingsByCity error:", error.message);
-    return [];
+    throw new Error("The directory is temporarily unavailable. Please try again.");
   }
   return applyHierarchy(
     dedupeBySlug(withTagsAll((data ?? []) as BusinessListing[]).filter(hasKnownCity))
@@ -126,11 +132,12 @@ export async function getListingsByState(
   const { data, error } = await supabase
     .from("business_listings")
     .select("*")
+    .not("slug", "in", PUBLIC_EXCLUDED_FILTER)
     .eq("state", stateAbbr.toUpperCase());
 
   if (error) {
     console.error("getListingsByState error:", error.message);
-    return [];
+    throw new Error("The directory is temporarily unavailable. Please try again.");
   }
   return applyHierarchy(withTagsAll((data ?? []) as BusinessListing[]).filter(hasKnownCity));
 }
@@ -141,6 +148,7 @@ export async function getListingBySlug(
   const { data, error } = await supabase
     .from("business_listings")
     .select("*")
+    .not("slug", "in", PUBLIC_EXCLUDED_FILTER)
     .eq("slug", slug)
     .single();
 
@@ -164,12 +172,14 @@ async function fetchAllListingRows(): Promise<BusinessListing[]> {
     const { data, error } = await supabase
       .from("business_listings")
       .select("*")
+      .not("slug", "in", PUBLIC_EXCLUDED_FILTER)
       .order("rating", { ascending: false })
+      .order("id", { ascending: true })
       .range(from, to);
 
     if (error) {
       console.error("fetchAllListingRows error:", error.message);
-      return allListings;
+      throw new Error("The directory is temporarily unavailable. Please try again.");
     }
 
     if (data) {
@@ -185,7 +195,7 @@ async function fetchAllListingRows(): Promise<BusinessListing[]> {
   return allListings;
 }
 
-const getCachedListingRows = unstable_cache(fetchAllListingRows, ["all-listing-rows"], {
+const getCachedListingRows = unstable_cache(fetchAllListingRows, ["all-listing-rows-reviewed-20260912"], {
   revalidate: 300,
   tags: [LISTINGS_CACHE_TAG],
 });
@@ -268,6 +278,7 @@ export async function getFeaturedListings(
   const { data, error } = await supabase
     .from("business_listings")
     .select("*")
+    .not("slug", "in", PUBLIC_EXCLUDED_FILTER)
     .eq("is_featured", true)
     .order("rating", { ascending: false })
     .limit(limit);
@@ -300,6 +311,7 @@ export async function getFeaturedByCity(
   const { data: localData, error: localError } = await supabase
     .from("business_listings")
     .select("*")
+    .not("slug", "in", PUBLIC_EXCLUDED_FILTER)
     .eq("is_featured", true)
     .eq("state", stateAbbr.toUpperCase())
     .in("city_slug", localSlugs)
@@ -337,6 +349,7 @@ export async function getFeaturedByCity(
   const { data: neighborData, error: neighborError } = await supabase
     .from("business_listings")
     .select("*")
+    .not("slug", "in", PUBLIC_EXCLUDED_FILTER)
     .eq("is_featured", true)
     .eq("state", stateAbbr.toUpperCase())
     .in("city_slug", neighborSlugs)
@@ -372,6 +385,7 @@ export async function getFeaturedCountByCity(
   const { count, error } = await supabase
     .from("business_listings")
     .select("*", { count: "exact", head: true })
+    .not("slug", "in", PUBLIC_EXCLUDED_FILTER)
     .eq("is_featured", true)
     .eq("state", stateAbbr.toUpperCase())
     .in("city_slug", localSlugs);
@@ -409,6 +423,7 @@ export async function getListingsByOwner(userId: string): Promise<NormalizedList
   const { data, error } = await supabase
     .from("business_listings")
     .select("*")
+    .not("slug", "in", PUBLIC_EXCLUDED_FILTER)
     .eq("owner_id", userId)
     .order("claimed_at", { ascending: false });
 
@@ -465,6 +480,7 @@ async function getCityRows(stateAbbr?: string): Promise<CityRow[]> {
     let query = supabase
       .from("business_listings")
       .select("city_slug, city, state")
+      .not("slug", "in", PUBLIC_EXCLUDED_FILTER)
       .range(from, to);
 
     if (stateAbbr) {
@@ -475,7 +491,7 @@ async function getCityRows(stateAbbr?: string): Promise<CityRow[]> {
 
     if (error) {
       console.error("getCityRows error:", error.message);
-      return [];
+      throw new Error("The directory is temporarily unavailable. Please try again.");
     }
 
     if (data) {
@@ -512,7 +528,7 @@ export async function getCityBrowseSummary(
 // Cached: hit on every /api/search request. Time-revalidated every 5 min.
 export const getCities = unstable_cache(
   async (): Promise<CityWithCount[]> => aggregateCities(await getCityRows()),
-  ["all-cities"],
+  ["all-cities-reviewed-20260912"],
   { revalidate: 300, tags: [LISTINGS_CACHE_TAG] }
 );
 
@@ -533,6 +549,7 @@ export async function getCityBySlug(
   let query = supabase
     .from("business_listings")
     .select("city_slug, city, state")
+    .not("slug", "in", PUBLIC_EXCLUDED_FILTER)
     .in("city_slug", citySlugVariants(slug, stateAbbr));
 
   if (stateAbbr) {
@@ -552,7 +569,8 @@ export async function getCityBySlug(
 export async function getTotalListingCount(): Promise<number> {
   const { count, error } = await supabase
     .from("business_listings")
-    .select("*", { count: "exact", head: true });
+    .select("*", { count: "exact", head: true })
+    .not("slug", "in", PUBLIC_EXCLUDED_FILTER);
 
   if (error) return 0;
   return count ?? 0;
@@ -565,6 +583,7 @@ export async function getListingCountByCity(
   let query = supabase
     .from("business_listings")
     .select("*", { count: "exact", head: true })
+    .not("slug", "in", PUBLIC_EXCLUDED_FILTER)
     .in("city_slug", citySlugVariants(citySlug, stateAbbr));
 
   if (stateAbbr) {

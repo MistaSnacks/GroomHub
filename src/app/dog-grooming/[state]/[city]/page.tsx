@@ -12,7 +12,7 @@ import { buildDogGroomingFaqs } from "@/lib/city-faqs";
 import { getEnrichedCityContent } from "@/lib/city-content";
 import { cityPageSchema } from "@/lib/schema";
 import { WaveDivider } from "@/components/wave-divider";
-import { AdSlot } from "@/components/ad-slot";
+import { AdSlot, ADS_ENABLED } from "@/components/ad-slot";
 import { clampDescription, clampTitle } from "@/lib/seo-utils";
 import { CityStatsBlock } from "@/components/city-stats-block";
 import { CityPricingSection } from "@/components/city-pricing-section";
@@ -46,8 +46,8 @@ export async function generateMetadata({ params }: CityPageProps): Promise<Metad
   // Prevent indexing of thin city pages with fewer than 3 listings
   const shouldIndex = groomerCount >= 3;
   const groomerText = groomerCount
-    ? `${groomerCount} verified groomer${groomerCount !== 1 ? "s" : ""}`
-    : "verified groomers";
+    ? `${groomerCount} listed groomer${groomerCount !== 1 ? "s" : ""}`
+    : "listed groomers";
   // Build title within 47-char limit (layout appends " | GroomLocal")
   // Try formats from most descriptive to shortest
   const titleWithCount = groomerCount
@@ -136,7 +136,7 @@ export default async function CityPage({ params }: CityPageProps) {
           </h1>
           <p className="text-text-muted flex items-center gap-1.5 text-lg">
             <MapPin weight="fill" className="w-5 h-5 text-brand-secondary" />
-            {listings.length} verified groomers
+            {listings.length} listed groomers
           </p>
 
           {content && (
@@ -175,12 +175,14 @@ export default async function CityPage({ params }: CityPageProps) {
         <>
           <WaveDivider variant="asymmetric" fromColor="#FDF8F0" toColor="#FFFFFF" />
 
-          {/* Ad slot between listings and city content */}
-          <section className="bg-white py-6">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              <AdSlot slot={`city-${city}-mid`} format="leaderboard" />
-            </div>
-          </section>
+          {/* Ad slot between listings and city content (hidden unless NEXT_PUBLIC_SHOW_ADS=true) */}
+          {ADS_ENABLED && (
+            <section className="bg-white py-6">
+              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <AdSlot slot={`city-${city}-mid`} format="leaderboard" />
+              </div>
+            </section>
+          )}
 
           {/* Neighborhoods */}
           {content.neighborhoods.length > 0 && (
@@ -329,12 +331,14 @@ export default async function CityPage({ params }: CityPageProps) {
             </section>
           )}
 
-          {/* Bottom ad slot */}
-          <section className="bg-white pb-8">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              <AdSlot slot={`city-${city}-bottom`} format="leaderboard" />
-            </div>
-          </section>
+          {/* Bottom ad slot (hidden unless NEXT_PUBLIC_SHOW_ADS=true) */}
+          {ADS_ENABLED && (
+            <section className="bg-white pb-8">
+              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <AdSlot slot={`city-${city}-bottom`} format="leaderboard" />
+              </div>
+            </section>
+          )}
         </>
       )}
 

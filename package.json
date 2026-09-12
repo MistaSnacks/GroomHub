@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:guides": "tsx --test scripts/test-grooming-guides.ts"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",

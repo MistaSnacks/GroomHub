@@ -10,7 +10,7 @@ export function PromoClaimListing() {
           {/* Left: Mascot */}
           <div className="flex-1 flex justify-center shrink-0">
             <MauiMascot
-              src="/maui-assets/14-maui-sitting-pretty-alt.png"
+              src="/maui-assets/14-maui-sitting-pretty-alt.png?v=maui-20260904-alpha1"
               size={280}
               animation="bounce"
             />

@@ -36,7 +36,7 @@ export function PromoFindGroomers() {
           {/* Right: Maui */}
           <div className="flex-1 flex justify-center shrink-0">
             <MauiMascot
-              src="/maui-assets/01-maui-bath.png"
+              src="/maui-assets/01-maui-bath.png?v=maui-20260904-alpha1"
               size={280}
               animation="float"
             />

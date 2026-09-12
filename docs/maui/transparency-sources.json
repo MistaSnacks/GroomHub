@@ -1,0 +1,320 @@
+[
+  {
+    "scene": "main",
+    "source": "docs/maui/opaque-masters/main.png",
+    "targets": [
+      "public/maui-assets/00-maui-main.png",
+      "public/maui-characters/00-maui-main.png"
+    ]
+  },
+  {
+    "scene": "bath",
+    "source": "docs/maui/opaque-masters/bath.png",
+    "targets": [
+      "public/maui-assets/01-maui-bath.png",
+      "public/maui-characters/01-maui-bath.png",
+      "public/maui-assets/10-maui-bath-alt.png",
+      "public/maui-characters/10-maui-bath-alt.png"
+    ]
+  },
+  {
+    "scene": "ear-cleaning",
+    "source": "docs/maui/opaque-masters/ear-cleaning.png",
+    "targets": [
+      "public/maui-assets/02-maui-ear-cleaning.png",
+      "public/maui-characters/02-maui-ear-cleaning.png",
+      "public/maui-assets/11-maui-ear-cleaning-alt.png",
+      "public/maui-characters/11-maui-ear-cleaning-alt.png"
+    ]
+  },
+  {
+    "scene": "nail-clip",
+    "source": "docs/maui/opaque-masters/nail-clip.png",
+    "targets": [
+      "public/maui-assets/03-maui-nail-clip.png",
+      "public/maui-characters/03-maui-nail-clip.png",
+      "public/maui-assets/12-maui-nail-clip-alt.png",
+      "public/maui-characters/12-maui-nail-clip-alt.png"
+    ]
+  },
+  {
+    "scene": "table",
+    "source": "docs/maui/opaque-masters/table.png",
+    "targets": [
+      "public/maui-assets/04-maui-nail-trim-table.png",
+      "public/maui-characters/04-maui-nail-trim-table.png",
+      "public/maui-assets/13-maui-nail-trim-table-alt.png",
+      "public/maui-characters/13-maui-nail-trim-table-alt.png"
+    ]
+  },
+  {
+    "scene": "brushing",
+    "source": "docs/maui/opaque-masters/brushing.png",
+    "targets": [
+      "public/maui-assets/05-maui-sitting-pretty.png",
+      "public/maui-characters/05-maui-sitting-pretty.png",
+      "public/maui-assets/14-maui-sitting-pretty-alt.png",
+      "public/maui-characters/14-maui-sitting-pretty-alt.png"
+    ]
+  },
+  {
+    "scene": "towel-standing",
+    "source": "docs/maui/opaque-masters/towel-standing.png",
+    "targets": [
+      "public/maui-assets/06-maui-towel-head-standing.png",
+      "public/maui-characters/06-maui-towel-head-standing.png",
+      "public/maui-assets/15-maui-towel-head-standing-alt.png",
+      "public/maui-characters/15-maui-towel-head-standing-alt.png"
+    ]
+  },
+  {
+    "scene": "blow-dry",
+    "source": "docs/maui/opaque-masters/blow-dry.png",
+    "targets": [
+      "public/maui-assets/07-maui-blow-dry.png",
+      "public/maui-characters/07-maui-blow-dry.png"
+    ]
+  },
+  {
+    "scene": "playing-ball",
+    "source": "docs/maui/opaque-masters/playing-ball.png",
+    "targets": [
+      "public/maui-assets/08-maui-playing-ball.png",
+      "public/maui-characters/08-maui-playing-ball.png",
+      "public/maui-assets/17-maui-playing-ball-alt.png",
+      "public/maui-characters/17-maui-playing-ball-alt.png"
+    ]
+  },
+  {
+    "scene": "cat-costume",
+    "source": "docs/maui/opaque-masters/cat-costume.png",
+    "targets": [
+      "public/maui-assets/09-maui-cat-costume.png",
+      "public/maui-characters/09-maui-cat-costume.png",
+      "public/maui-assets/maui-cat-grooming-blog.png"
+    ]
+  },
+  {
+    "scene": "towel-hearts",
+    "source": "docs/maui/opaque-masters/towel-hearts.png",
+    "targets": [
+      "public/maui-assets/16-maui-towel-head-hearts.png",
+      "public/maui-characters/16-maui-towel-head-hearts.png",
+      "public/maui-assets/19-maui-towel-head-hearts-new.png"
+    ]
+  },
+  {
+    "scene": "fresh-bath-waving",
+    "source": "docs/maui/opaque-masters/fresh-bath-waving.png",
+    "targets": [
+      "public/maui-assets/18-maui-fresh-bath-waving.png",
+      "public/maui-characters/18-maui-fresh-bath-waving.png"
+    ]
+  },
+  {
+    "scene": "grooming-cost",
+    "source": "docs/maui/source-edits/grooming-cost-four-limbs-20260907.png",
+    "targets": [
+      "public/maui-assets/maui-grooming-cost-blog.png"
+    ]
+  },
+  {
+    "scene": "grooming-frequency",
+    "source": "docs/maui/opaque-masters/grooming-frequency.png",
+    "targets": [
+      "public/maui-assets/maui-grooming-frequency-blog.png"
+    ]
+  },
+  {
+    "scene": "choosing-groomer",
+    "source": "docs/maui/opaque-masters/choosing-groomer.png",
+    "targets": [
+      "public/maui-assets/maui-choosing-groomer-blog.png"
+    ]
+  },
+  {
+    "scene": "goldendoodle",
+    "source": "docs/maui/opaque-masters/goldendoodle.png",
+    "targets": [
+      "public/maui-assets/maui-goldendoodle-grooming-guide-blog.png"
+    ]
+  },
+  {
+    "scene": "rain-mud",
+    "source": "docs/maui/opaque-masters/rain-mud.png",
+    "targets": [
+      "public/maui-assets/maui-rain-mud-blog.png"
+    ]
+  },
+  {
+    "scene": "seasonal",
+    "source": "docs/maui/opaque-masters/seasonal.png",
+    "targets": [
+      "public/maui-assets/maui-pnw-seasonal-blog.png"
+    ]
+  },
+  {
+    "scene": "winter",
+    "source": "docs/maui/opaque-masters/winter.png",
+    "targets": [
+      "public/maui-assets/maui-winter-grooming-blog.png",
+      "public/maui-assets/maui-winter-uploaded.png"
+    ]
+  },
+  {
+    "scene": "senior",
+    "source": "docs/maui/opaque-masters/senior.png",
+    "targets": [
+      "public/maui-assets/maui-senior-dog-grooming-blog.png"
+    ]
+  },
+  {
+    "scene": "anxious",
+    "source": "docs/maui/opaque-masters/anxious.png",
+    "targets": [
+      "public/maui-assets/maui-anxious-dog-grooming-blog.png"
+    ]
+  },
+  {
+    "scene": "matted",
+    "source": "docs/maui/opaque-masters/matted.png",
+    "targets": [
+      "public/maui-assets/maui-matted-dog-grooming-blog.png"
+    ]
+  },
+  {
+    "scene": "puppy",
+    "source": "docs/maui/opaque-masters/puppy.png",
+    "targets": [
+      "public/maui-assets/maui-puppy-first-groom-blog.png"
+    ]
+  },
+  {
+    "scene": "groomer-apron",
+    "source": "docs/maui/opaque-masters/groomer-apron.png",
+    "targets": [
+      "public/maui-assets/maui-groomer-apron-signature.png",
+      "public/maui-assets/maui-groomer-apron-chibi.png"
+    ]
+  },
+  {
+    "scene": "van-cost",
+    "source": "docs/maui/opaque-masters/van-cost.png",
+    "targets": [
+      "public/maui-assets/maui-grooming-van-cost-chibi.png"
+    ]
+  },
+  {
+    "scene": "mobile-van",
+    "source": "docs/maui/opaque-masters/mobile-van.png",
+    "targets": [
+      "public/maui-assets/maui-mobile-grooming-cost-blog.png"
+    ]
+  },
+  {
+    "scene": "mobile-hero",
+    "source": "docs/maui/opaque-masters/mobile-hero.png",
+    "targets": [
+      "public/maui-assets/maui-mobile-grooming-vector-hero.png",
+      "public/maui-assets/maui-mobile-grooming-pixel-hero.png"
+    ]
+  },
+  {
+    "scene": "summer",
+    "source": "docs/maui/opaque-masters/summer.png",
+    "targets": [
+      "public/maui-assets/maui-summer-grooming-blog.png"
+    ]
+  },
+  {
+    "scene": "grooming-duration",
+    "source": "docs/maui/opaque-masters/grooming-duration-v2.png",
+    "targets": [
+      "public/maui-assets/maui-grooming-duration-blog.png"
+    ]
+  },
+  {
+    "scene": "halloween-slinky-dog",
+    "source": "docs/maui/opaque-masters/halloween-slinky-dog.png",
+    "targets": [
+      "public/maui-assets/maui-halloween-slinky-dog-blog.png"
+    ]
+  },
+  {
+    "scene": "halloween-pumpkin",
+    "source": "docs/maui/opaque-masters/halloween-pumpkin.png",
+    "targets": [
+      "public/maui-assets/maui-halloween-pumpkin-blog.png"
+    ]
+  },
+  {
+    "scene": "halloween-dinosaur",
+    "source": "docs/maui/opaque-masters/halloween-dinosaur.png",
+    "targets": [
+      "public/maui-assets/maui-halloween-dinosaur-blog.png"
+    ]
+  },
+  {
+    "scene": "halloween-hot-dog",
+    "source": "docs/maui/opaque-masters/halloween-hot-dog.png",
+    "targets": [
+      "public/maui-assets/maui-halloween-hot-dog-blog.png"
+    ]
+  },
+  {
+    "scene": "halloween-ghost",
+    "source": "docs/maui/opaque-masters/halloween-ghost.png",
+    "targets": [
+      "public/maui-assets/maui-halloween-ghost-blog.png"
+    ]
+  },
+  {
+    "scene": "halloween-spider",
+    "source": "docs/maui/opaque-masters/halloween-spider.png",
+    "targets": [
+      "public/maui-assets/maui-halloween-spider-blog.png"
+    ]
+  },
+  {
+    "scene": "halloween-skeleton",
+    "source": "docs/maui/opaque-masters/halloween-skeleton.png",
+    "targets": [
+      "public/maui-assets/maui-halloween-skeleton-blog.png"
+    ]
+  },
+  {
+    "scene": "halloween-pokemon",
+    "source": "docs/maui/opaque-masters/halloween-pokemon.png",
+    "targets": [
+      "public/maui-assets/maui-halloween-pokemon-blog.png"
+    ]
+  },
+  {
+    "scene": "halloween-scooby-doo",
+    "source": "docs/maui/opaque-masters/halloween-scooby-doo.png",
+    "targets": [
+      "public/maui-assets/maui-halloween-scooby-doo-blog.png"
+    ]
+  },
+  {
+    "scene": "halloween-cow",
+    "source": "docs/maui/opaque-masters/halloween-cow.png",
+    "targets": [
+      "public/maui-assets/maui-halloween-cow-blog.png"
+    ]
+  },
+  {
+    "scene": "halloween-dolly-tribute",
+    "source": "docs/maui/opaque-masters/halloween-dolly-tribute.png",
+    "targets": [
+      "public/maui-assets/maui-halloween-dolly-tribute-blog.png"
+    ]
+  },
+  {
+    "scene": "halloween-jake-the-dog",
+    "source": "docs/maui/opaque-masters/halloween-jake-the-dog.png",
+    "targets": [
+      "public/maui-assets/maui-halloween-jake-the-dog-blog.png"
+    ]
+  }
+]

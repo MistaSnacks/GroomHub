@@ -15,7 +15,7 @@ interface MauiMascotProps {
 export function MauiMascot({
   size = 128,
   className,
-  src = "/maui-assets/00-maui-main.png",
+  src = "/maui-assets/00-maui-main.png?v=maui-20260904-alpha1",
   animation = "float",
   interactive = true,
   priority = false,

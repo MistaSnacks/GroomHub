@@ -1,0 +1,19 @@
+{
+  "model": "gpt-5.6-luna",
+  "provider": "OpenAI API via Hermes custom provider",
+  "endpoint": "https://api.openai.com/v1",
+  "reasoning_effort": "medium",
+  "direct_api_test": "passed",
+  "hermes_cli_test": "passed",
+  "scheduled_research_test": "passed",
+  "scheduled_research_result": "dog grooming cost: 3600 estimated monthly searches",
+  "scheduled_test_report": "/Users/admin/.hermes/cron/output/725a2f45361f/2026-09-04_23-48-07.md",
+  "weekly_job_id": "7d9933d99b17",
+  "next_run_at": "2026-09-07T09:00:00-07:00",
+  "timezone": "America/Los_Angeles",
+  "mode": "review",
+  "publication_enabled": false,
+  "preflight": "passed: 15 articles",
+  "skill_validation": "passed",
+  "site_build": "passed"
+}
