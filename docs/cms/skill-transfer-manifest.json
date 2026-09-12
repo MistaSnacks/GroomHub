@@ -1,0 +1,275 @@
+{
+  "date": "2026-09-12",
+  "source": "GroomHub portable Snackbox skill handoff",
+  "policy_note": "Shared Git policy is included; existing machine-specific policy and Hermes files were not copied.",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "f0d894e42dc4a5f76d2436b2d5b2ca2ca52ce0e0c520fec1c4a62500b6f3d3c0"
+    },
+    {
+      "path": "docs/automation/content-inventory.json",
+      "sha256": "d9ada47c286717f8508a2819205982e744d0f5073b9c1b141e48dd677fe8e64c"
+    },
+    {
+      "path": "docs/automation/weekly-guides-policy.json",
+      "sha256": "73e87db43bffb57cb9cc1c0f2d67867c6ed600813880b92a8859787c83927fd2"
+    },
+    {
+      "path": "docs/cms/groomlocal-schema.json",
+      "sha256": "473c0c1c3ec37104eac9b93f6480e1ff90c3669544e3be3513841f1ae309e513"
+    },
+    {
+      "path": "docs/cms/snackbox-handoff.md",
+      "sha256": "8961a4acaf37f5c9dc9df24af29920252f56e25e2eccc33bdf1e8d0b1e989682"
+    },
+    {
+      "path": "docs/content-audits/2026-09-07/content-checks.json",
+      "sha256": "0257f5cd57ead947b15046a8c9ac92259de011c35cc1569590229636f35dc184"
+    },
+    {
+      "path": "docs/content-audits/2026-09-07/editorial-review.json",
+      "sha256": "5565393d0612314aedd91133b01fa717cfc60a3386520e7c5ae05c23540f921f"
+    },
+    {
+      "path": "docs/content-audits/2026-09-07/hermes-job-after.json",
+      "sha256": "a08d55f66bc0381c5d883b6a4e1d392c5a3c3062c3a9554ca3b427a6f589391d"
+    },
+    {
+      "path": "docs/content-audits/2026-09-07/hermes-job-before.json",
+      "sha256": "0091492d1650020620125b823a9304e77cfede33493b41253d5a49f6686c9659"
+    },
+    {
+      "path": "docs/content-audits/2026-09-07/hermes-skill-before.md",
+      "sha256": "44e401c3b296dd5c13cc6cba3e06b4a4d2f1fc584142dca29bfdc3cf3c2aeb8b"
+    },
+    {
+      "path": "docs/content-audits/2026-09-07/image-optimizer-incident.md",
+      "sha256": "496e492f61a41586b5152b8878e84351aae6ef147ece8c03030c1a7a158f2944"
+    },
+    {
+      "path": "docs/content-audits/2026-09-07/report.md",
+      "sha256": "b77cebdd7ef3bc1a671c7e934eb023790dded20453d4b2f9de2e23789e8fa5b6"
+    },
+    {
+      "path": "docs/content-audits/2026-09-07/seo-evidence.json",
+      "sha256": "abe6003241b09f39c7506e91ee950951b25cb1afe9e592c8b20ce29a534c84cf"
+    },
+    {
+      "path": "docs/maui/STYLE-STANDARD.md",
+      "sha256": "a55c6074ede38642ae15d4f09ceb4cb590f9984fc932446d6805fdc1521aaf25"
+    },
+    {
+      "path": "docs/maui/approved-reference/bath-v2.png",
+      "sha256": "5fef4c54418bd4403bd883e988622e8ae0487cb2d3b31bd4d1c485c89cc3add7"
+    },
+    {
+      "path": "docs/maui/approved-reference/blow-dry-v2.png",
+      "sha256": "9fad64ee6ce999f55a9296321f684e36c69d4f41c144985b4e8c9a2d8bf6bd53"
+    },
+    {
+      "path": "docs/maui/approved-reference/brushing-v2.png",
+      "sha256": "b9ad67e1de64f667e4eb55f5de30757b582c6ee7e024ce26afa4c76272e26aac"
+    },
+    {
+      "path": "docs/maui/approved-reference/cat-costume-v2.png",
+      "sha256": "98c74a188beb0bb549f5424bb4b828b7504ef290b29568a16b7ee4b363e83092"
+    },
+    {
+      "path": "docs/maui/approved-reference/nail-clip-v2.png",
+      "sha256": "abcc4def9da523951ffd955e1526dba8fcef21d84a44612ccf9296fa4227bce8"
+    },
+    {
+      "path": "docs/maui/approved-reference/table-v2.png",
+      "sha256": "1980a97047363f6225238b1368acb6005d8061d0c06cd97f9d3b5932334f7b46"
+    },
+    {
+      "path": "docs/maui/transparency-seeds.json",
+      "sha256": "63699cf05c79e9c196adc2a07b614aa08e250ad96eee61fb7d5569382fd80076"
+    },
+    {
+      "path": "public/maui-assets/MAUI-BASE-PROMPT.md",
+      "sha256": "dde7fd4c5d6f0faa2a48f1583daa295499aac0d7492970124cda2c0cde987d16"
+    },
+    {
+      "path": "scripts/image-providers/gemini.py",
+      "sha256": "8e6d6232e40ab078a8cc5ddc32c2a0d353c2181ae8c8a4fdac17cc02e127a815"
+    },
+    {
+      "path": "scripts/image-providers/gpt-image.py",
+      "sha256": "37be5ea0240e5fa27b556cf2c4546d4300d97c5840efedd6b05414040c58b191"
+    },
+    {
+      "path": "scripts/maui-blog-image.sh",
+      "sha256": "294c2f14e50943b49b9a72992c4bd03256d391e6c47ad2a95a1a42d099f2ba13"
+    },
+    {
+      "path": "scripts/maui-compare-index.py",
+      "sha256": "ebef8c527b3924f712bd7654732dc96bf6b4b88acea213fabf887e37a4695a9a"
+    },
+    {
+      "path": "scripts/maui-remove-background.py",
+      "sha256": "f4c5810c26133194fb4aa2f5beb6dad4309df42bb13f28fcf16fa1ca5609f4a0"
+    },
+    {
+      "path": "skills/hermes-blog-skill/SKILL.md",
+      "sha256": "75e7233fab5852dc2038f463fe483231a3b1cd0b04e3dc88a75131ec93b88cea"
+    },
+    {
+      "path": "skills/hermes-blog-skill/references/2026-09-07-run-notes.md",
+      "sha256": "ecf04785ddb768e963413b96793059052a12618502f6375a6301f5f0f5bc8d80"
+    },
+    {
+      "path": "skills/hermes-blog-skill/references/maui/MAUI-BASE-PROMPT.md",
+      "sha256": "dde7fd4c5d6f0faa2a48f1583daa295499aac0d7492970124cda2c0cde987d16"
+    },
+    {
+      "path": "skills/hermes-blog-skill/references/maui/STYLE-STANDARD.md",
+      "sha256": "a55c6074ede38642ae15d4f09ceb4cb590f9984fc932446d6805fdc1521aaf25"
+    },
+    {
+      "path": "skills/hermes-blog-skill/references/maui/approved-reference/bath-v2.png",
+      "sha256": "5fef4c54418bd4403bd883e988622e8ae0487cb2d3b31bd4d1c485c89cc3add7"
+    },
+    {
+      "path": "skills/hermes-blog-skill/references/maui/approved-reference/blow-dry-v2.png",
+      "sha256": "9fad64ee6ce999f55a9296321f684e36c69d4f41c144985b4e8c9a2d8bf6bd53"
+    },
+    {
+      "path": "skills/hermes-blog-skill/references/maui/approved-reference/brushing-v2.png",
+      "sha256": "b9ad67e1de64f667e4eb55f5de30757b582c6ee7e024ce26afa4c76272e26aac"
+    },
+    {
+      "path": "skills/hermes-blog-skill/references/maui/approved-reference/cat-costume-v2.png",
+      "sha256": "98c74a188beb0bb549f5424bb4b828b7504ef290b29568a16b7ee4b363e83092"
+    },
+    {
+      "path": "skills/hermes-blog-skill/references/maui/approved-reference/nail-clip-v2.png",
+      "sha256": "abcc4def9da523951ffd955e1526dba8fcef21d84a44612ccf9296fa4227bce8"
+    },
+    {
+      "path": "skills/hermes-blog-skill/references/maui/approved-reference/table-v2.png",
+      "sha256": "1980a97047363f6225238b1368acb6005d8061d0c06cd97f9d3b5932334f7b46"
+    },
+    {
+      "path": "skills/hermes-blog-skill/references/maui-image.md",
+      "sha256": "283da88a54780f375f72c18513f06569add4ac58c6a9c4f72854df382883f159"
+    },
+    {
+      "path": "skills/hermes-blog-skill/references/maui-quality.md",
+      "sha256": "7cf81b8e36d7f5536d42085e3d647f51dafcc93acf238a64aab13d8b75971370"
+    },
+    {
+      "path": "skills/hermes-blog-skill/references/post-promotion-verification.md",
+      "sha256": "b2e685869dbe8a0ae74a87a1a5bc1176d7975792240259bbbb862f89bd845f68"
+    },
+    {
+      "path": "skills/hermes-blog-skill/references/seo-editorial.md",
+      "sha256": "be79098257296fcad6c8d0fdc4aa6d9c2ca2965d7762e8d29e2683f9d2347d34"
+    },
+    {
+      "path": "skills/hermes-blog-skill/references/setup.md",
+      "sha256": "23e4918c572a172449744e56edd6922504322a64f43271de1d5c30d8898f3577"
+    },
+    {
+      "path": "skills/hermes-blog-skill/references/snackbox-publishing.md",
+      "sha256": "d42c37d04916de095633b5a8d7b041b28161c187619f66730339ce2c9dc67a7c"
+    },
+    {
+      "path": "skills/hermes-blog-skill/references/tools.md",
+      "sha256": "a828092362eeb1b33c007a94f89801932dc1d071a38555e3c24bc40ce70d12e8"
+    },
+    {
+      "path": "skills/hermes-blog-skill/scripts/check-maui-image.py",
+      "sha256": "424a2ee807bad8280348d4f647a35508846c4c7745e88df9bba60f2de8cb02e7"
+    },
+    {
+      "path": "skills/hermes-blog-skill/scripts/cms-preflight.py",
+      "sha256": "e0e1defc6d2b864bff11f84f43984bce7fd1109012a81bfcf8e78c840c515263"
+    },
+    {
+      "path": "skills/hermes-blog-skill/scripts/upload-cms-image.py",
+      "sha256": "3ecea99f6ca690a1f46e37a720afa0e51a2465ff4e57a731d843c620b915127b"
+    },
+    {
+      "path": "skills/hermes-blog-skill/tests/test_helpers.py",
+      "sha256": "2252c609d17399f9f9ea6bbeb5c92e2f9d1b64d4998f8d0d0989fe9a2027d6f9"
+    },
+    {
+      "path": "src/content/blog/cat-grooming-what-to-expect.mdx",
+      "sha256": "28be6eb3bd1b6bc8726c3a010deaef51985eb544b319d0ac204ff95bae7949b0"
+    },
+    {
+      "path": "src/content/blog/choosing-the-right-groomer-for-your-pet.mdx",
+      "sha256": "d0ecda28dba5fee18029a2b102013558fb06db81c30e7ac9002376b810af7565"
+    },
+    {
+      "path": "src/content/blog/dog-ear-cleaning-grooming-guide.mdx",
+      "sha256": "8b161d6c91bc3b42154ab84e971e10b7e6eddcbfbf37220474e7b36c15bcdd3e"
+    },
+    {
+      "path": "src/content/blog/dog-grooming-cost-seattle-portland-2026.mdx",
+      "sha256": "d0ae340bf7a91694e39962a0b2b68076b17469d4c98496cec79c3cf5f0347bc3"
+    },
+    {
+      "path": "src/content/blog/dog-halloween-costume-ideas.mdx",
+      "sha256": "ff8d5ac74d5723d34cea626e002e45568b60894adf81115529ed76558db5563a"
+    },
+    {
+      "path": "src/content/blog/dog-nail-trimming-cost-guide.mdx",
+      "sha256": "30d49570346950e2c7bb3998180193a2b247eb5316346d49617376b2ee500310"
+    },
+    {
+      "path": "src/content/blog/goldendoodle-grooming-guide.mdx",
+      "sha256": "6c56c82a85fb1af90532100925793f9dfbbf01610bd11f97467f5a4ef197784e"
+    },
+    {
+      "path": "src/content/blog/grooming-anxious-dogs-stress-free-guide.mdx",
+      "sha256": "2f73a675bccd0be197e1296021aa59c2e0d9c5cde40bf38bc0b1dd2653ac6436"
+    },
+    {
+      "path": "src/content/blog/how-long-does-dog-grooming-take.mdx",
+      "sha256": "9ad1825f0501a301b7a29a8b11f85bf28ab8d6178050834de3bdc499e8df3583"
+    },
+    {
+      "path": "src/content/blog/how-often-should-you-groom-your-dog.mdx",
+      "sha256": "c2290920e2b8707b74c0200abc57218459ecbb377355c099c72bc49414b188b0"
+    },
+    {
+      "path": "src/content/blog/mobile-dog-grooming-cost-guide.mdx",
+      "sha256": "da61438c631ccf5228abdf5bb2028232cafda103d8fa724f2a87fc9d0ceaed1d"
+    },
+    {
+      "path": "src/content/blog/pnw-seasonal-dog-grooming-guide.mdx",
+      "sha256": "837d41420ba62b6cb1671a47ab73c70f81c16e1637d10c77dcfcca0caf767db8"
+    },
+    {
+      "path": "src/content/blog/puppy-first-grooming-guide.mdx",
+      "sha256": "eb83619c979de51b2d0af84c1d45c2d84a02cf0ddb4b558fa71c0c4a9e4c5c6d"
+    },
+    {
+      "path": "src/content/blog/rain-mud-fur-pnw-grooming-survival-guide.mdx",
+      "sha256": "88b315aa7a29f110082cf11bb70807c679688936fd9d7809b755574dccdcf086"
+    },
+    {
+      "path": "src/content/blog/senior-dog-grooming-budget-guide.mdx",
+      "sha256": "d41b40e62da58e79e22df1ffb26daf74a1506aca57c691ba9140d5c87970582d"
+    },
+    {
+      "path": "src/content/blog/severely-matted-dog-grooming-guide.mdx",
+      "sha256": "4b2cff5dd3284406546d687a9417251bfbface927269049ba8744e34ea9b16e4"
+    },
+    {
+      "path": "src/content/blog/summer-dog-grooming-pnw.mdx",
+      "sha256": "52dbfacde772b2565349f032b2e616f171dfc468c812ab8587af19c96fc71771"
+    },
+    {
+      "path": "src/content/blog/winter-grooming-tips-pnw-dogs.mdx",
+      "sha256": "c4660dd7941af2145821cf186983cafbbd4923ec674e6161a9429456d8aa0c5c"
+    },
+    {
+      "path": "src/lib/grooming-guides.ts",
+      "sha256": "987cb07257f8291279898844ff073255e5e38fd51c48d335c01f0d7002ffcf05"
+    }
+  ]
+}

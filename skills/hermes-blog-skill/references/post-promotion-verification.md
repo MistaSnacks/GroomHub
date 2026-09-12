@@ -1,3 +1,5 @@
+> Historical record from the retired code-deployment workflow. For new runs use [Snackbox publication](snackbox-publishing.md); do not execute the old publisher steps below.
+
 # Post-promotion verification failure
 
 ## Observed failure

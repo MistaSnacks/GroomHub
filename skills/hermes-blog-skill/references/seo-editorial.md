@@ -55,7 +55,7 @@ empty results separately from tool errors.
   providing individualized treatment advice.
 - Make the title and excerpt accurate and concise. Include the target phrase
   naturally, without treating a fixed character count as a display guarantee.
-- Match current MDX frontmatter, author attribution, category, and topic mapping.
+- Match the live Snackbox schema, real author attribution, category, and guide-topic reference.
   New article dates use the actual Pacific publication date.
 - Link naturally to relevant existing guides, service/city pages, and `/get-quotes`.
   The public section is **Grooming Guides** at `/blog`; `/resources` redirects there.
@@ -70,6 +70,6 @@ empty results separately from tool errors.
 Save the chosen intent, nearest existing guides, source links and dates, raw SEO
 evidence, and factual/editorial checks. Record why this topic is worthwhile and
 why it does not duplicate an existing article. Review the full draft, links,
-frontmatter, MDX compilation, and new Maui image before signing release checks.
-Use the controlled publisher in `SKILL.md`; writing a guide or selecting artwork
+CMS fields, rendered draft preview, and every new Maui image before signing release checks.
+Use the Snackbox workflow in `SKILL.md`; writing a guide or selecting artwork
 does not complete publication. Report only checks actually performed.

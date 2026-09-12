@@ -1,0 +1,962 @@
+{
+  "locales": [
+    "default"
+  ],
+  "collections": [
+    {
+      "kind": "collection",
+      "type": "blogPost",
+      "title": "Blogs & Grooming Guides",
+      "page": "/blog",
+      "docPage": "/blog/:slug",
+      "publishable": true,
+      "orderable": false,
+      "help": "Save new articles as drafts. Keep established slugs and publication dates when importing. Publish after checking facts, SEO, links, and Maui artwork. SEO fields record decisions; they do not run DataForSEO automatically. Hermes must choose a new, nonoverlapping topic and generate new Maui artwork. The Next.js CMS connection is pending: publishing here does not yet update groomlocal.com.",
+      "fields": [
+        {
+          "name": "title",
+          "type": "text",
+          "title": "Article title",
+          "required": true
+        },
+        {
+          "name": "slug",
+          "type": "slug",
+          "title": "URL slug",
+          "required": true,
+          "description": "Lowercase hyphenated words. Preserve existing URLs."
+        },
+        {
+          "name": "excerpt",
+          "type": "text",
+          "title": "Article summary",
+          "required": true
+        },
+        {
+          "name": "topic",
+          "type": "reference",
+          "title": "Guide topic",
+          "to": "guideTopic",
+          "required": true
+        },
+        {
+          "name": "category",
+          "type": "select",
+          "title": "Category",
+          "required": true,
+          "options": [
+            "grooming-tips",
+            "guides",
+            "seasonal",
+            "cat-care"
+          ]
+        },
+        {
+          "name": "author",
+          "type": "reference",
+          "title": "Author",
+          "to": "author",
+          "required": true
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "title": "Publication date",
+          "required": true,
+          "description": "Actual Pacific publication day. Preserve dates on imports."
+        },
+        {
+          "name": "dateModified",
+          "type": "date",
+          "title": "Last meaningful update"
+        },
+        {
+          "name": "readTime",
+          "type": "text",
+          "title": "Reading time",
+          "description": "Example: 7 min read. Match the article."
+        },
+        {
+          "name": "heroImage",
+          "type": "image",
+          "title": "Maui hero illustration",
+          "required": true
+        },
+        {
+          "name": "heroAlt",
+          "type": "text",
+          "title": "Hero image description",
+          "required": true
+        },
+        {
+          "name": "body",
+          "type": "richText",
+          "title": "Article body",
+          "required": true,
+          "description": "Headings, paragraphs, links, and lists. Cite factual sources and link to helpful site pages."
+        },
+        {
+          "name": "sections",
+          "type": "list",
+          "title": "Additional illustrated sections",
+          "description": "Optional ordered sections after the body. Images, callouts, and tables without executable MDX.",
+          "of": {
+            "type": "object",
+            "fields": [
+              {
+                "name": "kind",
+                "type": "select",
+                "title": "Section style",
+                "required": true,
+                "options": [
+                  "text",
+                  "illustration",
+                  "callout",
+                  "table"
+                ],
+                "default": "text"
+              },
+              {
+                "name": "heading",
+                "type": "text",
+                "title": "Heading"
+              },
+              {
+                "name": "body",
+                "type": "richText",
+                "title": "Section text"
+              },
+              {
+                "name": "image",
+                "type": "image",
+                "title": "Illustration"
+              },
+              {
+                "name": "imageAlt",
+                "type": "text",
+                "title": "Image description"
+              },
+              {
+                "name": "caption",
+                "type": "text",
+                "title": "Caption"
+              },
+              {
+                "name": "table",
+                "type": "object",
+                "title": "Table",
+                "fields": [
+                  {
+                    "name": "headings",
+                    "type": "list",
+                    "title": "Column headings",
+                    "of": {
+                      "type": "text"
+                    }
+                  },
+                  {
+                    "name": "rows",
+                    "type": "list",
+                    "title": "Rows",
+                    "of": {
+                      "type": "object",
+                      "fields": [
+                        {
+                          "name": "cells",
+                          "type": "list",
+                          "title": "Cells",
+                          "of": {
+                            "type": "text"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "tags",
+          "type": "list",
+          "title": "Tags",
+          "of": {
+            "type": "text"
+          }
+        },
+        {
+          "name": "seo",
+          "type": "object",
+          "title": "Search & social",
+          "fields": [
+            {
+              "name": "title",
+              "type": "text",
+              "title": "SEO title",
+              "description": "Optional override; the article/page title is the fallback."
+            },
+            {
+              "name": "description",
+              "type": "text",
+              "title": "Meta description",
+              "description": "A useful summary. Aim for about 140–160 characters without forcing a limit."
+            },
+            {
+              "name": "image",
+              "type": "image",
+              "title": "Social share image"
+            },
+            {
+              "name": "imageAlt",
+              "type": "text",
+              "title": "Social image description"
+            },
+            {
+              "name": "noIndex",
+              "type": "boolean",
+              "title": "Exclude from search",
+              "default": false,
+              "description": "Normally off. Use Save draft for unfinished content."
+            }
+          ]
+        },
+        {
+          "name": "sources",
+          "type": "list",
+          "title": "Factual sources",
+          "of": {
+            "type": "object",
+            "fields": [
+              {
+                "name": "title",
+                "type": "text",
+                "title": "Source",
+                "required": true
+              },
+              {
+                "name": "url",
+                "type": "text",
+                "title": "Source URL",
+                "required": true
+              },
+              {
+                "name": "checkedOn",
+                "type": "date",
+                "title": "Checked on"
+              }
+            ]
+          }
+        },
+        {
+          "name": "research",
+          "type": "object",
+          "title": "SEO research record",
+          "description": "Evidence, not an automatic checker. Do not store credentials or private notes.",
+          "fields": [
+            {
+              "name": "primaryKeyword",
+              "type": "text",
+              "title": "Primary search query"
+            },
+            {
+              "name": "searchIntent",
+              "type": "text",
+              "title": "Reader question / search intent"
+            },
+            {
+              "name": "checkedOn",
+              "type": "date",
+              "title": "DataForSEO evidence date"
+            },
+            {
+              "name": "monthlySearchVolume",
+              "type": "number",
+              "title": "Monthly search volume"
+            },
+            {
+              "name": "targetLocation",
+              "type": "text",
+              "title": "Research location"
+            },
+            {
+              "name": "distinctIntent",
+              "type": "text",
+              "title": "How this differs from existing guides"
+            }
+          ]
+        },
+        {
+          "name": "relatedGuides",
+          "type": "list",
+          "title": "Related guides",
+          "of": {
+            "type": "reference",
+            "to": "blogPost"
+          }
+        },
+        {
+          "name": "artworkReview",
+          "type": "object",
+          "title": "Maui publication check",
+          "fields": [
+            {
+              "name": "status",
+              "type": "select",
+              "title": "Artwork review",
+              "required": true,
+              "options": [
+                "pending",
+                "approved",
+                "needs-fixes"
+              ],
+              "default": "pending"
+            },
+            {
+              "name": "imageSha256",
+              "type": "text",
+              "title": "Reviewed image SHA-256",
+              "description": "Digest of the exact downloaded final image. A replacement invalidates approval."
+            },
+            {
+              "name": "reviewedOn",
+              "type": "datetime",
+              "title": "Reviewed at"
+            },
+            {
+              "name": "reviewer",
+              "type": "text",
+              "title": "Visual reviewer"
+            },
+            {
+              "name": "evidence",
+              "type": "text",
+              "title": "Review summary",
+              "description": "Record reference comparison, anatomy, transparency, bandana, and full silhouette checks. A checkbox is not an image review."
+            }
+          ],
+          "description": "Hermes must verify approval against the current hero image and every inline image before publishing. Pending or changed artwork remains a draft."
+        }
+      ]
+    },
+    {
+      "kind": "collection",
+      "type": "guideTopic",
+      "title": "Guide Topics",
+      "page": "/blog",
+      "orderable": true,
+      "publishable": true,
+      "help": "Guide browser topics. Once connected, adding topics will not require a code change.",
+      "fields": [
+        {
+          "name": "title",
+          "type": "text",
+          "title": "Topic name",
+          "required": true
+        },
+        {
+          "name": "slug",
+          "type": "slug",
+          "title": "Topic URL value",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "title": "Short description",
+          "required": true
+        }
+      ]
+    },
+    {
+      "kind": "collection",
+      "type": "author",
+      "title": "Authors",
+      "page": "/blog",
+      "orderable": true,
+      "publishable": true,
+      "help": "Use actual author attribution. Do not invent qualifications or professional relationships.",
+      "fields": [
+        {
+          "name": "name",
+          "type": "text",
+          "title": "Author name",
+          "required": true
+        },
+        {
+          "name": "slug",
+          "type": "slug",
+          "title": "Author identifier",
+          "required": true
+        },
+        {
+          "name": "bio",
+          "type": "text",
+          "title": "Short biography",
+          "required": true
+        },
+        {
+          "name": "avatar",
+          "type": "image",
+          "title": "Portrait"
+        },
+        {
+          "name": "avatarAlt",
+          "type": "text",
+          "title": "Portrait description"
+        }
+      ]
+    },
+    {
+      "kind": "collection",
+      "type": "page",
+      "title": "Marketing Pages",
+      "page": "/",
+      "docPage": "/:slug",
+      "orderable": true,
+      "publishable": true,
+      "help": "Editorial copy for About, For Groomers, and service introductions. Keep existing route slugs. Home has its own section. Layouts and application behavior stay in Next.js. Frontend connection is pending.",
+      "fields": [
+        {
+          "name": "title",
+          "type": "text",
+          "title": "Page title",
+          "required": true
+        },
+        {
+          "name": "slug",
+          "type": "slug",
+          "title": "Existing route slug",
+          "required": true
+        },
+        {
+          "name": "intro",
+          "type": "text",
+          "title": "Introduction"
+        },
+        {
+          "name": "heroImage",
+          "type": "image",
+          "title": "Hero image"
+        },
+        {
+          "name": "heroAlt",
+          "type": "text",
+          "title": "Hero image description"
+        },
+        {
+          "name": "body",
+          "type": "richText",
+          "title": "Page content"
+        },
+        {
+          "name": "sections",
+          "type": "list",
+          "title": "Page sections",
+          "of": {
+            "type": "object",
+            "fields": [
+              {
+                "name": "heading",
+                "type": "text",
+                "title": "Heading",
+                "required": true
+              },
+              {
+                "name": "body",
+                "type": "richText",
+                "title": "Content"
+              },
+              {
+                "name": "image",
+                "type": "image",
+                "title": "Image"
+              },
+              {
+                "name": "imageAlt",
+                "type": "text",
+                "title": "Image description"
+              },
+              {
+                "name": "cta",
+                "type": "object",
+                "title": "Button",
+                "fields": [
+                  {
+                    "name": "label",
+                    "type": "text",
+                    "title": "Button text",
+                    "required": true
+                  },
+                  {
+                    "name": "href",
+                    "type": "text",
+                    "title": "Destination",
+                    "required": true,
+                    "description": "Existing relative site path or complete https URL."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "faqs",
+          "type": "list",
+          "title": "FAQs",
+          "of": {
+            "type": "reference",
+            "to": "faq"
+          }
+        },
+        {
+          "name": "seo",
+          "type": "object",
+          "title": "Search & social",
+          "fields": [
+            {
+              "name": "title",
+              "type": "text",
+              "title": "SEO title",
+              "description": "Optional override; the article/page title is the fallback."
+            },
+            {
+              "name": "description",
+              "type": "text",
+              "title": "Meta description",
+              "description": "A useful summary. Aim for about 140–160 characters without forcing a limit."
+            },
+            {
+              "name": "image",
+              "type": "image",
+              "title": "Social share image"
+            },
+            {
+              "name": "imageAlt",
+              "type": "text",
+              "title": "Social image description"
+            },
+            {
+              "name": "noIndex",
+              "type": "boolean",
+              "title": "Exclude from search",
+              "default": false,
+              "description": "Normally off. Use Save draft for unfinished content."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "singleton",
+      "type": "homePage",
+      "title": "Homepage",
+      "page": "/",
+      "publishable": false,
+      "help": "Homepage editorial copy. Counts, groomer cards, cities, and search results continue to come from GroomLocal's database. Frontend connection is pending.",
+      "fields": [
+        {
+          "name": "title",
+          "type": "text",
+          "title": "Hero heading",
+          "required": true
+        },
+        {
+          "name": "intro",
+          "type": "text",
+          "title": "Hero introduction",
+          "required": true
+        },
+        {
+          "name": "heroImage",
+          "type": "image",
+          "title": "Hero illustration"
+        },
+        {
+          "name": "heroAlt",
+          "type": "text",
+          "title": "Hero image description"
+        },
+        {
+          "name": "primaryCta",
+          "type": "object",
+          "title": "Primary button",
+          "fields": [
+            {
+              "name": "label",
+              "type": "text",
+              "title": "Button text",
+              "required": true
+            },
+            {
+              "name": "href",
+              "type": "text",
+              "title": "Destination",
+              "required": true,
+              "description": "Existing relative site path or complete https URL."
+            }
+          ]
+        },
+        {
+          "name": "sections",
+          "type": "list",
+          "title": "Section copy",
+          "of": {
+            "type": "object",
+            "fields": [
+              {
+                "name": "key",
+                "type": "select",
+                "title": "Section",
+                "options": [
+                  "featured",
+                  "services",
+                  "cities",
+                  "howItWorks",
+                  "forGroomers"
+                ],
+                "required": true
+              },
+              {
+                "name": "heading",
+                "type": "text",
+                "title": "Heading",
+                "required": true
+              },
+              {
+                "name": "intro",
+                "type": "text",
+                "title": "Introduction"
+              }
+            ]
+          }
+        },
+        {
+          "name": "seo",
+          "type": "object",
+          "title": "Search & social",
+          "fields": [
+            {
+              "name": "title",
+              "type": "text",
+              "title": "SEO title",
+              "description": "Optional override; the article/page title is the fallback."
+            },
+            {
+              "name": "description",
+              "type": "text",
+              "title": "Meta description",
+              "description": "A useful summary. Aim for about 140–160 characters without forcing a limit."
+            },
+            {
+              "name": "image",
+              "type": "image",
+              "title": "Social share image"
+            },
+            {
+              "name": "imageAlt",
+              "type": "text",
+              "title": "Social image description"
+            },
+            {
+              "name": "noIndex",
+              "type": "boolean",
+              "title": "Exclude from search",
+              "default": false,
+              "description": "Normally off. Use Save draft for unfinished content."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "collection",
+      "type": "faq",
+      "title": "Frequently Asked Questions",
+      "orderable": true,
+      "publishable": true,
+      "help": "Reusable answers for marketing pages. Only render FAQ structured data when the same content is visible on the page.",
+      "fields": [
+        {
+          "name": "question",
+          "type": "text",
+          "title": "Question",
+          "required": true
+        },
+        {
+          "name": "answer",
+          "type": "richText",
+          "title": "Answer",
+          "required": true
+        },
+        {
+          "name": "audience",
+          "type": "select",
+          "title": "Audience",
+          "options": [
+            "pet-parents",
+            "groomers",
+            "both"
+          ],
+          "default": "both"
+        }
+      ]
+    },
+    {
+      "kind": "collection",
+      "type": "mauiIllustration",
+      "title": "Maui Illustration Library",
+      "orderable": false,
+      "publishable": true,
+      "help": "Upload true RGBA PNGs. Verify on teal/dark: four limbs, complete edges, approved face/proportions, red MAUI bandana. Preserve the fixed September 2026 references. New Hermes blogs require a newly generated scene; this library does not authorize recycling old artwork.",
+      "fields": [
+        {
+          "name": "title",
+          "type": "text",
+          "title": "Scene name",
+          "required": true
+        },
+        {
+          "name": "image",
+          "type": "image",
+          "title": "Transparent PNG",
+          "required": true
+        },
+        {
+          "name": "alt",
+          "type": "text",
+          "title": "Image description",
+          "required": true
+        },
+        {
+          "name": "prompt",
+          "type": "text",
+          "title": "Generation prompt"
+        },
+        {
+          "name": "appearanceReference",
+          "type": "text",
+          "title": "Approved appearance reference",
+          "default": "September 2026 approved Maui — brushing-v2"
+        },
+        {
+          "name": "generatedOn",
+          "type": "date",
+          "title": "Generated on"
+        },
+        {
+          "name": "reviewedOn",
+          "type": "date",
+          "title": "Visually checked on"
+        },
+        {
+          "name": "transparencyChecked",
+          "type": "boolean",
+          "title": "Real transparency checked",
+          "default": false
+        },
+        {
+          "name": "anatomyChecked",
+          "type": "boolean",
+          "title": "Anatomy and complete edges checked",
+          "default": false
+        },
+        {
+          "name": "review",
+          "type": "object",
+          "title": "Approval record",
+          "fields": [
+            {
+              "name": "status",
+              "type": "select",
+              "title": "Artwork review",
+              "required": true,
+              "options": [
+                "pending",
+                "approved",
+                "needs-fixes"
+              ],
+              "default": "pending"
+            },
+            {
+              "name": "imageSha256",
+              "type": "text",
+              "title": "Reviewed image SHA-256",
+              "description": "Digest of the exact downloaded final image. A replacement invalidates approval."
+            },
+            {
+              "name": "reviewedOn",
+              "type": "datetime",
+              "title": "Reviewed at"
+            },
+            {
+              "name": "reviewer",
+              "type": "text",
+              "title": "Visual reviewer"
+            },
+            {
+              "name": "evidence",
+              "type": "text",
+              "title": "Review summary",
+              "description": "Record reference comparison, anatomy, transparency, bandana, and full silhouette checks. A checkbox is not an image review."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "collection",
+      "type": "navItem",
+      "title": "Navigation",
+      "fields": [
+        {
+          "name": "label",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "path",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "placement",
+          "type": "select",
+          "title": "Menu location",
+          "options": [
+            "header",
+            "footer"
+          ],
+          "default": "header"
+        }
+      ],
+      "orderable": true,
+      "publishable": true,
+      "help": "Navigation labels and destinations. Preserve working URLs. Account actions and directory filters remain application controls. Frontend connection is pending."
+    },
+    {
+      "kind": "singleton",
+      "type": "siteSettings",
+      "title": "Site settings",
+      "fields": [
+        {
+          "name": "email",
+          "type": "text"
+        },
+        {
+          "name": "tagline",
+          "type": "text"
+        },
+        {
+          "name": "copyright",
+          "type": "text"
+        },
+        {
+          "name": "siteName",
+          "type": "text",
+          "title": "Site name",
+          "default": "GroomLocal"
+        },
+        {
+          "name": "seo",
+          "type": "object",
+          "title": "Search & social",
+          "fields": [
+            {
+              "name": "title",
+              "type": "text",
+              "title": "SEO title",
+              "description": "Optional override; the article/page title is the fallback."
+            },
+            {
+              "name": "description",
+              "type": "text",
+              "title": "Meta description",
+              "description": "A useful summary. Aim for about 140–160 characters without forcing a limit."
+            },
+            {
+              "name": "image",
+              "type": "image",
+              "title": "Social share image"
+            },
+            {
+              "name": "imageAlt",
+              "type": "text",
+              "title": "Social image description"
+            },
+            {
+              "name": "noIndex",
+              "type": "boolean",
+              "title": "Exclude from search",
+              "default": false,
+              "description": "Normally off. Use Save draft for unfinished content."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "intake",
+      "type": "contactMessage",
+      "title": "Contact messages",
+      "fields": [
+        {
+          "name": "name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "message",
+          "type": "text",
+          "required": true
+        }
+      ],
+      "help": "Reserved for a future contact-form connection. Current GroomLocal forms still use the existing application. Email notifications are not enabled."
+    },
+    {
+      "kind": "singleton",
+      "type": "branding",
+      "title": "Branding",
+      "fields": [
+        {
+          "name": "logo",
+          "type": "image",
+          "description": "Primary logo, for light backgrounds"
+        },
+        {
+          "name": "logoDark",
+          "type": "image",
+          "title": "Logo on dark",
+          "description": "Optional — used on dark backgrounds"
+        },
+        {
+          "name": "favicon",
+          "type": "image",
+          "description": "Square, at least 512×512 — browsers scale it down"
+        },
+        {
+          "name": "ogImage",
+          "type": "image",
+          "title": "Social share image",
+          "description": "1200×630 — shown when the site is shared on socials/chat"
+        },
+        {
+          "name": "ogTitle",
+          "type": "text",
+          "title": "Share title"
+        },
+        {
+          "name": "ogDescription",
+          "type": "text",
+          "title": "Share description"
+        }
+      ],
+      "publishable": false
+    }
+  ]
+}

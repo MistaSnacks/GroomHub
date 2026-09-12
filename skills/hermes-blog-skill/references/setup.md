@@ -1,121 +1,49 @@
-# Use on another computer
+# Set up the portable skill on another PC
 
-This package preserves the GroomLocal Hermes workflow as of September 11, 2026,
-including the September 7 requirement for new articles and new Maui artwork.
-It shares instructions, runtime scripts, policy, and fixed visual references. It does not install a
-scheduler, transfer credentials, or configure publishing on the other computer.
+This handoff updates the repository skill only. It does not configure the current local Hermes bot, transfer secrets, install a schedule, or enable the unfinished site integration.
 
-## Read or install
+## Files to bring
 
-Any bot can read `skills/hermes-blog-skill/SKILL.md` directly from this repository.
-For a Hermes installation, copy the entire `hermes-blog-skill` directory into that
-installation's skills directory, retaining `references/` and its PNG files.
-Use the skill name `hermes-blog-skill` or display title **Hermes Blog Skill**.
-Reading the skill does not require running a job.
+Pull the GroomHub repository: `https://github.com/MistaSnacks/GroomHub`. Keep the full checkout while the existing MDX guides are being migrated: they and `docs/automation/content-inventory.json` are coverage exclusions. Copy the complete `skills/hermes-blog-skill/` folder, including scripts and all six approved PNG references, into the receiving agent's skill directory. Its skill name is `hermes-blog-skill`.
 
-Pull `main` in the full GroomHub checkout, not just the skill directory. The
-runtime scripts and policy live at the repository paths below. Run commands from
-the checkout root. The shared policy writes to `output/groomlocal-weekly/`, which
-is ignored by Git; both preflight and publisher resolve it from the checkout
-root, even when called from another directory. Absolute output paths remain
-supported for existing installations. Do not replace an existing machine's
-policy or move its pending runs merely to match this shared default.
+If an existing receiving Hermes job loads `groomlocal-weekly-guides`, explicitly update that receiving installation to the new skill name or preserve its installed alias consistently. Do not create another weekly job. Do not reuse the old prompt that commands `scripts/publish-weekly-guide.py`; that prompt belongs to the legacy local runner and conflicts with this CMS workflow.
 
-## Runtime prerequisites for executing the workflow
+Required checkout resources:
 
-Check these files before an editorial run:
+- `AGENTS.md`, `docs/automation/weekly-guides-policy.json`, `docs/automation/content-inventory.json`, current `src/content/blog/`, and the latest `docs/content-audits/`.
+- `docs/cms/groomlocal-schema.json` and `docs/cms/snackbox-handoff.md`.
+- `docs/maui/STYLE-STANDARD.md`, `docs/maui/approved-reference/*.png`, `public/maui-assets/MAUI-BASE-PROMPT.md`.
+- For command-line image generation: `scripts/maui-blog-image.sh`, `scripts/maui-compare-index.py`, `scripts/image-providers/{gemini,gpt-image}.py`.
+- For transparent export: `scripts/maui-remove-background.py`. The existing `docs/maui/transparency-seeds.json` is only for its matching reviewed scenes; new scenes need their own inspected gaps.
 
-- `scripts/weekly-guides-preflight.py`
-- `scripts/publish-weekly-guide.py`
-- `scripts/verify-weekly-guide.mjs`
-- `docs/automation/weekly-guides-policy.json`
-- `src/lib/grooming-guides.ts`
-- Current MDX articles under `src/content/blog/` and applicable `AGENTS.md` rules
+The six bundled reference PNGs are opaque appearance masters, not deployable cutouts. Compare their hashes with the canonical checkout copies. Do not overwrite a newer explicitly approved standard or treat older illustrations as the reference.
 
-These runtime files are now included in `main` for the September 11 handoff.
-The exact handoff paths are in `docs/automation/hermes-runtime-files.json`.
-Install Python 3.11 or newer, Node.js compatible with the repository's Next.js
-version, Git, `uv`, and the Vercel CLI. Run `npm ci` in the checkout to install
-the existing locked JavaScript dependencies used by the verifier. Use a Unix
-shell (or WSL on Windows) for the shell image helper.
+## Tools, credentials and dependencies
 
-The Git checkout is not a complete snapshot of the latest deployed site.
-Read `docs/automation/content-inventory.json` alongside local MDX to avoid
-duplicating guides or drafts missing from the checkout. Its entries are coverage
-exclusions, not proof of publication; reconcile them with current live pages and
-GTM. The controlled publisher reconstructs current production source before
-applying a new article. Never deploy the Git checkout wholesale.
+Read [the complete tool checklist](tools.md). Connect Snackbox, GTM Board, DataForSEO, source reading, reference-image generation, visual inspection and a browser. Use the receiving PC's own credentials; copy no `.env`, OAuth files, API keys, or local Hermes configuration from this machine. The sample MCP configuration uses an environment placeholder rather than a real token.
 
-The image workflow uses `scripts/maui-blog-image.sh`,
-`scripts/maui-compare-index.py`, and `scripts/maui-remove-background.py`, or
-available image tools meeting the same appearance and export requirements.
-Both provider helpers are bundled at `scripts/image-providers/{gemini,gpt-image}.py`;
-no external `.claude` directory is needed. Their `uv` shebangs install declared
-dependencies. Supply image API keys through the process environment or the
-checkout's ignored `.env.local`. Provider defaults are preserved; the image-model
-comparison did not change the weekly default. The bundled OpenAI helper retains
-its existing Image 2 to 1.5 organization-verification fallback and reports the
-actual model used. Inspect helper arguments before execution.
-
-Run the extractor with its dependencies, for example:
+Install Python 3.11+, Pillow, Git and Node.js. `uv` runs the checked-in image provider helpers with their declared dependencies. For the background remover use:
 
 ```bash
 uv run --with numpy --with scipy --with Pillow python scripts/maui-remove-background.py --help
 ```
 
-Its `--sources` JSON is an array of `{ "scene": "new-slug", "source":
-"output/groomlocal-weekly/<run>/artwork/master.png" }`; source paths are relative
-to the checkout or absolute. `--output` must be a run-local directory. Optional
-`--seeds` maps scene names to reviewed normalized `[x, y]` coordinate lists.
-Inspect the generated numbered region diagnostic before selecting enclosed gaps.
+Read helper arguments before execution. Image generation helpers write under `public/maui-assets/_compare/` relative to their staging root, so run them from a unique staging copy inside the run directory containing only the needed helpers, base prompt and approved reference. Keep generated masters, transparent exports and evidence in that run directory. Do not modify the production checkout to generate article media.
 
-Bundled visual references correspond to these repository locations:
+The upload helper needs only Python's standard library. It uploads a local PNG directly into Snackbox media using `SNACKBOX_GROOMLOCAL_TOKEN`. Article creation and publication use MCP.
 
-| Bundled file, relative to this skill | Canonical repository location |
-|---|---|
-| `references/maui/STYLE-STANDARD.md` | `docs/maui/STYLE-STANDARD.md` |
-| `references/maui/MAUI-BASE-PROMPT.md` | `public/maui-assets/MAUI-BASE-PROMPT.md` |
-| `references/maui/approved-reference/*.png` | `docs/maui/approved-reference/*.png` |
+## Policy and first run
 
-Read the bundled versions when inspecting this package. When preparing a runtime,
-restore missing reference files to their canonical locations; preserve any newer
-explicitly approved standard and never overwrite approved images blindly. The
-PNG files are opaque identity references, not publishable transparent cutouts.
-New scenes require newly reviewed background seeds, not seeds copied from an
-unrelated image.
+Use the receiving checkout's editorial policy; preserve an existing absolute `output_root` and its pending run history. A fresh checkout's shared policy uses a checkout-relative output folder. Publishing requires `mode: publish` and `publication_authorized: true`; otherwise keep drafts. The CMS preflight reads those controls but deliberately does not call the legacy publisher. Tool access and end-to-end live-site readiness still need verification.
 
-## Services and policy
+The existing job is Monday 9 a.m. `America/Los_Angeles`, at most one new article with new Maui art. Preserve its existing model/provider/schedule unless Camren directs a change. Coordinate the receiving runner with the current runner before enabling it; two PCs must not publish the same weekly run. Use GTM's active run/card and CMS document ID to detect in-progress or completed work.
 
-- Authenticate GTM Board for project `groomlocal`. Preserve the recurring task ID
-  recorded in `SKILL.md`; do not create another recurring card merely because this
-  is a different computer.
-- Search Console is available through GTM Board's `google_search_console`
-  connector, configured for `sc-domain:groomlocal.com`. Confirm current access.
-- Connect DataForSEO and a source-reading tool such as Firecrawl. Use current
-  primary source pages for factual claims.
-- Connect image generation and visual inspection tools. Copy no API keys or OAuth
-  tokens into this repository or run reports.
-- Publication requires the current policy to explicitly enable publishing and
-  authenticated Vercel access to GroomLocal's production project. Preserve the
-  existing authorization scope and verification gates. If policy or access is
-  absent, report the missing prerequisite; do not enable publication yourself.
-- The existing schedule is Monday, 9 a.m. `America/Los_Angeles`, with at most one
-  new article and new illustration per run. Its recorded model is
-  `gpt-5.6-luna`, medium reasoning, via Hermes `openai-codex`. These are existing
-  job settings, not instructions to configure a second scheduler.
-- Coordinate with the existing weekly runner before executing from another PC.
-  Check GTM for an active or already-published run and synchronize pending updates
-  first. Do not run duplicate weekly publications from two machines.
+Suggested receiving-job prompt:
 
-For a missing preflight helper, stop before the run. For a scheduler path rejection
-with an installed helper, use the direct-execution fallback in `SKILL.md` only
-when the environment permits it. Reading the package never requires changing
-credentials, schedules, or permissions.
+> Use hermes-blog-skill for GroomLocal. Run its bundled CMS preflight against the GroomHub checkout. Reconcile CMS drafts/published posts, the existing MDX inventory, live pages and GTM. Research at most one new nonoverlapping guide with DataForSEO, generate new Maui art, and save a Snackbox draft. Complete the file and separate visual quality gates for every image. Publish through Snackbox MCP only in authorized publish mode after the CMS-to-site connection and draft preview have been verified. Never use the legacy MDX/Vercel publisher or update existing guides. Track both GTM cards and verify the live URL before marking live. Do not alter credentials, schedules, models, unrelated code or send messages.
 
-## Temporary Git handoff
+First run should verify connections read-only, then draft. The schema alone is not the live-site integration. See [publication readiness](snackbox-publishing.md) for the remaining frontend work and required proof before a publish-mode run can proceed.
 
-The user requested these runtime files stay tracked until the other machine has
-pulled them. After transfer is confirmed, any later removal from tracking must
-preserve local copies first. `.gitignore` alone does not untrack committed files;
-`git rm --cached` affects future checkouts and may remove clean copies on another
-machine's next pull. The transfer commit remains available in Git history.
+## Verify the package
+
+From the checkout, run `python3 -m unittest discover -s skills/hermes-blog-skill/tests -v`. Nine offline checks cover missing/uncertain visual approval, image replacement, opaque/empty/clipped exports, preflight authorization and the local-upload request. They do not spend API credits or publish content. Run the receiving agent's skill validator if available.
