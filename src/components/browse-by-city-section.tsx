@@ -1,8 +1,10 @@
+import type { MarketingSection } from "@/lib/marketing-copy";
 import type { CityWithCount } from "@/lib/types";
 import { stateSlugFromAbbr } from "@/lib/geography";
 import { CityPillGrid } from "@/components/city-pill-grid";
 
 interface BrowseByCitySectionProps {
+  copy?: MarketingSection;
   waCities: CityWithCount[];
   orCities: CityWithCount[];
 }
@@ -10,7 +12,7 @@ interface BrowseByCitySectionProps {
 const WA_SHOW_COUNT = 7;
 const OR_SHOW_COUNT = 5;
 
-export function BrowseByCitySection({ waCities, orCities }: BrowseByCitySectionProps) {
+export function BrowseByCitySection({ waCities, orCities, copy }: BrowseByCitySectionProps) {
   const waTotal = waCities.reduce((sum, c) => sum + c.groomer_count, 0);
   const orTotal = orCities.reduce((sum, c) => sum + c.groomer_count, 0);
 
@@ -19,13 +21,13 @@ export function BrowseByCitySection({ waCities, orCities }: BrowseByCitySectionP
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
         <div className="text-center mb-12">
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-accent-ink mb-2">
-            Explore the PNW
+            {copy?.eyebrow ?? "Explore the PNW"}
           </p>
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-brand-primary mb-2">
-            Browse by City
+            {copy?.heading ?? "Browse by City"}
           </h2>
           <p className="text-text-muted text-base max-w-lg mx-auto">
-            Find top-rated groomers in your neighborhood
+            {copy?.intro ?? "Find top-rated groomers in your neighborhood"}
           </p>
         </div>
 

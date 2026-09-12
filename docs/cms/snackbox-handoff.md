@@ -25,14 +25,14 @@ All 18 live articles passed content/metadata parity checks against the previous 
 
 ## Portable Hermes workflow
 
-`skills/hermes-blog-skill/` documents the CMS MCP, DataForSEO, GTM, source-reading, image generation, visual inspection and browser requirements, with credential placeholders and receiving-PC setup. Recheck tool access and the live connection on each receiving installation. The preflight intentionally starts readiness flags as false; a historical success is not a current connection test.
+The locally retained, Git-ignored `skills/hermes-blog-skill/` documents the CMS MCP, DataForSEO, GTM, source-reading, image generation, visual inspection and browser requirements, with credential placeholders and receiving-PC setup. Recheck tool access and the live connection on each receiving installation. The preflight intentionally starts readiness flags as false; a historical success is not a current connection test.
 
 Hermes creates at most one new, nonoverlapping guide with new Maui art per run. Every final image needs file checks and an actual visual comparison against the approved reference, tied to the exact downloaded CMS original hash. A changed image invalidates approval. These are skill gates; the CMS's general Publish button is not server-enforced artwork validation. Imported, unchanged artwork keeps `pending` review metadata rather than fabricated new approvals.
 
-The local Hermes installation, installed skill, credentials, configuration, scheduler and machine-specific policy remain unchanged. Transfer the portable skill and required checkout resources to the receiving PC; do not copy secrets.
+The local Hermes installation, credentials, configuration, scheduler and machine-specific policy remain unchanged. SSH verified all 21 skill files against the independently installed copy at `/Users/sarahclarke/.hermes/skills/groomlocal/hermes-blog-skill` on September 12, 2026. It is a real directory outside Git, not a symlink. The skill is now removed from Git tracking while local files are retained; future skill updates can be transferred directly to that installation. Historical transfer manifests describe their original archives, not the current checkout. Do not copy secrets.
 
 ## Scope and remaining content
 
-This release connects blogs, topics and authors. Marketing Pages, Homepage, FAQ, Navigation, Site Settings and Branding have schemas but are not yet connected to frontend copy. Their existing site content still comes from code. Listing data, business prices/booking links, claims, accounts and forms remain in the existing application database. The contact inbox has no form connection or notifications enabled.
+Blogs, topics and authors are connected. Homepage, About and For Groomers now read editorial copy, illustrations and SEO from Snackbox. New Marketing Page slugs render without deployment; see `marketing-pages.md`. Navigation, Site Settings and Branding still use code. FAQ references render on marketing pages; existing FAQ UI elsewhere is unchanged. Listing data, business prices/booking links, claims, accounts and forms remain in the existing application database. The contact inbox has no form connection or notifications enabled.
 
 Observed CMS issue: `delete_document` with an operation ID returned a database not-null error and rolled back. Re-reading confirmed the temporary test still existed; deleting with its current revision and no operation ID succeeded. No production content was deleted. This platform issue did not affect publishing.

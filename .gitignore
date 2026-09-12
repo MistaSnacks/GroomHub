@@ -69,3 +69,6 @@ get_roles.sql
 /output/
 __pycache__/
 *.py[cod]
+
+# Hermes skills are installed on the remote runner and maintained over SSH.
+/skills/hermes-blog-skill/

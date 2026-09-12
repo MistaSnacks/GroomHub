@@ -1,3 +1,4 @@
+import type { MarketingSection } from "@/lib/marketing-copy";
 import Link from "next/link";
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { SERVICE_TAGS } from "@/lib/tags";
@@ -6,6 +7,7 @@ import { AnimatedSection, AnimatedItem } from "./animated-section";
 
 interface BrowseByServiceSectionProps {
   serviceCounts?: Record<string, number>;
+  copy?: MarketingSection;
 }
 
 const SHOWN_SERVICE_SLUGS = [
@@ -30,7 +32,7 @@ const ICON_BG_COLORS = [
   "bg-brand-secondary/15 text-brand-secondary",
 ];
 
-export function BrowseByServiceSection({ serviceCounts }: BrowseByServiceSectionProps) {
+export function BrowseByServiceSection({ serviceCounts, copy }: BrowseByServiceSectionProps) {
   const services = SERVICE_TAGS.filter((t) =>
     SHOWN_SERVICE_SLUGS.includes(t.slug)
   );
@@ -40,13 +42,13 @@ export function BrowseByServiceSection({ serviceCounts }: BrowseByServiceSection
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-10">
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-accent-ink mb-2">
-            Our Services
+            {copy?.eyebrow ?? "Our Services"}
           </p>
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-brand-primary mb-2">
-            Browse by Service
+            {copy?.heading ?? "Browse by Service"}
           </h2>
           <p className="text-text-muted text-base max-w-lg">
-            Find exactly the grooming service your pet needs
+            {copy?.intro ?? "Find exactly the grooming service your pet needs"}
           </p>
         </div>
 
@@ -75,11 +77,11 @@ export function BrowseByServiceSection({ serviceCounts }: BrowseByServiceSection
           {/* View all services pill */}
           <AnimatedItem>
             <Link
-              href="/services"
+              href={copy?.cta?.href || "/services"}
               className="inline-flex items-center gap-3 rounded-full px-5 py-3 border-2 border-dashed border-border hover:border-brand-accent/40 transition-all group"
             >
               <span className="font-heading font-semibold text-text-muted group-hover:text-brand-accent-ink transition-colors">
-                View all services
+                {copy?.cta?.label ?? "View all services"}
               </span>
               <ArrowRight weight="bold" className="w-4 h-4 text-text-muted group-hover:text-brand-accent-ink transition-colors" />
             </Link>

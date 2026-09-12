@@ -1,3 +1,4 @@
+import { getHomeCopy, getMarketingPages, RESERVED_MARKETING_SLUGS } from "@/lib/cms/marketing";
 import type { MetadataRoute } from "next";
 import { getCities, getAllListings, canonicalCitySlug } from "@/lib/supabase/queries";
 import { SERVICE_TAGS, SPECIALTY_TAGS } from "@/lib/tags";
@@ -92,7 +93,13 @@ export default async function sitemap(args: {
       priority: 0.6,
     }));
 
-    return [...staticPages, ...statePages, ...servicePages, ...specialtyPages, ...blogPages];
+    const [marketingPages, home] = await Promise.all([getMarketingPages(true), getHomeCopy(true)]);
+    const hidden = new Set(marketingPages.filter(page=>page.seo?.noIndex).map(page=>`${BASE_URL}/${page.slug}`));
+    if (home?.seo?.noIndex) hidden.add(BASE_URL);
+    const extraPages: MetadataRoute.Sitemap = marketingPages
+      .filter(page=>!page.seo?.noIndex && !RESERVED_MARKETING_SLUGS.has(page.slug!))
+      .map(page=>({url:`${BASE_URL}/${page.slug}`,changeFrequency:"monthly",priority:0.5}));
+    return [...staticPages.filter(page=>!hidden.has(page.url)), ...statePages, ...servicePages, ...specialtyPages, ...blogPages, ...extraPages];
   }
 
   // ── Chunk 1: Individual groomer profiles ──

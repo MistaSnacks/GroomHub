@@ -1,3 +1,6 @@
+import { getHomeCopy, marketingMetadata } from "@/lib/cms/marketing";
+import { marketingSection, fillMarketingCounts } from "@/lib/marketing-copy";
+import { SnackboxOverlay } from "@/lib/cms/Overlay";
 import type { Metadata } from "next";
 import { websiteSchema, organizationSchema } from "@/lib/schema";
 import { BrowseByServiceSection } from "@/components/browse-by-service-section";
@@ -14,7 +17,7 @@ import { WaveDivider } from "@/components/wave-divider";
 
 export const revalidate = 300;
 
-export const metadata: Metadata = {
+const fallbackMetadata: Metadata = {
   alternates: { canonical: "https://groomlocal.com" },
   openGraph: {
     title: "GroomLocal | Find Dog Groomers in the PNW",
@@ -34,14 +37,18 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata() { return marketingMetadata(await getHomeCopy(),fallbackMetadata); }
+
 export default async function HomePage() {
-  const [waCities, orCities, totalCount, featuredListings] = await Promise.all([
+  const [waCities, orCities, totalCount, featuredListings, copy] = await Promise.all([
     getCitiesByState("WA"),
     getCitiesByState("OR"),
     getTotalListingCount(),
     getFeaturedListings(3),
+    getHomeCopy(),
   ]);
 
+  const section=(key:string)=>marketingSection(copy,key);
   const cityCount = waCities.length + orCities.length;
 
   const { "@context": _ws, ...websiteBody } = websiteSchema();
@@ -53,8 +60,9 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      {copy?._id && <SnackboxOverlay documents={[{docId:copy._id,title:"Homepage"}]} />}
       {/* HERO SECTION */}
-      <HomeHero totalCount={totalCount} />
+      <HomeHero totalCount={totalCount} copy={copy} />
 
       <WaveDivider variant="gentle" fromColor="#FDF8F0" toColor="#FFFFFF" />
 
@@ -62,7 +70,7 @@ export default async function HomePage() {
       <section className="bg-white pt-8 pb-0">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-text-muted text-base leading-relaxed">
-            GroomLocal is the Pacific Northwest&apos;s dog grooming directory, covering {totalCount.toLocaleString()}+ groomers across {cityCount} cities in Washington and Oregon. Compare services, pricing, and contact details for salons, mobile groomers, and self-wash stations near you. Whether you need a full groom for a Goldendoodle or a quick nail trim for a senior Lab, start here.
+            {fillMarketingCounts(copy?.overview ?? "GroomLocal is the Pacific Northwest's dog grooming directory, covering {groomerCount}+ groomers across {cityCount} cities in Washington and Oregon. Compare services, pricing, and contact details for salons, mobile groomers, and self-wash stations near you. Whether you need a full groom for a Goldendoodle or a quick nail trim for a senior Lab, start here.",{groomerCount:totalCount.toLocaleString(),cityCount})}
           </p>
         </div>
       </section>
@@ -72,13 +80,13 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
           <div className="text-center mb-12">
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-brand-primary mb-4">
-              Featured Groomers in the PNW
+              {section("featured").heading ?? "Featured Groomers in the PNW"}
               <span className="ml-3 inline-flex items-center align-middle rounded-full border border-border bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-text-muted">
                 Sponsored
               </span>
             </h2>
             <p className="text-text-muted text-lg max-w-2xl mx-auto">
-              Discover local grooming salons with hours, services, and pricing in one place.
+              {section("featured").intro ?? "Discover local grooming salons with hours, services, and pricing in one place."}
             </p>
           </div>
 
@@ -96,31 +104,31 @@ export default async function HomePage() {
       <WaveDivider variant="asymmetric" fromColor="#FFFFFF" toColor="#FDF8F0" />
 
       {/* BROWSE BY SERVICE */}
-      <BrowseByServiceSection />
+      <BrowseByServiceSection copy={section("services")} />
 
       {/* Cream → Teal wave before promo */}
       <WaveDivider variant="steep" fromColor="#FDF8F0" toColor="#4ECDC4" />
 
       {/* PROMO: FIND GROOMERS */}
-      <PromoFindGroomers />
+      <PromoFindGroomers copy={section("findGroomers")} />
 
       {/* Teal → White wave after promo */}
       <WaveDivider variant="double" fromColor="#4ECDC4" toColor="#FFFFFF" />
 
       {/* BROWSE BY SPECIALTY */}
-      <BrowseBySpecialtySection />
+      <BrowseBySpecialtySection copy={section("specialties")} />
 
       {/* White → Coral wave before claim CTA */}
       <WaveDivider variant="gentle" fromColor="#FFFFFF" toColor="#FF7E67" />
 
       {/* PROMO: CLAIM LISTING */}
-      <PromoClaimListing />
+      <PromoClaimListing copy={section("forGroomers")} />
 
       {/* Coral → White wave after claim CTA */}
       <WaveDivider variant="asymmetric" fromColor="#FF7E67" toColor="#FFFFFF" />
 
       {/* BROWSE BY CITY */}
-      <BrowseByCitySection waCities={waCities} orCities={orCities} />
+      <BrowseByCitySection copy={section("cities")} waCities={waCities} orCities={orCities} />
 
       {/* Homepage bottom ad (hidden unless NEXT_PUBLIC_SHOW_ADS=true) */}
       {ADS_ENABLED && (

@@ -414,7 +414,7 @@
       "publishable": true
     },
     {
-      "help": "Editorial copy for About, For Groomers, and service introductions. Keep existing route slugs. Home has its own section. Layouts and application behavior stay in Next.js. Frontend connection is pending.",
+      "help": "About and For Groomers copy is connected to the existing site layouts. Preserve slugs and section keys. Additional body content and FAQs appear below the page layout. New slugs use a simple landing-page layout. Application routes remain reserved.",
       "kind": "collection",
       "page": "/",
       "type": "page",
@@ -438,6 +438,62 @@
           "title": "Introduction"
         },
         {
+          "name": "emphasis",
+          "type": "text",
+          "title": "Heading phrase to highlight"
+        },
+        {
+          "name": "eyebrow",
+          "type": "text",
+          "title": "Small hero label"
+        },
+        {
+          "name": "primaryCta",
+          "type": "object",
+          "title": "Primary button",
+          "fields": [
+            {
+              "name": "label",
+              "type": "text",
+              "title": "Button text",
+              "required": true
+            },
+            {
+              "name": "href",
+              "type": "text",
+              "title": "Destination",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "secondaryCta",
+          "type": "object",
+          "title": "Secondary button",
+          "fields": [
+            {
+              "name": "label",
+              "type": "text",
+              "title": "Button text",
+              "required": true
+            },
+            {
+              "name": "href",
+              "type": "text",
+              "title": "Destination",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "badges",
+          "type": "list",
+          "title": "Hero benefits (For Groomers)",
+          "of": {
+            "type": "text"
+          }
+        },
+        {
           "name": "heroImage",
           "type": "image",
           "title": "Hero image"
@@ -457,10 +513,31 @@
             "type": "object",
             "fields": [
               {
+                "name": "key",
+                "type": "text",
+                "title": "Layout section key",
+                "description": "Existing pages: preserve this key. New landing pages: use a unique short key."
+              },
+              {
+                "name": "eyebrow",
+                "type": "text",
+                "title": "Small label"
+              },
+              {
+                "name": "emphasis",
+                "type": "text",
+                "title": "Heading phrase to highlight"
+              },
+              {
+                "name": "intro",
+                "type": "text",
+                "title": "Section introduction"
+              },
+              {
                 "name": "heading",
                 "type": "text",
                 "title": "Heading",
-                "required": true
+                "required": false
               },
               {
                 "name": "body",
@@ -494,6 +571,25 @@
                     "title": "Destination",
                     "required": true,
                     "description": "Existing relative site path or complete https URL."
+                  }
+                ]
+              },
+              {
+                "name": "secondaryCta",
+                "type": "object",
+                "title": "Secondary button",
+                "fields": [
+                  {
+                    "name": "label",
+                    "type": "text",
+                    "title": "Button text",
+                    "required": true
+                  },
+                  {
+                    "name": "href",
+                    "type": "text",
+                    "title": "Destination",
+                    "required": true
                   }
                 ]
               }
@@ -554,7 +650,7 @@
       "publishable": true
     },
     {
-      "help": "Homepage editorial copy. Counts, groomer cards, cities, and search results continue to come from GroomLocal's database. Frontend connection is pending.",
+      "help": "Live homepage copy. Preserve section keys to keep each layout slot connected. Counts use {groomerCount} and {cityCount}; search, listings and city data remain in the application database. Save a draft, preview, then publish.",
       "kind": "singleton",
       "page": "/",
       "type": "homePage",
@@ -571,6 +667,26 @@
           "type": "text",
           "title": "Hero introduction",
           "required": true
+        },
+        {
+          "name": "emphasis",
+          "type": "text",
+          "title": "Heading phrase to highlight"
+        },
+        {
+          "name": "eyebrow",
+          "type": "text",
+          "title": "Small hero label"
+        },
+        {
+          "name": "overview",
+          "type": "text",
+          "title": "Directory overview"
+        },
+        {
+          "name": "greeting",
+          "type": "text",
+          "title": "Maui greeting"
         },
         {
           "name": "heroImage",
@@ -613,9 +729,10 @@
                 "options": [
                   "featured",
                   "services",
-                  "cities",
-                  "howItWorks",
-                  "forGroomers"
+                  "specialties",
+                  "findGroomers",
+                  "forGroomers",
+                  "cities"
                 ],
                 "required": true
               },
@@ -629,6 +746,64 @@
                 "name": "intro",
                 "type": "text",
                 "title": "Introduction"
+              },
+              {
+                "name": "eyebrow",
+                "type": "text",
+                "title": "Small label"
+              },
+              {
+                "name": "emphasis",
+                "type": "text",
+                "title": "Heading phrase to highlight"
+              },
+              {
+                "name": "image",
+                "type": "image",
+                "title": "Illustration"
+              },
+              {
+                "name": "imageAlt",
+                "type": "text",
+                "title": "Image description"
+              },
+              {
+                "name": "cta",
+                "type": "object",
+                "title": "Primary button",
+                "fields": [
+                  {
+                    "name": "label",
+                    "type": "text",
+                    "title": "Button text",
+                    "required": true
+                  },
+                  {
+                    "name": "href",
+                    "type": "text",
+                    "title": "Destination",
+                    "required": true
+                  }
+                ]
+              },
+              {
+                "name": "secondaryCta",
+                "type": "object",
+                "title": "Secondary button",
+                "fields": [
+                  {
+                    "name": "label",
+                    "type": "text",
+                    "title": "Button text",
+                    "required": true
+                  },
+                  {
+                    "name": "href",
+                    "type": "text",
+                    "title": "Destination",
+                    "required": true
+                  }
+                ]
               }
             ]
           },
@@ -673,7 +848,7 @@
           ]
         }
       ],
-      "publishable": false
+      "publishable": true
     },
     {
       "help": "Reusable answers for marketing pages. Only render FAQ structured data when the same content is visible on the page.",

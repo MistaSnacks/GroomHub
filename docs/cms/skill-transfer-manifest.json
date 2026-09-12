@@ -1,6 +1,6 @@
 {
   "date": "2026-09-12",
-  "source": "GroomHub portable Snackbox skill handoff",
+  "source": "Historical September 12 portable Snackbox skill archive manifest; not a current tracked-file inventory. The receiving-PC installation has been verified over SSH and the local skill directory is now ignored.",
   "policy_note": "Shared Git policy is included; existing machine-specific policy and Hermes files were not copied.",
   "files": [
     {

@@ -11,7 +11,7 @@ function authorized(req: Request) {
 const headers = { "Cache-Control": "no-store" };
 export async function GET(req: Request) {
   if (!authorized(req)) return NextResponse.json({ok:false},{status:401,headers});
-  return NextResponse.json({ok:true,snackbox:{revalidate:1,visualEditing:1},cms:{project:"groomlocal",blogPost:1}},{headers});
+  return NextResponse.json({ok:true,snackbox:{revalidate:1,visualEditing:1},cms:{project:"groomlocal",blogPost:1,homePage:1,page:1}},{headers});
 }
 export async function POST(req: Request) {
   if (!authorized(req)) return NextResponse.json({ok:false},{status:401,headers});

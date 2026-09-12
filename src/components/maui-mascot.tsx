@@ -7,6 +7,7 @@ interface MauiMascotProps {
   size?: number;
   className?: string;
   src?: string;
+  alt?: string;
   animation?: "bounce" | "float" | "none";
   interactive?: boolean;
   priority?: boolean;
@@ -16,6 +17,7 @@ export function MauiMascot({
   size = 128,
   className,
   src = "/maui-assets/00-maui-main.png?v=maui-20260904-alpha1",
+  alt = "Maui Mascot",
   animation = "float",
   interactive = true,
   priority = false,
@@ -40,14 +42,14 @@ export function MauiMascot({
   return (
     <motion.div
       className={`inline-flex items-end justify-center select-none ${className ?? ""}`}
-      aria-label="Maui the mascot"
+      aria-label={alt}
       style={{ width: size, height: size }}
       {...getAnimationProps()}
       whileHover={interactive ? { scale: 1.05, rotate: [-2, 2, -2, 0] } : undefined}
     >
       <Image
         src={src}
-        alt="Maui Mascot"
+        alt={alt}
         width={size}
         height={size}
         className="w-full h-full object-contain drop-shadow-md"

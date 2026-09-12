@@ -1,3 +1,4 @@
+import type { MarketingSection } from "@/lib/marketing-copy";
 import Link from "next/link";
 import { ArrowRight, PawPrint } from "@phosphor-icons/react/dist/ssr";
 import { SPECIALTY_TAGS } from "@/lib/tags";
@@ -22,7 +23,7 @@ function getCardStyle(index: number) {
   return { bg: "bg-white text-brand-primary border border-border", iconBg: "bg-brand-accent/10 text-brand-accent-ink", link: "text-brand-accent-ink hover:text-brand-accent-ink" };
 }
 
-export function BrowseBySpecialtySection() {
+export function BrowseBySpecialtySection({copy}: {copy?: MarketingSection} = {}) {
   const specialties = SPECIALTY_TAGS.filter((t) =>
     SHOWN_SPECIALTY_SLUGS.includes(t.slug)
   ).sort((a, b) =>
@@ -36,13 +37,13 @@ export function BrowseBySpecialtySection() {
           <div className="md:flex-1" />
           <div className="text-left md:text-right max-w-lg">
             <p className="text-xs font-semibold uppercase tracking-widest text-brand-accent-ink mb-2">
-              Specialized Care
+              {copy?.eyebrow ?? "Specialized Care"}
             </p>
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-brand-primary mb-4">
-              Browse by Specialty
+              {copy?.heading ?? "Browse by Specialty"}
             </h2>
             <p className="text-text-muted text-base">
-              Does your pet have unique needs? Find groomers with the exact expertise you&apos;re looking for.
+              {copy?.intro ?? "Does your pet have unique needs? Find groomers with the exact expertise you're looking for."}
             </p>
           </div>
         </div>
@@ -79,10 +80,10 @@ export function BrowseBySpecialtySection() {
 
         <div className="text-center mt-10">
           <Link
-            href="/specialties"
+            href={copy?.cta?.href || "/specialties"}
             className="inline-flex items-center gap-2 text-brand-primary font-semibold hover:text-brand-accent-ink transition-colors"
           >
-            <span>View all specialties</span>
+            <span>{copy?.cta?.label ?? "View all specialties"}</span>
             <ArrowRight weight="bold" className="w-4 h-4" />
           </Link>
         </div>

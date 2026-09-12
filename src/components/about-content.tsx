@@ -5,7 +5,12 @@ import { MauiMascot } from "./maui-mascot";
 import { Heart, Star, Leaf, Users } from "@phosphor-icons/react";
 import { WaveDivider } from "./wave-divider";
 
+import { marketingSection, fillMarketingCounts, type MarketingCopy } from "@/lib/marketing-copy";
+import { MarketingHeading } from "./marketing-heading";
+import { editableField } from "@/lib/cms/sdk";
+
 interface AboutContentProps {
+  copy?: MarketingCopy;
   metrics: {
     totalGroomers: number;
     citiesCovered: number;
@@ -30,7 +35,8 @@ const itemVariants: Variants = {
   },
 };
 
-export function AboutContent({ metrics }: AboutContentProps) {
+export function AboutContent({ metrics, copy }: AboutContentProps) {
+  const section=(key:string)=>marketingSection(copy,key);
   return (
     <div className="min-h-screen text-brand-primary overflow-hidden">
 
@@ -44,14 +50,13 @@ export function AboutContent({ metrics }: AboutContentProps) {
             className="text-center max-w-3xl mx-auto"
           >
             <motion.p variants={itemVariants} className="text-xs font-semibold uppercase tracking-widest text-brand-accent mb-3">
-              Our Story
+              {copy?.eyebrow ?? "Our Story"}
             </motion.p>
-            <motion.h1 variants={itemVariants} className="font-heading text-5xl md:text-6xl font-bold mb-6 text-brand-primary">
-              Built by groomers,{" "}
-              <span className="text-brand-secondary italic">for pet parents.</span>
+            <motion.h1 {...(copy?._id ? editableField(copy._id,"title") : {})} variants={itemVariants} className="font-heading text-5xl md:text-6xl font-bold mb-6 text-brand-primary">
+              <MarketingHeading text={copy?.title ?? "Built by groomers, for pet parents."} emphasis={copy?.emphasis ?? "for pet parents."} className="text-brand-secondary italic" />
             </motion.h1>
             <motion.p variants={itemVariants} className="text-lg md:text-xl text-text-muted">
-              We started GroomLocal with a simple mission: make finding a great groomer in the Pacific Northwest as easy as a belly rub.
+              {copy?.intro ?? "We started GroomLocal with a simple mission: make finding a great groomer in the Pacific Northwest as easy as a belly rub."}
             </motion.p>
           </motion.div>
         </div>
@@ -72,19 +77,19 @@ export function AboutContent({ metrics }: AboutContentProps) {
             <motion.div variants={itemVariants} className="w-full md:w-2/5 flex justify-center">
               <div className="relative">
                 <div className="absolute inset-0 bg-brand-accent/20 rounded-full blur-3xl -z-10" />
-                <MauiMascot src="/maui-assets/08-maui-playing-ball.png?v=maui-20260904-alpha1" size={320} animation="float" priority />
+                <MauiMascot src={section("story").imageSrc || "/maui-assets/08-maui-playing-ball.png?v=maui-20260904-alpha1"} alt={section("story").imageAlt} size={320} animation="float" priority />
               </div>
             </motion.div>
 
             <motion.div variants={itemVariants} className="w-full md:w-3/5">
               <h2 className="font-heading text-3xl md:text-4xl font-bold mb-6 text-brand-primary">
-                It started with a bad haircut.
+                {section("story").heading ?? "It started with a bad haircut."}
               </h2>
               <p className="text-text-muted text-lg leading-relaxed mb-4">
-                GroomLocal was started by a working groomer who saw how hard it was for pet parents to find quality grooming services in the Pacific Northwest. After years behind the grooming table, we knew what makes a great groomer and wanted to make that easier to find.
+                {section("story").intro ?? "GroomLocal was started by a working groomer who saw how hard it was for pet parents to find quality grooming services in the Pacific Northwest. After years behind the grooming table, we knew what makes a great groomer and wanted to make that easier to find."}
               </p>
               <p className="text-text-muted text-lg leading-relaxed mb-8">
-                Today, GroomLocal lists over {metrics.totalGroomers.toLocaleString()} groomers across Washington and Oregon. Every listing includes services offered, contact details, and location info so you can make an informed choice.
+                {fillMarketingCounts(section("story-details").intro ?? "Today, GroomLocal lists over {groomerCount} groomers across Washington and Oregon. Every listing includes services offered, contact details, and location info so you can make an informed choice.",{groomerCount:metrics.totalGroomers.toLocaleString()})}
               </p>
 
               {/* Stats */}
@@ -120,10 +125,10 @@ export function AboutContent({ metrics }: AboutContentProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <p className="text-xs font-semibold uppercase tracking-widest text-brand-accent mb-2">
-              What We Believe
+              {section("values").eyebrow ?? "What We Believe"}
             </p>
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-brand-primary">
-              Our Values
+              {section("values").heading ?? "Our Values"}
             </h2>
           </div>
 
@@ -139,9 +144,9 @@ export function AboutContent({ metrics }: AboutContentProps) {
               <div className="flex items-center justify-center w-14 h-14 rounded-xl bg-brand-secondary/15 text-brand-secondary mb-6">
                 <Heart weight="fill" className="w-7 h-7" />
               </div>
-              <h3 className="font-heading text-2xl font-bold text-brand-primary mb-3">Pets First</h3>
+              <h3 className="font-heading text-2xl font-bold text-brand-primary mb-3">{section("pets-first").heading ?? "Pets First"}</h3>
               <p className="text-text-muted leading-relaxed flex-1">
-                Every decision we make starts with one question: is this better for pets? We verify groomers, highlight fear-free options, and make sure your pet is always the priority.
+                {section("pets-first").intro ?? "Every decision we make starts with one question: is this better for pets? We verify groomers, highlight fear-free options, and make sure your pet is always the priority."}
               </p>
             </motion.div>
 
@@ -150,9 +155,9 @@ export function AboutContent({ metrics }: AboutContentProps) {
               <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-brand-accent/10 text-brand-accent mb-4">
                 <Star weight="fill" className="w-6 h-6" />
               </div>
-              <h3 className="font-heading text-lg font-bold text-brand-primary mb-2">Transparency</h3>
+              <h3 className="font-heading text-lg font-bold text-brand-primary mb-2">{section("transparency").heading ?? "Transparency"}</h3>
               <p className="text-sm text-text-muted leading-relaxed">
-                Verified listings, transparent pricing, and honest information. No hidden surprises.
+                {section("transparency").intro ?? "Verified listings, transparent pricing, and honest information. No hidden surprises."}
               </p>
             </motion.div>
 
@@ -161,9 +166,9 @@ export function AboutContent({ metrics }: AboutContentProps) {
               <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/20 mb-4">
                 <Leaf weight="fill" className="w-6 h-6" />
               </div>
-              <h3 className="font-heading text-lg font-bold mb-2">Free Forever</h3>
+              <h3 className="font-heading text-lg font-bold mb-2">{section("free-forever").heading ?? "Free Forever"}</h3>
               <p className="text-sm text-white/70 leading-relaxed">
-                Searching for a groomer should never cost a thing. Our directory is free for pet parents, always.
+                {section("free-forever").intro ?? "Searching for a groomer should never cost a thing. Our directory is free for pet parents, always."}
               </p>
             </motion.div>
 
@@ -172,9 +177,9 @@ export function AboutContent({ metrics }: AboutContentProps) {
               <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-brand-primary/10 text-brand-primary mb-4">
                 <Users weight="fill" className="w-6 h-6" />
               </div>
-              <h3 className="font-heading text-lg font-bold text-brand-primary mb-2">Community</h3>
+              <h3 className="font-heading text-lg font-bold text-brand-primary mb-2">{section("community").heading ?? "Community"}</h3>
               <p className="text-sm text-text-muted leading-relaxed">
-                We support local PNW businesses and connect them with loving pet parents. Every groomer in our directory is part of the family.
+                {section("community").intro ?? "We support local PNW businesses and connect them with loving pet parents. Every groomer in our directory is part of the family."}
               </p>
             </motion.div>
           </motion.div>
@@ -195,23 +200,23 @@ export function AboutContent({ metrics }: AboutContentProps) {
           >
             <motion.div variants={itemVariants} className="w-full md:w-1/2">
               <p className="text-xs font-semibold uppercase tracking-widest text-brand-accent mb-3">
-                Our Mascot
+                {section("maui").eyebrow ?? "Our Mascot"}
               </p>
               <h2 className="font-heading text-3xl md:text-4xl font-bold mb-6">
-                Meet <span className="text-brand-accent">Maui</span>
+                <MarketingHeading text={section("maui").heading ?? "Meet Maui"} emphasis={section("maui").emphasis ?? "Maui"} className="text-brand-accent" />
               </h2>
               <p className="text-text-muted text-lg mb-6 leading-relaxed">
-                Maui is our small, fluffy, and endlessly enthusiastic Chief Grooming Officer! With his signature red bandana and happy tail wags, he&apos;s here to guide you through finding the best grooming services for your pets.
+                {section("maui").intro ?? "Maui is our small, fluffy, and endlessly enthusiastic Chief Grooming Officer! With his signature red bandana and happy tail wags, he's here to guide you through finding the best grooming services for your pets."}
               </p>
               <p className="text-text-muted text-lg leading-relaxed">
-                Whether he&apos;s testing out a new bubble bath or giving the paw of approval to a fresh haircut, Maui ensures every groomer in our directory meets our high standards.
+                {section("maui-details").intro ?? "Whether he's testing out a new bubble bath or giving the paw of approval to a fresh haircut, Maui ensures every groomer in our directory meets our high standards."}
               </p>
             </motion.div>
 
             <motion.div variants={itemVariants} className="w-full md:w-1/2 flex justify-center">
               <div className="relative">
                 <div className="absolute inset-0 bg-brand-secondary/20 rounded-full blur-3xl -z-10" />
-                <MauiMascot src="/maui-assets/05-maui-sitting-pretty.png?v=maui-20260904-alpha1" size={320} animation="bounce" />
+                <MauiMascot src={section("maui").imageSrc || "/maui-assets/05-maui-sitting-pretty.png?v=maui-20260904-alpha1"} alt={section("maui").imageAlt} size={320} animation="bounce" />
               </div>
             </motion.div>
           </motion.div>

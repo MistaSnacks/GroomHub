@@ -1,6 +1,6 @@
 {
   "captured_on": "2026-09-11",
-  "purpose": "Temporary runtime transfer; keep tracked until the receiving machine confirms its pull.",
+  "purpose": "Historical September 11 transfer manifest, not a current tracked-file inventory. SSH verified the independently installed receiving-PC skill on September 12; skills/hermes-blog-skill is now ignored.",
   "policy_note": "Shared policy uses checkout-relative output. Keep an existing installation's absolute policy/output history intact.",
   "files": [
     {
@@ -127,5 +127,6 @@
       "path": "src/lib/grooming-guides.ts",
       "sha256": "987cb07257f8291279898844ff073255e5e38fd51c48d335c01f0d7002ffcf05"
     }
-  ]
+  ],
+  "receiving_skill_verified_on": "2026-09-12"
 }
