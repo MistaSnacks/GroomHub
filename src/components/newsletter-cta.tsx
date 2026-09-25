@@ -68,6 +68,7 @@ export function NewsletterCta() {
             <input type="text" name="hp_field" tabIndex={-1} autoComplete="off" className="hidden" />
             <input
               type="email"
+              aria-label="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="your@email.com"

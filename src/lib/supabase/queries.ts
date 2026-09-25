@@ -1,5 +1,6 @@
 import { PUBLIC_EXCLUDED_FILTER } from "../listing-review";
 import { unstable_cache } from "next/cache";
+import { cache } from "react";
 import { activeSponsorshipFilter, sortRegularList } from "@/lib/listing-rules";
 import { supabase } from "./client";
 import { normalizeTags } from "../tags";
@@ -131,7 +132,7 @@ export async function getListingsByState(
   return applyHierarchy(withTagsAll((data ?? []) as BusinessListing[]).filter(hasKnownCity));
 }
 
-export async function getListingBySlug(
+async function getListingBySlugUncached(
   slug: string
 ): Promise<NormalizedListing | null> {
   const { data, error } = await supabase
@@ -422,8 +423,8 @@ export async function getListingsByOwner(userId: string): Promise<NormalizedList
     .order("claimed_at", { ascending: false });
 
   if (error) {
-    console.error("getListingsByOwner error:", error.message);
-    return [];
+    console.error(JSON.stringify({ scope: "queries", event: "getListingsByOwner_failed", ownerId: userId, code: error.code, message: error.message }));
+    throw new Error("Your listings could not be loaded right now. Please try again.");
   }
   return withTagsAll((data ?? []) as BusinessListing[]);
 }
@@ -537,7 +538,7 @@ export async function getAllCitiesWithCounts(): Promise<CityWithCount[]> {
   return getCities();
 }
 
-export async function getCityBySlug(
+async function getCityBySlugUncached(
   slug: string,
   stateAbbr?: string
 ): Promise<CityWithCount | null> {
@@ -686,3 +687,7 @@ export async function searchListings(
   const results = fuse.search(logicalQuery);
   return results.map(res => res.item);
 }
+
+// generateMetadata and the page both call these; React.cache dedupes them per request.
+export const getListingBySlug = cache(getListingBySlugUncached);
+export const getCityBySlug = cache(getCityBySlugUncached);

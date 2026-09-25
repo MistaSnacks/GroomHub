@@ -37,7 +37,8 @@ export default async function InboxPage({
         listingsQuery = listingsQuery.eq("id", params.id);
     }
 
-    const { data: listings } = await listingsQuery;
+    const { data: listings, error: listingsError } = await listingsQuery;
+    if (listingsError) throw new Error("Your listings could not be loaded right now. Please try again.");
     const owned = listings ?? [];
 
     if (owned.length === 0) {
@@ -54,12 +55,13 @@ export default async function InboxPage({
     const listingIds = owned.map((l) => l.id);
     const listingNames = new Map(owned.map((l) => [l.id, l.name]));
 
-    const { data: leadRows } = await admin
+    const { data: leadRows, error: leadsError } = await admin
         .from("leads")
         .select("id, listing_id, sender_name, sender_email, sender_phone, message, created_at")
         .in("listing_id", listingIds)
         .order("created_at", { ascending: false });
 
+    if (leadsError) throw new Error("Your inbox could not be loaded right now. Please try again.");
     const leads = (leadRows ?? []) as LeadRow[];
 
     return (

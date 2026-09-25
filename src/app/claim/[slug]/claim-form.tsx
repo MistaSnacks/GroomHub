@@ -192,15 +192,16 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
     return (
         <form onSubmit={onSubmit} className="space-y-4">
             {error && (
-                <div className="p-3 text-sm text-[#C2185B] bg-[#FCE4EC] rounded-xl border border-[#F48FB1]">
+                <div role="alert" className="p-3 text-sm text-[#C2185B] bg-[#FCE4EC] rounded-xl border border-[#F48FB1]">
                     {error}
                 </div>
             )}
 
             {/* Mode toggle */}
-            <div className="flex rounded-xl border border-border overflow-hidden">
+            <div className="flex rounded-xl border border-border overflow-hidden" role="group" aria-label="Account type">
                 <button
                     type="button"
+                    aria-pressed={mode === "signup"}
                     onClick={() => { setMode("signup"); setError(null); }}
                     className={`flex-1 py-2.5 text-sm font-semibold transition-colors ${
                         mode === "signup"
@@ -212,6 +213,7 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
                 </button>
                 <button
                     type="button"
+                    aria-pressed={mode === "signin"}
                     onClick={() => { setMode("signin"); setError(null); }}
                     className={`flex-1 py-2.5 text-sm font-semibold transition-colors ${
                         mode === "signin"

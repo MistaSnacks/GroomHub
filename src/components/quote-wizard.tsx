@@ -198,16 +198,18 @@ export function QuoteWizard() {
           </h3>
 
           <div>
-            <label id="quote-pet-type-label" className="text-sm font-medium text-text mb-2 block">
+            <p id="quote-pet-type-label" className="text-sm font-medium text-text mb-2 block">
               What kind of pet?
-            </label>
-            <div className="flex gap-3">
+            </p>
+            <div className="flex gap-3" role="group" aria-labelledby="quote-pet-type-label">
               {[
                 { value: "dog", label: "Dog", icon: Dog },
                 { value: "cat", label: "Cat", icon: Cat },
               ].map(({ value, label, icon: Icon }) => (
                 <button
                   key={value}
+                  type="button"
+                  aria-pressed={form.petType === value}
                   onClick={() => updateForm("petType", value)}
                   className={`flex-1 flex items-center justify-center gap-2 rounded-xl border-2 py-4 text-sm font-semibold transition-colors ${form.petType === value
                       ? "border-brand-accent bg-brand-accent/5 text-brand-accent"
@@ -251,13 +253,15 @@ export function QuoteWizard() {
           </div>
 
           <div>
-            <label id="quote-pet-size-label" className="text-sm font-medium text-text mb-2 block">
+            <p id="quote-pet-size-label" className="text-sm font-medium text-text mb-2 block">
               Size
-            </label>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2" role="group" aria-labelledby="quote-pet-size-label">
               {sizes.map((size) => (
                 <button
                   key={size.value}
+                  type="button"
+                  aria-pressed={form.petSize === size.value}
                   onClick={() => updateForm("petSize", size.value)}
                   className={`rounded-xl border-2 p-3 text-center transition-colors ${form.petSize === size.value
                       ? "border-brand-accent bg-brand-accent/5"

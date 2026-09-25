@@ -29,6 +29,7 @@ import { SERVICE_TAGS, SPECIALTY_TAGS } from "@/lib/tags";
 import { getLimits } from "@/lib/tiers";
 import { usableListingImages } from "@/lib/images";
 import type { DayHours } from "@/lib/types";
+import { resizeImage } from "@/lib/resize-image";
 
 const DAYS = [
   "Monday",
@@ -184,7 +185,9 @@ export function EditListingClient(props: EditListingClientProps) {
       }
       setUploadingPhotos(true);
       try {
-        for (const file of files) {
+        for (const original of files) {
+          // Downscale and crop to 4:3 WebP in the browser; a phone photo is often 4 to 8 MB.
+          const file = await resizeImage(original).catch(() => original);
           if (file.size > MAX_CLIENT_FILE_SIZE) {
             setPhotoError("File must be under 5MB.");
             break;

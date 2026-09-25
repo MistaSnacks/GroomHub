@@ -282,6 +282,7 @@ export function SearchHero() {
               if (flatItems.length > 0) setIsOpen(true);
             }}
             placeholder="Search by city, zip, service, or groomer name..."
+            aria-label="Search groomers by city, zip, service, or name"
             className="w-full h-12 pl-10 pr-4 rounded-xl border border-border bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-secondary text-text"
             role="combobox"
             aria-expanded={isOpen}

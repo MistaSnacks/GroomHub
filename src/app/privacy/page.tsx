@@ -123,7 +123,11 @@ export default function PrivacyPage() {
               <ul className="list-disc pl-6 space-y-2 text-text-muted">
                 <li>
                   <strong className="text-text">Service providers</strong> who
-                  help us operate the site (hosting, analytics, email delivery).
+                  help us operate the site: Vercel (hosting and page analytics),
+                  Supabase (database, authentication, photo storage), Resend
+                  (transactional email), Snackbox (content management for the
+                  guides), and Google Maps (the map embed on listing pages, which
+                  may set Google cookies).
                 </li>
                 <li>
                   <strong className="text-text">Business owners</strong> who

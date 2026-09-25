@@ -65,9 +65,10 @@ export function TagFilterBar({
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-text-muted">Sort by</span>
+          <label htmlFor="listing-sort" className="text-xs text-text-muted">Sort by</label>
           <div className="relative">
             <select
+              id="listing-sort"
               value={sort}
               onChange={(e) => setSort(e.target.value)}
               className="appearance-none rounded-lg border border-border bg-white px-3 py-2 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent"
@@ -89,7 +90,10 @@ export function TagFilterBar({
       {/* Filter toggle + active pills */}
       <div className="flex flex-wrap items-center gap-2">
         <button
+          type="button"
           onClick={() => setExpanded(!expanded)}
+          aria-expanded={expanded}
+          aria-controls="listing-filters-panel"
           className="flex items-center gap-1.5 rounded-full border border-border bg-white px-3 py-1.5 text-xs font-medium text-text-muted hover:border-brand-accent/50 transition-colors"
         >
           <FadersHorizontal weight="bold" className="h-3.5 w-3.5" />
@@ -146,7 +150,7 @@ export function TagFilterBar({
 
       {/* Expanded filter sections */}
       {expanded && (
-        <div className="rounded-xl border border-border bg-white p-4 space-y-4 animate-fade-slide-up" style={{ animationDelay: "0ms" }}>
+        <div id="listing-filters-panel" className="rounded-xl border border-border bg-white p-4 space-y-4 animate-fade-slide-up" style={{ animationDelay: "0ms" }}>
           {/* Services */}
           <FilterSection title="Services">
             {SERVICE_TAGS.map((tag) => (
@@ -209,9 +213,9 @@ function FilterSection({
 }) {
   return (
     <div>
-      <h4 className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2">
+      <h3 className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2">
         {title}
-      </h4>
+      </h3>
       <div className="flex flex-wrap gap-1.5">{children}</div>
     </div>
   );
@@ -228,7 +232,9 @@ function TogglePill({
 }) {
   return (
     <button
+      type="button"
       onClick={onClick}
+      aria-pressed={active}
       className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
         active
           ? "border-brand-accent bg-brand-accent/10 text-brand-accent"
@@ -251,10 +257,12 @@ function FilterPill({
     <span className="inline-flex items-center gap-1 rounded-full border border-brand-accent bg-brand-accent/10 px-2.5 py-1 text-xs font-medium text-brand-accent">
       {label}
       <button
+        type="button"
         onClick={onRemove}
+        aria-label={`Remove ${label} filter`}
         className="hover:text-fun-pop transition-colors"
       >
-        <X weight="bold" className="h-3 w-3" />
+        <X weight="bold" className="h-3 w-3" aria-hidden="true" />
       </button>
     </span>
   );
