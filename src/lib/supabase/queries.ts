@@ -142,8 +142,9 @@ export async function getListingBySlug(
     .single();
 
   if (error) {
-    console.error("getListingBySlug error:", error.message);
-    return null;
+    if (error.code === "PGRST116") return null; // no rows: a real 404
+    console.error(JSON.stringify({ scope: "queries", event: "getListingBySlug_failed", slug, code: error.code, message: error.message }));
+    throw new Error("The directory is temporarily unavailable. Please try again.");
   }
   return withTags(data as BusinessListing);
 }
@@ -474,6 +475,7 @@ async function getCityRows(stateAbbr?: string): Promise<CityRow[]> {
       .from("business_listings")
       .select("city_slug, city, state")
       .not("slug", "in", PUBLIC_EXCLUDED_FILTER)
+      .order("id", { ascending: true })
       .range(from, to);
 
     if (stateAbbr) {
@@ -598,15 +600,27 @@ let listingFuseCache: {
   fuse: Fuse<NormalizedListing>;
   rowCount: number;
   builtAt: number;
+  signature: string;
 } | null = null;
 const LISTING_FUSE_TTL_MS = 5 * 60 * 1000;
 
+// Cheap content signature so an edit that keeps the row count still rebuilds the index.
+function listingSignature(all: NormalizedListing[]): string {
+  let h = 0;
+  for (const l of all) {
+    const s = `${l.slug}|${l.name}|${l.city_slug}|${l.description?.length ?? 0}|${l.service_tags.join(",")}`;
+    for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+  }
+  return `${all.length}:${h}`;
+}
+
 function getListingFuse(all: NormalizedListing[]): Fuse<NormalizedListing> {
   const now = Date.now();
+  const signature = listingSignature(all);
   if (
     listingFuseCache &&
     now - listingFuseCache.builtAt < LISTING_FUSE_TTL_MS &&
-    listingFuseCache.rowCount === all.length
+    listingFuseCache.signature === signature
   ) {
     return listingFuseCache.fuse;
   }
@@ -626,7 +640,7 @@ function getListingFuse(all: NormalizedListing[]): Fuse<NormalizedListing> {
     useExtendedSearch: true, // Required for logical queries ($and)
   });
 
-  listingFuseCache = { fuse, rowCount: all.length, builtAt: now };
+  listingFuseCache = { fuse, rowCount: all.length, builtAt: now, signature };
   return fuse;
 }
 
@@ -643,7 +657,13 @@ export async function searchListings(
 
   // Split the query into distinct terms for multi-intent searching
   // e.g. "Seattle Mobile" -> ["seattle", "mobile"]
-  const terms = q.split(/\s+/).filter(Boolean);
+  // Fuse extended-search treats ! ^ = ' " | as operators; users mean them literally.
+  const terms = q
+    .split(/\s+/)
+    .map((t) => t.replace(/[!^='"|]/g, ""))
+    .filter(Boolean)
+    .slice(0, 6);
+  if (terms.length === 0) return [];
 
   const fuse = getListingFuse(all);
 

@@ -165,12 +165,29 @@ export default async function CityPage({ params }: CityPageProps) {
           {featuredListings.length > 0 && (
             <FeaturedSection listings={featuredListings} cityName={cityName} />
           )}
-          <Suspense fallback={<div className="py-8 text-center text-text-muted">Loading filters...</div>}>
-            <CityListingsClient
-              listings={listings}
-              heading={`Best Dog Groomers in ${cityName}`}
-            />
-          </Suspense>
+          {listings.length > 0 ? (
+            <Suspense fallback={<div className="py-8 text-center text-text-muted">Loading filters...</div>}>
+              <CityListingsClient
+                listings={listings}
+                heading={`Best Dog Groomers in ${cityName}`}
+              />
+            </Suspense>
+          ) : (
+            <div className="py-16 text-center">
+              <p className="font-heading text-lg text-brand-primary">
+                No dog groomers are listed in {cityName} yet.
+              </p>
+              <p className="text-sm text-text-muted mt-2">
+                Try a nearby city below, or tell us about a groomer we are missing.
+              </p>
+              <Link
+                href="/get-listed"
+                className="inline-flex mt-5 text-sm font-semibold text-brand-accent underline hover:text-brand-primary"
+              >
+                Add a grooming business
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 

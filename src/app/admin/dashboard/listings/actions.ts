@@ -2,6 +2,7 @@
 
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireAdmin } from "@/lib/admin";
+import { revalidatePath, updateTag } from "next/cache";
 
 const getAdmin = createAdminClient;
 
@@ -39,8 +40,10 @@ export async function toggleFeatured(slug: string, featured: boolean) {
     .eq("slug", slug);
 
   if (error) {
-    console.error("toggleFeatured error:", error.message);
+    console.error(JSON.stringify({ scope: "admin", event: "toggleFeatured_failed", slug, code: error.code, message: error.message }));
     return { success: false, error: error.message };
   }
+  updateTag("listings");
+  revalidatePath(`/groomer/${slug}`);
   return { success: true };
 }

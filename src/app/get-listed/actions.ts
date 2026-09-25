@@ -2,6 +2,8 @@
 
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendEmail } from "@/lib/email/send";
+import { headers } from "next/headers";
+import { rateLimit, clientKey } from "@/lib/rate-limit";
 
 interface SubmitResult {
   ok: boolean;
@@ -62,6 +64,10 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
       emailDomain: droppedEmail.includes("@") ? droppedEmail.split("@").pop() : null,
     }));
     return { ok: true };
+  }
+
+  if (!rateLimit(`submit:${clientKey(await headers())}`, 5, 10 * 60_000).ok) {
+    return { ok: false, error: "Too many submissions from this connection. Please try again in a few minutes." };
   }
 
   let payloadSize = 0;

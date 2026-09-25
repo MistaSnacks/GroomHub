@@ -27,6 +27,8 @@ export interface RefeatureTriggerStatus {
   houseCity: string | null;
   met: boolean;
   checkedAt: string;
+  /** Set when a count query failed; the other numbers are then meaningless. */
+  error: string | null;
 }
 
 export async function getRefeatureTriggerStatus(): Promise<RefeatureTriggerStatus> {
@@ -54,6 +56,7 @@ export async function getRefeatureTriggerStatus(): Promise<RefeatureTriggerStatu
       : Promise.resolve({ data: null, error: null }),
   ]);
 
+  const queryError = claimedRes.error?.message ?? payingRes.error?.message ?? houseRes.error?.message ?? null;
   const otherClaimed = claimedRes.count ?? 0;
   const payingSponsors = payingRes.count ?? 0;
   const house = houseRes.data as
@@ -61,7 +64,7 @@ export async function getRefeatureTriggerStatus(): Promise<RefeatureTriggerStatu
     | null;
 
   const houseCurrentlySponsored = !!house && isSponsored(house);
-  const configured = !!slug && !!house;
+  const configured = !!slug && !!house && !queryError;
   const met =
     configured &&
     !houseCurrentlySponsored &&
@@ -70,6 +73,7 @@ export async function getRefeatureTriggerStatus(): Promise<RefeatureTriggerStatu
 
   return {
     configured,
+    error: queryError,
     otherClaimed,
     claimedTarget: CLAIMED_TARGET,
     payingSponsors,

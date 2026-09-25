@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { rateLimit, clientKey } from "@/lib/rate-limit";
 import { getCities, searchListings } from "@/lib/supabase/queries";
 import { SERVICE_TAGS, SPECIALTY_TAGS, type TagDefinition } from "@/lib/tags";
 import Fuse from "fuse.js";
@@ -43,7 +44,12 @@ function getCityFuse(cities: CityWithCount[]): Fuse<CityWithCount> {
 }
 
 export async function GET(request: NextRequest) {
-  const q = request.nextUrl.searchParams.get("q")?.trim() ?? "";
+  const q = (request.nextUrl.searchParams.get("q")?.trim() ?? "").slice(0, 64);
+
+  const limit = rateLimit(`search:${clientKey(request.headers)}`, 120, 60_000);
+  if (!limit.ok) {
+    return NextResponse.json({ error: "Too many searches. Please slow down." }, { status: 429, headers: { "Retry-After": String(limit.retryAfterSeconds) } });
+  }
 
   if (q.length < 2) {
     return NextResponse.json({
@@ -71,10 +77,8 @@ export async function GET(request: NextRequest) {
   // Limit groomer results for dropdown
   const groomerResults = groomers.slice(0, 6);
 
-  return NextResponse.json({
-    cities,
-    groomers: groomerResults,
-    services,
-    specialties,
-  });
+  return NextResponse.json(
+    { cities, groomers: groomerResults, services, specialties },
+    { headers: { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" } }
+  );
 }

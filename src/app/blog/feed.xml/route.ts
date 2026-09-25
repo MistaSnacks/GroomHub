@@ -2,6 +2,8 @@ import fs from "fs";
 import path from "path";
 import { getBlogPosts } from "@/lib/blog";
 
+export const revalidate = 900;
+
 const BASE_URL = "https://groomlocal.com";
 
 const ENCLOSURE_TYPES: Record<string, string> = {

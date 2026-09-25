@@ -17,6 +17,10 @@ export async function GET(request: NextRequest) {
   }
 
   const status = await getRefeatureTriggerStatus();
+  if (status.error) {
+    console.error(JSON.stringify({ scope: "refeature_cron", event: "query_failed", message: status.error }));
+    return NextResponse.json({ ...status, emailed: false }, { status: 500 });
+  }
   const emailed = status.met ? await notify(status) : false;
   if (status.met && !emailed) {
     // The trigger fired but nobody was told. Non-200 so Vercel's cron log shows it.

@@ -1,6 +1,8 @@
 import { getFeaturedCountsForCities } from "@/lib/supabase/queries";
 import { PricingPageClient } from "./pricing-page-client";
 
+export const revalidate = 3600;
+
 const TOP_CITIES = [
   { slug: "seattle", name: "Seattle", stateAbbr: "WA" },
   { slug: "portland", name: "Portland", stateAbbr: "OR" },

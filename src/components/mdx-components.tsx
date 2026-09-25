@@ -1,4 +1,5 @@
-import type { MDXComponents } from "mdx/types";
+// Local alias; the MDX toolchain is no longer a dependency (blog content comes from Snackbox).
+type MDXComponents = Record<string, React.ElementType>;
 import Link from "next/link";
 import type { ReactNode } from "react";
 

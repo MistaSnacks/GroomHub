@@ -1,15 +1,21 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { MauiMascot } from "@/components/maui-mascot";
 import { ArrowClockwise, House } from "@phosphor-icons/react";
 
 export default function Error({
+  error,
   reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  useEffect(() => {
+    console.error(JSON.stringify({ scope: "route-error", digest: error.digest, message: error.message }));
+  }, [error]);
+
   return (
     <div className="min-h-[70vh] flex items-center justify-center bg-bg px-4">
       <div className="text-center max-w-md">

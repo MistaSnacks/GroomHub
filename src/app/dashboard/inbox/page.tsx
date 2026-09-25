@@ -126,7 +126,7 @@ export default async function InboxPage({
                                             )}
                                             {lead.created_at && (
                                                 <time dateTime={lead.created_at}>
-                                                    {new Date(lead.created_at).toLocaleString("en-US", {
+                                                    {new Date(lead.created_at).toLocaleString("en-US", { timeZone: "America/Los_Angeles",
                                                         month: "short",
                                                         day: "numeric",
                                                         year: "numeric",

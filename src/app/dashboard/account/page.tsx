@@ -46,7 +46,7 @@ export default async function AccountPage() {
               Account Created
             </label>
             <p className="text-sm text-text">
-              {new Date(user.created_at).toLocaleDateString("en-US", {
+              {new Date(user.created_at).toLocaleDateString("en-US", { timeZone: "America/Los_Angeles",
                 year: "numeric",
                 month: "long",
                 day: "numeric",

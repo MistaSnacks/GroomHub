@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { rateLimit, clientKey } from "@/lib/rate-limit";
 
 const MAX_PAYLOAD_BYTES = 20_000;
 
@@ -8,6 +9,10 @@ function clean(value: unknown, max = 200): string {
 }
 
 export async function POST(request: NextRequest) {
+  const limit = rateLimit(`newsletter:${clientKey(request.headers)}`, 5, 10 * 60_000);
+  if (!limit.ok) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429, headers: { "Retry-After": String(limit.retryAfterSeconds) } });
+  }
   try {
     const contentLength = Number(request.headers.get("content-length") || 0);
     if (contentLength > MAX_PAYLOAD_BYTES) {

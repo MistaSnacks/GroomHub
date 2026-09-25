@@ -2,7 +2,8 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
+import { logEvent } from "@/lib/log";
 import { getLimits } from "@/lib/tiers";
 
 const getAdmin = createAdminClient;
@@ -90,6 +91,7 @@ export async function uploadPhoto(formData: FormData) {
     return { error: "Failed to save photo." };
   }
 
+  updateTag("listings");
   revalidatePath(`/groomer/${listing.slug}`);
   revalidatePath(`/dashboard/listing/${listing.slug}`);
   return { success: true, url: urlData.publicUrl };
@@ -116,7 +118,8 @@ export async function deletePhoto(formData: FormData) {
     const url = new URL(imageUrl);
     const pathMatch = url.pathname.match(/\/groomer-photos\/(.+)$/);
     if (pathMatch) {
-      await admin.storage.from("groomer-photos").remove([pathMatch[1]]);
+      const { error: removeError } = await admin.storage.from("groomer-photos").remove([pathMatch[1]]);
+      if (removeError) logEvent("warn", "photos", "storage_remove_failed", { listingId, path: pathMatch[1], message: removeError.message });
     }
   } catch {
     // If URL parsing fails or storage delete fails, still remove from DB
@@ -127,8 +130,12 @@ export async function deletePhoto(formData: FormData) {
     .update({ images: newImages })
     .eq("id", listingId);
 
-  if (dbError) return { error: "Failed to delete photo." };
+  if (dbError) {
+    logEvent("error", "photos", "db_update_failed", { listingId, code: dbError.code, message: dbError.message });
+    return { error: "Failed to delete photo." };
+  }
 
+  updateTag("listings");
   revalidatePath(`/groomer/${listing.slug}`);
   revalidatePath(`/dashboard/listing/${listing.slug}`);
   return { success: true };
@@ -172,8 +179,12 @@ export async function deletePhotos(listingId: string, imageUrls: string[]) {
     .update({ images: newImages })
     .eq("id", listingId);
 
-  if (dbError) return { error: "Failed to delete photos." };
+  if (dbError) {
+    logEvent("error", "photos", "db_update_failed", { listingId, code: dbError.code, message: dbError.message });
+    return { error: "Failed to delete photos." };
+  }
 
+  updateTag("listings");
   revalidatePath(`/groomer/${listing.slug}`);
   revalidatePath(`/dashboard/listing/${listing.slug}`);
   return { success: true, deleted: verified.length };
@@ -191,19 +202,6 @@ export async function uploadLogo(formData: FormData) {
   const result = await requireListingOwnership(listingId);
   if ("error" in result) return { error: result.error };
   const { listing, admin } = result;
-
-  // Delete old logo if exists
-  if (listing.logo_url) {
-    try {
-      const url = new URL(listing.logo_url);
-      const pathMatch = url.pathname.match(/\/groomer-photos\/(.+)$/);
-      if (pathMatch) {
-        await admin.storage.from("groomer-photos").remove([pathMatch[1]]);
-      }
-    } catch {
-      // Continue even if old delete fails
-    }
-  }
 
   const timestamp = Date.now();
   const ext = EXT_BY_MIME[file.type] || "jpg";
@@ -227,8 +225,25 @@ export async function uploadLogo(formData: FormData) {
     .update({ logo_url: urlData.publicUrl })
     .eq("id", listingId);
 
-  if (dbError) return { error: "Failed to save logo." };
+  if (dbError) {
+    logEvent("error", "photos", "logo_save_failed", { listingId, code: dbError.code, message: dbError.message });
+    return { error: "Failed to save logo." };
+  }
 
+  // Only now remove the previous logo; a failed upload above leaves the old one intact.
+  if (listing.logo_url) {
+    try {
+      const old = new URL(listing.logo_url).pathname.match(/\/groomer-photos\/(.+)$/);
+      if (old) {
+        const { error: removeError } = await admin.storage.from("groomer-photos").remove([old[1]]);
+        if (removeError) logEvent("warn", "photos", "storage_remove_failed", { listingId, path: old[1], message: removeError.message });
+      }
+    } catch {
+      // Unparseable legacy URL; nothing to remove.
+    }
+  }
+
+  updateTag("listings");
   revalidatePath(`/groomer/${listing.slug}`);
   revalidatePath(`/dashboard/listing/${listing.slug}`);
   return { success: true, url: urlData.publicUrl };
@@ -248,7 +263,8 @@ export async function deleteLogo(formData: FormData) {
       const url = new URL(listing.logo_url);
       const pathMatch = url.pathname.match(/\/groomer-photos\/(.+)$/);
       if (pathMatch) {
-        await admin.storage.from("groomer-photos").remove([pathMatch[1]]);
+        const { error: removeError } = await admin.storage.from("groomer-photos").remove([pathMatch[1]]);
+      if (removeError) logEvent("warn", "photos", "storage_remove_failed", { listingId, path: pathMatch[1], message: removeError.message });
       }
     } catch {
       // Continue
@@ -260,8 +276,12 @@ export async function deleteLogo(formData: FormData) {
     .update({ logo_url: null })
     .eq("id", listingId);
 
-  if (dbError) return { error: "Failed to remove logo." };
+  if (dbError) {
+    logEvent("error", "photos", "db_update_failed", { listingId, code: dbError.code, message: dbError.message });
+    return { error: "Failed to remove logo." };
+  }
 
+  updateTag("listings");
   revalidatePath(`/groomer/${listing.slug}`);
   revalidatePath(`/dashboard/listing/${listing.slug}`);
   return { success: true };

@@ -2,6 +2,9 @@
 
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendEmail } from "@/lib/email/send";
+import { headers } from "next/headers";
+import { after } from "next/server";
+import { rateLimit, clientKey } from "@/lib/rate-limit";
 import {
   renderBrandedEmail,
   emailDetailCard,
@@ -58,6 +61,10 @@ export async function sendGroomerMessage(
 ): Promise<GroomerMessageResult> {
   if (formData.get("hp_field")?.toString()) {
     return { ok: true };
+  }
+
+  if (!rateLimit(`lead:${clientKey(await headers())}`, 5, 10 * 60_000).ok) {
+    return { ok: false, error: "Too many messages from this connection. Please try again in a few minutes." };
   }
 
   const listingId = formData.get("listingId")?.toString().trim() || "";
@@ -119,6 +126,8 @@ export async function sendGroomerMessage(
   }
   const leadId = lead.id as string;
 
+  // Notify after the response is sent; the lead row is already the source of truth.
+  after(async () => {
   // Notify the verified account email first; the scraped listing email is a fallback only.
   let ownerEmail: string | null = null;
   const { data: ownerData, error: ownerError } = await admin.auth.admin.getUserById(listing.owner_id);
@@ -150,6 +159,7 @@ export async function sendGroomerMessage(
         : { notify_error: outcome.error.slice(0, 500) }
     )
     .eq("id", leadId);
+  });
 
   return { ok: true };
 }

@@ -116,7 +116,7 @@ export async function getDashboardAnalytics(days: number) {
     for (let i = 0; i < days; i++) {
         const d = new Date(startDate);
         d.setDate(d.getDate() + i + 1); // shift by 1 to include up to today
-        const dateStr = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+        const dateStr = d.toLocaleDateString("en-US", { timeZone: "America/Los_Angeles", month: "short", day: "numeric" });
         trendMap.set(dateStr, { website: 0, directions: 0, calls: 0 });
     }
 
@@ -127,7 +127,7 @@ export async function getDashboardAnalytics(days: number) {
     let callsCount = 0;
 
     currentEvents.forEach(e => {
-        const dateStr = new Date(e.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+        const dateStr = new Date(e.created_at).toLocaleDateString("en-US", { timeZone: "America/Los_Angeles", month: "short", day: "numeric" });
         if (!trendMap.has(dateStr)) trendMap.set(dateStr, { website: 0, directions: 0, calls: 0 });
 
         const entry = trendMap.get(dateStr)!;

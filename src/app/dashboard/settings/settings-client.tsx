@@ -44,6 +44,20 @@ export function SettingsClient({ userEmail, listings }: SettingsClientProps) {
           ) : (
             <form action={updatePassword} className="space-y-3 pt-2">
               <div>
+                <label className="block text-sm font-medium text-text mb-1.5" htmlFor="currentPassword">
+                  Current Password
+                </label>
+                <input
+                  type="password"
+                  id="currentPassword"
+                  name="currentPassword"
+                  autoComplete="current-password"
+                  className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm shadow-sm transition-colors focus:border-brand-primary focus:ring-1 focus:ring-brand-primary outline-none"
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+              <div>
                 <label className="block text-sm font-medium text-text mb-1.5" htmlFor="newPassword">
                   New Password
                 </label>
@@ -54,7 +68,8 @@ export function SettingsClient({ userEmail, listings }: SettingsClientProps) {
                   className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm shadow-sm transition-colors focus:border-brand-primary focus:ring-1 focus:ring-brand-primary outline-none"
                   placeholder="••••••••"
                   required
-                  minLength={6}
+                  minLength={8}
+                  autoComplete="new-password"
                 />
               </div>
               <div className="flex items-center gap-3">

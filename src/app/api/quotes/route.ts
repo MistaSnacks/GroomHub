@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendEmail } from "@/lib/email/send";
+import { rateLimit, clientKey } from "@/lib/rate-limit";
 
 const VALID_PET_TYPES = ["dog", "cat"];
 const VALID_SIZES = ["small", "medium", "large", "xlarge", ""];
@@ -131,6 +132,10 @@ async function notify(q: QuotePayload, quoteId: string): Promise<void> {
 const MAX_PAYLOAD_BYTES = 20_000;
 
 export async function POST(request: NextRequest) {
+  const limit = rateLimit(`quote:${clientKey(request.headers)}`, 5, 10 * 60_000);
+  if (!limit.ok) {
+    return NextResponse.json({ error: "Too many requests. Please try again in a few minutes." }, { status: 429, headers: { "Retry-After": String(limit.retryAfterSeconds) } });
+  }
   const contentLength = Number(request.headers.get("content-length") || 0);
   if (contentLength > MAX_PAYLOAD_BYTES) {
     return NextResponse.json({ error: "Invalid request." }, { status: 400 });

@@ -171,7 +171,7 @@ export default async function DashboardPage({
               </p>
               {listing.claimed_at && (
                 <p className="text-xs text-text-muted mb-4">
-                  Claimed on {new Date(listing.claimed_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                  Claimed on {new Date(listing.claimed_at).toLocaleDateString("en-US", { timeZone: "America/Los_Angeles", month: "short", day: "numeric", year: "numeric" })}
                 </p>
               )}
               <div className="flex items-center gap-3">

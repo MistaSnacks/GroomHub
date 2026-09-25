@@ -23,7 +23,8 @@ export function parseListingCommerce(form: FormData): { patch: { booking_url?: s
     const max = Number(String(form.get("price_max") || "").trim());
     if (![min, max].every(n => Number.isSafeInteger(n) && n >= 0 && n <= 2147483647)) return { patch: {}, error: "Prices must be positive whole-dollar amounts, or blank." };
     if (max > 0 && (min === 0 || max < min)) return { patch: {}, error: "Maximum price must be at least the starting price. Leave it blank if there is no fixed maximum." };
-    Object.assign(patch, { price_min: min, price_max: max, price_range: "", transparent_pricing: min > 0 });
+    // A numeric price replaces the scraped $/$$/$$$ tier; blank prices leave it untouched.
+    Object.assign(patch, { price_min: min, price_max: max, transparent_pricing: min > 0, ...(min > 0 ? { price_range: "" } : {}) });
   }
   return { patch };
 }

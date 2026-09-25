@@ -5,6 +5,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath, updateTag } from "next/cache";
 import { parseListingCommerce } from "@/lib/listing-commerce";
 import { redirect } from "next/navigation";
+import { PASSWORD_MIN_LENGTH } from "@/lib/auth-rules";
 
 const getAdmin = createAdminClient;
 
@@ -87,11 +88,22 @@ export async function unclaimListing(formData: FormData) {
 export async function updatePassword(formData: FormData) {
   const newPassword = formData.get("newPassword") as string;
 
-  if (!newPassword || newPassword.length < 6) {
-    redirect("/dashboard/settings?error=Password must be at least 6 characters");
+  const currentPassword = (formData.get("currentPassword") as string | null) ?? "";
+
+  if (!newPassword || newPassword.length < PASSWORD_MIN_LENGTH) {
+    redirect(`/dashboard/settings?error=Password must be at least ${PASSWORD_MIN_LENGTH} characters`);
   }
 
-  const { supabase } = await requireUser("/login?redirect=/dashboard/settings");
+  const { supabase, user } = await requireUser("/login?redirect=/dashboard/settings");
+
+  // Re-authenticate so a hijacked session cannot rotate the password silently.
+  if (!user.email || !currentPassword) {
+    redirect("/dashboard/settings?error=Enter your current password");
+  }
+  const { error: reauthError } = await supabase.auth.signInWithPassword({ email: user.email, password: currentPassword });
+  if (reauthError) {
+    redirect("/dashboard/settings?error=Current password is incorrect");
+  }
 
   const { error } = await supabase.auth.updateUser({ password: newPassword });
 
@@ -112,16 +124,22 @@ export async function deleteAccount(formData: FormData) {
 
   const { supabase, user } = await requireUser("/login");
 
-  // Unclaim all listings owned by this user (use admin to ensure it works)
+  // Release every listing first; abort if that fails so no listing points at a deleted account.
   const admin = getAdmin();
-  await admin
+  const { error: releaseError } = await admin
     .from("business_listings")
     .update({
       owner_id: null,
       subscription_tier: null,
       claimed_at: null,
+      is_featured: false,
+      sponsor_paid_until: null,
     })
     .eq("owner_id", user.id);
+  if (releaseError) {
+    console.error(JSON.stringify({ scope: "account", event: "release_failed", userId: user.id, code: releaseError.code, message: releaseError.message }));
+    redirect("/dashboard/settings?error=Failed to delete account");
+  }
 
   // Delete the auth user via admin client
   const { error } = await admin.auth.admin.deleteUser(user.id);

@@ -8,6 +8,9 @@ test("safeRedirectPath rejects every off-site shape", () => {
     assert.equal(safeRedirectPath(bad), "/dashboard", String(bad));
   }
   assert.equal(safeRedirectPath("/dashboard/listing/foo?x=1"), "/dashboard/listing/foo?x=1");
+  for (const loop of ["/login", "/login?redirect=/login", "/signup", "/auth/callback"]) {
+    assert.equal(safeRedirectPath(loop), "/dashboard", loop);
+  }
   assert.equal(safeRedirectPath(undefined, "/login"), "/login");
 });
 

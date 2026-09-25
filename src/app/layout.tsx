@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SnackboxScript } from "@/lib/cms/Overlay";
 import { SiteFooter } from "@/components/site-footer";
 import { getCities } from "@/lib/supabase/queries";
+import { logEvent, errorFields } from "@/lib/log";
 
 const fredoka = Fredoka({
   variable: "--font-fredoka",
@@ -56,7 +57,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cities = await getCities();
+  // The header city menu is a convenience; a database hiccup must not turn every page into a 500.
+  const cities = await getCities().catch((err: unknown) => {
+    logEvent("error", "layout", "cities_unavailable", errorFields(err));
+    return [];
+  });
 
   return (
     <html lang="en">

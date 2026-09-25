@@ -7,6 +7,8 @@ import {
   escapeHtml,
 } from "@/lib/email/template";
 import { sendEmail } from "@/lib/email/send";
+import { headers } from "next/headers";
+import { rateLimit, clientKey } from "@/lib/rate-limit";
 
 export type ContactMessageResult = { ok: true } | { ok: false; error: string };
 
@@ -17,6 +19,9 @@ export async function sendContactMessage(
 ): Promise<ContactMessageResult> {
   if (formData.get("hp_field")?.toString()) {
     return { ok: true };
+  }
+  if (!rateLimit(`contact:${clientKey(await headers())}`, 5, 10 * 60_000).ok) {
+    return { ok: false, error: "Too many messages from this connection. Please try again in a few minutes." };
   }
 
   const firstName = formData.get("first_name")?.toString().trim() || "";

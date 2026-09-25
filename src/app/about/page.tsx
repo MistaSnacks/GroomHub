@@ -5,6 +5,8 @@ import { Metadata } from 'next';
 import { AboutContent } from '@/components/about-content';
 import { getCities, getTotalListingCount } from '@/lib/supabase/queries';
 
+export const revalidate = 3600;
+
 const fallbackMetadata: Metadata = {
     title: 'About Us',
     description: 'GroomLocal is the Pacific Northwest\'s trusted pet grooming directory. Connecting pet parents with verified groomers across Washington and Oregon.',
