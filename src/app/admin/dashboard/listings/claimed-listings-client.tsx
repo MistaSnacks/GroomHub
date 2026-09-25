@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Star } from "lucide-react";
 import { toggleFeatured } from "./actions";
+import { revokeClaim } from "@/app/admin/dashboard/claims/actions";
 
 interface ClaimedListing {
   slug: string;
@@ -34,6 +35,21 @@ function formatDate(dateStr: string | null): string {
 export function ClaimedListingsClient({ listings: initialListings }: { listings: ClaimedListing[] }) {
   const [listings, setListings] = useState(initialListings);
   const [toggling, setToggling] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+
+  async function handleRevoke(slug: string, name: string) {
+    const note = window.prompt(`Remove the owner from "${name}"? Optional note for the record:`);
+    if (note === null) return;
+    setToggling(slug);
+    const result = await revokeClaim(slug, note);
+    if (result.ok) {
+      setListings((prev) => prev.filter((l) => l.slug !== slug));
+      setNotice(`Ownership removed from ${name}.`);
+    } else {
+      setNotice(result.error);
+    }
+    setToggling(null);
+  }
 
   const featuredCount = listings.filter((l) => l.is_featured).length;
 
@@ -52,6 +68,9 @@ export function ClaimedListingsClient({ listings: initialListings }: { listings:
       setListings((prev) =>
         prev.map((l) => (l.slug === slug ? { ...l, is_featured: currentValue } : l))
       );
+      setNotice(result.error ?? "Could not update the featured flag.");
+    } else {
+      setNotice(null);
     }
     setToggling(null);
   }
@@ -65,6 +84,8 @@ export function ClaimedListingsClient({ listings: initialListings }: { listings:
         </p>
       </div>
 
+      {notice && <p role="status" className="mb-4 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm text-gray-800">{notice}</p>}
+
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <table className="w-full text-sm">
           <thead>
@@ -75,6 +96,7 @@ export function ClaimedListingsClient({ listings: initialListings }: { listings:
               <th className="text-left px-4 py-3 font-medium text-gray-600">Tier</th>
               <th className="text-left px-4 py-3 font-medium text-gray-600">Claimed</th>
               <th className="text-center px-4 py-3 font-medium text-gray-600">Featured</th>
+              <th className="text-center px-4 py-3 font-medium text-gray-600">Owner</th>
             </tr>
           </thead>
           <tbody>
@@ -120,6 +142,16 @@ export function ClaimedListingsClient({ listings: initialListings }: { listings:
                       className={`w-3.5 h-3.5 ${listing.is_featured ? "fill-amber-500" : ""}`}
                     />
                     {listing.is_featured ? "Featured" : "Set Featured"}
+                  </button>
+                </td>
+                <td className="px-4 py-3 text-center">
+                  <button
+                    type="button"
+                    onClick={() => handleRevoke(listing.slug, listing.name)}
+                    disabled={toggling === listing.slug}
+                    className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-gray-100 text-gray-600 hover:bg-red-50 hover:text-red-700 disabled:opacity-50"
+                  >
+                    Revoke
                   </button>
                 </td>
               </tr>

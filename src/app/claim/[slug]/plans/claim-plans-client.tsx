@@ -16,7 +16,7 @@ export function ClaimPlansClient({ slug }: { slug: string }) {
           <h1 className="font-heading text-3xl font-bold text-brand-primary">Confirm your free listing</h1>
           <p className="text-text-muted mt-3">Manage your business details, add photos, and receive inquiries. No credit card required.</p>
         </div>
-        {error && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">{error === "already-claimed" ? "This listing has already been claimed by another user." : "We couldn't complete this claim. Please try again."}</p>}
+        {error && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">{error === "already-claimed" ? "This listing has already been claimed by another user." : error === "pending-other" ? "Another account has a claim on this listing under review. Contact us if you believe that is a mistake." : error === "not-found" ? "We could not find that listing." : "We couldn't complete this claim. Please try again."}</p>}
         <div className="rounded-2xl border border-border bg-white p-6 space-y-5">
           <h2 className="font-heading text-xl font-bold text-brand-primary">Free · $0</h2>
           <ul className="space-y-2 text-sm text-text-muted">
@@ -24,7 +24,7 @@ export function ClaimPlansClient({ slug }: { slug: string }) {
             <li>Services, specialties, pricing and up to {getLimits("free").photos} photos during beta</li>
             <li>Owner Confirmed badge and contact inquiries</li>
           </ul>
-          <p className="text-xs text-text-muted">By confirming, you state that you are authorized to manage this business.</p>
+          <p className="text-xs text-text-muted">By confirming, you state that you are authorized to manage this business. Claims from an email at the business&apos;s own website domain are approved instantly; others are reviewed by a person, usually within one business day.</p>
           <form action={processClaim}>
             <input type="hidden" name="slug" value={slug} />
             <ConfirmButton />

@@ -10,7 +10,32 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.1"
+    PostgrestVersion: "14.5"
+  }
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
   }
   public: {
     Tables: {
@@ -61,6 +86,7 @@ export type Database = {
           breeds: string[] | null
           city: string
           city_slug: string
+          claimed_at: string | null
           created_at: string
           description: string
           email: string | null
@@ -73,6 +99,7 @@ export type Database = {
           is_paw_verified: boolean | null
           lat: number | null
           lng: number | null
+          logo_url: string | null
           name: string
           owner_id: string | null
           pet_types: string[] | null
@@ -87,6 +114,7 @@ export type Database = {
           short_description: string
           slug: string
           specialties: string[] | null
+          sponsor_paid_until: string | null
           state: string
           subscription_tier: string | null
           team_size: number | null
@@ -104,6 +132,7 @@ export type Database = {
           breeds?: string[] | null
           city: string
           city_slug: string
+          claimed_at?: string | null
           created_at?: string
           description: string
           email?: string | null
@@ -116,6 +145,7 @@ export type Database = {
           is_paw_verified?: boolean | null
           lat?: number | null
           lng?: number | null
+          logo_url?: string | null
           name: string
           owner_id?: string | null
           pet_types?: string[] | null
@@ -130,6 +160,7 @@ export type Database = {
           short_description: string
           slug: string
           specialties?: string[] | null
+          sponsor_paid_until?: string | null
           state: string
           subscription_tier?: string | null
           team_size?: number | null
@@ -147,6 +178,7 @@ export type Database = {
           breeds?: string[] | null
           city?: string
           city_slug?: string
+          claimed_at?: string | null
           created_at?: string
           description?: string
           email?: string | null
@@ -159,6 +191,7 @@ export type Database = {
           is_paw_verified?: boolean | null
           lat?: number | null
           lng?: number | null
+          logo_url?: string | null
           name?: string
           owner_id?: string | null
           pet_types?: string[] | null
@@ -173,6 +206,7 @@ export type Database = {
           short_description?: string
           slug?: string
           specialties?: string[] | null
+          sponsor_paid_until?: string | null
           state?: string
           subscription_tier?: string | null
           team_size?: number | null
@@ -191,6 +225,153 @@ export type Database = {
             referencedColumns: ["slug"]
           },
         ]
+      }
+      business_listings_removed_20260916: {
+        Row: {
+          accepts_new_clients: boolean | null
+          address: string | null
+          badges: string[] | null
+          booking_url: string | null
+          breeds: string[] | null
+          city: string | null
+          city_slug: string | null
+          claimed_at: string | null
+          created_at: string | null
+          description: string | null
+          email: string | null
+          grooms_cats: boolean | null
+          hours: Json[] | null
+          id: string | null
+          images: string[] | null
+          is_best_in_show: boolean | null
+          is_featured: boolean | null
+          is_paw_verified: boolean | null
+          lat: number | null
+          lng: number | null
+          logo_url: string | null
+          name: string | null
+          owner_id: string | null
+          pet_types: string[] | null
+          phone: string | null
+          price_max: number | null
+          price_min: number | null
+          price_range: string | null
+          rating: number | null
+          reason: string | null
+          removed_at: string | null
+          review_count: number | null
+          service_categories: string[] | null
+          services: string[] | null
+          short_description: string | null
+          slug: string | null
+          specialties: string[] | null
+          sponsor_paid_until: string | null
+          state: string | null
+          subscription_tier: string | null
+          team_size: number | null
+          transparent_pricing: boolean | null
+          waitlist_status: string | null
+          website: string | null
+          year_established: number | null
+          zip: string | null
+        }
+        Insert: {
+          accepts_new_clients?: boolean | null
+          address?: string | null
+          badges?: string[] | null
+          booking_url?: string | null
+          breeds?: string[] | null
+          city?: string | null
+          city_slug?: string | null
+          claimed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          email?: string | null
+          grooms_cats?: boolean | null
+          hours?: Json[] | null
+          id?: string | null
+          images?: string[] | null
+          is_best_in_show?: boolean | null
+          is_featured?: boolean | null
+          is_paw_verified?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          logo_url?: string | null
+          name?: string | null
+          owner_id?: string | null
+          pet_types?: string[] | null
+          phone?: string | null
+          price_max?: number | null
+          price_min?: number | null
+          price_range?: string | null
+          rating?: number | null
+          reason?: string | null
+          removed_at?: string | null
+          review_count?: number | null
+          service_categories?: string[] | null
+          services?: string[] | null
+          short_description?: string | null
+          slug?: string | null
+          specialties?: string[] | null
+          sponsor_paid_until?: string | null
+          state?: string | null
+          subscription_tier?: string | null
+          team_size?: number | null
+          transparent_pricing?: boolean | null
+          waitlist_status?: string | null
+          website?: string | null
+          year_established?: number | null
+          zip?: string | null
+        }
+        Update: {
+          accepts_new_clients?: boolean | null
+          address?: string | null
+          badges?: string[] | null
+          booking_url?: string | null
+          breeds?: string[] | null
+          city?: string | null
+          city_slug?: string | null
+          claimed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          email?: string | null
+          grooms_cats?: boolean | null
+          hours?: Json[] | null
+          id?: string | null
+          images?: string[] | null
+          is_best_in_show?: boolean | null
+          is_featured?: boolean | null
+          is_paw_verified?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          logo_url?: string | null
+          name?: string | null
+          owner_id?: string | null
+          pet_types?: string[] | null
+          phone?: string | null
+          price_max?: number | null
+          price_min?: number | null
+          price_range?: string | null
+          rating?: number | null
+          reason?: string | null
+          removed_at?: string | null
+          review_count?: number | null
+          service_categories?: string[] | null
+          services?: string[] | null
+          short_description?: string | null
+          slug?: string | null
+          specialties?: string[] | null
+          sponsor_paid_until?: string | null
+          state?: string | null
+          subscription_tier?: string | null
+          team_size?: number | null
+          transparent_pricing?: boolean | null
+          waitlist_status?: string | null
+          website?: string | null
+          year_established?: number | null
+          zip?: string | null
+        }
+        Relationships: []
       }
       cities: {
         Row: {
@@ -268,6 +449,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      listing_submissions: {
+        Row: {
+          business_name: string
+          city: string
+          contact_name: string | null
+          created_at: string
+          email: string
+          id: string
+          notes: string | null
+          phone: string | null
+          state: string
+          status: string
+          website: string | null
+        }
+        Insert: {
+          business_name: string
+          city: string
+          contact_name?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          notes?: string | null
+          phone?: string | null
+          state: string
+          status?: string
+          website?: string | null
+        }
+        Update: {
+          business_name?: string
+          city?: string
+          contact_name?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          notes?: string | null
+          phone?: string | null
+          state?: string
+          status?: string
+          website?: string | null
+        }
+        Relationships: []
       }
       listings: {
         Row: {
@@ -443,6 +666,60 @@ export type Database = {
         }
         Relationships: []
       }
+      quote_requests: {
+        Row: {
+          city: string
+          created_at: string
+          email: string
+          id: string
+          name: string
+          notes: string | null
+          pet_breed: string | null
+          pet_name: string | null
+          pet_size: string | null
+          pet_type: string
+          phone: string | null
+          preferred_date: string | null
+          preferred_time: string | null
+          services: string[]
+          status: string
+        }
+        Insert: {
+          city: string
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          notes?: string | null
+          pet_breed?: string | null
+          pet_name?: string | null
+          pet_size?: string | null
+          pet_type: string
+          phone?: string | null
+          preferred_date?: string | null
+          preferred_time?: string | null
+          services?: string[]
+          status?: string
+        }
+        Update: {
+          city?: string
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          pet_breed?: string | null
+          pet_name?: string | null
+          pet_size?: string | null
+          pet_type?: string
+          phone?: string | null
+          preferred_date?: string | null
+          preferred_time?: string | null
+          services?: string[]
+          status?: string
+        }
+        Relationships: []
+      }
       search_logs: {
         Row: {
           created_at: string
@@ -494,12 +771,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -523,11 +800,11 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -548,11 +825,11 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -573,11 +850,11 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -590,11 +867,11 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -604,6 +881,9 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {},
   },

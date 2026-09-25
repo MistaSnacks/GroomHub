@@ -1,17 +1,12 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { createClient as createAdminClient } from "@supabase/supabase-js";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath, updateTag } from "next/cache";
 import { parseListingCommerce } from "@/lib/listing-commerce";
 import { redirect } from "next/navigation";
 
-function getAdmin() {
-  return createAdminClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
+const getAdmin = createAdminClient;
 
 /**
  * Canonical city slug. Must match the import pipeline
@@ -70,6 +65,8 @@ export async function unclaimListing(formData: FormData) {
       owner_id: null,
       subscription_tier: null,
       claimed_at: null,
+      is_featured: false,
+      sponsor_paid_until: null,
     })
     .eq("slug", slug)
     .eq("owner_id", user.id)
@@ -190,6 +187,35 @@ export async function updateListing(formData: FormData) {
   if (name.length > 120) {
     return { error: "Name must be 120 characters or fewer." };
   }
+  // These fields are rendered into JSON-LD, meta tags and email; keep markup out.
+  const ANGLE = /[<>]/;
+  for (const [label, value] of [
+    ["Business name", name],
+    ["Phone", phone],
+    ["Email", email],
+    ["Address", address],
+    ["City", city],
+    ["ZIP", zip],
+  ] as const) {
+    if (ANGLE.test(value)) return { error: `${label} cannot contain < or >.` };
+  }
+  if (phone.length > 40) {
+    return { error: "Phone number must be 40 characters or fewer." };
+  }
+  if (address.length > 200 || city.length > 100 || zip.length > 10) {
+    return { error: "Address, city or ZIP is too long." };
+  }
+  if (state && !["WA", "OR"].includes(state.toUpperCase())) {
+    return { error: "State must be WA or OR." };
+  }
+  const isStringList = (v: unknown): v is string[] =>
+    Array.isArray(v) && v.length <= 50 && v.every((x) => typeof x === "string" && x.length <= 80);
+  if (services !== undefined && !isStringList(services)) {
+    return { error: "Services must be a list of short text values." };
+  }
+  if (specialties !== undefined && !isStringList(specialties)) {
+    return { error: "Specialties must be a list of short text values." };
+  }
   if (short_description.length > 300) {
     return { error: "Short description must be 300 characters or fewer." };
   }
@@ -228,7 +254,7 @@ export async function updateListing(formData: FormData) {
       ...commerce.patch,
       ...(address ? { address } : {}),
       ...(city ? { city, city_slug: slugifyCity(city) } : {}),
-      ...(state ? { state } : {}),
+      ...(state ? { state: state.toUpperCase() } : {}),
       ...(zip ? { zip } : {}),
       ...(services !== undefined ? { services } : {}),
       ...(specialties !== undefined ? { specialties } : {}),

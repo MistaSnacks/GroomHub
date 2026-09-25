@@ -45,6 +45,7 @@ export interface BusinessListing {
   owner_id?: string;
   subscription_tier?: "free" | "basic" | "premium";
   claimed_at?: string;
+  sponsor_paid_until?: string | null;
   updated_at?: string | null;
 }
 
@@ -77,6 +78,7 @@ export interface ListingCardData {
   price_tag: PriceTag;
   short_description: string;
   is_featured: boolean;
+  sponsor_paid_until?: string | null;
   rating: number;
   review_count: number;
   waitlist_status?: "immediate" | "short" | "long" | "closed";

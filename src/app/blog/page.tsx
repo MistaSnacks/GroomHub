@@ -7,6 +7,7 @@ import { blogListingSchema } from "@/lib/schema";
 import { BlogCard } from "@/components/blog-card";
 import { NewsletterCta } from "@/components/newsletter-cta";
 import { WaveDivider } from "@/components/wave-divider";
+import { jsonLd } from "@/lib/json-ld";
 
 export const metadata: Metadata = {
   title: "Grooming Guides | Tips & Pet Care",
@@ -38,13 +39,13 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const [allPostsForSchema, topics] = await Promise.all([getBlogPosts(), getGuideTopics()]);
   const { topic, category, posts } = getGuideListing(allPostsForSchema, sp, topics);
   const title = topic?.title ?? (category ? getCategoryLabel(category) : "All grooming guides");
-  const jsonLd = blogListingSchema(allPostsForSchema);
+  const listingJsonLd = blogListingSchema(allPostsForSchema);
 
   return (
     <div className="flex flex-col min-h-screen">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+        dangerouslySetInnerHTML={{ __html: jsonLd(listingJsonLd) }}
       />
 
       {/* Hero */}

@@ -6,6 +6,7 @@ import {
   emailParagraph,
   escapeHtml,
 } from "@/lib/email/template";
+import { sendEmail } from "@/lib/email/send";
 
 export type ContactMessageResult = { ok: true } | { ok: false; error: string };
 
@@ -42,52 +43,31 @@ export async function sendContactMessage(
     return { ok: false, error: "Message must be between 10 and 2000 characters." };
   }
 
-  const key = process.env.RESEND_API_KEY;
   const to = process.env.CONTACT_NOTIFY_EMAIL || "hello@groomlocal.com";
-  if (!key) {
-    console.error("Contact notify failed: RESEND_API_KEY not set");
-    return { ok: false, error: "Something went wrong. Please try again." };
-  }
+  const html = renderBrandedEmail({
+    preheader: subject || "New website contact message",
+    heading: "New contact form message",
+    body:
+      emailParagraph(`A visitor sent a message from the GroomLocal contact page.`) +
+      emailDetailCard("Message details", [
+        { label: "From", value: name },
+        { label: "Email", value: email },
+        { label: "Phone", value: phone || "Not provided" },
+        { label: "Subject", value: subject || "Website contact" },
+        { label: "Message", value: message },
+      ]),
+    footerNote: escapeHtml("Reply directly to the sender's email address."),
+  });
 
-  try {
-    const html = renderBrandedEmail({
-      preheader: subject || "New website contact message",
-      heading: "New contact form message",
-      body:
-        emailParagraph(
-          `A visitor sent a message from the GroomLocal contact page.`
-        ) +
-        emailDetailCard("Message details", [
-          { label: "From", value: name },
-          { label: "Email", value: email },
-          { label: "Phone", value: phone || "Not provided" },
-          { label: "Subject", value: subject || "Website contact" },
-          { label: "Message", value: message },
-        ]),
-      footerNote: escapeHtml("Reply directly to the sender's email address."),
-    });
-
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${key}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: process.env.QUOTE_FROM_EMAIL || "GroomLocal <onboarding@resend.dev>",
-        to: [to],
-        reply_to: email,
-        subject: subject ? `Contact: ${subject}` : `Contact form: ${name}`,
-        html,
-      }),
-    });
-
-    if (!res.ok) {
-      console.error("Contact notify failed:", res.status);
-      return { ok: false, error: "Something went wrong. Please try again." };
-    }
-  } catch {
-    console.error("Contact notify failed");
+  // There is no database row for contact messages, so delivery failure is a user-facing error.
+  const result = await sendEmail({
+    site: "contact",
+    to,
+    subject: subject ? `Contact: ${subject}` : `Contact form: ${name}`,
+    html,
+    replyTo: email,
+  });
+  if (!result.ok) {
     return { ok: false, error: "Something went wrong. Please try again." };
   }
 

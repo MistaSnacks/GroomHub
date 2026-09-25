@@ -1,5 +1,6 @@
 import { PUBLIC_EXCLUDED_FILTER } from "../listing-review";
 import { unstable_cache } from "next/cache";
+import { activeSponsorshipFilter, sortRegularList } from "@/lib/listing-rules";
 import { supabase } from "./client";
 import { normalizeTags } from "../tags";
 import type { BusinessListing, NormalizedListing, CityWithCount } from "../types";
@@ -80,23 +81,11 @@ function dedupeBySlug(listings: NormalizedListing[]): NormalizedListing[] {
   });
 }
 
-// ─── Hierarchy Sorting Guarantee ─────────────────────────
-// This guarantees that paying users get the visibility value they paid for.
-const TIER_WEIGHT = { premium: 3, basic: 2, free: 1 } as const;
-
+// ─── Regular list ordering ───────────────────────────────
+// The regular list never reflects payment (see src/lib/listing-rules.ts). Sponsored
+// placement is the labeled Featured block rendered separately by FeaturedSection.
 function applyHierarchy(listings: NormalizedListing[]): NormalizedListing[] {
-  return listings.sort((a, b) => {
-    // 1. Sort by Subscription Tier
-    const weightA = TIER_WEIGHT[a.subscription_tier as keyof typeof TIER_WEIGHT] || 0;
-    const weightB = TIER_WEIGHT[b.subscription_tier as keyof typeof TIER_WEIGHT] || 0;
-
-    if (weightA !== weightB) {
-      return weightB - weightA; // Higher weight first
-    }
-
-    // 2. Tie-breaker: Rating
-    return (b.rating || 0) - (a.rating || 0);
-  });
+  return sortRegularList(listings);
 }
 
 // ─── Listing Queries ────────────────────────────────────
@@ -195,7 +184,7 @@ async function fetchAllListingRows(): Promise<BusinessListing[]> {
   return allListings;
 }
 
-const getCachedListingRows = unstable_cache(fetchAllListingRows, ["all-listing-rows-reviewed-20260912"], {
+const getCachedListingRows = unstable_cache(fetchAllListingRows, ["all-listing-rows-reviewed-20260916"], {
   revalidate: 300,
   tags: [LISTINGS_CACHE_TAG],
 });
@@ -280,6 +269,7 @@ export async function getFeaturedListings(
     .select("*")
     .not("slug", "in", PUBLIC_EXCLUDED_FILTER)
     .eq("is_featured", true)
+    .or(activeSponsorshipFilter())
     .order("rating", { ascending: false })
     .limit(limit);
 
@@ -313,6 +303,7 @@ export async function getFeaturedByCity(
     .select("*")
     .not("slug", "in", PUBLIC_EXCLUDED_FILTER)
     .eq("is_featured", true)
+    .or(activeSponsorshipFilter())
     .eq("state", stateAbbr.toUpperCase())
     .in("city_slug", localSlugs)
     .order("rating", { ascending: false })
@@ -351,6 +342,7 @@ export async function getFeaturedByCity(
     .select("*")
     .not("slug", "in", PUBLIC_EXCLUDED_FILTER)
     .eq("is_featured", true)
+    .or(activeSponsorshipFilter())
     .eq("state", stateAbbr.toUpperCase())
     .in("city_slug", neighborSlugs)
     .order("rating", { ascending: false })
@@ -387,6 +379,7 @@ export async function getFeaturedCountByCity(
     .select("*", { count: "exact", head: true })
     .not("slug", "in", PUBLIC_EXCLUDED_FILTER)
     .eq("is_featured", true)
+    .or(activeSponsorshipFilter())
     .eq("state", stateAbbr.toUpperCase())
     .in("city_slug", localSlugs);
 

@@ -81,6 +81,7 @@ export function AnalyticsDashboard() {
     const [data, setData] = useState<DashboardAnalytics | null>(null);
     const [userData, setUserData] = useState<UserSignupsData | null>(null);
     const [loadedDays, setLoadedDays] = useState<number | null>(null);
+    const [loadError, setLoadError] = useState<string | null>(null);
 
     const days = dateRange === "7D" ? 7 : dateRange === "90D" ? 90 : 30;
     const isLoading = loadedDays !== days || !data;
@@ -92,14 +93,29 @@ export function AnalyticsDashboard() {
             getUserSignups(days),
         ]).then(([analytics, users]) => {
             if (cancelled) return;
+            setLoadError(null);
             setData(analytics);
             setUserData(users);
+            setLoadedDays(days);
+        }).catch((err: unknown) => {
+            if (cancelled) return;
+            console.error("[admin] analytics load failed", { days, message: err instanceof Error ? err.message : String(err) });
+            setLoadError("Analytics could not be loaded. Try again in a moment.");
             setLoadedDays(days);
         });
         return () => {
             cancelled = true;
         };
     }, [days]);
+
+    if (loadError) {
+        return (
+            <div className="min-h-screen bg-gray-50/50 p-6 flex flex-col items-center justify-center font-sans">
+                <p className="text-red-600 font-medium mb-4">{loadError}</p>
+                <button type="button" onClick={() => setLoadedDays(null)} className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white">Retry</button>
+            </div>
+        );
+    }
 
     if (isLoading || !data) {
         return (
@@ -148,10 +164,11 @@ export function AnalyticsDashboard() {
                             key={tab}
                             type="button"
                             aria-pressed={i === 0}
-                            className={`px-1 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${i === 0}
-                                ? "border-blue-500 text-blue-600"
-                                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                                }`}
+                            className={`px-1 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
+                                i === 0
+                                    ? "border-blue-500 text-blue-600"
+                                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                            }`}
                         >
                             {tab}
                         </button>

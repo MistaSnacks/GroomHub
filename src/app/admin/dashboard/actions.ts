@@ -1,7 +1,7 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
-import { createClient as createServiceClient } from "@supabase/supabase-js";
+import type { User } from "@supabase/supabase-js";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { requireAdmin } from "@/lib/admin";
 import { getRefeatureTriggerStatus } from "@/lib/refeature-trigger";
 
@@ -9,17 +9,21 @@ export async function getUserSignups(days: number) {
     if (!(await requireAdmin())) {
         throw new Error("Unauthorized");
     }
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-    const supabase = createServiceClient(supabaseUrl, serviceKey);
+    const supabase = createAdminClient();
 
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days);
     const prevStartDate = new Date();
     prevStartDate.setDate(prevStartDate.getDate() - days * 2);
 
-    const { data: allUsers } = await supabase.auth.admin.listUsers();
-    const users = allUsers?.users || [];
+    // listUsers defaults to 50 per page; page until a short page so totals stay right.
+    const users: User[] = [];
+    for (let page = 1; ; page++) {
+        const { data: pageData, error } = await supabase.auth.admin.listUsers({ page, perPage: 1000 });
+        if (error) throw new Error(`listUsers: ${error.message}`);
+        users.push(...(pageData?.users ?? []));
+        if (!pageData || pageData.users.length < 1000) break;
+    }
 
     const currentUsers = users.filter(u => new Date(u.created_at) >= startDate);
     const prevUsers = users.filter(u => new Date(u.created_at) >= prevStartDate && new Date(u.created_at) < startDate);
@@ -68,7 +72,7 @@ export async function getDashboardAnalytics(days: number) {
         throw new Error("Unauthorized");
     }
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
 
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days);
@@ -76,18 +80,28 @@ export async function getDashboardAnalytics(days: number) {
     const prevStartDate = new Date();
     prevStartDate.setDate(prevStartDate.getDate() - days * 2);
 
-    // Fetch analytics events
-    const { data: events } = await supabase
-        .from("analytics_events")
-        .select("created_at, event_type")
-        .gte("created_at", prevStartDate.toISOString())
-        .order("created_at", { ascending: true });
+    // Fetch analytics events. PostgREST caps unranged selects at 1,000 rows, so page
+    // explicitly; a truncated window silently under-counts the most recent days.
+    const events: { created_at: string; event_type: string }[] = [];
+    for (let from = 0; ; from += 1000) {
+        const { data, error } = await supabase
+            .from("analytics_events")
+            .select("created_at, event_type")
+            .gte("created_at", prevStartDate.toISOString())
+            .order("created_at", { ascending: true })
+            .range(from, from + 999);
+        if (error) throw new Error(`analytics_events: ${error.message}`);
+        events.push(...(data ?? []));
+        if (!data || data.length < 1000) break;
+    }
 
     // Fetch search logs
-    const { data: searchLogs } = await supabase
+    const { data: searchLogs, error: searchError } = await supabase
         .from("search_logs")
         .select("created_at, query")
-        .gte("created_at", prevStartDate.toISOString());
+        .gte("created_at", prevStartDate.toISOString())
+        .range(0, 9999);
+    if (searchError) throw new Error(`search_logs: ${searchError.message}`);
 
     const currentEvents = (events || []).filter(e => new Date(e.created_at) >= startDate);
     const prevEvents = (events || []).filter(e => new Date(e.created_at) < startDate);
@@ -179,7 +193,7 @@ export async function getDashboardAnalytics(days: number) {
     const prevImpressions = prevEvents.filter(e => e.event_type === "page_view").length;
 
     const calcTrend = (curr: number, prev: number) => {
-        if (prev === 0) return { trend: "up" as const, trendValue: "100" };
+        if (prev === 0) return { trend: "up" as const, trendValue: curr > 0 ? "100" : "0" };
         const diff = curr - prev;
         const pct = (diff / prev) * 100;
         return {

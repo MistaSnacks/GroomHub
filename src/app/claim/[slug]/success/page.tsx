@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { CheckCircle, ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { WaveDivider } from "@/components/wave-divider";
 import { createClient } from "@/lib/supabase/server";
-import { createClient as createAdminClient } from "@supabase/supabase-js";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { CopyBadge } from "@/components/copy-badge";
 
 export default async function ClaimSuccessPage({
@@ -23,10 +23,7 @@ export default async function ClaimSuccessPage({
 
     // Use admin client for the ownership check to bypass RLS/caching issues.
     // The anon-key singleton could return stale data or hide owner_id.
-    const supabaseAdmin = createAdminClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
+    const supabaseAdmin = createAdminClient();
 
     const { data: listing } = await supabaseAdmin
         .from("business_listings")
@@ -38,10 +35,40 @@ export default async function ClaimSuccessPage({
         redirect(`/dog-grooming`);
     }
 
-    // If listing is NOT owned by this user, send to claim step 1 (not groomer
-    // profile, which would show the "Claim" CTA and create a loop)
+    // Not the owner: show the review status if this user has a pending claim,
+    // otherwise send to claim step 1 (not the groomer profile, which would show
+    // the "Claim" CTA and create a loop).
     if (listing.owner_id !== user.id) {
-        redirect(`/claim/${slug}`);
+        const { data: pending } = await supabaseAdmin
+            .from("claim_requests")
+            .select("id, created_at")
+            .eq("listing_id", listing.id)
+            .eq("user_id", user.id)
+            .eq("status", "pending")
+            .maybeSingle();
+        if (!pending) {
+            redirect(`/claim/${slug}`);
+        }
+        return (
+            <div className="flex flex-col flex-1 bg-bg">
+                <section className="py-20 flex-1 flex flex-col items-center justify-center">
+                    <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 text-center">
+                        <h1 className="font-heading text-3xl md:text-4xl font-bold text-brand-primary mb-4">
+                            Your claim is under review
+                        </h1>
+                        <p className="text-lg text-text-muted mb-4">
+                            Thanks for claiming <strong className="text-brand-primary">{listing.name}</strong>. Because your account email is not at the business&apos;s website domain, a person will verify the claim before editing is unlocked. This usually takes one business day.
+                        </p>
+                        <p className="text-sm text-text-muted mb-8 max-w-md mx-auto">
+                            You will get an email at {user.email} when it is approved. Nothing else is needed from you.
+                        </p>
+                        <Link href={`/groomer/${slug}`} className="inline-flex items-center gap-2 rounded-full border border-border bg-white px-6 py-3 text-sm font-bold text-brand-primary">
+                            Back to the listing
+                        </Link>
+                    </div>
+                </section>
+            </div>
+        );
     }
 
     return (

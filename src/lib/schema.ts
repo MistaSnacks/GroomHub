@@ -380,6 +380,9 @@ export function cityFaqSchema(
   };
 }
 
+// Same shape as the city FAQ schema; blog posts derive their pairs from the FAQ section.
+export const faqPageSchema = cityFaqSchema;
+
 export function blogPostSchema(
   post: BlogPostFull,
   options?: { wordCount?: number; articleSection?: string; keywords?: string[] }

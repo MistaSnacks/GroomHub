@@ -14,6 +14,7 @@ import { PromoFindGroomers } from "@/components/promo-find-groomers";
 import { PromoClaimListing } from "@/components/promo-claim-listing";
 import { AdSlot, ADS_ENABLED } from "@/components/ad-slot";
 import { WaveDivider } from "@/components/wave-divider";
+import { jsonLd } from "@/lib/json-ld";
 
 export const revalidate = 300;
 
@@ -143,7 +144,7 @@ export default async function HomePage() {
 
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLd(homepageJsonLd) }}
       />
     </div>
   );

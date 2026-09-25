@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase/client";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 const MAX_PAYLOAD_BYTES = 20_000;
 
@@ -34,15 +34,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { error } = await supabase
+    // Re-subscribing an existing address is a success, not a conflict.
+    const { error } = await createAdminClient()
       .from("newsletter_subscribers")
-      .upsert(
-        { email, source: "website" },
-        { onConflict: "email" }
-      );
+      .upsert({ email, source: "website", unsubscribed_at: null }, { onConflict: "email" });
 
     if (error) {
-      console.error("Newsletter subscribe error:", error.code);
+      console.error(JSON.stringify({ scope: "newsletter", event: "upsert_failed", code: error.code, message: error.message }));
       return NextResponse.json(
         { error: "Something went wrong. Please try again." },
         { status: 500 }

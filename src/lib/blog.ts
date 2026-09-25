@@ -93,3 +93,35 @@ export async function getRelatedPosts(currentSlug: string, limit = 3): Promise<B
     + Number(p.category === current.category);
   return posts.filter(p=>p.slug!==currentSlug).sort((a,b)=>rank(b)-rank(a)).slice(0,limit);
 }
+
+export interface BlogFaq { question: string; answer: string }
+
+// Pull question/answer pairs from the "Frequently Asked Questions" section of a post:
+// each h3 after that h2 is a question, and the paragraphs until the next heading are its answer.
+export function extractFaqs(post: Pick<BlogPostFull, "body" | "sections">): BlogFaq[] {
+  const blocks: PortableBlock[] = [...post.body, ...post.sections.flatMap(section => section.body || [])];
+  const text = (block: PortableBlock) => stegaClean(block.children?.map(span => span.text).join("") || "").trim();
+  const faqs: BlogFaq[] = [];
+  let inFaq = false;
+  let current: BlogFaq | null = null;
+  for (const block of blocks) {
+    if (block._type !== "block") { if (inFaq && current) { faqs.push(current); current = null; } continue; }
+    const style = block.style || "normal";
+    if (style === "h2") {
+      if (current) faqs.push(current);
+      current = null;
+      inFaq = /frequently asked questions|^faqs?$/i.test(text(block));
+      continue;
+    }
+    if (!inFaq) continue;
+    if (style === "h3" || style === "h4") {
+      if (current) faqs.push(current);
+      current = { question: text(block), answer: "" };
+    } else if (current && !block.listItem) {
+      const answer = text(block);
+      if (answer) current.answer = current.answer ? `${current.answer} ${answer}` : answer;
+    }
+  }
+  if (current) faqs.push(current);
+  return faqs.filter(faq => faq.question && faq.answer);
+}

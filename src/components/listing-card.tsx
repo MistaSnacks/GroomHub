@@ -8,6 +8,7 @@ import { getServiceLabel, getSpecialtyLabel } from "@/lib/tags";
 import { isUsableListingImage } from "@/lib/images";
 import type { BusinessListing, ListingCardData, NormalizedListing } from "@/lib/types";
 import { TrackedWebsiteLink } from "./tracked-website-link";
+import { isSponsored } from "@/lib/listing-rules";
 
 type CardListing = BusinessListing | NormalizedListing | ListingCardData;
 
@@ -41,7 +42,7 @@ export function ListingCard({ listing, index = 0, compact = false, variant = "ve
   }
 
   // Paid placement is disclosed with a "Sponsored" label. Badges are never derived from payment.
-  const isSponsored = listing.subscription_tier === "premium";
+  const sponsored = isSponsored(listing);
   const displayBadges = listing.badges || [];
 
   // Vertical variant (existing behavior)
@@ -102,7 +103,7 @@ export function ListingCard({ listing, index = 0, compact = false, variant = "ve
           </div>
 
           {/* Badges */}
-          {isSponsored && (
+          {sponsored && (
             <div className="mb-2"><span className="inline-flex items-center rounded-full border border-border bg-bg px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-text-muted">Sponsored</span></div>
           )}
           {displayBadges.length > 0 && (
@@ -244,9 +245,9 @@ function HorizontalCard({
               {listing.name}
             </h3>
 
-            {(listing.owner_id || listing.subscription_tier === "premium" || (listing.badges && listing.badges.length > 0)) && (
+            {(listing.owner_id || isSponsored(listing) || (listing.badges && listing.badges.length > 0)) && (
               <div className="flex flex-wrap items-center gap-1.5">
-                {listing.subscription_tier === "premium" && (<span className="inline-flex items-center rounded-full border border-border bg-bg px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-text-muted">Sponsored</span>)}
+                {isSponsored(listing) && (<span className="inline-flex items-center rounded-full border border-border bg-bg px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-text-muted">Sponsored</span>)}
                 {listing.owner_id && (
                   <span className="inline-flex items-center gap-0.5 text-brand-accent-ink text-xs font-medium">
                     <CheckCircle weight="fill" className="w-3.5 h-3.5" />

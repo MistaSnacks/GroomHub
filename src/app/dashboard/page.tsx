@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { Storefront, PencilSimple, ArrowSquareOut, PlusCircle } from "@phosphor-icons/react/dist/ssr";
 import { createClient } from "@/lib/supabase/server";
 import { getListingsByOwner } from "@/lib/supabase/queries";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { StatusBanner } from "./status-banner";
 
 const tierColors: Record<string, string> = {
@@ -23,6 +25,43 @@ export default async function DashboardPage({
   if (!user) return null;
 
   const listings = await getListingsByOwner(user.id);
+
+  // A signed-in owner with no listing usually got here mid-claim (the email
+  // confirmation link sometimes lands on the homepage). Find the listing they
+  // were claiming: the cookie set by the claim form, or a public listing whose
+  // stored email matches their account.
+  let pendingClaim: { slug: string; name: string } | null = null;
+  let underReview: { slug: string; name: string } | null = null;
+  if (listings.length === 0) {
+    const admin = createAdminClient();
+    const { data: review } = await admin
+      .from("claim_requests")
+      .select("listing_slug, business_listings(name)")
+      .eq("user_id", user.id)
+      .eq("status", "pending")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (review) {
+      const rel = review.business_listings as { name?: string } | { name?: string }[] | null;
+      const name = Array.isArray(rel) ? rel[0]?.name : rel?.name;
+      underReview = { slug: review.listing_slug as string, name: name ?? (review.listing_slug as string) };
+    }
+
+    if (!underReview) {
+      const cookieStore = await cookies();
+      const cookieSlug = cookieStore.get("gl_pending_claim")?.value;
+      // Two plain queries; never interpolate user-controlled strings into a filter expression.
+      if (cookieSlug && /^[a-z0-9-]{1,120}$/.test(cookieSlug)) {
+        const { data } = await supabase.from("business_listings").select("slug,name").eq("slug", cookieSlug).is("owner_id", null).maybeSingle();
+        if (data) pendingClaim = { slug: data.slug, name: data.name };
+      }
+      if (!pendingClaim && user.email) {
+        const { data } = await supabase.from("business_listings").select("slug,name").eq("email", user.email.toLowerCase()).is("owner_id", null).limit(1).maybeSingle();
+        if (data) pendingClaim = { slug: data.slug, name: data.name };
+      }
+    }
+  }
 
   const errorMessage =
     params.error === "not-authorized"
@@ -53,7 +92,7 @@ export default async function DashboardPage({
           My Listings
         </h2>
         <Link
-          href="/get-listed"
+          href="/search"
           className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-accent hover:text-brand-primary transition-colors"
         >
           <PlusCircle weight="bold" className="w-4 h-4" />
@@ -61,21 +100,54 @@ export default async function DashboardPage({
         </Link>
       </div>
 
-      {listings.length === 0 ? (
+      {listings.length === 0 && underReview ? (
+        <div className="bg-white rounded-2xl border border-border p-10 text-center">
+          <Storefront weight="duotone" className="w-12 h-12 text-brand-accent mx-auto mb-4" />
+          <h3 className="font-heading text-lg font-semibold text-brand-primary mb-2">
+            Your claim for {underReview.name} is under review
+          </h3>
+          <p className="text-sm text-text-muted mb-6 max-w-sm mx-auto">
+            A person is verifying that you represent this business. You will get an email when editing is unlocked, usually within one business day.
+          </p>
+          <Link href={`/groomer/${underReview.slug}`} className="text-sm underline text-brand-primary">View the listing</Link>
+        </div>
+      ) : listings.length === 0 && pendingClaim ? (
+        <div className="bg-white rounded-2xl border border-brand-accent/40 p-10 text-center">
+          <Storefront weight="duotone" className="w-12 h-12 text-brand-accent mx-auto mb-4" />
+          <h3 className="font-heading text-lg font-semibold text-brand-primary mb-2">
+            Finish claiming {pendingClaim.name}
+          </h3>
+          <p className="text-sm text-text-muted mb-6 max-w-sm mx-auto">
+            Your account is ready. One more click confirms your free listing and unlocks editing, photos, and inquiries.
+          </p>
+          <Link
+            href={`/claim/${pendingClaim.slug}/plans`}
+            className="inline-flex items-center gap-2 rounded-full bg-brand-primary px-6 py-3 text-sm font-bold text-white hover:bg-brand-primary/90 transition-all"
+          >
+            Confirm Free Listing
+          </Link>
+          <p className="text-xs text-text-muted mt-4">
+            Not your business? <Link href="/search" className="underline">Find your listing</Link>
+          </p>
+        </div>
+      ) : listings.length === 0 ? (
         <div className="bg-white rounded-2xl border border-border p-10 text-center">
           <Storefront weight="duotone" className="w-12 h-12 text-text-muted mx-auto mb-4" />
           <h3 className="font-heading text-lg font-semibold text-brand-primary mb-2">
             No listings yet
           </h3>
           <p className="text-sm text-text-muted mb-6 max-w-sm mx-auto">
-            Claim your grooming business to manage your profile, update your info, and connect with pet parents.
+            Find your grooming business in the directory and click Claim on its profile to manage your listing, photos, and inquiries.
           </p>
           <Link
-            href="/get-listed"
+            href="/search"
             className="inline-flex items-center gap-2 rounded-full bg-brand-primary px-6 py-3 text-sm font-bold text-white hover:bg-brand-primary/90 transition-all"
           >
-            Get Listed
+            Find My Business
           </Link>
+          <p className="text-xs text-text-muted mt-4">
+            Not listed yet? <Link href="/get-listed" className="underline">Request a new listing</Link>
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">

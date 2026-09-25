@@ -25,7 +25,19 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
 
     const redirectUrl = `${typeof window !== "undefined" ? location.origin : ""}/auth/callback?next=/claim/${listingSlug}/plans`;
 
+    // Remember which listing this signup was for. If the confirmation link lands
+    // the owner on the homepage instead of the plans page, the dashboard uses
+    // this to offer a "finish claiming" link instead of the generic Get Listed form.
+    const rememberPendingClaim = () => {
+        try {
+            document.cookie = `gl_pending_claim=${encodeURIComponent(listingSlug)}; path=/; max-age=${60 * 60 * 24 * 14}; SameSite=Lax`;
+        } catch {
+            // cookies blocked; the claim still works through the normal redirect
+        }
+    };
+
     const handleSignUp = async (): Promise<"navigated" | "confirm-email" | "error"> => {
+        rememberPendingClaim();
         const supabase = createClient();
         const { error: signUpErr, data } = await supabase.auth.signUp({
             email,
@@ -54,6 +66,7 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
     };
 
     const handleSignIn = async (): Promise<"navigated" | "confirm-email" | "error"> => {
+        rememberPendingClaim();
         const supabase = createClient();
         const { error: signInErr } = await supabase.auth.signInWithPassword({
             email,

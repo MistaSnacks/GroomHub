@@ -1,15 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { sendEmail } from "@/lib/email/send";
 
 const VALID_PET_TYPES = ["dog", "cat"];
 const VALID_SIZES = ["small", "medium", "large", "xlarge", ""];
-
-function getAdmin() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
 
 interface QuotePayload {
   petType: string;
@@ -79,58 +73,59 @@ function summarize(q: QuotePayload): string {
     .join("\n");
 }
 
-async function persist(q: QuotePayload): Promise<{ ok: boolean; detail?: string }> {
-  const admin = getAdmin();
+async function persist(q: QuotePayload): Promise<{ ok: true; id: string } | { ok: false; detail: string }> {
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from("quote_requests")
+    .insert({
+      pet_type: q.petType,
+      pet_name: q.petName || null,
+      pet_breed: q.petBreed || null,
+      pet_size: q.petSize || null,
+      services: q.services,
+      city: q.city,
+      preferred_date: q.preferredDate || null,
+      preferred_time: q.preferredTime || null,
+      name: q.name,
+      email: q.email,
+      phone: q.phone || null,
+      notes: q.notes || null,
+    })
+    .select("id")
+    .single();
 
-  const { error } = await admin.from("quote_requests").insert({
-    pet_type: q.petType,
-    pet_name: q.petName || null,
-    pet_breed: q.petBreed || null,
-    pet_size: q.petSize || null,
-    services: q.services,
-    city: q.city,
-    preferred_date: q.preferredDate || null,
-    preferred_time: q.preferredTime || null,
-    name: q.name,
-    email: q.email,
-    phone: q.phone || null,
-    notes: q.notes || null,
-  });
-
-  if (!error) return { ok: true };
-
-  // Table may not exist yet (migration pending) — capture the request as an
-  // analytics event instead so nothing is lost.
-  const { error: fallbackErr } = await admin.from("analytics_events").insert({
-    event_type: "quote_request",
-    url: "/get-quotes",
-    metadata: { ...q, summary: summarize(q) },
-  });
-
-  if (!fallbackErr) return { ok: true };
-  return { ok: false, detail: `${error.message}; fallback: ${fallbackErr.message}` };
+  if (error || !data) {
+    return { ok: false, detail: error ? `${error.code ?? "unknown"}: ${error.message}` : "no row returned" };
+  }
+  return { ok: true, id: data.id as string };
 }
 
-// Best-effort owner notification. No-ops when RESEND_API_KEY is missing or
-// invalid; the Supabase row is the source of truth either way.
-async function notify(q: QuotePayload): Promise<void> {
-  const key = process.env.RESEND_API_KEY;
+// Owner notification. The quote row is the source of truth; the email outcome is
+// recorded on the row so an unnotified quote can be found later.
+async function notify(q: QuotePayload, quoteId: string): Promise<void> {
   const to = process.env.QUOTE_NOTIFY_EMAIL;
-  if (!key || !to) return;
-  try {
-    await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        from: process.env.QUOTE_FROM_EMAIL || "GroomLocal <onboarding@resend.dev>",
-        to: [to],
-        subject: `New quote request: ${q.petType} in ${q.city}`,
-        text: summarize(q),
-      }),
-    });
-  } catch (err) {
-    console.error("Quote notify failed:", err);
+  const admin = createAdminClient();
+  if (!to) {
+    console.error(JSON.stringify({ scope: "email", site: "quote", ok: false, error: "missing QUOTE_NOTIFY_EMAIL", quoteId }));
+    await admin.from("quote_requests").update({ notify_error: "missing QUOTE_NOTIFY_EMAIL" }).eq("id", quoteId);
+    return;
   }
+  const result = await sendEmail({
+    site: "quote",
+    to,
+    subject: `New quote request: ${q.petType} in ${q.city}`,
+    text: summarize(q),
+    replyTo: q.email,
+    context: { quoteId },
+  });
+  await admin
+    .from("quote_requests")
+    .update(
+      result.ok
+        ? { notified_at: new Date().toISOString(), resend_id: result.id, notify_error: null }
+        : { notify_error: result.error.slice(0, 500) }
+    )
+    .eq("id", quoteId);
 }
 
 const MAX_PAYLOAD_BYTES = 20_000;
@@ -170,13 +165,13 @@ export async function POST(request: NextRequest) {
 
   const saved = await persist(data);
   if (!saved.ok) {
-    console.error("Quote persist failed:", saved.detail);
+    console.error(JSON.stringify({ scope: "quote", event: "persist_failed", detail: saved.detail }));
     return NextResponse.json(
       { error: "Something went wrong saving your request. Please try again." },
       { status: 500 }
     );
   }
 
-  await notify(data);
+  await notify(data, saved.id);
   return NextResponse.json({ success: true });
 }

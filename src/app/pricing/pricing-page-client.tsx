@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { CaretDown, CaretRight, Check, X, Star, ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import { CaretDown, CaretRight, Check, X, ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { WaveDivider } from "@/components/wave-divider";
 import { AnimatedSection, AnimatedItem } from "@/components/animated-section";
 import { FeaturedAvailability } from "@/components/featured-availability";

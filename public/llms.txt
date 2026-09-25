@@ -1,10 +1,10 @@
 # GroomLocal
 
-> The Pacific Northwest's most comprehensive dog grooming directory. Find verified groomers in Washington and Oregon.
+> The Pacific Northwest's dog and cat grooming directory. Find groomers in Washington and Oregon by city, service, and specialty.
 
 ## About
 
-GroomLocal helps pet owners find trusted, verified dog groomers across the Pacific Northwest. We cover 1,000+ grooming businesses in 109 cities across Washington and Oregon.
+GroomLocal helps pet owners find dog and cat groomers across the Pacific Northwest. The directory lists more than 1,100 grooming businesses in over 200 cities across Washington and Oregon. Listings are compiled from public sources; a business shows an "Owner Confirmed" badge once its owner has claimed and reviewed it.
 
 ## Key Pages
 
@@ -62,12 +62,13 @@ Portland, Eugene, Salem, Bend, Medford, Beaverton, Hillsboro, Gresham, Lake Oswe
 
 ## For Groomers
 
-Grooming businesses can list for free or upgrade to paid tiers for enhanced visibility, analytics, and booking integration.
+Every listing is free. Owners can claim their listing to manage details, photos, and inquiries. Free and Sponsored listings show the same Owner Confirmed badge; the badge is never for sale.
 
-- Free listing: Basic business info
-- Standard ($39/mo): Photos, services display, analytics
-- Featured ($89/mo): Priority placement, booking widget, badges
-- Premium ($179/mo): #1 placement, homepage spotlight, lead notifications
+- Free listing ($0): claim and edit your profile, add photos, receive inquiries, Owner Confirmed badge
+- Sponsored ($49/mo, or $41/mo billed annually): a clearly labeled spot in the Featured section at the top of your city page, limited to three per city. Payment never changes your badge or your position in the regular list.
+
+Pricing details: https://groomlocal.com/pricing
+Claim or add a listing: https://groomlocal.com/for-groomers
 
 ## Contact
 

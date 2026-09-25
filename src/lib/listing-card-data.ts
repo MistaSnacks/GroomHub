@@ -24,6 +24,7 @@ export function toListingCardData(listing: NormalizedListing): ListingCardData {
     price_tag: listing.price_tag,
     short_description: listing.short_description || "",
     is_featured: listing.is_featured,
+    sponsor_paid_until: listing.sponsor_paid_until ?? null,
     rating: listing.rating,
     review_count: listing.review_count,
     waitlist_status: listing.waitlist_status,

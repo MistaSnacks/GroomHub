@@ -1,4 +1,5 @@
-import { createClient } from "@supabase/supabase-js";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { isSponsored } from "@/lib/listing-rules";
 
 /**
  * Re-feature trigger for the house listing (the founder-related salon).
@@ -30,10 +31,7 @@ export interface RefeatureTriggerStatus {
 
 export async function getRefeatureTriggerStatus(): Promise<RefeatureTriggerStatus> {
   const slug = process.env.HOUSE_LISTING_SLUG?.trim() || null;
-  const admin = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
+  const admin = createAdminClient();
   const nowIso = new Date().toISOString();
 
   const [claimedRes, payingRes, houseRes] = await Promise.all([
@@ -50,7 +48,7 @@ export async function getRefeatureTriggerStatus(): Promise<RefeatureTriggerStatu
     slug
       ? admin
           .from("business_listings")
-          .select("subscription_tier, is_featured, city, state")
+          .select("subscription_tier, is_featured, sponsor_paid_until, city, state")
           .eq("slug", slug)
           .maybeSingle()
       : Promise.resolve({ data: null, error: null }),
@@ -59,10 +57,10 @@ export async function getRefeatureTriggerStatus(): Promise<RefeatureTriggerStatu
   const otherClaimed = claimedRes.count ?? 0;
   const payingSponsors = payingRes.count ?? 0;
   const house = houseRes.data as
-    | { subscription_tier: string | null; is_featured: boolean | null; city: string | null; state: string | null }
+    | { subscription_tier: string | null; is_featured: boolean | null; sponsor_paid_until: string | null; city: string | null; state: string | null }
     | null;
 
-  const houseCurrentlySponsored = !!house && (house.subscription_tier === "premium" || house.is_featured === true);
+  const houseCurrentlySponsored = !!house && isSponsored(house);
   const configured = !!slug && !!house;
   const met =
     configured &&

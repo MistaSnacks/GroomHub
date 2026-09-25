@@ -1,14 +1,9 @@
 "use server";
 
-import { createClient as createServiceClient } from "@supabase/supabase-js";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { requireAdmin } from "@/lib/admin";
 
-function getAdmin() {
-  return createServiceClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
+const getAdmin = createAdminClient;
 
 export async function getClaimedListings() {
   if (!(await requireAdmin())) {
@@ -36,7 +31,11 @@ export async function toggleFeatured(slug: string, featured: boolean) {
   const admin = getAdmin();
   const { error } = await admin
     .from("business_listings")
-    .update({ is_featured: featured })
+    .update(
+      featured
+        ? { is_featured: true, subscription_tier: "premium" }
+        : { is_featured: false, subscription_tier: "free", sponsor_paid_until: null }
+    )
     .eq("slug", slug);
 
   if (error) {

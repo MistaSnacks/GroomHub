@@ -14,13 +14,15 @@ import {
   getRelatedPosts,
   getCategoryLabel,
   formatBlogDate,
+  extractFaqs,
 } from "@/lib/blog";
-import { blogPostSchema, breadcrumbSchema } from "@/lib/schema";
+import { blogPostSchema, breadcrumbSchema, faqPageSchema } from "@/lib/schema";
 import { BlogCard } from "@/components/blog-card";
 import { AuthorBio } from "@/components/author-bio";
 import { AdSlot, ADS_ENABLED } from "@/components/ad-slot";
 import { WaveDivider } from "@/components/wave-divider";
 import { clampDescription } from "@/lib/seo-utils";
+import { jsonLd } from "@/lib/json-ld";
 
 // New CMS slugs render on demand without another deployment.
 export const dynamicParams = true;
@@ -78,6 +80,7 @@ export default async function BlogArticlePage({ params }: Props) {
   const related = await getRelatedPosts(slug, 3);
   const categoryLabel = getCategoryLabel(post.category);
   const wordCount = post.content.trim().split(/\s+/).filter(Boolean).length;
+  const faqs = extractFaqs(post);
 
   const breadcrumbs = [
     { name: "Home", href: "/" },
@@ -92,19 +95,27 @@ export default async function BlogArticlePage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(blogPostSchema(post, {
+          __html: jsonLd(blogPostSchema(post, {
             wordCount,
             articleSection: categoryLabel,
             keywords: post.tags,
-          })).replace(/</g, "\\u003c"),
+          })),
         }}
       />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbSchema(breadcrumbs)).replace(/</g, "\\u003c"),
+          __html: jsonLd(breadcrumbSchema(breadcrumbs)),
         }}
       />
+      {faqs.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: jsonLd(faqPageSchema(faqs)),
+          }}
+        />
+      )}
 
       {/* Hero */}
       <section className="bg-brand-secondary py-12 md:py-16 md:pb-0 relative overflow-hidden">

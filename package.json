@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:guides": "tsx --test scripts/test-grooming-guides.ts"
+    "test": "tsx --import ./tests/setup-env.ts --test 'tests/**/*.test.ts' scripts/test-cms-content.tsx",
+    "test:content": "tsx --test scripts/test-grooming-guides.ts"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
@@ -40,5 +41,9 @@
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
     "typescript": "^5"
-  }
+  },
+  "engines": {
+    "node": ">=22 <23"
+  },
+  "packageManager": "npm@10.9.2"
 }

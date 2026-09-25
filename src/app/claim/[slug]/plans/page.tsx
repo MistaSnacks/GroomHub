@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getListingBySlug } from "@/lib/supabase/queries";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { ClaimPlansClient } from "./claim-plans-client";
 
 export default async function ClaimPlansPage({
@@ -28,6 +29,18 @@ export default async function ClaimPlansPage({
     // Existing owners can change plans. Only bounce visitors who don't own it.
     if (listing.owner_id && listing.owner_id !== user.id) {
         redirect(`/groomer/${slug}`);
+    }
+
+    // A claim already waiting for review shows its status instead of the form.
+    const { data: pending } = await createAdminClient()
+        .from("claim_requests")
+        .select("id")
+        .eq("listing_id", listing.id)
+        .eq("user_id", user.id)
+        .eq("status", "pending")
+        .maybeSingle();
+    if (pending) {
+        redirect(`/claim/${slug}/success`);
     }
 
     return <ClaimPlansClient slug={slug} />;

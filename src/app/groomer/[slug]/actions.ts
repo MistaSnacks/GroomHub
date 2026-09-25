@@ -1,6 +1,7 @@
 "use server";
 
-import { createClient as createAdminClient } from "@supabase/supabase-js";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { sendEmail } from "@/lib/email/send";
 import {
   renderBrandedEmail,
   emailDetailCard,
@@ -12,66 +13,44 @@ export type GroomerMessageResult = { ok: true } | { ok: false; error: string };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function getAdmin() {
-  return createAdminClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
-
 async function notifyOwner(opts: {
   to: string;
   listingName: string;
+  listingSlug: string;
+  leadId: string;
   senderName: string;
   senderEmail: string;
   senderPhone: string | null;
   message: string;
-}): Promise<void> {
-  const key = process.env.RESEND_API_KEY;
-  if (!key) {
-    console.warn("Groomer message notify skipped: RESEND_API_KEY not set");
-    return;
-  }
-  try {
-    const html = renderBrandedEmail({
-      preheader: `New message about ${opts.listingName}`,
-      heading: "A pet parent sent you a message",
-      body:
-        emailParagraph(
-          `Someone contacted <strong>${escapeHtml(opts.listingName)}</strong> through GroomLocal.`
-        ) +
-        emailDetailCard("Message details", [
-          { label: "From", value: opts.senderName },
-          { label: "Email", value: opts.senderEmail },
-          { label: "Phone", value: opts.senderPhone || "Not provided" },
-          { label: "Message", value: opts.message },
-        ]),
-      cta: {
-        label: "Open your inbox",
-        url: "https://groomlocal.com/dashboard/inbox",
-      },
-      footerNote: `This message was sent via the contact form on your GroomLocal listing.`,
-    });
+}) {
+  const html = renderBrandedEmail({
+    preheader: `New message about ${opts.listingName}`,
+    heading: "A pet parent sent you a message",
+    body:
+      emailParagraph(
+        `Someone contacted <strong>${escapeHtml(opts.listingName)}</strong> through GroomLocal.`
+      ) +
+      emailDetailCard("Message details", [
+        { label: "From", value: opts.senderName },
+        { label: "Email", value: opts.senderEmail },
+        { label: "Phone", value: opts.senderPhone || "Not provided" },
+        { label: "Message", value: opts.message },
+      ]),
+    cta: {
+      label: "Open your inbox",
+      url: "https://groomlocal.com/dashboard/inbox",
+    },
+    footerNote: `This message was sent via the contact form on your GroomLocal listing.`,
+  });
 
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${key}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: process.env.QUOTE_FROM_EMAIL || "GroomLocal <onboarding@resend.dev>",
-        to: [opts.to],
-        subject: `New GroomLocal message for ${opts.listingName}`,
-        html,
-      }),
-    });
-    if (!res.ok) {
-      console.error("Groomer message notify failed:", res.status);
-    }
-  } catch {
-    console.error("Groomer message notify failed");
-  }
+  return sendEmail({
+    site: "lead",
+    to: opts.to,
+    subject: `New GroomLocal message for ${opts.listingName}`,
+    html,
+    replyTo: opts.senderEmail,
+    context: { slug: opts.listingSlug, leadId: opts.leadId },
+  });
 }
 
 export async function sendGroomerMessage(
@@ -109,7 +88,7 @@ export async function sendGroomerMessage(
     ? `${message}\n\nPet details: ${petDetails}`
     : message;
 
-  const admin = getAdmin();
+  const admin = createAdminClient();
   const { data: listing, error: listingError } = await admin
     .from("business_listings")
     .select("id, name, slug, email, owner_id")
@@ -121,42 +100,56 @@ export async function sendGroomerMessage(
     return { ok: false, error: "This listing is not accepting messages." };
   }
 
-  const { error: insertError } = await admin.from("leads").insert({
-    listing_id: listing.id,
-    sender_name: name,
-    sender_email: email,
-    sender_phone: phone || null,
-    message: storedMessage,
-    status: "new",
-  });
+  const { data: lead, error: insertError } = await admin
+    .from("leads")
+    .insert({
+      listing_id: listing.id,
+      sender_name: name,
+      sender_email: email,
+      sender_phone: phone || null,
+      message: storedMessage,
+      status: "new",
+    })
+    .select("id")
+    .single();
 
-  if (insertError) {
-    console.error("Lead insert failed:", insertError.code);
+  if (insertError || !lead) {
+    console.error(JSON.stringify({ scope: "lead", event: "insert_failed", slug: listing.slug, code: insertError?.code, message: insertError?.message }));
     return { ok: false, error: "Something went wrong. Please try again." };
   }
+  const leadId = lead.id as string;
 
-  let ownerEmail = listing.email as string | null;
-  if (!ownerEmail) {
-    const { data: ownerData, error: ownerError } = await admin.auth.admin.getUserById(
-      listing.owner_id
-    );
-    if (ownerError) {
-      console.error("Owner email lookup failed");
-    } else {
-      ownerEmail = ownerData.user?.email ?? null;
-    }
+  // Notify the verified account email first; the scraped listing email is a fallback only.
+  let ownerEmail: string | null = null;
+  const { data: ownerData, error: ownerError } = await admin.auth.admin.getUserById(listing.owner_id);
+  if (ownerError) {
+    console.error(JSON.stringify({ scope: "lead", event: "owner_lookup_failed", slug: listing.slug, leadId, message: ownerError.message }));
+  } else {
+    ownerEmail = ownerData.user?.email ?? null;
   }
+  if (!ownerEmail) ownerEmail = (listing.email as string | null) || null;
 
-  if (ownerEmail) {
-    await notifyOwner({
-      to: ownerEmail,
-      listingName: listing.name,
-      senderName: name,
-      senderEmail: email,
-      senderPhone: phone || null,
-      message: storedMessage,
-    });
-  }
+  const outcome = ownerEmail
+    ? await notifyOwner({
+        to: ownerEmail,
+        listingName: listing.name,
+        listingSlug: listing.slug,
+        leadId,
+        senderName: name,
+        senderEmail: email,
+        senderPhone: phone || null,
+        message: storedMessage,
+      })
+    : ({ ok: false, error: "no owner email on file" } as const);
+
+  await admin
+    .from("leads")
+    .update(
+      outcome.ok
+        ? { notified_at: new Date().toISOString(), resend_id: outcome.id, notify_error: null }
+        : { notify_error: outcome.error.slice(0, 500) }
+    )
+    .eq("id", leadId);
 
   return { ok: true };
 }

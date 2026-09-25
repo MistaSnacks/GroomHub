@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { redirect, notFound } from "next/navigation";
+import { permanentRedirect, notFound } from "next/navigation";
 import { CaretRight, MapPin } from "@phosphor-icons/react/dist/ssr";
 import { getCityBrowseSummary } from "@/lib/supabase/queries";
 
@@ -9,6 +9,7 @@ import { supabase } from "@/lib/supabase/client";
 import { statePageSchema } from "@/lib/schema";
 import { WaveDivider } from "@/components/wave-divider";
 import { CityPillGrid } from "@/components/city-pill-grid";
+import { jsonLd } from "@/lib/json-ld";
 
 export const revalidate = 300;
 
@@ -132,7 +133,7 @@ export default async function StatePage({ params }: StatePageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(statePageSchema(stateName, state)),
+          __html: jsonLd(statePageSchema(stateName, state)),
         }}
       />
     </div>
@@ -145,7 +146,7 @@ async function handleLegacyRedirect(slug: string): Promise<never> {
 
   if (lastPart === "WA" || lastPart === "OR") {
     const citySlug = dashParts.slice(0, -1).join("-");
-    redirect(`/dog-grooming/${lastPart.toLowerCase()}/${citySlug}`);
+    permanentRedirect(`/dog-grooming/${lastPart.toLowerCase()}/${citySlug}`);
   }
 
   const { data } = await supabase
@@ -156,7 +157,7 @@ async function handleLegacyRedirect(slug: string): Promise<never> {
     .single();
 
   if (data) {
-    redirect(`/dog-grooming/${stateSlugFromAbbr(data.state)}/${data.city_slug}`);
+    permanentRedirect(`/dog-grooming/${stateSlugFromAbbr(data.state)}/${data.city_slug}`);
   }
 
   notFound();

@@ -1,0 +1,1 @@
+These six files were applied to production by hand (SQL editor / MCP) between March and September 2026 under different version numbers than their filenames. Their effects are included in `../20260924000000_baseline_reconstructed.sql`. They are kept for history only and are not part of the migration ledger.

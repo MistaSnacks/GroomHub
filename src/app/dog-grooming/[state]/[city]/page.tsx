@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ensureCanonicalCityRoute } from "@/lib/city-route";
 import { CaretRight, MapPin, Park, MapTrifold, Storefront, TreeStructure, Question } from "@phosphor-icons/react/dist/ssr";
 import { CityListingsClient } from "@/components/city-listings-client";
 import { getListingsByCity, getCitiesByState, getCityBySlug, getFeaturedByCity, getCities } from "@/lib/supabase/queries";
@@ -17,6 +18,7 @@ import { clampDescription, clampTitle } from "@/lib/seo-utils";
 import { CityStatsBlock } from "@/components/city-stats-block";
 import { CityPricingSection } from "@/components/city-pricing-section";
 import { getCityPricingBreakdown } from "@/lib/city-pricing";
+import { jsonLd } from "@/lib/json-ld";
 
 export const revalidate = 300;
 
@@ -33,7 +35,8 @@ interface CityPageProps {
 }
 
 export async function generateMetadata({ params }: CityPageProps): Promise<Metadata> {
-  const { state, city } = await params;
+  const raw = await params;
+  const { state, city } = ensureCanonicalCityRoute("/dog-grooming", raw.state, raw.city);
   if (!isValidStateSlug(state)) notFound();
   const stateAbbr = stateAbbrFromSlug(state);
   const cityData = await getCityBySlug(city, stateAbbr);
@@ -96,7 +99,8 @@ export async function generateMetadata({ params }: CityPageProps): Promise<Metad
 }
 
 export default async function CityPage({ params }: CityPageProps) {
-  const { state, city } = await params;
+  const raw = await params;
+  const { state, city } = ensureCanonicalCityRoute("/dog-grooming", raw.state, raw.city);
   if (!isValidStateSlug(state)) notFound();
   const stateAbbr = stateAbbrFromSlug(state);
   const stateName = stateNameFromSlug(state);
@@ -444,7 +448,7 @@ export default async function CityPage({ params }: CityPageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(cityPageSchema(listings, cityName, stateAbbr, state, city, faqs)),
+          __html: jsonLd(cityPageSchema(listings, cityName, stateAbbr, state, city, faqs)),
         }}
       />
     </div>

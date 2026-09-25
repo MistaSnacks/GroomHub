@@ -16,7 +16,7 @@ export const SERVICE_TAGS: TagDefinition[] = [
     description: "Complete grooming package including bath, haircut, nail trim, ear cleaning, and styling.",
     aliases: [
       "full groom", "full-service grooming", "full grooming", "full service groom",
-      "one-on-one grooming", "full-service mobile grooming", "all-natural grooming",
+      "one-on-one grooming", "all-natural grooming",
       "fear-free grooming", "anxiety-adapted cuts", "doodle grooming",
       "luxury grooming", "one-on-one attention",
     ],

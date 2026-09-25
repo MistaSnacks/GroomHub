@@ -1,6 +1,7 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { sendEmail } from "@/lib/email/send";
 
 interface SubmitResult {
   ok: boolean;
@@ -24,43 +25,42 @@ function clean(value: unknown, max = 500): string {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
 }
 
-async function notify(r: SubmissionRow): Promise<void> {
-  const key = process.env.RESEND_API_KEY;
+async function notify(r: SubmissionRow, submissionId: string): Promise<void> {
   const to = process.env.LISTING_NOTIFY_EMAIL;
-  if (!key || !to) {
-    console.warn("Listing notify skipped: RESEND_API_KEY or LISTING_NOTIFY_EMAIL not set");
+  if (!to) {
+    console.error(JSON.stringify({ scope: "email", site: "listing_submission", ok: false, error: "missing LISTING_NOTIFY_EMAIL", submissionId }));
     return;
   }
-  try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        from: process.env.QUOTE_FROM_EMAIL || "GroomLocal <onboarding@resend.dev>",
-        to: [to],
-        subject: `New listing submission: ${r.business_name}`,
-        text: [
-          `Business: ${r.business_name}`,
-          `Contact: ${r.contact_name || "N/A"}`,
-          `Location: ${r.city}, ${r.state}`,
-          `Email: ${r.email}`,
-          `Phone: ${r.phone || "N/A"}`,
-          `Website: ${r.website || "N/A"}`,
-          `Notes: ${r.notes || "N/A"}`,
-        ].join("\n"),
-      }),
-    });
-    if (!res.ok) {
-      console.error("Listing notify failed:", res.status);
-    }
-  } catch {
-    console.error("Listing notify failed");
-  }
+  await sendEmail({
+    site: "listing_submission",
+    to,
+    subject: `New listing submission: ${r.business_name}`,
+    replyTo: r.email,
+    text: [
+      `Business: ${r.business_name}`,
+      `Contact: ${r.contact_name || "N/A"}`,
+      `Location: ${r.city}, ${r.state}`,
+      `Email: ${r.email}`,
+      `Phone: ${r.phone || "N/A"}`,
+      `Website: ${r.website || "N/A"}`,
+      `Notes: ${r.notes || "N/A"}`,
+    ].join("\n"),
+    context: { submissionId },
+  });
 }
 
 export async function submitListing(formData: FormData): Promise<SubmitResult> {
   const honeypot = formData.get("hp_field");
   if (typeof honeypot === "string" && honeypot.length > 0) {
+    // A filled honeypot is usually a bot, but browser autofill can hit it too.
+    // Log it so a real owner's lost submission is at least visible in Vercel logs.
+    const droppedEmail = String(formData.get("email") || "");
+    console.warn(JSON.stringify({
+      scope: "listing_submission",
+      event: "honeypot_drop",
+      business: String(formData.get("business_name") || "").slice(0, 80),
+      emailDomain: droppedEmail.includes("@") ? droppedEmail.split("@").pop() : null,
+    }));
     return { ok: true };
   }
 
@@ -93,7 +93,7 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
     return { ok: false, error: "Please enter a valid email address." };
   }
 
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   const row: SubmissionRow = {
     business_name,
@@ -106,14 +106,14 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
     notes,
   };
 
-  const { error } = await supabase.from("listing_submissions").insert(row);
+  const { data, error } = await supabase.from("listing_submissions").insert(row).select("id").single();
 
-  if (error) {
-    console.error("Listing submission error:", error.code);
+  if (error || !data) {
+    console.error(JSON.stringify({ scope: "listing_submission", event: "insert_failed", code: error?.code, message: error?.message }));
     return { ok: false, error: "Something went wrong. Please try again." };
   }
 
-  await notify(row);
+  await notify(row, data.id as string);
 
   return { ok: true };
 }

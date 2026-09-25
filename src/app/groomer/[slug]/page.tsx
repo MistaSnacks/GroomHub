@@ -31,6 +31,7 @@ import { localBusinessSchema, breadcrumbSchema } from "@/lib/schema";
 import { stateSlugFromAbbr, stateNameFromAbbr } from "@/lib/geography";
 import { PageViewTracker } from "@/components/page-view-tracker";
 import { clampDescription, clampTitle } from "@/lib/seo-utils";
+import { jsonLd } from "@/lib/json-ld";
 
 export const revalidate = 300;
 
@@ -138,13 +139,13 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(localBusinessSchema(listing)),
+          __html: jsonLd(localBusinessSchema(listing)),
         }}
       />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbSchema(breadcrumbs)),
+          __html: jsonLd(breadcrumbSchema(breadcrumbs)),
         }}
       />
 

@@ -131,7 +131,6 @@ export function CityListingsInner({
         break;
     }
 
-    result.sort((a, b) => (b.is_featured ? 1 : 0) - (a.is_featured ? 1 : 0));
 
     return result;
   }, [listings, activeServiceTags, activeSpecialtyTags, activeFeatureTags, activePriceTag, sort]);

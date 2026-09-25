@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ensureCanonicalCityRoute } from "@/lib/city-route";
 import { CaretRight, MapPin, Cat, Question } from "@phosphor-icons/react/dist/ssr";
 import { CityListingsClient } from "@/components/city-listings-client";
 import { getListingsByServiceTag, getCitiesByState, getCityBySlug, getFeaturedByCity } from "@/lib/supabase/queries";
@@ -16,6 +17,7 @@ import { CityStatsBlock } from "@/components/city-stats-block";
 import { clampDescription, clampTitle } from "@/lib/seo-utils";
 import { CityPricingSection } from "@/components/city-pricing-section";
 import { getCityPricingBreakdown } from "@/lib/city-pricing";
+import { jsonLd } from "@/lib/json-ld";
 
 export const revalidate = 300;
 
@@ -28,7 +30,8 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { state, city } = await params;
+  const raw = await params;
+  const { state, city } = ensureCanonicalCityRoute("/cat-grooming", raw.state, raw.city);
   if (!isValidStateSlug(state)) notFound();
 
   const stateAbbr = stateAbbrFromSlug(state);
@@ -67,7 +70,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function CatGroomingCityPage({ params }: Props) {
-  const { state, city } = await params;
+  const raw = await params;
+  const { state, city } = ensureCanonicalCityRoute("/cat-grooming", raw.state, raw.city);
   if (!isValidStateSlug(state)) notFound();
   const stateAbbr = stateAbbrFromSlug(state);
   const stateName = stateNameFromSlug(state);
@@ -222,7 +226,7 @@ export default async function CatGroomingCityPage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
+          __html: jsonLd(
             serviceCityPageSchema(
               listings,
               cityName,

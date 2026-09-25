@@ -17,6 +17,7 @@ import { WaveDivider } from "@/components/wave-divider";
 import { clampDescription, clampTitle } from "@/lib/seo-utils";
 import { AnimatedSection, AnimatedItem } from "@/components/animated-section";
 import type { NormalizedListing } from "@/lib/types";
+import { jsonLd } from "@/lib/json-ld";
 
 export const revalidate = 300;
 
@@ -105,7 +106,7 @@ export default async function SpecialtyLandingPage({ params }: Props) {
     <div className="flex flex-col min-h-screen">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        dangerouslySetInnerHTML={{ __html: jsonLd(schema) }}
       />
 
       {/* Hero */}

@@ -169,7 +169,7 @@ export default async function ClaimPage({
                 )}
 
                 <p className="text-xs text-center text-text-muted mt-6">
-                  By claiming this profile, you agree to our <a href="/terms" className="text-brand-accent hover:underline">Terms of Service</a> and <a href="/privacy" className="text-brand-accent hover:underline">Privacy Policy</a>, and verify you are an authorized representative of {listing.name}.
+                  By claiming this profile, you agree to our <Link href="/terms" className="text-brand-accent hover:underline">Terms of Service</Link> and <Link href="/privacy" className="text-brand-accent hover:underline">Privacy Policy</Link>, and verify you are an authorized representative of {listing.name}.
                 </p>
               </div>
 
