@@ -12,6 +12,33 @@
 
 ---
 
+## 0. Remediation status (2026-09-24, same day, commits 64c2f3b, 07b63d9, 61f8121, 86030ee)
+
+**Done and verified** (`tsc` clean, `eslint` 0 errors, 33 offline unit tests + 16 skill tests pass, migrations applied to the linked project and the ledger reconciled):
+
+- SEC-01 JSON-LD escaping via `src/lib/json-ld.ts` at all 11 sites; angle brackets rejected in listing fields.
+- SEC-02 / M1-2 claim verification: domain match auto-approves, otherwise `claim_requests` queue with an admin page, approve/reject emails, and a revoke action.
+- FE-28 / M1-4 `src/lib/listing-rules.ts`: regular lists ignore payment; featured queries require an unexpired paid-through date; label, admin toggle, claim, unclaim, deletion and cron use the same predicate.
+- SEC-09 / M1-3 Next 16.3.6; `npm audit` clean at high and above; unused MDX packages and `sharp` removed.
+- OBS-1/2 / M1-5 `src/lib/email/send.ts`; `notified_at` / `notify_error` / `resend_id` on leads and quotes; no sandbox sender in production; cron returns 500 when it cannot notify; admin page for leads and quotes (M1-6).
+- SEC-08 / M1-7 and the live findings the DB answered: owner PostgREST update policy, public lead insert, anon submission and newsletter inserts, authenticated analytics reads and authenticated storage writes removed; RLS enabled on the three exposed legacy tables; CHECK constraints on state and URL schemes; indexes added (`supabase/migrations/20260924120000_*`).
+- M0-4 reconstructed baseline migration, ledger repaired, `database.types.ts` regenerated. M0-1/M0-3 tree committed, Node pinned, CI workflow. M0-2 `npm test` harness with suites for schema, tags, blog, CMS sanitizers, redirects, admin allowlist, city routes, pricing, email, sponsorship, claims, newsletter.
+- OBS-16 / M2-2 structured logger, `/api/health`, boot-time env report, `global-error.tsx`, blog error boundary, root layout survives a cities failure, 404 vs outage distinguished. M2-7 `.env.example` and `src/lib/env.ts`.
+- SEC-03 / M2-1 per-instance rate limiting on every public write path and search; search caps and CDN caching; Fuse operator stripping.
+- Correctness batch: deletion order, price tier preservation, logo replace order, storage-remove logging, deterministic paging, Fuse cache signature, auth redirect loop, cron error propagation, Pacific time zones, revalidation on pricing/about/feed, cache tags from photo and admin actions, request-level memoization of the two hot lookups, client-side image resize.
+- Copy and UI: honest dog-city empty state, tier names, newsletter and contact wording, signed unsubscribe route, em dashes removed, accessibility on the filter bar, quote wizard, claim form, search and newsletter inputs, edit-page save state.
+- AI pipeline / M2-8: policy in review mode; skill says `request_review`; anatomy rule keys on limb counts; `--pose bipedal`; `scripts/blog-hero-image.py` added; providers load only their own keys; skill tracked in git; Python requirements pinned; `docs/automation/weekly-guides.md` rewritten. DC-01 `llms.txt` pricing fixed. Dead code and retired scripts archived; README rewritten.
+
+**Needs the owner** (cannot be done from this machine):
+1. Set `EMAIL_FROM` in Vercel to a verified Resend sender (or keep `QUOTE_FROM_EMAIL`); in production no email is sent without it. Confirm `QUOTE_NOTIFY_EMAIL`, `LISTING_NOTIFY_EMAIL`, `ADMIN_EMAILS`, `CRON_SECRET`, `HOUSE_LISTING_SLUG`, `REVALIDATION_SECRET` are set; `/api/health` reports what is missing by name.
+2. Push `main` and deploy from git. Four commits are local only.
+3. Sync `skills/hermes-blog-skill/`, `scripts/blog-hero-image.py`, `scripts/image-providers/*`, and `docs/automation/weekly-guides-policy.json` to the receiving Mac (it was unreachable at 192.168.4.38 during this session).
+4. Rotate the service-role key on a schedule and move the Google Ads/GSC credentials out of `.env.local` (SEC-22).
+
+**Deliberately not done**: shared-store rate limiting (Upstash) and Turnstile (new services; the in-memory limiter is the hook), `ServiceCityPage` extraction (M2-4), the city/metro table consolidation and remaining duplication sweeps (M2-3 c/d), photo array RPC (C-08), `server-only` package (Node dependency install was done without it; add with the next install), framer-motion removal and other Low performance items, Sentry.
+
+---
+
 ## 1. Executive summary
 
 **Health grade: D+.** The app type-checks, has no import cycles, and its auth checks are correct as written, but a stored XSS is reachable on every public listing page by any self-registered account, a consumer-facing pricing promise is contradicted by the ranking code, there are effectively no tests and no CI, nothing observable exists for the money paths, the database schema is not in source, and production has been deployed from an uncommitted working tree for twelve days.
