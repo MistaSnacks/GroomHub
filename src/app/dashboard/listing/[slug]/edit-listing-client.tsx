@@ -353,7 +353,17 @@ export function EditListingClient(props: EditListingClientProps) {
   const realImages = usableListingImages(images);
 
   return (
-    <form action={handleSave} onChange={() => setIsDirty(true)} className="space-y-8">
+    <form
+      action={handleSave}
+      onChange={(e) => {
+        // Photo and logo inputs upload immediately through their own actions; they are not unsaved form state.
+        const target = e.target as HTMLElement;
+        if (target instanceof HTMLInputElement && target.type === "file") return;
+        setIsDirty(true);
+        setSaveResult(null);
+      }}
+      className="space-y-8"
+    >
       <input type="hidden" name="slug" value={props.slug} />
       <input
         type="hidden"

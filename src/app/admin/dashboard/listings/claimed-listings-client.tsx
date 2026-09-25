@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Star } from "lucide-react";
 import { toggleFeatured } from "./actions";
 import { revokeClaim } from "@/app/admin/dashboard/claims/actions";
+import { tierDisplayName } from "@/lib/pricing";
 
 interface ClaimedListing {
   slug: string;
@@ -124,7 +125,7 @@ export function ClaimedListingsClient({ listings: initialListings }: { listings:
                       tierColors[listing.subscription_tier || "free"] || tierColors.free
                     }`}
                   >
-                    {listing.subscription_tier || "free"}
+                    {tierDisplayName(listing.subscription_tier)}
                   </span>
                 </td>
                 <td className="px-4 py-3 text-gray-500">{formatDate(listing.claimed_at)}</td>

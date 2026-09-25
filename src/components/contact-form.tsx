@@ -41,7 +41,7 @@ export function ContactForm({ listingId, listingSlug, listingName }: ContactForm
                 <CheckCircle weight="fill" className="w-12 h-12 text-brand-primary mx-auto mb-3" />
                 <h3 className="font-heading text-lg font-bold text-brand-primary mb-2">Message Sent!</h3>
                 <p className="text-sm text-text-muted">
-                    Your message is on its way to {listingName}. Groomers reply directly by email or phone, so response times vary.
+                    Your message is saved to {listingName}&apos;s GroomLocal inbox and emailed to them. Groomers reply directly by email or phone, so response times vary.
                 </p>
                 <button
                     type="button"

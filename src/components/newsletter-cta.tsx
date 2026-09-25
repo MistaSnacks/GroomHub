@@ -55,13 +55,13 @@ export function NewsletterCta() {
           Grooming tips delivered to your inbox
         </h2>
         <p className="text-brand-primary/80 mb-8 max-w-md mx-auto">
-          Get weekly grooming tips, seasonal care guides, and PNW pet community updates. No spam, just helpful content.
+          Occasional grooming tips and seasonal care guides for Pacific Northwest pet parents. No spam, and every email has a one-click unsubscribe.
         </p>
 
         {status === "success" ? (
           <div className="flex items-center justify-center gap-2 text-brand-primary font-semibold">
             <Check weight="bold" className="w-5 h-5" />
-            You&apos;re subscribed! Check your inbox soon.
+            You&apos;re on the list. We only send when there is something worth reading.
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">

@@ -5,6 +5,14 @@ import { BETA_MODE, TIER_LIMITS } from "./tiers";
 // a generous Free listing and one labeled Sponsored placement (DB slug stays "premium").
 // "basic" remains a valid DB tier for compatibility but is no longer sold.
 // Annual prices are "two months free" (monthly * 10 / 12).
+/** Human name for a stored tier slug ("premium" is sold as "Sponsored"). */
+export function tierDisplayName(slug: string | null | undefined): string {
+  const found = pricingTiers.find((t) => t.slug === slug);
+  if (found) return found.name;
+  if (slug === "basic") return "Free";
+  return "Free";
+}
+
 export const pricingTiers: PricingTier[] = [
   {
     name: "Free",

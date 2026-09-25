@@ -71,8 +71,8 @@ get_roles.sql
 __pycache__/
 *.py[cod]
 
-# Hermes skills are installed on the remote runner and maintained over SSH.
-/skills/hermes-blog-skill/
+# The Hermes blog skill is tracked here (source of truth) and synced to the remote runner.
+/skills/hermes-blog-skill/__pycache__/
 
 # outreach contact lists are business data, not source
 /outreach/contacted-list.md

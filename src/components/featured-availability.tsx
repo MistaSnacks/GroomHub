@@ -31,7 +31,7 @@ export function FeaturedAvailability({ cities }: FeaturedAvailabilityProps) {
               </span>
               {isFull ? (
                 <span className="font-medium text-brand-accent">
-                  Full - join the waitlist
+                  All spots taken. Contact us about the next opening.
                 </span>
               ) : (
                 <span className="font-medium text-brand-primary">

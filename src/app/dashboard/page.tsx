@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getListingsByOwner } from "@/lib/supabase/queries";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { StatusBanner } from "./status-banner";
+import { tierDisplayName } from "@/lib/pricing";
 
 const tierColors: Record<string, string> = {
   free: "bg-border text-text-muted",
@@ -162,7 +163,7 @@ export default async function DashboardPage({
                 </h3>
                 {listing.subscription_tier && (
                   <span className={`shrink-0 text-[10px] font-bold uppercase tracking-wider rounded-full px-2.5 py-1 ${tierColors[listing.subscription_tier] || tierColors.free}`}>
-                    {listing.subscription_tier}
+                    {tierDisplayName(listing.subscription_tier)}
                   </span>
                 )}
               </div>

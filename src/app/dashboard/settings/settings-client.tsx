@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Key, Warning, Trash, ArrowsClockwise } from "@phosphor-icons/react/dist/ssr";
 import { unclaimListing, updatePassword, deleteAccount } from "../actions";
+import { tierDisplayName } from "@/lib/pricing";
 
 interface SettingsClientProps {
   userEmail: string;
@@ -103,7 +104,7 @@ export function SettingsClient({ userEmail, listings }: SettingsClientProps) {
               <div key={listing.slug} className="flex items-center justify-between gap-4 py-3 border-b border-border last:border-0">
                 <div>
                   <p className="text-sm font-semibold text-brand-primary">{listing.name}</p>
-                  <p className="text-xs text-text-muted capitalize">{listing.subscription_tier} plan</p>
+                  <p className="text-xs text-text-muted">{tierDisplayName(listing.subscription_tier)} plan</p>
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
                   <Link

@@ -153,7 +153,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           </h1>
           {didTagFallback && (
             <p className="text-sm text-brand-primary mt-2">
-              No exact matches for &apos;{q}&apos; — showing all {fallbackTagLabel} groomers
+              No exact matches for &apos;{q}&apos;. Showing all {fallbackTagLabel} groomers.
             </p>
           )}
           <p className="text-sm text-text-muted mt-1">

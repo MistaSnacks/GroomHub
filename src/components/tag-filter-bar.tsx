@@ -22,7 +22,7 @@ interface TagFilterBarProps {
 }
 
 const sortOptions = [
-  { value: "top-rated", label: "Directory order" },
+  { value: "top-rated", label: "Highest rated" },
   { value: "price-low", label: "Price: Low to High" },
   { value: "price-high", label: "Price: High to Low" },
 ];

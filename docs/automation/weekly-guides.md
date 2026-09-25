@@ -1,53 +1,46 @@
-# Weekly GroomLocal guides
+# Weekly grooming guides
 
-Hermes runs each Monday at 9:00 a.m. America/Los_Angeles (first run September 7, 2026). The user authorized recurring GTM tracking and verified publication on September 5, 2026.
+One new guide per week, written by the Hermes blog skill on the receiving Mac (see the workspace `AGENTS.md`), with a new Maui illustration, and handed to the owner for review inside Snackbox CMS. Nothing publishes without the owner.
 
-Job `groomlocal-weekly-guides` (`7d9933d99b17`) uses `gpt-5.6-luna` with medium reasoning through the `openai-codex` ChatGPT subscription provider. Per-job `base_url` is unset so Hermes resolves its own pooled OAuth credential at `https://chatgpt.com/backend-api/codex`. An explicit per-job URL bypasses that pool in this Hermes version. The API key added during initial setup was removed from Hermes; no API fallback is configured. Research and image services retain their separate billing.
+## Policy
 
-## Each run
+`docs/automation/weekly-guides-policy.json` is the contract the skill reads at the start of every run.
 
-1. Synchronize any pending GTM updates for already-published runs.
-2. Create or reuse a card in the explicit `groomlocal` project, column `preparing`, type/channel `seo`. Save its actual ID in the run directory.
-3. Research live opportunities and select at most one worthwhile NEW guide on a nonoverlapping topic. Do not publish duplicate or cosmetic content just to meet a quota.
-4. Write and review the MDX, direct source links, topic mapping, and a newly generated topic-specific Maui illustration. Record the exact draft hash and completed checks.
-5. Publish with `scripts/publish-weekly-guide.py`, then put the verified canonical URL and result on the GTM card and move it to `live`.
+| Field | Value | Meaning |
+|---|---|---|
+| `mode` | `review` | Save a Snackbox draft and call `request_review`. Never `publish_draft`. |
+| `publication_authorized` | `false` | Agent self-review is not owner approval. |
+| `review_workflow` | `snackbox_request_review` | The `blogPost` collection has `requireReview` on; the owner publishes from the Studio. |
+| `maximum_articles_per_run` | `1` | |
+| `require_new_maui_image` | `true` | The bundled art loop must approve a new illustration. |
+| `output_root` | `output/groomlocal-weekly` | Relative to the checkout; the art loop requires run artifacts inside the checkout. |
+| `schedule` | `0 9 * * 1` America/Los_Angeles | |
 
-The current mode is **publish**. The release command reconstructs the current production source by SHA-1 and stages only the selected MDX, topic assignment, and required new PNG. It validates MDX, topic mapping, internal links, and image transparency. Vercel builds with production settings without assigning the live domain. The command checks the deployment's article, listing, feed, and blog sitemap, confirms production has not changed, promotes the release, and verifies the public URL. Local content is synchronized only where that will preserve unrelated edits.
+The retired MDX and Vercel publisher (`scripts/archive/publish-weekly-guide.py`) is not part of this workflow and must not be invoked.
 
-A real GTM card and completed factual/editorial/image checks are required before publication. If the board, source acquisition, content validation, build, page checks, or production-baseline check fails, stop and record the reason. Do not bypass the publisher by deploying the working checkout. A completed release is recorded in `publication.json`; never republish it merely to retry a failed board update.
+## What a run produces
 
-## Files and outputs
+- A Snackbox `blogPost` draft with the article, SEO fields, related links and the approved hero image.
+- A `request_review` call on that draft, verified by reading the document back.
+- A run directory under `output_root` with `publication.json` (status `pending_owner_review`, `live: false`), the art loop record, gate JSON files and `report.md`.
+- A GTM board card in `preparing` until the owner publishes and the public URL is verified.
 
-- `docs/automation/weekly-guides-policy.json`: mode, authorization, schedule, model, and output root.
-- The live Hermes cron table remains authoritative; machine-specific job snapshots are not transferred.
-- `scripts/weekly-guides-preflight.py`: inventories content and pending board updates in a fresh run directory.
-- `scripts/publish-weekly-guide.py` and `scripts/verify-weekly-guide.mjs`: controlled release and validation.
-- `skills/hermes-blog-skill/SKILL.md`: editorial, GTM, and publication instructions.
-- `skills/hermes-blog-skill/references/seo-editorial.md`: underlying SEO and Maui requirements.
+## Owner steps
 
-Run artifacts: `output/groomlocal-weekly/<timestamp>/` by default, resolved from the checkout root; existing installations may use an absolute path in their policy.
-Scheduler reports: the active Hermes installation's `cron/output/7d9933d99b17/` directory.
+1. Open the Snackbox Studio review queue.
+2. Read the draft, check the Maui image against `docs/maui/STYLE-STANDARD.md`.
+3. Publish from the Studio, or leave a comment and reject.
 
-Each run keeps its GTM card ID, source evidence, draft, review checks, release manifest, deployment result, and publication record. These are operational artifacts and are not deployed with the article.
+## Verifying a run without trusting "Last run: ok"
 
-## Operations
+The scheduler reports success when the process exits cleanly, not when a draft exists. Check:
 
-```bash
-hermes cron list
-hermes cron pause 7d9933d99b17
-hermes cron resume 7d9933d99b17
-hermes cron run 7d9933d99b17
-hermes gateway status
-```
+- The run directory has `publication.json` with a `cms_document_id`.
+- The Snackbox document is in `review` state.
+- The art loop record ends `approved` (not `exhausted` or `needs_export_review`).
 
-`run` requests an immediate full editorial run. It uses subscription capacity and can incur research or image-service charges. The Mac must be running and connected; the launchd gateway cannot execute while the computer sleeps or is off.
+## Known constraints
 
-To return to drafts, set policy mode to `review` and `publication_authorized` to false. The publisher rejects that configuration. A review run still creates a GTM card and delivers the complete draft.
-
-## Verification
-
-Fresh subscription OAuth login, Hermes CLI response, and a real scheduled DataForSEO call passed. The corrected scheduler returned `SCHEDULED_SUBSCRIPTION_LUNA_OK 3600`. These historical verification snapshots remain on the original runner and are not part of the handoff. The first complete release passed and is live at https://groomlocal.com/blog/dog-nail-trimming-cost-guide. Its publication.json records the exact two changed files and deployment. The sitemap is split: /sitemap.xml is the index and /sitemap/0.xml contains guides. Promotion explicitly selects the camrens-projects-24b42280 team. The publisher supports --resume for an already-built stage after a corrected verification error; source hashes and the production baseline must still match. No live browser viewport check was possible because no browser was connected.
-
-## September 7 separation of responsibilities
-
-Codex audits and maintains existing guides. Hermes creates new articles only, each with a newly generated Maui illustration. The policy and publisher enforce `--new` and `--asset`; the skill requires intent-level deduplication and visual review. The cron prompt invokes the repository preflight directly to avoid the scheduler script-directory error. The full existing-guide audit is in `docs/content-audits/2026-09-07/`.
+- The art loop calls `scripts/blog-hero-image.py`; keep that helper present in the checkout the skill runs from.
+- Apron Maui is always bipedal; the anatomy hard rule keys on limb counts, not on a raised paw.
+- Model IDs and gate thresholds live in the skill; record the exact `jev_model` from each gate file when calibrating.

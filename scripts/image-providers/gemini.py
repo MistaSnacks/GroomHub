@@ -2,8 +2,8 @@
 # /// script
 # requires-python = ">=3.11"
 # dependencies = [
-#   "google-genai>=1.16.0",
-#   "Pillow>=10.0.0",
+#   "google-genai>=1.16.0,<2",
+#   "Pillow>=10.0.0,<12",
 # ]
 # ///
 """Generate images via Google Gemini (google-genai SDK) with multi-reference support.
@@ -41,7 +41,8 @@ def _load_env_local() -> None:
         key, _, val = line.partition("=")
         key = key.strip()
         val = val.strip().strip('"').strip("'")
-        if key and key not in os.environ:
+        # Only image credentials; the app's other secrets stay out of this process.
+        if key in {"OPENAI_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY"} and key not in os.environ:
             os.environ[key] = val
 
 
