@@ -1,4 +1,6 @@
+import { Suspense } from "react";
 import { CityListingsInner } from "./city-listings-inner";
+import { CityListingsStatic } from "./city-listings-static";
 import { toListingCardData } from "@/lib/listing-card-data";
 import type { NormalizedListing } from "@/lib/types";
 
@@ -18,11 +20,22 @@ export function CityListingsClient({
   const cards = listings.map(toListingCardData);
 
   return (
-    <CityListingsInner
-      listings={cards}
-      heading={heading}
-      preFilterService={preFilterService}
-      preFilterSpecialty={preFilterSpecialty}
-    />
+    <Suspense
+      fallback={
+        <CityListingsStatic
+          listings={cards}
+          heading={heading}
+          preFilterService={preFilterService}
+          preFilterSpecialty={preFilterSpecialty}
+        />
+      }
+    >
+      <CityListingsInner
+        listings={cards}
+        heading={heading}
+        preFilterService={preFilterService}
+        preFilterSpecialty={preFilterSpecialty}
+      />
+    </Suspense>
   );
 }

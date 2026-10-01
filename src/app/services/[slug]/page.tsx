@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Suspense } from "react";
 import { CaretRight, Scissors, MapPin, Question } from "@phosphor-icons/react/dist/ssr";
 import { CityListingsClient } from "@/components/city-listings-client";
 import { getListingsByServiceTag, canonicalCitySlug } from "@/lib/supabase/queries";
@@ -232,13 +231,11 @@ export default async function ServiceLandingPage({ params }: Props) {
       {/* All Listings */}
       <section className="bg-white flex-1">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 w-full">
-          <Suspense fallback={<div className="py-8 text-center text-text-muted">Loading filters...</div>}>
-            <CityListingsClient
-              listings={listings}
-              heading={`All ${tag.label} Groomers`}
-              preFilterService={slug}
-            />
-          </Suspense>
+          <CityListingsClient
+            listings={listings}
+            heading={`All ${tag.label} Groomers`}
+            preFilterService={slug}
+          />
         </div>
       </section>
 

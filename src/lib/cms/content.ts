@@ -4,7 +4,7 @@ import { stegaClean } from "./sdk";
 
 export interface CmsAsset { _ref?: string; id?: string; url?: string; originalUrl?: string; width?: number; height?: number; alt?: string }
 export interface PortableSpan { _type: string; _key?: string; text: string; marks?: string[] }
-export interface PortableBlock { _type: string; _key?: string; style?: string; listItem?: string; level?: number; children?: PortableSpan[]; markDefs?: {_key: string; _type: string; href?: string}[] }
+export interface PortableBlock { _type: string; _key?: string; style?: string; listItem?: string; level?: number; children?: PortableSpan[]; markDefs?: {_key: string; _type: string; href?: string; sponsored?: boolean}[] }
 export interface CmsSection { kind?: string; heading?: string; body?: PortableBlock[]; image?: CmsAsset; imageAlt?: string; caption?: string; table?: {headings?: string[]; rows?: {cells?: string[]}[]}; cta?: {label?: string; href?: string} }
 export interface CmsSeo { title?: string; description?: string; image?: CmsAsset; imageAlt?: string; noIndex?: boolean }
 

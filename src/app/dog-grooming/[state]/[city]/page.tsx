@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ensureCanonicalCityRoute } from "@/lib/city-route";
@@ -166,12 +165,10 @@ export default async function CityPage({ params }: CityPageProps) {
             <FeaturedSection listings={featuredListings} cityName={cityName} />
           )}
           {listings.length > 0 ? (
-            <Suspense fallback={<div className="py-8 text-center text-text-muted">Loading filters...</div>}>
-              <CityListingsClient
-                listings={listings}
-                heading={`Best Dog Groomers in ${cityName}`}
-              />
-            </Suspense>
+            <CityListingsClient
+              listings={listings}
+              heading={`Best Dog Groomers in ${cityName}`}
+            />
           ) : (
             <div className="py-16 text-center">
               <p className="font-heading text-lg text-brand-primary">

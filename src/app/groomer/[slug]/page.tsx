@@ -32,6 +32,7 @@ import { stateSlugFromAbbr, stateNameFromAbbr } from "@/lib/geography";
 import { PageViewTracker } from "@/components/page-view-tracker";
 import { clampDescription, clampTitle } from "@/lib/seo-utils";
 import { jsonLd } from "@/lib/json-ld";
+import { TrackedLink } from "@/components/tracked-website-link";
 
 export const revalidate = 300;
 
@@ -208,10 +209,10 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                   {listing.address}, {listing.city}, {listing.state} {listing.zip}
                 </span>
                 {listing.phone ? (
-                  <a href={`tel:${listing.phone}`} className="flex items-center gap-1.5 hover:text-brand-primary transition-colors">
+                  <TrackedLink href={`tel:${listing.phone}`} listingId={listing.id} action="phone_click" className="flex items-center gap-1.5 hover:text-brand-primary transition-colors">
                     <Phone weight="fill" className="h-4 w-4" />
                     {listing.phone}
-                  </a>
+                  </TrackedLink>
                 ) : (
                   <span className="flex items-center gap-1.5 text-text-muted/50">
                     <Phone weight="fill" className="h-4 w-4" />
@@ -501,7 +502,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                   {listing.phone ? (
                     <p className="flex items-center gap-2">
                       <Phone weight="fill" className="w-4 h-4 shrink-0" />
-                      <a href={`tel:${listing.phone}`} className="hover:text-brand-primary transition-colors">{listing.phone}</a>
+                      <TrackedLink href={`tel:${listing.phone}`} listingId={listing.id} action="phone_click" className="hover:text-brand-primary transition-colors">{listing.phone}</TrackedLink>
                     </p>
                   ) : (
                     <p className="flex items-center gap-2 text-text-muted/50">
@@ -539,6 +540,21 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                       loading="lazy"
                     />
                   </div>
+                )}
+                {(listing.address || (listing.lat && listing.lng)) && (
+                  <TrackedLink
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+                      listing.lat && listing.lng
+                        ? `${listing.lat},${listing.lng}`
+                        : `${listing.address}, ${listing.city}, ${listing.state} ${listing.zip ?? ""}`
+                    )}`}
+                    listingId={listing.id}
+                    action="directions_click"
+                    className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-primary hover:text-brand-primary/80 transition-colors"
+                  >
+                    <MapPin weight="fill" className="h-4 w-4" />
+                    Get directions
+                  </TrackedLink>
                 )}
 
                 {listing.booking_url && (

@@ -2,6 +2,7 @@ import { createElement, Fragment, type ElementType, type ReactNode } from "react
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import { mdxComponents } from "./mdx-components";
+import { isAffiliateHref, SPONSORED_REL } from "@/lib/affiliate-links";
 import { imageUrl, safeContentHref, type PortableBlock, type PortableSpan, type CmsSection } from "@/lib/cms/content";
 
 const wrap = (tag: string, children?: ReactNode, props: Record<string, unknown> = {}) =>
@@ -12,8 +13,9 @@ function spanContent(span: PortableSpan, block: PortableBlock): ReactNode {
   for (const mark of span.marks || []) {
     if (["strong", "em", "code", "strike"].includes(mark)) value = wrap(mark === "strike" ? "del" : mark, value);
     else {
-      const href = safeContentHref(block.markDefs?.find(def => def._key === mark)?.href);
-      if (href) value = wrap("a", value, { href });
+      const def = block.markDefs?.find(d => d._key === mark);
+      const href = safeContentHref(def?.href);
+      if (href) value = wrap("a", value, def?.sponsored === true || isAffiliateHref(href) ? { href, rel: SPONSORED_REL } : { href });
     }
   }
   return <Fragment key={span._key}>{value}</Fragment>;

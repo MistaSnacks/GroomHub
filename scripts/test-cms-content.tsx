@@ -26,3 +26,18 @@ test("CMS links and table cells render formatting without executing HTML or scri
   assert.doesNotMatch(html, /href="javascript:|<script>/);
   assert.match(html, /&lt;script&gt;/);
 });
+
+test("affiliate links get rel=sponsored, ordinary external links do not", () => {
+  const link = (key: string, href: string, sponsored?: boolean) =>
+    block(key, {children:[{_type:"span",_key:key,text:key,marks:["l"]}],markDefs:[{_key:"l",_type:"link",href,...(sponsored ? {sponsored} : {})}]});
+  const html = renderToStaticMarkup(<PortableContent blocks={[
+    link("network","https://www.flexlinkspro.com/track?x=1"),
+    link("flagged","https://www.embrace.com/", true),
+    link("plain","https://www.avma.org/"),
+  ]} />);
+  const anchor = (text: string) => html.match(new RegExp(`<a [^>]*>${text}</a>`))?.[0] ?? "";
+  assert.match(anchor("network"), /rel="sponsored nofollow noopener noreferrer"/);
+  assert.match(anchor("flagged"), /rel="sponsored nofollow noopener noreferrer"/);
+  assert.match(anchor("plain"), /rel="noopener noreferrer"/);
+  assert.doesNotMatch(anchor("plain"), /sponsored/);
+});
