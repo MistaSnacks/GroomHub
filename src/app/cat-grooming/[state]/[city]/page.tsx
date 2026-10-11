@@ -6,7 +6,7 @@ import { CaretRight, MapPin, Cat, Question } from "@phosphor-icons/react/dist/ss
 import { CityListingsClient } from "@/components/city-listings-client";
 import { getListingsByServiceTag, getCitiesByState, getCityBySlug, getFeaturedByCity } from "@/lib/supabase/queries";
 import { stateAbbrFromSlug, stateNameFromSlug, getNearbyCities, buildServiceCityPath, buildCityPath, isValidStateSlug } from "@/lib/geography";
-import { getMetroNeighbors } from "@/lib/metro-clusters";
+import { getMetroNeighbors, getMetroNeighborSlugs } from "@/lib/metro-clusters";
 import { buildCatGroomingFaqs } from "@/lib/city-faqs";
 import { getEnrichedCityContent } from "@/lib/city-content";
 import { serviceCityPageSchema } from "@/lib/schema";
@@ -85,7 +85,7 @@ export default async function CatGroomingCityPage({ params }: Props) {
   if (!cityData && !getEnrichedCityContent(stateAbbr, city)) notFound();
 
   const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
-  const nearby = getNearbyCities(city, relatedCities, getMetroNeighbors(city), 6);
+  const nearby = getNearbyCities(city, relatedCities, getMetroNeighborSlugs(city, stateAbbr), 6);
   const faqs = buildCatGroomingFaqs(cityName, stateAbbr, listings.length);
   const hasListings = listings.length > 0;
 
@@ -116,7 +116,7 @@ export default async function CatGroomingCityPage({ params }: Props) {
               </p>
               <CityStatsBlock
                 groomerCount={listings.length}
-                metroCityCount={getMetroNeighbors(city).length + 1}
+                metroCityCount={getMetroNeighbors(city, stateAbbr).length + 1}
                 serviceCount={new Set(listings.flatMap((l) => l.service_tags ?? [])).size}
                 lastUpdated={new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" })}
               />

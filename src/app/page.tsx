@@ -18,6 +18,9 @@ import { jsonLd } from "@/lib/json-ld";
 
 export const revalidate = 300;
 
+/** Sponsored cards in the home page featured row (placeholders fill any empty ones). */
+const HOME_FEATURED_SPOTS = 4;
+
 const fallbackMetadata: Metadata = {
   alternates: { canonical: "https://groomlocal.com" },
   openGraph: {
@@ -45,7 +48,7 @@ export default async function HomePage() {
     getCitiesByState("WA"),
     getCitiesByState("OR"),
     getTotalListingCount(),
-    getFeaturedListings(3),
+    getFeaturedListings(HOME_FEATURED_SPOTS),
     getHomeCopy(),
   ]);
 
@@ -91,11 +94,11 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredListings.slice(0, 3).map((listing, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 xl:gap-6">
+            {featuredListings.slice(0, HOME_FEATURED_SPOTS).map((listing, index) => (
               <ListingCard key={listing.slug} listing={listing} index={index} compact />
             ))}
-            {Array.from({ length: Math.max(0, 3 - featuredListings.length) }).map((_, i) => (
+            {Array.from({ length: Math.max(0, HOME_FEATURED_SPOTS - featuredListings.length) }).map((_, i) => (
               <PremiumPlaceholderCard key={`placeholder-${i}`} index={featuredListings.length + i} />
             ))}
           </div>

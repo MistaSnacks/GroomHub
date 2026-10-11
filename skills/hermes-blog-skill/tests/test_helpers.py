@@ -175,23 +175,70 @@ class Helpers(unittest.TestCase):
             self.assertEqual(filled.getpixel((620, 620))[3], 0)
             self.assertEqual(filled.getpixel((0, 0))[3], 0)
 
-    def test_jev_gate_limb_counts_are_hard_rejections_but_a_raised_paw_is_not(self):
+    def test_jev_gate_raised_paw_rejects_quadruped_but_not_bipedal(self):
         answers = self._answers()  # Jev says anatomy 0.97
-        # Apron Maui is bipedal and holds props: a raised paw with four limbs is fine (owner rule, 2026-09-15).
-        bipedal = {"raised_paw": True, "front_paws_visible": 2, "rear_paws_visible": 2, "visible_limbs_total": 4}
-        decision = jev_gate.decide(answers, "master", 0.85, bipedal)
-        self.assertTrue(decision["passed"])
-        self.assertEqual(decision["gates"]["anatomy"], 0.97)
-        # More than four visible limbs is always a rejection, whatever Jev says.
+        upright = {"raised_paw": True, "front_paws_visible": 2, "rear_paws_visible": 2, "visible_limbs_total": 4,
+                   "paws_on_ground": 2}
+        # Four-legged poses: a raised paw is an automatic rejection (five-limb lesson, 2026-09-21).
+        quad = jev_gate.decide(answers, "master", 0.85, upright)
+        self.assertFalse(quad["passed"])
+        self.assertEqual(quad["gates"]["anatomy"], 0.0)
+        # Bipedal poses (owner standard): raised front paws are expected, limb counts decide.
+        biped = jev_gate.decide(answers, "master", 0.85, upright, bipedal=True)
+        self.assertTrue(biped["passed"])
+        self.assertEqual(biped["gates"]["anatomy"], 0.97)
+        three_down = dict(upright, paws_on_ground=3)
+        self.assertFalse(jev_gate.decide(answers, "master", 0.85, three_down, bipedal=True)["passed"])
+        self.assertIn("hind legs", jev_gate.correction_text(["anatomy"], bipedal=True))
+        # More than four visible limbs is always a rejection, whatever Jev says, in either mode.
         three_front = {"raised_paw": False, "front_paws_visible": 3, "rear_paws_visible": 1, "visible_limbs_total": 4}
-        rejected = jev_gate.decide(answers, "master", 0.85, three_front)
-        self.assertFalse(rejected["passed"])
-        self.assertEqual(rejected["failing"], ["anatomy"])
-        self.assertEqual(rejected["gates"]["anatomy"], 0.05)
+        for mode in (False, True):
+            rejected = jev_gate.decide(answers, "master", 0.85, three_front, bipedal=mode)
+            self.assertFalse(rejected["passed"])
+            self.assertEqual(rejected["failing"], ["anatomy"])
+            self.assertEqual(rejected["gates"]["anatomy"], 0.05)
         five = {"raised_paw": True, "front_paws_visible": 2, "rear_paws_visible": 2, "visible_limbs_total": 5}
-        self.assertFalse(jev_gate.decide(answers, "master", 0.85, five)["passed"])
+        self.assertFalse(jev_gate.decide(answers, "master", 0.85, five, bipedal=True)["passed"])
         clean = {"raised_paw": False, "front_paws_visible": 2, "rear_paws_visible": 1, "visible_limbs_total": 3}
         self.assertTrue(jev_gate.decide(answers, "master", 0.85, clean)["passed"])
+
+    def test_jev_gate_gaze_rejects_camera_grin_when_work_gaze_required(self):
+        answers = self._answers()
+        limbs = {"raised_paw": True, "front_paws_visible": 2, "rear_paws_visible": 2, "visible_limbs_total": 4,
+                 "paws_on_ground": 2}
+        # Owner feedback 2026-10-05: bipedal heroes held props but grinned at the camera like the reference.
+        grin = dict(limbs, eyes_look_at="the viewer", copies_reference_camera_grin=True)
+        rejected = jev_gate.decide(answers, "master", 0.85, grin, bipedal=True, look_at_work=True)
+        self.assertFalse(rejected["passed"])
+        self.assertEqual(rejected["failing"], ["gaze"])
+        self.assertIn("pupils", jev_gate.correction_text(["gaze"]))
+        copied = dict(limbs, eyes_look_at="the prop or task he is working on", copies_reference_camera_grin=True)
+        self.assertFalse(jev_gate.decide(answers, "master", 0.85, copied, bipedal=True, look_at_work=True)["passed"])
+        working = dict(limbs, eyes_look_at="the prop or task he is working on", copies_reference_camera_grin=False)
+        self.assertTrue(jev_gate.decide(answers, "master", 0.85, working, bipedal=True, look_at_work=True)["passed"])
+        # Missing gaze observation fails closed; the gate is off unless the loop asks for it.
+        self.assertIn("gaze", jev_gate.decide(answers, "master", 0.85, limbs, bipedal=True, look_at_work=True)["failing"])
+        self.assertTrue(jev_gate.decide(answers, "master", 0.85, grin, bipedal=True)["passed"])
+        for p in art_loop.POSES:
+            self.assertNotIn("facing the viewer", p["pose"])
+            self.assertNotIn("head turned to the viewer", p["pose"])
+
+    def test_art_loop_pose_rotation_prefers_unused_poses_and_includes_bipedal(self):
+        import json, tempfile
+        from pathlib import Path
+        self.assertTrue(any(p["bipedal"] for p in art_loop.POSES))
+        for p in art_loop.POSES:
+            if p["ref"]:
+                self.assertTrue((art_loop.POSE_DIR / p["ref"]).is_file(), p["ref"])
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            first = art_loop.POSES[0]["id"]
+            old = root / "2026-09-21_000000" / "art"
+            old.mkdir(parents=True)
+            (old / "art-loop.json").write_text(json.dumps({"attempts": [{"pose_id": first}, {"pose_id": first}]}))
+            plan = art_loop.pose_plan(root / "2026-09-28_000000")
+            self.assertNotEqual(plan[0]["id"], first)
+            self.assertEqual(plan[-1]["id"], first)
 
 
 if __name__ == "__main__":

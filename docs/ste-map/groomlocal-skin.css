@@ -1,0 +1,27 @@
+
+/* Neutral skin: flat colors. A project can replace this block with its own kit (build.py --skin). */
+.vp{background-image:radial-gradient(rgba(60,50,40,.13) 1.2px, transparent 1.3px);background-size:28px 28px}
+.zone-board{background:#e9e3d6}
+.zone-cream{background:#f6f1e7}
+.zone-alert{background:#f7e9e2;border-color:rgba(184,64,46,.75)!important}
+.kp{border:0;padding:16px 18px}
+.kp-cream{background:#fffdf8;color:#2B2622;box-shadow:inset 0 0 0 2px #d9cfbd}
+.kp-denim{background:#2c3f5c;color:#F4EEDF}
+.kp-mustard{background:#dca533;color:#3a2c12}
+.kp-olive{background:#56632f;color:#F1EDDD}
+.kp-terracotta{background:#b9532f;color:#FBEFE6}
+.kp-tan{background:#c9a26b;color:#2B2622}
+.kp-label{background:#fffdf8;border-radius:12px;padding:10px 16px;box-shadow:inset 0 0 0 2px #d9cfbd}
+.kpill{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:999px;padding:0 calc(var(--pw, 14px) * .7)}
+.kpill-scarlet{background:#b8402e;color:#FBF1E6}.kpill-tan{background:#d8bb8c;color:#2B2622}.kpill-olive{background:#56632f;color:#F4F0E2}
+.kpill-mustard{background:#dca533;color:#2E2310}.kpill-terracotta{background:#b9532f;color:#FBEFE6}.kpill-denim{background:#2c3f5c;color:#F4EEDF}
+.kpill-charcoal{background:#2d2a27;color:#F3ECDB}
+.reader-card.kp{padding:22px 18px}
+
+:root{--ground:#FDF8F0;--paper:#FFFFFF;--ink:#1E293B;--ink-2:#344256;--ink-3:#586879;--denim:#1E293B;--scarlet:#C4452E;--rule:rgba(30,41,59,.25);--f-display:system-ui,-apple-system,Segoe UI,sans-serif;--f-hand:system-ui,-apple-system,Segoe UI,sans-serif;--f-mono:ui-monospace,SFMono-Regular,monospace}
+.zone-board{background:#E4F4F2}.zone-cream{background:#FDF8F0}
+.kp-denim,.kpill-denim{background:#1E293B;color:#FFFFFF}
+.kp-olive,.kpill-olive{background:#16766D;color:#FFFFFF}
+.kp-tan,.kpill-tan{background:#E8DDD4;color:#1E293B}
+.kp-terracotta,.kpill-terracotta{background:#C4452E;color:#FFFFFF}
+.zone-intro{font-size:18px}.kp-label{background:#FFFFFF;color:#1E293B}

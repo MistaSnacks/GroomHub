@@ -81,7 +81,7 @@ const steps = [
   {
     step: "3",
     title: "Get Found",
-    desc: "Existing listings stay visible while you claim them. New business submissions are reviewed before publication, usually within 48 hours.",
+    desc: "Existing listings stay visible while you claim them. New businesses can add themselves from the Get Listed page and go live right away.",
   },
 ];
 

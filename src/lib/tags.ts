@@ -140,7 +140,7 @@ export const SPECIALTY_TAGS: TagDefinition[] = [
   {
     slug: "fear-free",
     label: "Fear-Free / Anxiety",
-    description: "Certified fear-free and cooperative care techniques for anxious, nervous, or reactive pets.",
+    description: "Fear-free and cooperative care techniques for anxious, nervous, or reactive pets.",
     aliases: [
       "anxiety", "fear-free", "anxious dogs",
       "cooperative care", "fear-free certified",
@@ -269,7 +269,8 @@ export type PriceTag = "$" | "$$" | "$$$" | "$$$$";
 function buildAliasMap(tags: TagDefinition[]): Map<string, string> {
   const map = new Map<string, string>();
   for (const tag of tags) {
-    for (const alias of tag.aliases) {
+    // The owner dashboard saves labels ("Nail Care"), so slug and label must resolve too.
+    for (const alias of [tag.slug, tag.label, ...tag.aliases]) {
       map.set(alias.toLowerCase().trim(), tag.slug);
     }
   }

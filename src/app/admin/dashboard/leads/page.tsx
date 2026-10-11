@@ -1,112 +1,291 @@
-import { redirect } from "next/navigation";
-import { requireAdmin } from "@/lib/admin";
-import { createAdminClient } from "@/lib/supabase/admin";
+import Link from "next/link";
+import { loadCore } from "@/lib/admin-console/data";
+import { formatDateTime } from "@/lib/admin-console/metrics";
+import { Empty, ExternalA, PageBody, PageHeader, Panel, Pill, prettyUrl, rowCls, td, th } from "../../_components/ui";
+import { StatusButtons } from "./status-buttons";
 
-export const dynamic = "force-dynamic";
+export const metadata = { title: "Inbox" };
 
-export const metadata = {
-  title: "Leads and Quotes - Admin",
-};
-
-interface QuoteRow {
-  id: string; created_at: string; pet_type: string; pet_breed: string | null; services: string[]; city: string;
-  name: string; email: string; phone: string | null; notes: string | null; status: string;
-  notified_at: string | null; notify_error: string | null;
-}
-interface LeadRow {
-  id: string; created_at: string | null; sender_name: string; sender_email: string; sender_phone: string | null;
-  message: string; status: string; notified_at: string | null; notify_error: string | null;
-  business_listings: { name?: string; slug?: string } | { name?: string; slug?: string }[] | null;
-}
-
-function when(value: string | null) {
-  if (!value) return "-";
-  return new Date(value).toLocaleString("en-US", { timeZone: "America/Los_Angeles", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
-}
+const TABS = [
+  { key: "requests", label: "Quote requests" },
+  { key: "messages", label: "Groomer messages" },
+  { key: "submissions", label: "Listing requests" },
+  { key: "staging", label: "Scraped, not imported" },
+  { key: "newsletter", label: "Newsletter" },
+] as const;
+type TabKey = (typeof TABS)[number]["key"];
 
 function Notified({ at, error }: { at: string | null; error: string | null }) {
-  if (at) return <span className="text-green-700">emailed {when(at)}</span>;
-  return <span className="text-red-700">not emailed{error ? `: ${error}` : ""}</span>;
+  if (at) return <Pill tone="ok">Emailed {formatDateTime(at)}</Pill>;
+  return (
+    <Pill tone="fail" icon title={error ?? undefined}>
+      Not emailed{error ? `: ${error.slice(0, 40)}` : ""}
+    </Pill>
+  );
 }
 
-export default async function LeadsPage() {
-  if (!(await requireAdmin())) redirect("/login?redirect=/admin/dashboard/leads");
-  const db = createAdminClient();
+export default async function InboxPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
+  const requested = (await searchParams).tab;
+  const tab: TabKey = TABS.some((t) => t.key === requested) ? (requested as TabKey) : "requests";
+  const core = await loadCore();
 
-  const [quotesRes, leadsRes] = await Promise.all([
-    db.from("quote_requests").select("id, created_at, pet_type, pet_breed, services, city, name, email, phone, notes, status, notified_at, notify_error").order("created_at", { ascending: false }).limit(200),
-    db.from("leads").select("id, created_at, sender_name, sender_email, sender_phone, message, status, notified_at, notify_error, business_listings(name, slug)").order("created_at", { ascending: false }).limit(200),
-  ]);
-  if (quotesRes.error) throw new Error(`quote_requests: ${quotesRes.error.message}`);
-  if (leadsRes.error) throw new Error(`leads: ${leadsRes.error.message}`);
-  const quotes = (quotesRes.data ?? []) as QuoteRow[];
-  const leads = (leadsRes.data ?? []) as LeadRow[];
-  const unnotified = quotes.filter((q) => !q.notified_at).length + leads.filter((l) => !l.notified_at).length;
+  const activeSubscribers = core.subscribers.filter((s) => !s.unsubscribedAt);
+  const counts: Record<TabKey, { total: number; open: number }> = {
+    requests: { total: core.quotes.length, open: core.quotes.filter((q) => q.status === "new").length },
+    messages: { total: core.leads.length, open: core.leads.filter((l) => l.status === "new").length },
+    submissions: { total: core.submissions.length, open: core.submissions.filter((s) => s.status === "new").length },
+    staging: { total: core.staging.length, open: core.staging.filter((s) => s.status === "pending").length },
+    newsletter: { total: activeSubscribers.length, open: 0 },
+  };
 
   return (
-    <div className="p-6 max-w-6xl space-y-10">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Leads and Quotes</h1>
-        <p className="text-sm text-gray-500 mt-1">
-          Every quote request and groomer message, newest first. {unnotified > 0 ? `${unnotified} did not get a notification email.` : "All rows were emailed."}
-        </p>
-      </div>
+    <>
+      <PageHeader
+        eyebrow="Run the business"
+        title="Inbox"
+        description="Everything people sent through the site: pet owners asking for quotes, messages to claimed groomers, businesses asking to be listed, plus scraped finds that never made it into the directory."
+      />
+      <PageBody>
+        <nav className="flex gap-1 overflow-x-auto rounded-xl border border-adm-line bg-white p-1" aria-label="Inbox sections">
+          {TABS.map((t) => (
+            <Link
+              key={t.key}
+              href={`/admin/dashboard/leads?tab=${t.key}`}
+              aria-current={tab === t.key ? "page" : undefined}
+              className={`flex shrink-0 items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${tab === t.key ? "bg-brand-primary text-white" : "text-stone-600 hover:bg-adm-plane"}`}
+            >
+              {t.label}
+              <span className={`rounded-full px-1.5 text-[11px] tabular-nums ${tab === t.key ? "bg-white/20" : counts[t.key].open ? "bg-brand-accent/90 text-slate-900" : "bg-stone-100 text-stone-500"}`}>
+                {counts[t.key].open || counts[t.key].total}
+              </span>
+            </Link>
+          ))}
+        </nav>
 
-      <section>
-        <h2 className="text-lg font-semibold text-gray-900 mb-3">Quote requests ({quotes.length})</h2>
-        {quotes.length === 0 ? (
-          <p className="text-sm text-gray-500 bg-white rounded-xl border border-gray-200 p-6">No quote requests yet.</p>
-        ) : (
-          <div className="bg-white rounded-xl border border-gray-200 overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead><tr className="border-b border-gray-200 bg-gray-50 text-left text-gray-600">
-                <th className="px-4 py-3 font-medium">When</th><th className="px-4 py-3 font-medium">Who</th><th className="px-4 py-3 font-medium">Pet</th><th className="px-4 py-3 font-medium">Services</th><th className="px-4 py-3 font-medium">City</th><th className="px-4 py-3 font-medium">Notification</th>
-              </tr></thead>
-              <tbody>
-                {quotes.map((q) => (
-                  <tr key={q.id} className="border-b border-gray-100 align-top">
-                    <td className="px-4 py-3 text-gray-500 whitespace-nowrap">{when(q.created_at)}</td>
-                    <td className="px-4 py-3"><div className="font-medium text-gray-900">{q.name}</div><a href={`mailto:${q.email}`} className="text-blue-600 hover:underline">{q.email}</a>{q.phone && <div className="text-gray-500">{q.phone}</div>}</td>
-                    <td className="px-4 py-3 text-gray-700">{q.pet_type}{q.pet_breed ? `, ${q.pet_breed}` : ""}</td>
-                    <td className="px-4 py-3 text-gray-700">{q.services.join(", ")}{q.notes && <div className="text-gray-500 mt-1 max-w-xs">{q.notes}</div>}</td>
-                    <td className="px-4 py-3 text-gray-700">{q.city}</td>
-                    <td className="px-4 py-3"><Notified at={q.notified_at} error={q.notify_error} /></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
-
-      <section>
-        <h2 className="text-lg font-semibold text-gray-900 mb-3">Groomer messages ({leads.length})</h2>
-        {leads.length === 0 ? (
-          <p className="text-sm text-gray-500 bg-white rounded-xl border border-gray-200 p-6">No messages to claimed listings yet.</p>
-        ) : (
-          <div className="bg-white rounded-xl border border-gray-200 overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead><tr className="border-b border-gray-200 bg-gray-50 text-left text-gray-600">
-                <th className="px-4 py-3 font-medium">When</th><th className="px-4 py-3 font-medium">Listing</th><th className="px-4 py-3 font-medium">From</th><th className="px-4 py-3 font-medium">Message</th><th className="px-4 py-3 font-medium">Notification</th>
-              </tr></thead>
-              <tbody>
-                {leads.map((l) => {
-                  const rel = Array.isArray(l.business_listings) ? l.business_listings[0] : l.business_listings;
-                  return (
-                    <tr key={l.id} className="border-b border-gray-100 align-top">
-                      <td className="px-4 py-3 text-gray-500 whitespace-nowrap">{when(l.created_at)}</td>
-                      <td className="px-4 py-3">{rel?.slug ? <a href={`/groomer/${rel.slug}`} className="text-blue-600 hover:underline">{rel.name ?? rel.slug}</a> : "-"}</td>
-                      <td className="px-4 py-3"><div className="font-medium text-gray-900">{l.sender_name}</div><a href={`mailto:${l.sender_email}`} className="text-blue-600 hover:underline">{l.sender_email}</a>{l.sender_phone && <div className="text-gray-500">{l.sender_phone}</div>}</td>
-                      <td className="px-4 py-3 text-gray-700 max-w-md whitespace-pre-wrap">{l.message}</td>
-                      <td className="px-4 py-3"><Notified at={l.notified_at} error={l.notify_error} /></td>
+        {tab === "requests" && (
+          <Panel flush title="Quote requests" description="Pet owners asking GroomLocal to find them a groomer. Each one should be answered within a day.">
+            {core.quotes.length === 0 ? (
+              <div className="px-5 pb-5">
+                <Empty title="No quote requests yet">They arrive from the Get Quotes form and are emailed to QUOTE_NOTIFY_EMAIL.</Empty>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr>
+                      <th className={th}>When</th>
+                      <th className={th}>Who</th>
+                      <th className={th}>Pet and services</th>
+                      <th className={th}>City</th>
+                      <th className={th}>Notification</th>
+                      <th className={th}>Triage</th>
                     </tr>
+                  </thead>
+                  <tbody>
+                    {core.quotes.map((q) => (
+                      <tr key={q.id} className={rowCls}>
+                        <td className={`${td} whitespace-nowrap text-stone-500`}>{formatDateTime(q.createdAt)}</td>
+                        <td className={td}>
+                          <p className="font-medium text-brand-primary">{q.name}</p>
+                          <a href={`mailto:${q.email}`} className="text-xs text-teal-700 hover:underline">
+                            {q.email}
+                          </a>
+                          {q.phone && <p className="text-xs text-stone-500">{q.phone}</p>}
+                        </td>
+                        <td className={td}>
+                          {q.petType}
+                          {q.petBreed ? `, ${q.petBreed}` : ""}
+                          <p className="text-xs text-stone-500">{q.services.join(", ")}</p>
+                          {q.notes && <p className="mt-1 max-w-xs text-xs text-stone-500">{q.notes}</p>}
+                        </td>
+                        <td className={td}>{q.city}</td>
+                        <td className={td}>
+                          <Notified at={q.notifiedAt} error={q.notifyError} />
+                        </td>
+                        <td className={td}>
+                          <StatusButtons kind="quote" id={q.id} status={q.status} />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </Panel>
+        )}
+
+        {tab === "messages" && (
+          <Panel flush title="Groomer messages" description="Contact-form messages to claimed listings. The owner sees these in their own inbox; this is the copy for checking delivery.">
+            {core.leads.length === 0 ? (
+              <div className="px-5 pb-5">
+                <Empty title="No messages to claimed listings yet" />
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr>
+                      <th className={th}>When</th>
+                      <th className={th}>Listing</th>
+                      <th className={th}>From</th>
+                      <th className={th}>Message</th>
+                      <th className={th}>Notification</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {core.leads.map((l) => {
+                      const listing = core.listingByKey.get(l.listingId);
+                      return (
+                        <tr key={l.id} className={rowCls}>
+                          <td className={`${td} whitespace-nowrap text-stone-500`}>{formatDateTime(l.createdAt)}</td>
+                          <td className={td}>
+                            {listing ? (
+                              <a href={`/groomer/${listing.slug}`} target="_blank" className="text-teal-700 hover:underline">
+                                {listing.name}
+                              </a>
+                            ) : (
+                              l.listingId
+                            )}
+                          </td>
+                          <td className={td}>
+                            <p className="font-medium text-brand-primary">{l.senderName}</p>
+                            <a href={`mailto:${l.senderEmail}`} className="text-xs text-teal-700 hover:underline">
+                              {l.senderEmail}
+                            </a>
+                          </td>
+                          <td className={`${td} max-w-md whitespace-pre-wrap text-stone-700`}>{l.message}</td>
+                          <td className={td}>
+                            <Notified at={l.notifiedAt} error={l.notifyError} />
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </Panel>
+        )}
+
+        {tab === "submissions" && (
+          <Panel title="Listing requests" description="Businesses that used Get Listed. Add real ones to the directory by hand, then mark them handled.">
+            {core.submissions.length === 0 ? (
+              <Empty title="No listing requests" />
+            ) : (
+              <ul className="space-y-3">
+                {core.submissions.map((s) => {
+                  // Any two-letter state code in the city field other than WA/OR ("Washington, UT 84780").
+                  const outOfRegion = (s.city.match(/\b[A-Z]{2}\b/g) ?? []).some((code) => code !== "WA" && code !== "OR");
+                  return (
+                    <li key={s.id} className="flex flex-col gap-3 rounded-xl border border-adm-line p-4 md:flex-row md:items-start md:justify-between">
+                      <div className="min-w-0">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <p className="font-medium text-brand-primary">{s.businessName}</p>
+                          <Pill tone={s.status === "new" ? "warn" : "neutral"}>{s.status}</Pill>
+                          {outOfRegion && (
+                            <Pill tone="fail" icon>
+                              Looks outside WA/OR
+                            </Pill>
+                          )}
+                        </div>
+                        <p className="mt-0.5 text-xs text-stone-500">
+                          {s.city} · state field {s.state} · {formatDateTime(s.createdAt)}
+                        </p>
+                        <p className="mt-2 text-xs text-stone-600">
+                          {s.contactName && <>{s.contactName} · </>}
+                          <a href={`mailto:${s.email}`} className="text-teal-700 hover:underline">
+                            {s.email}
+                          </a>
+                          {s.phone && <> · {s.phone}</>}
+                          {s.website && (
+                            <>
+                              {" · "}
+                              <ExternalA href={s.website.startsWith("http") ? s.website : `https://${s.website}`}>{prettyUrl(s.website)}</ExternalA>
+                            </>
+                          )}
+                        </p>
+                        {s.notes && <p className="mt-2 max-w-2xl rounded-lg bg-adm-plane/60 px-3 py-2 text-xs text-stone-600">{s.notes}</p>}
+                      </div>
+                      <StatusButtons kind="submission" id={s.id} status={s.status} />
+                    </li>
                   );
                 })}
-              </tbody>
-            </table>
-          </div>
+              </ul>
+            )}
+          </Panel>
         )}
-      </section>
-    </div>
+
+        {tab === "staging" && (
+          <Panel flush title="Scraped, not imported" description="Rows in listings_staging from earlier scrapes. Read-only here; the import scripts decide what becomes a listing.">
+            {core.staging.length === 0 ? (
+              <div className="px-5 pb-5">
+                <Empty title="Staging is empty" />
+              </div>
+            ) : (
+              <table className="w-full text-sm">
+                <thead>
+                  <tr>
+                    <th className={th}>Business</th>
+                    <th className={th}>Address</th>
+                    <th className={th}>Source</th>
+                    <th className={th}>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {core.staging.map((s) => {
+                    const exists = s.name ? core.listings.some((l) => l.name.toLowerCase() === s.name!.toLowerCase()) : false;
+                    return (
+                      <tr key={s.id} className={rowCls}>
+                        <td className={td}>
+                          <p className="font-medium text-brand-primary">{s.name ?? "(no name)"}</p>
+                          {s.website && <ExternalA href={s.website} className="text-xs">{prettyUrl(s.website)}</ExternalA>}
+                        </td>
+                        <td className={`${td} text-xs text-stone-600`}>{s.address ?? "-"}</td>
+                        <td className={`${td} text-xs`}>{s.sourceUrl ? <ExternalA href={s.sourceUrl}>{prettyUrl(s.sourceUrl).slice(0, 48)}</ExternalA> : "-"}</td>
+                        <td className={td}>
+                          <div className="flex flex-wrap gap-1">
+                            <Pill tone="neutral">{s.status ?? "unknown"}</Pill>
+                            {exists && <Pill tone="ok">Already listed</Pill>}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            )}
+          </Panel>
+        )}
+
+        {tab === "newsletter" && (
+          <Panel title="Newsletter" description={`${activeSubscribers.length} active, ${core.subscribers.length - activeSubscribers.length} unsubscribed.`}>
+            {core.subscribers.length === 0 ? (
+              <Empty title="No subscribers yet">The signup box on the blog writes here.</Empty>
+            ) : (
+              <table className="w-full text-sm">
+                <thead>
+                  <tr>
+                    <th className={th}>Email</th>
+                    <th className={th}>Source</th>
+                    <th className={th}>Subscribed</th>
+                    <th className={th}>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {core.subscribers.map((s) => (
+                    <tr key={s.id} className={rowCls}>
+                      <td className={td}>{s.email}</td>
+                      <td className={`${td} text-stone-500`}>{s.source ?? "-"}</td>
+                      <td className={`${td} text-stone-500`}>{formatDateTime(s.subscribedAt)}</td>
+                      <td className={td}>{s.unsubscribedAt ? <Pill tone="neutral">Unsubscribed</Pill> : <Pill tone="ok">Active</Pill>}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </Panel>
+        )}
+      </PageBody>
+    </>
   );
 }

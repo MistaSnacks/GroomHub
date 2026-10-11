@@ -26,6 +26,7 @@ import {
   deleteLogo,
 } from "../../photos/actions";
 import { SERVICE_TAGS, SPECIALTY_TAGS } from "@/lib/tags";
+import { METRO_CLUSTERS, metroMembers, type MetroCluster } from "@/lib/metro-clusters";
 import { getLimits } from "@/lib/tiers";
 import { usableListingImages } from "@/lib/images";
 import type { DayHours } from "@/lib/types";
@@ -63,6 +64,22 @@ interface EditListingClientProps {
   images: string[];
   logoUrl: string;
   subscriptionTier: string;
+  /** METRO_CLUSTERS slug a mobile groomer travels across, or "" for none. */
+  serviceMetro: string;
+}
+
+const MOBILE_TAG = SERVICE_TAGS.find((t) => t.slug === "mobile-grooming");
+
+/** Stored services can be imported lowercase ("mobile grooming"), so match the label and aliases loosely. */
+function isMobileService(service: string): boolean {
+  const v = service.trim().toLowerCase();
+  return !!MOBILE_TAG && (v === MOBILE_TAG.label.toLowerCase() || (MOBILE_TAG.aliases ?? []).includes(v));
+}
+
+function metroOptionLabel(cluster: MetroCluster): string {
+  const names = metroMembers(cluster).map((c) => c.slug.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" "));
+  const shown = names.slice(0, 4).join(", ");
+  return names.length > 4 ? `${cluster.name}: ${shown} and ${names.length - 4} more` : `${cluster.name}: ${shown}`;
 }
 
 function initHours(existing: DayHours[]): DayHours[] {
@@ -100,6 +117,7 @@ export function EditListingClient(props: EditListingClientProps) {
   const [selectedServices, setSelectedServices] = useState<Set<string>>(
     () => new Set(props.services)
   );
+  const [serviceMetro, setServiceMetro] = useState(props.serviceMetro);
   const [selectedSpecialties, setSelectedSpecialties] = useState<Set<string>>(
     () => new Set(props.specialties)
   );
@@ -382,6 +400,12 @@ export function EditListingClient(props: EditListingClientProps) {
         type="hidden"
         name="hours"
         value={JSON.stringify(editHours)}
+      />
+      {/* Cleared on save if the listing no longer offers mobile grooming. */}
+      <input
+        type="hidden"
+        name="service_metro"
+        value={[...selectedServices].some(isMobileService) ? serviceMetro : ""}
       />
 
       {/* ─── Hero Section ─── */}
@@ -828,6 +852,30 @@ export function EditListingClient(props: EditListingClientProps) {
             );
           })}
         </div>
+
+        {[...selectedServices].some(isMobileService) && (
+          <div className="mt-5 rounded-xl border border-brand-secondary/30 bg-brand-secondary/5 p-4">
+            <label htmlFor="edit-service-metro" className="block text-sm font-semibold text-brand-primary mb-1">
+              Metro area you travel to
+            </label>
+            <p className="text-xs text-text-muted mb-3">
+              Your listing stays based in {props.city || "your city"}. Pick a metro area and it also shows on every city page in that area, under &quot;Mobile groomers who travel to&quot; that city.
+            </p>
+            <select
+              id="edit-service-metro"
+              value={serviceMetro}
+              onChange={(e) => setServiceMetro(e.target.value)}
+              className="w-full rounded-xl border border-border bg-white px-3 py-2 text-sm"
+            >
+              <option value="">None, only {props.city || "my city"}</option>
+              {METRO_CLUSTERS.map((c) => (
+                <option key={c.slug} value={c.slug}>
+                  {metroOptionLabel(c)}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
 
       {/* ─── Specialties Section ─── */}

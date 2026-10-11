@@ -11,7 +11,7 @@ export function SiteFooter() {
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center gap-3 mb-4 group">
               <div className="flex h-10 w-10 items-center justify-center rounded-full overflow-hidden border-[2.5px] border-white flex-shrink-0">
-                <Image src="/maui-logo.svg" alt="GroomLocal mascot Maui" width={40} height={40} className="h-full w-full object-cover" />
+                <Image src="/maui-logo-circle.svg" alt="GroomLocal mascot Maui" width={40} height={40} className="h-full w-full object-cover" />
               </div>
               <span className="font-heading text-lg font-bold text-slate-900">
                 GroomLocal

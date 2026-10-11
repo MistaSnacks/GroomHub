@@ -3,6 +3,14 @@
     {
       "path": "/api/cron/refeature-check",
       "schedule": "0 15 * * *"
+    },
+    {
+      "path": "/api/cron/profile-reminders",
+      "schedule": "0 17 * * *"
+    },
+    {
+      "path": "/api/cron/owner-reports",
+      "schedule": "0 18 3 * *"
     }
   ]
 }

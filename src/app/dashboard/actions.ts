@@ -6,6 +6,7 @@ import { revalidatePath, updateTag } from "next/cache";
 import { parseListingCommerce } from "@/lib/listing-commerce";
 import { redirect } from "next/navigation";
 import { PASSWORD_MIN_LENGTH } from "@/lib/auth-rules";
+import { getMetroClusterBySlug } from "@/lib/metro-clusters";
 
 const getAdmin = createAdminClient;
 
@@ -68,6 +69,7 @@ export async function unclaimListing(formData: FormData) {
       claimed_at: null,
       is_featured: false,
       sponsor_paid_until: null,
+      sponsor_comp: false,
     })
     .eq("slug", slug)
     .eq("owner_id", user.id)
@@ -134,6 +136,7 @@ export async function deleteAccount(formData: FormData) {
       claimed_at: null,
       is_featured: false,
       sponsor_paid_until: null,
+      sponsor_comp: false,
     })
     .eq("owner_id", user.id);
   if (releaseError) {
@@ -198,6 +201,10 @@ export async function updateListing(formData: FormData) {
   const services = safeJsonParse<string[]>(formData.get("services") as string | null);
   const specialties = safeJsonParse<string[]>(formData.get("specialties") as string | null);
   const hours = safeJsonParse<unknown>(formData.get("hours") as string | null);
+  // Only the listing edit form sends this field; other callers leave the column alone.
+  const serviceMetro = formData.has("service_metro")
+    ? ((formData.get("service_metro") as string | null) ?? "").trim()
+    : undefined;
 
   if (!name) {
     return { error: "Business name is required." };
@@ -252,6 +259,9 @@ export async function updateListing(formData: FormData) {
   if (hours !== undefined && !isHoursArray(hours)) {
     return { error: "Hours must be an array of day objects." };
   }
+  if (serviceMetro && !getMetroClusterBySlug(serviceMetro)) {
+    return { error: "Choose a metro area from the list." };
+  }
 
   const commerce = parseListingCommerce(formData);
   if (commerce.error) return { error: commerce.error };
@@ -277,6 +287,7 @@ export async function updateListing(formData: FormData) {
       ...(services !== undefined ? { services } : {}),
       ...(specialties !== undefined ? { specialties } : {}),
       ...(hours !== undefined ? { hours } : {}),
+      ...(serviceMetro !== undefined ? { service_metro: serviceMetro || null } : {}),
     })
     .eq("slug", slug)
     .eq("owner_id", user.id)

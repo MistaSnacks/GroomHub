@@ -46,6 +46,8 @@ export async function getRefeatureTriggerStatus(): Promise<RefeatureTriggerStatu
       .from("business_listings")
       .select("id", { count: "exact", head: true })
       .gt("sponsor_paid_until", nowIso)
+      // Free promotional spots carry an end date too, but nobody paid for them.
+      .eq("sponsor_comp", false)
       .neq("slug", slug ?? "__none__"),
     slug
       ? admin

@@ -1,9 +1,11 @@
 "use server";
 
 import { revalidatePath, updateTag } from "next/cache";
+import { invalidateCore } from "@/lib/admin-console/data";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireAdmin } from "@/lib/admin";
 import { sendEmail } from "@/lib/email/send";
+import { sendClaimApprovedEmail } from "@/lib/owner-mail";
 
 export interface ClaimRequestRow {
   id: string;
@@ -102,19 +104,14 @@ export async function approveClaim(requestId: string): Promise<{ ok: true } | { 
     .update({ status: "approved", reviewed_at: new Date().toISOString(), reviewed_by: adminUser.email ?? adminUser.id })
     .eq("id", requestId);
 
-  await notifyClaimant(
-    req.user_email as string,
-    `Your GroomLocal claim for ${listing?.name ?? req.listing_slug} is approved`,
-    [
-      `Good news: your claim for ${listing?.name ?? req.listing_slug} has been verified.`,
-      "",
-      "Sign in to manage your listing, add photos and see inquiries:",
-      "https://groomlocal.com/dashboard",
-    ].join("\n"),
-    { slug: req.listing_slug as string }
-  );
+  await sendClaimApprovedEmail(db, {
+    listingId: req.listing_id as string,
+    userId: req.user_id as string,
+    to: req.user_email as string,
+  });
 
   updateTag("listings");
+  invalidateCore();
   revalidatePath(`/groomer/${req.listing_slug}`);
   revalidatePath("/dashboard");
   revalidatePath("/admin/dashboard/claims");
@@ -150,6 +147,7 @@ export async function rejectClaim(requestId: string, note: string): Promise<{ ok
     ].join("\n"),
     { slug: req.listing_slug as string }
   );
+  invalidateCore();
   revalidatePath("/admin/dashboard/claims");
   return { ok: true };
 }
@@ -164,7 +162,7 @@ export async function revokeClaim(slug: string, note: string): Promise<{ ok: tru
 
   const { error } = await db
     .from("business_listings")
-    .update({ owner_id: null, subscription_tier: null, claimed_at: null, is_featured: false, sponsor_paid_until: null })
+    .update({ owner_id: null, subscription_tier: null, claimed_at: null, is_featured: false, sponsor_paid_until: null, sponsor_comp: false })
     .eq("id", listing.id);
   if (error) {
     log("revoke_failed", { slug, code: error.code, message: error.message });
@@ -178,6 +176,7 @@ export async function revokeClaim(slug: string, note: string): Promise<{ ok: tru
     .eq("status", "approved");
 
   updateTag("listings");
+  invalidateCore();
   revalidatePath(`/groomer/${slug}`);
   revalidatePath("/dashboard");
   revalidatePath("/admin/dashboard/listings");

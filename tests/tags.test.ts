@@ -19,6 +19,12 @@ test("feature tags follow the boolean columns in a fixed order", () => {
   assert.deepEqual(all.feature_tags, ["paw-verified", "transparent-pricing", "walk-ins-welcome", "vaccinations-required"]);
 });
 
+test("labels saved by the owner dashboard resolve to their tags", () => {
+  const tags = normalizeTags({ services: ["Dog Bath", "Nail Care", "Puppy Grooming"], specialties: ["Fear-Free / Anxiety", "Doodle & Poodle Expert"] });
+  assert.deepEqual(tags.service_tags, ["dog-bath", "nail-care", "puppy-grooming"]);
+  assert.deepEqual(tags.specialty_tags, ["fear-free", "doodle-poodle"]);
+});
+
 test("alias lookup is case and whitespace insensitive", () => {
   assert.equal(matchServiceTag("  FULL GROOM "), matchServiceTag("full groom"));
 });

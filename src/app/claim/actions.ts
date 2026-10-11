@@ -7,15 +7,16 @@ import { redirect } from "next/navigation";
 import { LISTING_REDIRECTS, PUBLIC_EXCLUDED_SLUGS } from "@/lib/listing-review";
 import { decideClaim } from "@/lib/claims";
 import { sendEmail } from "@/lib/email/send";
+import { sendClaimApprovedEmail } from "@/lib/owner-mail";
 
 function log(event: string, fields: Record<string, unknown>) {
     console.error(JSON.stringify({ scope: "claim", event, ...fields }));
 }
 
 /**
- * Claim a listing. Verified automatically when the account email's domain matches
- * the listing's website; otherwise a pending request is queued for admin review and
- * the listing stays unclaimed until approved.
+ * Claim a listing. Approved immediately unless the claim looks clearly unrelated to the
+ * business (see decideClaim in src/lib/claims.ts); those queue for admin review and the
+ * listing stays unclaimed until approved.
  */
 export async function processClaim(formData: FormData) {
     const requestedSlug = formData.get("slug") as string;
@@ -33,7 +34,7 @@ export async function processClaim(formData: FormData) {
 
     const { data: listing, error: fetchError } = await admin
         .from("business_listings")
-        .select("id, owner_id, is_featured, subscription_tier, website, name")
+        .select("id, owner_id, is_featured, subscription_tier, website, name, email")
         .eq("slug", slug)
         .single();
 
@@ -64,16 +65,16 @@ export async function processClaim(formData: FormData) {
         redirect(`/claim/${slug}/plans?error=pending-other`);
     }
 
-    const verification = decideClaim(user.email, listing.website);
+    const decision = decideClaim(user.email, { website: listing.website, name: listing.name, email: listing.email });
 
-    if (verification === "admin_review") {
+    if (decision.verification === "admin_review") {
         const { error: insertError } = await admin.from("claim_requests").insert({
             listing_id: listing.id,
             listing_slug: slug,
             user_id: user.id,
             user_email: user.email,
             status: "pending",
-            verification,
+            verification: decision.verification,
         });
         if (insertError) {
             log("pending_insert_failed", { slug, userId: user.id, code: insertError.code, message: insertError.message });
@@ -87,11 +88,11 @@ export async function processClaim(formData: FormData) {
                 subject: `Claim needs review: ${listing.name}`,
                 text: [
                     `${user.email} asked to claim "${listing.name}" (${slug}).`,
-                    `Their email domain does not match the listing website (${listing.website || "none"}).`,
+                    `Why it was held: ${decision.reason}.`,
                     "",
                     "Review it here: https://groomlocal.com/admin/dashboard/claims",
                 ].join("\n"),
-                context: { slug },
+                context: { slug, rule: decision.rule },
             });
         } else {
             log("review_notify_skipped", { slug, reason: "missing LISTING_NOTIFY_EMAIL" });
@@ -99,7 +100,7 @@ export async function processClaim(formData: FormData) {
         redirect(`/claim/${slug}/success`);
     }
 
-    // Domain match: approve immediately. The `.is("owner_id", null)` guard makes this atomic.
+    // Nothing suspicious: approve immediately. The `.is("owner_id", null)` guard makes this atomic.
     const { data: updated, error: updateError } = await admin
         .from("business_listings")
         .update({
@@ -117,16 +118,22 @@ export async function processClaim(formData: FormData) {
         redirect(`/claim/${slug}/plans?error=already-claimed`);
     }
 
-    await admin.from("claim_requests").insert({
+    // The listing is already owned at this point, so a failed audit row is logged rather than undoing the claim.
+    const { error: auditError } = await admin.from("claim_requests").insert({
         listing_id: listing.id,
         listing_slug: slug,
         user_id: user.id,
         user_email: user.email,
         status: "approved",
-        verification,
+        verification: decision.verification,
         reviewed_at: new Date().toISOString(),
-        reviewed_by: "system:domain_match",
+        reviewed_by: `system:${decision.rule}`,
     });
+    if (auditError) {
+        log("approved_insert_failed", { slug, userId: user.id, rule: decision.rule, code: auditError.code, message: auditError.message });
+    }
+
+    await sendClaimApprovedEmail(admin, { listingId: listing.id, userId: user.id, to: user.email });
 
     updateTag("listings");
     revalidatePath(`/groomer/${slug}`);

@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
-import { ArrowSquareOut } from "@phosphor-icons/react/dist/ssr";
+import { ArrowSquareOut, SealCheck } from "@phosphor-icons/react/dist/ssr";
 import { createClient } from "@/lib/supabase/server";
 import { getListingBySlug } from "@/lib/supabase/queries";
 import { EditListingClient } from "./edit-listing-client";
@@ -35,14 +35,23 @@ export default async function EditListingPage({ params, searchParams }: EditList
         <h1 className="font-heading text-2xl font-bold text-brand-primary">
           Edit Profile
         </h1>
-        <Link
-          href={`/groomer/${slug}`}
-          target="_blank"
-          className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-brand-primary transition-colors"
-        >
-          <ArrowSquareOut weight="bold" className="w-4 h-4" />
-          View public profile
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link
+            href="/dashboard#badge"
+            className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-brand-primary transition-colors"
+          >
+            <SealCheck weight="bold" className="w-4 h-4" />
+            Website badge
+          </Link>
+          <Link
+            href={`/groomer/${slug}`}
+            target="_blank"
+            className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-brand-primary transition-colors"
+          >
+            <ArrowSquareOut weight="bold" className="w-4 h-4" />
+            View public profile
+          </Link>
+        </div>
       </div>
 
       {error && (
@@ -78,6 +87,7 @@ export default async function EditListingPage({ params, searchParams }: EditList
         images={listing.images || []}
         logoUrl={listing.logo_url || ""}
         subscriptionTier={listing.subscription_tier || "free"}
+        serviceMetro={listing.service_metro || ""}
       />
     </div>
   );

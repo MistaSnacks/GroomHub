@@ -43,6 +43,15 @@
 }
 
 @theme inline {
+  /* Admin console (src/app/admin). Chart series order is validated for color-blind separation; keep the order. */
+  --color-adm-plane: #F7F2E9;
+  --color-adm-rail: #0F172A;
+  --color-adm-line: #E9E0D4;
+  --color-adm-s1: #12958B;
+  --color-adm-s2: #E2553D;
+  --color-adm-s3: #2A78D6;
+  --color-adm-s4: #C98500;
+
   --color-brand-primary: var(--brand-primary);
   --color-brand-secondary: var(--brand-secondary);
   --color-brand-accent: var(--brand-accent);
@@ -379,5 +388,28 @@ html {
 
   .bento-2x {
     flex: 2 1 0;
+  }
+}
+/* --- Admin console --- */
+/* The console has its own navigation, so the public header and footer step aside. */
+body:has([data-admin-shell]) > header,
+body:has([data-admin-shell]) > footer {
+  display: none;
+}
+
+@keyframes adm-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+[data-admin-shell] .adm-rise {
+  animation: adm-rise 0.4s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-admin-shell] .adm-rise {
+    animation: none;
   }
 }

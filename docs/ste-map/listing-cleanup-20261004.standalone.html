@@ -1,0 +1,1319 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>[hidden]{display:none!important}</style><title>GroomLocal listing cleanup</title>
+<style>
+/* Layout: a full-window canvas. The top bar holds the paths and tools. The world pans and zooms under it.
+   A reader card opens on the right (a bottom sheet on a phone). One visual world, light only. */
+:root{
+  color-scheme: light;
+  --ground:#EAE3D2; --ink:#2B2622; --ink-2:#4e4134; --ink-3:#7d6d5a; --scarlet:#b8402e; --denim:#2c3f5c;
+  --paper:#f7f1e3; --rule:rgba(107,74,50,.32);
+  --f-display:"Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --f-hand:"Caveat", "Bradley Hand", "Segoe Print", cursive;
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--ground);color:var(--ink)}
+body{font-family:var(--f-display);font-size:15px;line-height:1.45}
+button{font:inherit;color:inherit}
+code{font-family:var(--f-mono);font-size:.86em;background:rgba(107,74,50,.1);padding:0 .25em;border-radius:3px;overflow-wrap:anywhere}
+.app{height:100%;display:grid;grid-template-rows:auto 1fr;grid-template-columns:minmax(0,1fr)}
+
+/* ---------- top bar ---------- */
+.top{position:relative;z-index:30;display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"brand . tools" "paths paths paths";align-items:center;gap:8px 22px;padding:10px 16px 8px;background:var(--paper);border-bottom:2px dashed var(--rule);min-width:0}
+.brand{grid-area:brand}.tools{grid-area:tools}.paths{grid-area:paths}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.brand img{height:30px;width:auto;display:block}
+.brand h1{font:800 21px/1.05 var(--f-display);margin:0;letter-spacing:-.01em}
+.brand p{margin:2px 0 0;font:500 12px/1.3 var(--f-mono);color:var(--ink-3)}
+.paths{display:flex;align-items:center;gap:10px;min-width:0}
+.eyebrow{font:700 19px/1 var(--f-hand);color:var(--scarlet);white-space:nowrap}
+.path-row{display:flex;flex-wrap:wrap;gap:8px;padding:4px 2px;min-width:0}
+.ppill{height:34px;--pw:17px;font:700 13px/1 var(--f-display);white-space:nowrap;cursor:pointer;padding:0 4px}
+.ppill[aria-pressed="true"]{outline:3px solid var(--ink);outline-offset:3px;border-radius:999px}
+.tools{display:flex;align-items:center;gap:8px;justify-content:flex-end;flex-wrap:wrap;min-width:0}
+.find{position:relative}
+.find input{height:34px;width:190px;border:2px solid var(--rule);border-radius:999px;background:#fffdf7;padding:0 14px;font:500 13px var(--f-display);color:var(--ink)}
+.find input:focus{outline:3px solid var(--denim);outline-offset:1px}
+.find ul{position:absolute;right:0;top:40px;width:300px;max-height:340px;overflow:auto;margin:0;padding:6px;list-style:none;background:#fffdf7;border:2px solid var(--rule);border-radius:14px;box-shadow:0 14px 30px rgba(45,32,20,.25)}
+.find li button{all:unset;display:block;width:100%;box-sizing:border-box;padding:7px 9px;border-radius:9px;cursor:pointer}
+.find li button:hover,.find li button:focus-visible{background:rgba(44,63,92,.1)}
+.find li b{display:block;font-weight:700;font-size:14px}
+.find li span{font:12px var(--f-mono);color:var(--ink-3)}
+.tbtn{height:34px;--pw:17px;min-width:34px;font:700 14px/1 var(--f-display);cursor:pointer;padding:0 2px;white-space:nowrap}
+.tbtn:focus-visible,.ppill:focus-visible,.step:focus-visible,.zone-tag:focus-visible,.chip:focus-visible,.mpill:focus-visible,.note:focus-visible{outline:3px solid var(--denim);outline-offset:3px}
+
+/* ---------- viewport and world ---------- */
+.vp{position:relative;overflow:hidden;touch-action:none;cursor:grab;outline:none;background-color:var(--ground)}
+.vp.dragging{cursor:grabbing}
+.world{position:absolute;left:0;top:0;transform-origin:0 0}
+.world.moving{will-change:transform}
+.threads{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+.th,.th-sh,.lk{fill:none;stroke-linecap:round}
+.th{stroke:var(--tc,#b8402e);stroke-width:max(5px, calc(2.4px / var(--k)));stroke-dasharray:18 12;opacity:.9;transition:opacity .25s}
+.th-sh{stroke:rgba(45,32,20,.26);stroke-width:max(7px, calc(3.4px / var(--k)));stroke-dasharray:18 12;transform:translate(2px,3px);transition:opacity .25s}
+.lk{stroke:var(--denim);stroke-width:max(3px, calc(1.8px / var(--k)));stroke-dasharray:2 10;opacity:.85}
+.touring .th,.touring .th-sh{opacity:.1}
+.touring .th.on{opacity:1;stroke-width:max(7px, calc(3.4px / var(--k)))}
+.touring .th-sh.on{opacity:1}
+
+/* zones */
+.zone{position:absolute;border-radius:30px;border:3px dashed rgba(90,64,42,.42);box-shadow:0 22px 44px rgba(45,32,20,.16)}
+.zone-head{position:absolute;left:56px;top:40px;display:flex;align-items:flex-start;gap:26px;flex-wrap:wrap}
+.zone-tag{cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;padding:2px 6px}
+.zone-tag .zt{font:800 34px/1.05 var(--f-display);letter-spacing:-.01em}
+.zone-tag .eyebrow{font-size:24px}
+.zone-intro{margin:12px 0 0;font:500 19px/1.4 var(--f-display);color:var(--ink-2);max-width:560px}
+/* far zoom: the zone name sits in the gap above its zone, like a map label */
+.zone-big{position:absolute;left:6px;bottom:calc(100% + 14px);display:none;flex-direction:column;align-items:flex-start;white-space:nowrap;pointer-events:none}
+.zone-big b{font:800 clamp(60px, calc(22px / var(--k)), 150px)/.95 var(--f-display);color:#33271d;letter-spacing:-.02em}
+.zone-big i{font:700 clamp(40px, calc(15px / var(--k)), 96px)/.9 var(--f-hand);color:var(--scarlet);font-style:normal}
+.zone-notes{position:absolute;display:flex;flex-direction:column;gap:26px}
+
+/* steps */
+.step{position:absolute;display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;cursor:pointer;border-radius:18px;
+  box-shadow:0 6px 9px rgba(45,32,20,.26),0 16px 26px rgba(45,32,20,.2);transition:opacity .25s, box-shadow .2s;overflow:hidden}
+.step .num{position:absolute;right:10px;top:8px;font:700 14px/1 var(--f-mono);opacity:.75}
+.step .st-title{flex-shrink:0;font:800 max(23px, calc(12.5px / var(--k)))/1.06 var(--f-display);letter-spacing:-.01em;padding-right:26px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.step .st-sub{font:500 14px/1.25 var(--f-mono);opacity:.88;overflow-wrap:anywhere}
+.step .st-pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+.step.sel{box-shadow:0 0 0 7px rgba(184,64,46,.95),0 6px 9px rgba(45,32,20,.26),0 16px 26px rgba(45,32,20,.2)}
+.step.lit{box-shadow:0 0 0 6px rgba(44,63,92,.75),0 6px 9px rgba(45,32,20,.26)}
+.touring .step:not(.on){opacity:.42}
+.mpill{height:26px;--pw:13px;font:700 11.5px/1 var(--f-mono);white-space:nowrap;padding:0 3px}
+button.mpill{cursor:pointer}
+
+/* notes (pinned paper) */
+.note{position:relative;display:block;width:100%;text-align:left;cursor:pointer;border:0;padding:26px 24px 22px;background:#fbf5e6;border-radius:6px;
+  box-shadow:0 2px 3px rgba(45,32,20,.18),0 14px 24px rgba(45,32,20,.18);transform:rotate(var(--rot,-1deg))}
+.note::before{content:"";position:absolute;left:50%;top:-9px;width:20px;height:20px;margin-left:-10px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #e58a74, #b8402e 55%, #7d2416);box-shadow:0 3px 4px rgba(45,32,20,.4)}
+.note .q{display:block;font:700 max(27px, calc(12px / var(--k)))/1.05 var(--f-hand);color:var(--scarlet);margin-bottom:8px}
+.note .a{display:block;font:500 16px/1.42 var(--f-display);color:var(--ink)}
+
+/* zoom levels */
+[data-z="far"] .zone-head,[data-z="far"] .zone-notes,[data-z="far"] .step > *{visibility:hidden}
+[data-z="far"] .zone-big{display:flex}
+[data-z="mid"] .step .st-sub,[data-z="mid"] .step .st-pills{display:none}
+[data-z="mid"] .note .a,[data-z="mid"] .zone-intro{visibility:hidden}
+
+/* ---------- reader ---------- */
+.reader{position:absolute;z-index:20;right:16px;top:16px;bottom:16px;width:min(430px, calc(100% - 32px));display:flex}
+.reader-card{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;box-shadow:0 20px 40px rgba(45,32,20,.3)}
+.reader-x{position:absolute;right:6px;top:4px;z-index:2;height:30px;--pw:15px;font:700 13px/1 var(--f-display);cursor:pointer}
+.reader-body{flex:1;min-height:0;overflow:auto;padding:6px 10px 12px;font-size:15.5px}
+.r-tags{display:flex;gap:6px;flex-wrap:wrap;margin:2px 60px 8px 0}
+.r-eyebrow{font:700 20px/1 var(--f-hand);color:var(--scarlet);margin:6px 0 2px}
+.r-title{font:800 28px/1.08 var(--f-display);margin:0 0 4px;letter-spacing:-.01em;text-wrap:balance}
+.r-sub{font:500 13px/1.35 var(--f-mono);color:var(--ink-3);margin:0 0 6px;overflow-wrap:anywhere}
+.r-sec h3{font:700 11px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin:16px 0 6px;padding-bottom:5px;border-bottom:2px dashed var(--rule)}
+.r-sec.issues h3{color:var(--scarlet)}
+.r-sec.issues .ste-list li::before{background:var(--scarlet)}
+.ste{margin:0 0 6px}
+.ste:last-child{margin-bottom:0}
+.ste-list{margin:0;padding:0;list-style:none}
+.ste-list li{position:relative;padding-left:16px;margin:4px 0}
+.ste-list li::before{content:"";position:absolute;left:2px;top:.55em;width:7px;height:7px;border-radius:50%;background:var(--ink-2)}
+.r-rows{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;margin:14px 0 0;align-items:start}
+.r-rows dt{font:700 11px/26px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.r-rows dd{margin:0;display:flex;flex-wrap:wrap;gap:6px;min-width:0}
+.r-rows dd .ste{margin:0;width:100%}
+.files{list-style:none;margin:0;padding:0;font-size:13px}
+.files li{margin:4px 0;overflow-wrap:anywhere}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{height:30px;--pw:15px;font:700 12.5px/1 var(--f-display);cursor:pointer}
+.zlist{list-style:none;margin:0;padding:0;counter-reset:z}
+.zlist li{margin:2px 0}
+.zlist button{all:unset;cursor:pointer;display:flex;gap:10px;align-items:baseline;padding:5px 6px;border-radius:8px;width:100%;box-sizing:border-box}
+.zlist button:hover,.zlist button:focus-visible{background:rgba(44,63,92,.1)}
+.zlist .n{font:700 12px var(--f-mono);color:var(--ink-3);min-width:22px}
+.zlist .d{font:12px var(--f-mono);color:var(--ink-3);margin-left:auto;white-space:nowrap}
+.term{all:unset;cursor:pointer;border-bottom:2px dotted var(--denim)}
+.term:hover{color:var(--denim)}
+
+/* ---------- tour bar, hint, minimap, drawer ---------- */
+.tourbar{position:absolute;z-index:22;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center;
+  max-width:min(760px, calc(100% - 32px));padding:12px 18px;background:var(--paper);border:2px dashed var(--rule);border-radius:20px;box-shadow:0 14px 30px rgba(45,32,20,.25)}
+.tourbar .tq{font:700 22px/1.1 var(--f-hand);color:var(--scarlet);flex:1 1 260px;min-width:0}
+.tourbar .tc{font:600 12.5px var(--f-mono);color:var(--ink-3);white-space:nowrap}
+.hint{position:absolute;z-index:15;left:50%;bottom:18px;transform:translateX(-50%);padding:8px 16px;background:rgba(247,241,227,.94);border:2px dashed var(--rule);border-radius:999px;font:600 13px var(--f-display);color:var(--ink-2);white-space:nowrap;pointer-events:none;transition:opacity .4s}
+.minimap{position:absolute;z-index:16;left:16px;bottom:16px;width:220px;padding:8px;overflow:hidden;background:rgba(247,241,227,.95);border:2px dashed var(--rule);border-radius:14px;cursor:pointer}
+.mm-in{position:relative}
+.mm-z{position:absolute;border-radius:3px;opacity:.85}
+.mm-view{position:absolute;border:2px solid var(--scarlet);border-radius:3px;pointer-events:none}
+.drawer{position:absolute;z-index:25;left:16px;top:16px;bottom:16px;width:min(440px, calc(100% - 32px));display:flex}
+.drawer .reader-body h2{font:800 26px/1.1 var(--f-display);margin:4px 60px 6px 0}
+.legend{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;align-items:center;margin:8px 0}
+.legend .sw{width:46px;height:30px;--bw:10px}
+.legend .thsw{width:46px;height:12px}
+.dict dt{font:700 13px var(--f-mono);margin-top:10px}
+.dict dt span{font-weight:500;color:var(--ink-3)}
+.dict dt.not{color:var(--scarlet)}
+.dict dd{margin:2px 0 0}
+.pop{position:absolute;z-index:40;max-width:320px;background:#fffdf7;border:2px solid var(--rule);border-radius:14px;padding:12px 14px;font-size:14px;box-shadow:0 14px 30px rgba(45,32,20,.28)}
+.pop b{font-family:var(--f-mono)}
+mark.na{background:none;color:inherit}
+.ste-on mark.na{background:#f6d3cc;color:var(--scarlet)}
+.ste-on .s::after{content:" " attr(data-wc) "/" attr(data-lim);font:10px var(--f-mono);color:var(--denim);vertical-align:super}
+.ste-on .s.over{text-decoration:underline wavy var(--scarlet)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+@media (max-width:760px){
+  .top{grid-template-columns:minmax(0,1fr);grid-template-areas:"brand" "tools" "paths";gap:6px;padding:8px 12px}
+  .brand img{height:22px}.brand h1{font-size:17px}.brand p{display:none}
+  .paths .eyebrow{display:none}
+  .path-row{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  .tools{justify-content:flex-start;flex-wrap:nowrap}
+  .find{flex:1 1 auto;min-width:0}.find input{width:100%}
+  .find ul{width:min(300px, calc(100vw - 24px));left:0;right:auto}
+  .minimap{display:none}
+  .reader{left:8px;right:8px;top:auto;bottom:8px;width:auto;height:min(58%, 520px)}
+  .drawer{left:8px;right:8px;width:auto}
+  .tourbar{top:10px;bottom:auto;padding:8px 12px}
+  .tourbar .tq{font-size:18px}
+  .hint{white-space:normal;text-align:center;width:calc(100% - 32px)}
+}
+@media (prefers-reduced-motion: reduce){ .th,.th-sh,.step{transition:none} }
+</style>
+<!-- SKIN:BEGIN -->
+<style>
+
+/* Neutral skin: flat colors. A project can replace this block with its own kit (build.py --skin). */
+.vp{background-image:radial-gradient(rgba(60,50,40,.13) 1.2px, transparent 1.3px);background-size:28px 28px}
+.zone-board{background:#e9e3d6}
+.zone-cream{background:#f6f1e7}
+.zone-alert{background:#f7e9e2;border-color:rgba(184,64,46,.75)!important}
+.kp{border:0;padding:16px 18px}
+.kp-cream{background:#fffdf8;color:#2B2622;box-shadow:inset 0 0 0 2px #d9cfbd}
+.kp-denim{background:#2c3f5c;color:#F4EEDF}
+.kp-mustard{background:#dca533;color:#3a2c12}
+.kp-olive{background:#56632f;color:#F1EDDD}
+.kp-terracotta{background:#b9532f;color:#FBEFE6}
+.kp-tan{background:#c9a26b;color:#2B2622}
+.kp-label{background:#fffdf8;border-radius:12px;padding:10px 16px;box-shadow:inset 0 0 0 2px #d9cfbd}
+.kpill{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:999px;padding:0 calc(var(--pw, 14px) * .7)}
+.kpill-scarlet{background:#b8402e;color:#FBF1E6}.kpill-tan{background:#d8bb8c;color:#2B2622}.kpill-olive{background:#56632f;color:#F4F0E2}
+.kpill-mustard{background:#dca533;color:#2E2310}.kpill-terracotta{background:#b9532f;color:#FBEFE6}.kpill-denim{background:#2c3f5c;color:#F4EEDF}
+.kpill-charcoal{background:#2d2a27;color:#F3ECDB}
+.reader-card.kp{padding:22px 18px}
+
+:root{--ground:#FDF8F0;--paper:#FFFFFF;--ink:#1E293B;--ink-2:#344256;--ink-3:#586879;--denim:#1E293B;--scarlet:#C4452E;--rule:rgba(30,41,59,.25);--f-display:system-ui,-apple-system,Segoe UI,sans-serif;--f-hand:system-ui,-apple-system,Segoe UI,sans-serif;--f-mono:ui-monospace,SFMono-Regular,monospace}
+.zone-board{background:#E4F4F2}.zone-cream{background:#FDF8F0}
+.kp-denim,.kpill-denim{background:#1E293B;color:#FFFFFF}
+.kp-olive,.kpill-olive{background:#16766D;color:#FFFFFF}
+.kp-tan,.kpill-tan{background:#E8DDD4;color:#1E293B}
+.kp-terracotta,.kpill-terracotta{background:#C4452E;color:#FFFFFF}
+.zone-intro{font-size:18px}.kp-label{background:#FFFFFF;color:#1E293B}
+
+</style>
+<!-- SKIN:END -->
+
+<div class="app">
+  <header class="top">
+    <div class="brand" id="brand"></div>
+    <nav class="paths" aria-label="Follow a path"><span class="eyebrow">Follow a path</span><div class="path-row" id="pathrow"></div></nav>
+    <div class="tools">
+      <div class="find"><label class="sr" for="find-in">Find a part</label><input id="find-in" type="search" placeholder="Find a part" autocomplete="off"><ul id="find-list" hidden></ul></div>
+      <button type="button" class="tbtn kpill kpill-tan" id="btn-fit" title="Show the whole map">Whole map</button>
+      <button type="button" class="tbtn kpill kpill-tan" id="btn-out" aria-label="Zoom out">&minus;</button>
+      <button type="button" class="tbtn kpill kpill-tan" id="btn-in" aria-label="Zoom in">+</button>
+      <button type="button" class="tbtn kpill kpill-charcoal" id="btn-about" aria-expanded="false">Key</button>
+    </div>
+  </header>
+  <main class="vp" id="vp" tabindex="0" aria-label="Map. Drag to move. Scroll or pinch to zoom. Use the paths to follow a flow.">
+    <div class="world" id="world" data-z="far">
+      <div id="zlayer"></div>
+      <svg class="threads" id="threads" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g id="th-g"></g><g id="lk-g"></g></svg>
+      <div id="layer"></div>
+    </div>
+    <div class="hint" id="hint">Drag to move. Scroll or pinch to zoom. Click a patch to read it.</div>
+    <div class="minimap" id="minimap" aria-hidden="true"><div class="mm-in" id="mm-in"></div></div>
+    <div class="tourbar" id="tourbar" hidden></div>
+    <aside class="reader" id="reader" hidden aria-label="Selected part"><div class="reader-card kp kp-cream"><button type="button" class="reader-x kpill kpill-charcoal" id="reader-x">Close</button><div class="reader-body" id="reader-body" tabindex="-1"></div></div></aside>
+    <aside class="drawer" id="drawer" hidden aria-label="Map key"><div class="reader-card kp kp-cream"><button type="button" class="reader-x kpill kpill-charcoal" id="drawer-x">Close</button><div class="reader-body" id="drawer-body"></div></div></aside>
+  </main>
+</div>
+<div class="pop" id="pop" hidden></div>
+<div id="problems" hidden></div>
+
+<script>
+/* SHEET:BEGIN
+   Replace only this object to make a new canvas. Schema notes are in SKILL.md (canvas section).
+   Descriptive STE fields (25 words): what, fails, issues, intro, a, meaning, example, text.
+   Procedural STE fields (20 words): next, rules, steps, how. Inline markup: `code`, [[term-id|label]], **bold**. */
+window.CANVAS = {
+  "title": "GroomLocal listing cleanup",
+  "subtitle": "October 4, 2026 | Production verified",
+  "verified": "Production deploy `dpl_GzjQBzzWVmchnWv2Ark7ZRcjG7hm` passed 43 live checks. The outreach evidence stops at 22:29 UTC on October 4.",
+  "kinds": {
+    "check": {
+      "label": "Evidence and checks",
+      "short": "Check",
+      "fabric": "tan",
+      "pill": "tan"
+    },
+    "data": {
+      "label": "Database records",
+      "short": "Data",
+      "fabric": "olive",
+      "pill": "olive"
+    },
+    "code": {
+      "label": "Public site code",
+      "short": "Code",
+      "fabric": "denim",
+      "pill": "denim"
+    },
+    "service": {
+      "label": "Production deploy",
+      "short": "Service",
+      "fabric": "terracotta",
+      "pill": "terracotta"
+    }
+  },
+  "statuses": {
+    "limited": {
+      "label": "Cached evidence"
+    }
+  },
+  "zones": [
+    {
+      "id": "data",
+      "title": "Database cleanup",
+      "eyebrow": "Evidence and writes",
+      "cols": 2,
+      "ground": "cream",
+      "intro": "The cleanup protects owner control and keeps each public URL."
+    },
+    {
+      "id": "site",
+      "title": "Public site",
+      "eyebrow": "Deploy and proof",
+      "cols": 2,
+      "ground": "board",
+      "intro": "The site serves one profile per location and uses the canonical Seattle slug."
+    }
+  ],
+  "rows": [
+    [
+      "data",
+      "site"
+    ]
+  ],
+  "steps": [
+    {
+      "id": "snapshot",
+      "zone": "data",
+      "kind": "check",
+      "title": "Read outreach",
+      "sub": "22:29 UTC snapshot",
+      "status": "limited",
+      "what": "The remote host did not respond. The audit used the saved October 4 outreach snapshot.",
+      "fails": "Later sends and later bounces remain unchecked until the host responds.",
+      "issues": [
+        "The fresh outreach read failed."
+      ],
+      "next": "Use the saved evidence for this audit.",
+      "files": [
+        {
+          "p": "src/lib/admin-console/outreach.ts",
+          "l": "110",
+          "n": "The reader falls back to the saved snapshot."
+        }
+      ],
+      "refs": [
+        "docs/data-fixes/2026-10-04-listing-cleanup-results.md#outreach-source-limit"
+      ]
+    },
+    {
+      "id": "backup",
+      "zone": "data",
+      "kind": "data",
+      "title": "Save the backup",
+      "sub": "245 full records",
+      "what": "The backup table stores all 245 target records before this run changes any listing.",
+      "rows": [
+        [
+          "Table",
+          "`business_listings_cleanup_backup_20261004`"
+        ],
+        [
+          "Access",
+          "Public roles cannot read the backup."
+        ],
+        [
+          "Timestamp",
+          "The source has no `updated_at` field. The requested backup column is null."
+        ]
+      ],
+      "fails": "A missing backup stops a write.",
+      "files": [
+        {
+          "p": ".admin-cache/cleanup-20261004/backup.sql",
+          "l": "1",
+          "n": "The private SQL preserves complete source records."
+        }
+      ]
+    },
+    {
+      "id": "names",
+      "zone": "data",
+      "kind": "data",
+      "title": "Correct the names",
+      "sub": "24 names and two ZIP codes",
+      "reads": [
+        "backup"
+      ],
+      "what": "The name plan contains 83 listings. Sixty names already matched. This run corrected 23 names and verified the apostrophe for Liz.",
+      "rows": [
+        [
+          "ZIP codes",
+          "Happy Paws Renton uses `98059`. Capitol Hill uses `98112`."
+        ],
+        [
+          "Guard",
+          "Each write requires no owner and the expected old value."
+        ],
+        [
+          "URLs",
+          "No listing slug changed."
+        ]
+      ],
+      "fails": "A claimed listing or changed field stops the write.",
+      "files": [
+        {
+          "p": "docs/data-fixes/2026-10-04-names.json",
+          "l": "1"
+        }
+      ],
+      "refs": [
+        "docs/data-fixes/2026-10-04-listing-cleanup-results.md#name-status-for-every-planned-row"
+      ]
+    },
+    {
+      "id": "emails",
+      "zone": "data",
+      "kind": "check",
+      "title": "Audit the emails",
+      "sub": "158 verified; five cleared",
+      "reads": [
+        "snapshot",
+        "backup"
+      ],
+      "what": "All 158 planned emails already matched the database. They passed the saved outreach checks. Five earlier emails failed the audit and were cleared.",
+      "rows": [
+        [
+          "Evidence",
+          "A match requires sent outreach without a recorded bounce, or the listing website domain for the earlier audit."
+        ],
+        [
+          "Claims",
+          "An exact listing email match can auto-approve a claim."
+        ],
+        [
+          "Public data",
+          "The listing email appears in JSON-LD."
+        ],
+        [
+          "Quote requests",
+          "Unclaimed listings reject quote requests before a lead insert or email send."
+        ]
+      ],
+      "fails": "The cleanup skips owners, nonempty emails, bounces, duplicate addresses, and builder addresses.",
+      "files": [
+        {
+          "p": "src/lib/claims.ts",
+          "l": "135"
+        },
+        {
+          "p": "src/lib/schema.ts",
+          "l": "88"
+        },
+        {
+          "p": "src/app/groomer/[slug]/actions.ts",
+          "l": "106"
+        }
+      ]
+    },
+    {
+      "id": "public",
+      "zone": "site",
+      "kind": "code",
+      "title": "Use one profile",
+      "sub": "Redirects and region labels",
+      "what": "Duplicate FLOOF, Pawfect Wash, and Happy Paws URLs redirect to the kept profiles. The supply retailer leaves public groomer results.",
+      "rows": [
+        [
+          "Distinct locations",
+          "Happy Paws Seattle and the four Seattle Canine Club locations remain separate."
+        ],
+        [
+          "Region",
+          "Normandy Park, Duvall, and Black Diamond join Seattle Metro. Dog grooming city pages display the region."
+        ]
+      ],
+      "files": [
+        {
+          "p": "src/lib/listing-review.ts",
+          "l": "8"
+        },
+        {
+          "p": "src/lib/metro-clusters.ts",
+          "l": "40"
+        },
+        {
+          "p": "src/app/dog-grooming/[state]/[city]/page.tsx",
+          "l": "147"
+        }
+      ]
+    },
+    {
+      "id": "deploy",
+      "zone": "site",
+      "kind": "service",
+      "title": "Deploy production",
+      "sub": "groomlocal.com",
+      "reads": [
+        "public"
+      ],
+      "what": "Vercel built the site and assigned the production domain. The private audit folder stayed outside the upload.",
+      "rows": [
+        [
+          "Command",
+          "`vercel --prod --archive=tgz --yes`"
+        ],
+        [
+          "Deployment",
+          "`dpl_GzjQBzzWVmchnWv2Ark7ZRcjG7hm`"
+        ],
+        [
+          "Status",
+          "Vercel reports `READY` and the production alias."
+        ]
+      ],
+      "fails": "A build failure prevents a successful production deploy.",
+      "files": [
+        {
+          "p": ".vercelignore",
+          "l": "11"
+        }
+      ],
+      "refs": [
+        "https://groom-n43c5seqq-camrens-projects-24b42280.vercel.app"
+      ]
+    },
+    {
+      "id": "proof",
+      "zone": "site",
+      "kind": "check",
+      "title": "Verify the live site",
+      "sub": "81 tests; 43 live checks",
+      "reads": [
+        "deploy"
+      ],
+      "what": "All 81 tests and 43 live checks pass. TypeScript and lint checks pass. The browser shows each kept Seattle card once.",
+      "rows": [
+        [
+          "Redirects",
+          "The duplicate URLs return 308."
+        ],
+        [
+          "Region",
+          "Normandy Park displays Seattle Metro."
+        ],
+        [
+          "Sitemap",
+          "The listing and city sitemaps exclude duplicate URLs and `seattle-wa`."
+        ],
+        [
+          "Health",
+          "`/api/health` returns 200 and reports the database as `ok`."
+        ]
+      ],
+      "files": [
+        {
+          "p": ".admin-cache/cleanup-20261004/public-proof.json",
+          "l": "1"
+        }
+      ],
+      "refs": [
+        "docs/data-fixes/2026-10-04-listing-cleanup-results.md#verification"
+      ]
+    },
+    {
+      "id": "orphan",
+      "zone": "site",
+      "kind": "data",
+      "title": "Delete the old city",
+      "sub": "seattle-wa",
+      "reads": [
+        "proof"
+      ],
+      "what": "The cleanup saved the orphan city record, confirmed zero listing references, and deleted the old Seattle city row.",
+      "rows": [
+        [
+          "Guard",
+          "The delete requires zero listing references."
+        ],
+        [
+          "Public route",
+          "The old city URL still redirects to `seattle`."
+        ],
+        [
+          "Scope",
+          "Other small-town city rows remain for the work after October 8."
+        ]
+      ],
+      "fails": "A listing reference stops the delete.",
+      "files": [
+        {
+          "p": ".admin-cache/cleanup-20261004/orphan-city-delete.sql",
+          "l": "1"
+        }
+      ]
+    }
+  ],
+  "paths": [
+    {
+      "id": "cleanup",
+      "title": "Follow the cleanup",
+      "pill": "denim",
+      "color": "#12958B",
+      "question": "What happens when the cleanup changes a listing?",
+      "steps": [
+        "snapshot",
+        "backup",
+        "names",
+        "emails",
+        "public",
+        "deploy",
+        "proof",
+        "orphan"
+      ]
+    },
+    {
+      "id": "email-audit",
+      "title": "Check the emails",
+      "pill": "olive",
+      "color": "#C4452E",
+      "question": "What happens when an email passes the audit?",
+      "steps": [
+        "snapshot",
+        "backup",
+        "emails",
+        "proof"
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "id": "mail-note",
+      "zone": "data",
+      "q": "Did this send email?",
+      "a": "No. The cleanup sent no email. Unclaimed listings still reject quote requests.",
+      "links": [
+        "emails"
+      ]
+    },
+    {
+      "id": "live-note",
+      "zone": "site",
+      "q": "What remains unchecked?",
+      "a": "The remote host did not respond. Later outreach sends and bounces remain unchecked.",
+      "links": [
+        "snapshot",
+        "proof"
+      ]
+    }
+  ]
+};
+
+function setCleanupRows() {
+  window.CANVAS.rows = window.innerWidth < 760 ? [["data"], ["site"]] : [["data", "site"]];
+}
+setCleanupRows();
+window.addEventListener("resize", setCleanupRows);
+window.CANVAS.dictionary = [
+ {
+  "id": "listing",
+  "term": "listing",
+  "pos": "noun",
+  "meaning": "One database record for one business location."
+ },
+ {
+  "id": "claim",
+  "term": "claim",
+  "pos": "noun",
+  "meaning": "A request from an account to control a listing."
+ },
+ {
+  "id": "snapshot",
+  "term": "snapshot",
+  "pos": "noun",
+  "meaning": "A saved copy of the outreach records at one time."
+ },
+ {
+  "id": "redirect",
+  "term": "redirect",
+  "pos": "noun",
+  "meaning": "An HTTP response that sends the visitor to the kept public URL."
+ },
+ {
+  "id": "guard",
+  "term": "guard",
+  "pos": "noun",
+  "meaning": "A database condition that stops a write when a field changes."
+ },
+ {
+  "id": "backup",
+  "term": "backup",
+  "pos": "noun",
+  "meaning": "A stored copy of the records before this cleanup changes them."
+ }
+];
+/* SHEET:END */
+</script>
+
+<script>
+/* Canvas engine. Do not edit for a new canvas; edit window.CANVAS above. */
+(function () {
+  "use strict";
+  var C = window.CANVAS;
+  var REDUCED = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" }[c]; }); }
+  function arr(v) { return v == null ? [] : Array.isArray(v) ? v : [v]; }
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
+  /* ---------------- text (STE) ---------------- */
+  var STE_FIELDS = { what: "desc", fails: "desc", issues: "desc", intro: "desc", input: "desc", output: "desc", a: "desc", meaning: "desc", example: "desc", text: "desc", q: "desc", question: "desc",
+    next: "proc", rules: "proc", steps_text: "proc", how: "proc" };
+  var LIMIT = { desc: 25, proc: 20 };
+  var SKIP_KEYS = { flag: 1, bad: 1, sample: 1, files: 1, refs: 1 };
+  var DICT = C.dictionary || [], TERM = {}, FLAGS = [];
+  DICT.forEach(function (d) { TERM[d.id] = d; arr(d.flag).forEach(function (f) { FLAGS.push([f.toLowerCase(), d]); }); });
+  var flagRe = FLAGS.length ? new RegExp("\\b(" + FLAGS.map(function (x) { return x[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); })
+    .sort(function (a, b) { return b.length - a.length; }).join("|") + ")\\b", "gi") : null;
+  function flagEntry(w) { w = w.toLowerCase(); for (var i = 0; i < FLAGS.length; i++) if (FLAGS[i][0] === w) return FLAGS[i][1]; return null; }
+  function markFlags(t) {
+    if (!flagRe) return t;
+    return t.replace(flagRe, function (m) { var d = flagEntry(m); return "<mark class=\"na\" title=\"Not approved." + (d && d.use ? " Use " + esc(d.use) + "." : "") + "\">" + m + "</mark>"; });
+  }
+  function inline(s) {
+    s = String(s == null ? "" : s);
+    var re = /`([^`]+)`|\[\[([^\]|]+)(?:\|([^\]]+))?\]\]|\*\*([^*]+)\*\*/g, out = "", i = 0, m;
+    while ((m = re.exec(s))) {
+      out += markFlags(esc(s.slice(i, m.index)));
+      if (m[1] != null) out += "<code>" + esc(m[1]) + "</code>";
+      else if (m[2] != null) out += "<button type=\"button\" class=\"term\" data-term=\"" + esc(m[2]) + "\">" + esc(m[3] || m[2].replace(/-/g, " ")) + "</button>";
+      else out += "<b>" + markFlags(esc(m[4])) + "</b>";
+      i = re.lastIndex;
+    }
+    return out + markFlags(esc(s.slice(i)));
+  }
+  function splitSentences(s) {
+    s = String(s).trim();
+    var masked = s.replace(/`[^`]*`|\[\[[^\]]*\]\]/g, function (m) { return m.replace(/[.!?]/g, "_"); });
+    var out = [], start = 0;
+    for (var i = 0; i < masked.length; i++) {
+      var c = masked[i];
+      if (c !== "." && c !== "!" && c !== "?") continue;
+      var j = i + 1;
+      while (j < masked.length && /["')\]]/.test(masked[j])) j++;
+      if (j >= masked.length) break;
+      if (!/\s/.test(masked[j])) continue;
+      var k = j;
+      while (k < masked.length && /\s/.test(masked[k])) k++;
+      if (k < masked.length && /[A-Z0-9`\["(]/.test(masked[k])) { out.push(s.slice(start, j).trim()); start = k; i = k - 1; }
+    }
+    var rest = s.slice(start).trim();
+    if (rest) out.push(rest);
+    return out;
+  }
+  function wordCount(s) {
+    return s.replace(/`[^`]*`/g, " X ").replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, function (m, a, b) { return " " + (b || a.replace(/-/g, " ")) + " "; })
+      .replace(/\*\*/g, "").split(/\s+/).filter(function (w) { return /[A-Za-z0-9]/.test(w); }).length;
+  }
+  function spans(p, lim) {
+    return splitSentences(p).map(function (x) { var n = wordCount(x); return "<span class=\"s" + (n > lim ? " over" : "") + "\" data-wc=\"" + n + "\" data-lim=\"" + lim + "\">" + inline(x) + "</span>"; }).join(" ");
+  }
+  function steHTML(v, kind) { var lim = LIMIT[kind] || 25; return arr(v).map(function (p) { return "<p class=\"ste\">" + spans(p, lim) + "</p>"; }).join(""); }
+  function steList(v, kind) { var lim = LIMIT[kind] || 25; return "<ul class=\"ste-list\">" + arr(v).map(function (p) { return "<li>" + spans(p, lim) + "</li>"; }).join("") + "</ul>"; }
+  function checkAll() {
+    var res = { n: 0, over: [], na: [], para: [] };
+    function visit(o, where) {
+      if (Array.isArray(o)) { o.forEach(function (x) { visit(x, where); }); return; }
+      if (!o || typeof o !== "object") return;
+      var name = [o.title, o.term, o.q, o.id].filter(function (x) { return typeof x === "string"; })[0] || "";
+      var here = name ? (where ? where + " / " : "") + name : where;
+      Object.keys(o).forEach(function (k) {
+        var v = o[k], isText = typeof v === "string" || (Array.isArray(v) && v.length && v.every(function (x) { return typeof x === "string"; }));
+        if (STE_FIELDS[k] && isText) {
+          var kind = STE_FIELDS[k], lim = LIMIT[kind];
+          arr(v).forEach(function (p) {
+            var ss = splitSentences(p);
+            if (kind === "desc" && ss.length > 6) res.para.push({ where: here, n: ss.length });
+            ss.forEach(function (x) {
+              res.n++;
+              var n = wordCount(x);
+              if (n > lim) res.over.push({ where: here, n: n, lim: lim, s: x });
+              if (flagRe) { var plain = x.replace(/`[^`]*`/g, " ").replace(/\[\[[^\]]*\]\]/g, " "), m; flagRe.lastIndex = 0; while ((m = flagRe.exec(plain))) res.na.push({ where: here, w: m[0] }); }
+            });
+          });
+        } else if (v && typeof v === "object" && !SKIP_KEYS[k] && k.charAt(0) !== "_") visit(v, here);
+      });
+    }
+    visit({ zones: C.zones, steps: C.steps, paths: C.paths, notes: C.notes, dictionary: C.dictionary, intro: C.intro }, "");
+    return res;
+  }
+
+  /* ---------------- model ---------------- */
+  var L = Object.assign({ stepW: 260, stepH: 140, gapX: 74, gapY: 84, pad: 56, head: 190, noteW: 320, zoneGap: 280, top: 280 }, C.layout || {});
+  var ZONES = {}, STEPS = {}, PATHS = {}, NOTES = {};
+  C.zones.forEach(function (z) { ZONES[z.id] = z; z._steps = []; z._notes = []; });
+  C.steps.forEach(function (s) { STEPS[s.id] = s; s._paths = []; if (ZONES[s.zone]) { ZONES[s.zone]._steps.push(s); s._num = ZONES[s.zone]._steps.length; } });
+  (C.notes || []).forEach(function (n) { NOTES[n.id] = n; if (ZONES[n.zone]) ZONES[n.zone]._notes.push(n); });
+  (C.paths || []).forEach(function (p) { PATHS[p.id] = p; p.steps = p.steps.filter(function (id) { return STEPS[id]; }); p.steps.forEach(function (id) { if (STEPS[id]._paths.indexOf(p.id) < 0) STEPS[id]._paths.push(p.id); }); });
+  function kindOf(s) { return (C.kinds || {})[s.kind] || { label: s.kind, fabric: "cream" }; }
+  function refList(s) { return arr(s.reads).concat(arr(s.writes), arr(s.model), arr(s.links)).filter(function (id) { return STEPS[id] || NOTES[id]; }); }
+
+  /* ---------------- DOM build ---------------- */
+  var vp = $("#vp"), world = $("#world"), layer = $("#layer"), svg = $("#threads");
+  function stepHTML(s) {
+    var k = kindOf(s), st = s.status && C.statuses && C.statuses[s.status], ni = arr(s.issues).length;
+    var aria = s.title + ", " + k.label + (st ? ", " + st.label : "") + (ni ? ", " + ni + " open issue" + (ni > 1 ? "s" : "") : "");
+    return "<button type=\"button\" class=\"step kp kp-" + esc(k.fabric) + " kind-" + esc(s.kind) + "\" id=\"s-" + esc(s.id) + "\" data-step=\"" + esc(s.id) + "\" aria-label=\"" + esc(aria) + "\">" +
+      "<span class=\"num\">" + s._num + "</span><span class=\"st-title\">" + esc(s.title) + "</span>" + (s.sub ? "<span class=\"st-sub\">" + esc(s.sub) + "</span>" : "") +
+      "<span class=\"st-pills\">" + (st ? "<span class=\"mpill kpill kpill-charcoal\">" + esc(st.label) + "</span>" : "") +
+      /* with a status pill beside it, the short form keeps both pills on one row */
+      (ni ? "<span class=\"mpill kpill kpill-scarlet\">! " + ni + (st ? "" : " issue" + (ni > 1 ? "s" : "")) + "</span>" : "") + "</span></button>";
+  }
+  function noteHTML(n, i) {
+    return "<button type=\"button\" class=\"note\" id=\"n-" + esc(n.id) + "\" data-note=\"" + esc(n.id) + "\" style=\"--rot:" + (i % 2 ? "1.2deg" : "-1.4deg") + "\">" +
+      "<span class=\"q\">" + esc(n.q) + "</span><span class=\"a\">" + spans(n.a, 25) + "</span></button>";
+  }
+  function build() {
+    var h = "";
+    C.zones.forEach(function (z) {
+      h += "<section class=\"zone zone-" + esc(z.ground || "board") + "\" id=\"z-" + esc(z.id) + "\">" +
+        "<div class=\"zone-big\" aria-hidden=\"true\">" + (z.eyebrow ? "<i>" + esc(z.eyebrow) + "</i>" : "") + "<b>" + esc(z.title) + "</b></div>" +
+        "<div class=\"zone-head\"><button type=\"button\" class=\"zone-tag kp-label\" data-zone=\"" + esc(z.id) + "\">" + (z.eyebrow ? "<span class=\"eyebrow\">" + esc(z.eyebrow) + "</span>" : "") +
+        "<span class=\"zt\">" + esc(z.title) + "</span></button>" + (z.intro ? "<p class=\"zone-intro\">" + spans(z.intro, 25) + "</p>" : "") + "</div>" +
+        "<div class=\"zone-notes\" id=\"zn-" + esc(z.id) + "\">" + z._notes.map(noteHTML).join("") + "</div></section>";
+    });
+    $("#zlayer").innerHTML = h; h = "";
+    C.steps.forEach(function (s) { if (ZONES[s.zone]) h += stepHTML(s); });
+    layer.innerHTML = h;
+    var b = C.brand || {};
+    $("#brand").innerHTML = (b.logo ? "<img src=\"" + esc(b.logo) + "\" alt=\"" + esc(b.alt || "") + "\">" : "") + "<div><h1>" + esc(C.title) + "</h1>" + (C.subtitle ? "<p>" + esc(C.subtitle) + "</p>" : "") + "</div>";
+    $("#pathrow").innerHTML = (C.paths || []).map(function (p) {
+      return "<button type=\"button\" class=\"ppill kpill kpill-" + esc(p.pill || "tan") + "\" data-path=\"" + esc(p.id) + "\" aria-pressed=\"false\" title=\"" + esc(p.question || "") + "\">" + esc(p.title) + "</button>";
+    }).join("");
+  }
+
+  /* ---------------- layout ---------------- */
+  var W = 0, H = 0;
+  function layout() {
+    /* measure text at a fixed scale: the counter-scaled sizes would change the measured heights */
+    var keepK = world.style.getPropertyValue("--k");
+    world.style.setProperty("--k", "0.3");
+    C.zones.forEach(function (z) {
+      var cols = z.cols || 2, n = Math.max(1, z._steps.length), rows = Math.ceil(n / cols);
+      var gridW = cols * L.stepW + (cols - 1) * L.gapX, gridH = rows * L.stepH + (rows - 1) * L.gapY;
+      var hasNotes = z._notes.length > 0, notesEl = $("#zn-" + z.id);
+      if (hasNotes) notesEl.style.width = L.noteW + "px";
+      var innerW = gridW + (hasNotes ? L.gapX + L.noteW : 0);
+      var head = $("#z-" + z.id + " .zone-head");
+      head.style.width = innerW + "px";
+      z._headH = Math.max(L.head, head.offsetHeight + 40 + 40);
+      z._gridH = gridH; z._cols = cols; z._gridW = gridW;
+      z.w = L.pad * 2 + innerW;
+      z.h = z._headH + L.pad + Math.max(gridH, hasNotes ? notesEl.offsetHeight + 20 : 0);
+    });
+    var y = L.top; W = 0;
+    var ROWS = (C.rows || [C.zones.map(function (z) { return z.id; })]).map(function (row) { return row.map(function (id) { return ZONES[id]; }).filter(Boolean); });
+    ROWS.forEach(function (zs) { var w = 0; zs.forEach(function (z) { w += z.w; }); W = Math.max(W, w + (zs.length - 1) * L.zoneGap); });
+    ROWS.forEach(function (zs) {
+      var rowW = 0, rowH = 0; zs.forEach(function (z) { rowW += z.w; rowH = Math.max(rowH, z.h); }); rowW += (zs.length - 1) * L.zoneGap;
+      var x = (W - rowW) / 2;
+      zs.forEach(function (z) { z.x = x; z.y = y; z.h = rowH; x += z.w + L.zoneGap; });
+      y += rowH + L.zoneGap;
+    });
+    H = y - L.zoneGap;
+    C.zones.forEach(function (z) {
+      var el = $("#z-" + z.id);
+      el.style.cssText = "left:" + z.x + "px;top:" + z.y + "px;width:" + z.w + "px;height:" + z.h + "px";
+      var notesEl = $("#zn-" + z.id);
+      notesEl.style.left = (L.pad + z._gridW + L.gapX) + "px"; notesEl.style.top = z._headH + "px";
+      z._steps.forEach(function (s, i) {
+        var r = Math.floor(i / z._cols), c = i % z._cols;
+        if (r % 2 === 1) c = z._cols - 1 - c;
+        s.x = z.x + L.pad + c * (L.stepW + L.gapX); s.y = z.y + z._headH + r * (L.stepH + L.gapY); s.w = L.stepW; s.h = L.stepH;
+        var se = $("#s-" + s.id);
+        se.style.cssText = "left:" + s.x + "px;top:" + s.y + "px;width:" + s.w + "px;height:" + s.h + "px";
+      });
+      z._notes.forEach(function (n) {
+        var ne = $("#n-" + n.id);
+        n.x = z.x + L.pad + z._gridW + L.gapX; n.y = z.y + z._headH + ne.offsetTop; n.w = L.noteW; n.h = ne.offsetHeight;
+      });
+    });
+    if (keepK) world.style.setProperty("--k", keepK); else world.style.removeProperty("--k");
+    world.style.width = W + "px"; world.style.height = H + "px";
+    svg.setAttribute("width", W); svg.setAttribute("height", H); svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+    drawThreads();
+    buildMinimap();
+  }
+
+  /* ---------------- threads ---------------- */
+  function ctr(b) { return [b.x + b.w / 2, b.y + b.h / 2]; }
+  function anchors(a, b) {
+    var ac = ctr(a), bc = ctr(b), dx = bc[0] - ac[0], dy = bc[1] - ac[1];
+    if (Math.abs(dy) < a.h * 0.5) return dx > 0 ? [[a.x + a.w, ac[1]], [b.x, bc[1]], [1, 0], [-1, 0]] : [[a.x, ac[1]], [b.x + b.w, bc[1]], [-1, 0], [1, 0]];
+    if (Math.abs(dx) < a.w * 0.6) return dy > 0 ? [[ac[0], a.y + a.h], [bc[0], b.y], [0, 1], [0, -1]] : [[ac[0], a.y], [bc[0], b.y + b.h], [0, -1], [0, 1]];
+    return dx > 0 ? [[a.x + a.w, ac[1]], [b.x, bc[1]], [1, 0], [-1, 0]] : [[a.x, ac[1]], [b.x + b.w, bc[1]], [-1, 0], [1, 0]];
+  }
+  function curve(a, b) {
+    var A = anchors(a, b), p = A[0], q = A[1], d = clamp(Math.hypot(q[0] - p[0], q[1] - p[1]) * 0.42, 40, 340);
+    return "M" + p[0] + "," + p[1] + " C" + (p[0] + A[2][0] * d) + "," + (p[1] + A[2][1] * d) + " " + (q[0] + A[3][0] * d) + "," + (q[1] + A[3][1] * d) + " " + q[0] + "," + q[1];
+  }
+  function drawThreads() {
+    var g = "";
+    (C.paths || []).forEach(function (p) {
+      for (var i = 0; i + 1 < p.steps.length; i++) {
+        var d = curve(STEPS[p.steps[i]], STEPS[p.steps[i + 1]]);
+        g += "<path class=\"th-sh\" data-path=\"" + esc(p.id) + "\" d=\"" + d + "\"/><path class=\"th\" data-path=\"" + esc(p.id) + "\" style=\"--tc:" + esc(p.color || "#b8402e") + "\" d=\"" + d + "\"/>";
+      }
+    });
+    $("#th-g").innerHTML = g;
+  }
+  function drawLinks(from, ids) {
+    var g = "";
+    ids.forEach(function (id) { var t = STEPS[id] || NOTES[id]; if (t && t !== from) g += "<path class=\"lk\" d=\"" + curve(from, t) + "\"/>"; });
+    $("#lk-g").innerHTML = g;
+    $$(".step.lit").forEach(function (e) { e.classList.remove("lit"); });
+    ids.forEach(function (id) { var e = $("#s-" + id); if (e) e.classList.add("lit"); });
+  }
+
+  /* ---------------- camera ---------------- */
+  /* Speed rule: a moving camera changes only transforms. Zoom-dependent styles (--k for text size and
+     thread width, data-z for the detail level) change when the camera rests, in fixed steps. A continuous
+     --k restyled every patch on every zoom frame, so Chrome repainted and decoded all the fabric images
+     again (2026-10-03, 2x pixels: 69 of 269 frames over 33 ms, 12.5 s of image decode). The ground is a
+     separate layer that moves by transform; it repaints only when the zoom changes by about 2x. */
+  var cam = { x: 0, y: 0, k: 0.2 }, idleT = 0, anim = 0, kStep = -1, ground = null, gK = 1, gT = 0;
+  var KMIN = 0.04, KMAX = 2.2;
+  var KSTEPS = [0.04, 0.05, 0.065, 0.085, 0.11, 0.14, 0.18, 0.23, 0.3, 0.39, 0.5, 0.65, 0.85, 1.1, 1.45, 1.9];
+  function stepOf(k) { var best = KSTEPS[0]; KSTEPS.forEach(function (s) { if (Math.abs(Math.log(k / s)) < Math.abs(Math.log(k / best))) best = s; }); return best; }
+  function zlevel(k) { return k < 0.27 ? "far" : k < 0.58 ? "mid" : "near"; }
+  function groundInit() {
+    var bg = getComputedStyle(vp).backgroundImage;
+    if (!bg || bg === "none") return;
+    ground = document.createElement("div");
+    ground.className = "ground"; ground.setAttribute("aria-hidden", "true");
+    ground.style.cssText = "position:absolute;left:0;top:0;pointer-events:none;transform-origin:0 0;will-change:transform;background-repeat:repeat;background-image:" + bg;
+    vp.style.backgroundImage = "none";
+    vp.insertBefore(ground, vp.firstChild);
+  }
+  function groundReset() {
+    if (!ground) return;
+    var s = vpSize();
+    gK = cam.k; gT = Math.max(6, (C.groundTile || 432) * gK);
+    ground.style.width = Math.ceil(1.85 * s[0] + gT + 4) + "px"; ground.style.height = Math.ceil(1.85 * s[1] + gT + 4) + "px";
+    ground.style.backgroundSize = gT + "px " + gT + "px";
+    groundMove();
+  }
+  function groundMove() {
+    if (!ground) return;
+    var rel = cam.k / gK;
+    if (rel < 0.56 || rel > 1.8) { groundReset(); return; }
+    var p = gT * rel, ox = ((cam.x % p) + p) % p - p, oy = ((cam.y % p) + p) % p - p;
+    ground.style.transform = "translate(" + ox + "px," + oy + "px) scale(" + rel + ")";
+  }
+  function settle() {
+    clearTimeout(idleT);
+    world.classList.remove("moving");
+    var s = stepOf(cam.k);
+    if (s !== kStep) { world.style.setProperty("--k", String(s)); kStep = s; }
+    var z = zlevel(cam.k);
+    if (world.getAttribute("data-z") !== z) world.setAttribute("data-z", z);
+    if (ground && Math.abs(Math.log(cam.k / gK)) > 0.18) groundReset();
+  }
+  function apply() {
+    world.style.transform = "translate(" + cam.x + "px," + cam.y + "px) scale(" + cam.k + ")";
+    groundMove();
+    world.classList.add("moving");
+    clearTimeout(idleT);
+    idleT = setTimeout(settle, 160);
+    updateMinimap();
+  }
+  function vpSize() { return [vp.clientWidth, vp.clientHeight]; }
+  function zoomAt(sx, sy, f) {
+    var k = clamp(cam.k * f, KMIN, KMAX); f = k / cam.k;
+    cam.x = sx - (sx - cam.x) * f; cam.y = sy - (sy - cam.y) * f; cam.k = k; apply();
+  }
+  /* free area of the viewport (minus open reader or drawer) */
+  function freeRect() {
+    var s = vpSize(), r = { x: 0, y: 0, w: s[0], h: s[1] };
+    var rd = $("#reader");
+    if (!rd.hidden) {
+      var b = rd.getBoundingClientRect(), v = vp.getBoundingClientRect();
+      if (b.width < v.width * 0.8) r.w = Math.max(200, b.left - v.left - 8); else r.h = Math.max(160, b.top - v.top - 8);
+    }
+    var tb = $("#tourbar");
+    if (!tb.hidden) { var tbr = tb.getBoundingClientRect(), vv = vp.getBoundingClientRect(); if (tbr.top - vv.top > s[1] / 2) r.h = Math.min(r.h, tbr.top - vv.top - 8); else { r.y = tbr.bottom - vv.top + 8; r.h -= r.y; } }
+    return r;
+  }
+  function camFor(box, opts) {
+    opts = opts || {};
+    var fr = freeRect(), pad = opts.pad == null ? 60 : opts.pad;
+    var k = Math.min((fr.w - pad * 2) / box.w, (fr.h - pad * 2) / box.h);
+    if (opts.kmin) k = Math.max(k, opts.kmin);
+    if (opts.kmax) k = Math.min(k, opts.kmax);
+    k = clamp(k, KMIN, KMAX);
+    return { k: k, x: fr.x + fr.w / 2 - (box.x + box.w / 2) * k, y: fr.y + fr.h / 2 - (box.y + box.h / 2) * k };
+  }
+  /* van Wijk and Nuij smooth zoom (as in d3.interpolateZoom) */
+  function interpZoom(p0, p1) {
+    var rho = Math.SQRT2, rho2 = 2, rho4 = 4, ux0 = p0[0], uy0 = p0[1], w0 = p0[2], ux1 = p1[0], uy1 = p1[1], w1 = p1[2];
+    var dx = ux1 - ux0, dy = uy1 - uy0, d2 = dx * dx + dy * dy, i, S;
+    if (d2 < 1e-12) { S = Math.log(w1 / w0) / rho; i = function (t) { return [ux0 + t * dx, uy0 + t * dy, w0 * Math.exp(rho * t * S)]; }; }
+    else {
+      var d1 = Math.sqrt(d2), b0 = (w1 * w1 - w0 * w0 + rho4 * d2) / (2 * w0 * rho2 * d1), b1 = (w1 * w1 - w0 * w0 - rho4 * d2) / (2 * w1 * rho2 * d1);
+      var r0 = Math.log(Math.sqrt(b0 * b0 + 1) - b0), r1 = Math.log(Math.sqrt(b1 * b1 + 1) - b1);
+      S = (r1 - r0) / rho;
+      i = function (t) { var s = t * S, c0 = Math.cosh(r0), u = w0 / (rho2 * d1) * (c0 * Math.tanh(rho * s + r0) - Math.sinh(r0)); return [ux0 + u * dx, uy0 + u * dy, w0 * c0 / Math.cosh(rho * s + r0)]; };
+    }
+    i.duration = Math.abs(S) * 1000;
+    return i;
+  }
+  function flyTo(t, done) {
+    cancelAnimationFrame(anim);
+    if (REDUCED) { cam = { x: t.x, y: t.y, k: t.k }; apply(); settle(); if (done) done(); return; }
+    var s = vpSize(), cx = s[0] / 2, cy = s[1] / 2;
+    var p0 = [(cx - cam.x) / cam.k, (cy - cam.y) / cam.k, s[0] / cam.k], p1 = [(cx - t.x) / t.k, (cy - t.y) / t.k, s[0] / t.k];
+    var f = interpZoom(p0, p1), dur = clamp(f.duration * 0.85, 420, 1500), t0 = performance.now();
+    (function frame(now) {
+      var u = clamp((now - t0) / dur, 0, 1), e = u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2, v = f(e), k = s[0] / v[2];
+      cam = { k: k, x: cx - v[0] * k, y: cy - v[1] * k }; apply();
+      if (u < 1) anim = requestAnimationFrame(frame); else { settle(); if (done) done(); }
+    })(t0);
+  }
+  function boxOf(ids) {
+    var x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    ids.forEach(function (id) { var b = STEPS[id] || NOTES[id] || ZONES[id]; if (!b) return; x0 = Math.min(x0, b.x); y0 = Math.min(y0, b.y); x1 = Math.max(x1, b.x + b.w); y1 = Math.max(y1, b.y + b.h); });
+    return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
+  }
+  function fitAll(animate) { var t = camFor({ x: 0, y: 0, w: W, h: H }, { pad: 30 }); if (animate) flyTo(t); else { cam = t; apply(); } }
+  /* first view: the whole map, or on a narrow screen the first row of zones */
+  function startView() {
+    var first = (C.rows && C.rows[0] && C.rows[0][0]) || (C.zones[0] && C.zones[0].id);
+    if (vpSize()[0] < 760 && ZONES[first]) { cam = camFor(ZONES[first], { pad: 12 }); apply(); }
+    else fitAll(false);
+    settle(); groundReset();
+  }
+
+  /* ---------------- selection, reader ---------------- */
+  var sel = null, tour = null;
+  function setHash(id) { try { history.replaceState(null, "", "#" + id); } catch (e) { /* the frame can refuse */ } }
+  function sec(t, body, cls) { return "<section class=\"r-sec" + (cls ? " " + cls : "") + "\"><h3>" + esc(t) + "</h3>" + body + "</section>"; }
+  function refPill(id) {
+    var t = STEPS[id];
+    if (!t) return "<span class=\"mpill kpill kpill-tan\">" + esc(id) + "</span>";
+    return "<button type=\"button\" class=\"mpill kpill kpill-" + esc(kindOf(t).pill || kindOf(t).fabric) + "\" data-go=\"" + esc(id) + "\">" + esc(t.title) + "</button>";
+  }
+  function stepReader(s) {
+    var k = kindOf(s), st = s.status && C.statuses && C.statuses[s.status], z = ZONES[s.zone];
+    var h = "<div class=\"r-tags\"><span class=\"mpill kpill kpill-" + esc(k.pill || k.fabric) + "\">" + esc(k.label) + "</span>" + (st ? "<span class=\"mpill kpill kpill-charcoal\">" + esc(st.label) + "</span>" : "") + "</div>" +
+      "<p class=\"r-eyebrow\">" + esc(z.title) + ", step " + s._num + "</p><h2 class=\"r-title\">" + esc(s.title) + "</h2>" + (s.sub ? "<p class=\"r-sub\">" + inline(s.sub) + "</p>" : "");
+    if (s.what) h += sec("What happens", steHTML(s.what, "desc"));
+    var rows = [];
+    if (s.input) rows.push(["Input", steHTML(s.input, "desc")]);
+    if (s.output) rows.push(["Output", steHTML(s.output, "desc")]);
+    if (arr(s.reads).length) rows.push(["Reads", arr(s.reads).map(refPill).join("")]);
+    if (arr(s.writes).length) rows.push(["Writes", arr(s.writes).map(refPill).join("")]);
+    if (arr(s.model).length) rows.push(["Model", arr(s.model).map(refPill).join("")]);
+    if (arr(s.links).length) rows.push(["See also", arr(s.links).map(refPill).join("")]);
+    arr(s.rows).forEach(function (r) { rows.push([r[0], "<span>" + inline(r[1]) + "</span>"]); });
+    if (rows.length) h += "<dl class=\"r-rows\">" + rows.map(function (r) { return "<dt>" + esc(r[0]) + "</dt><dd>" + r[1] + "</dd>"; }).join("") + "</dl>";
+    if (s.fails) h += sec("If it fails", steHTML(s.fails, "desc"));
+    if (s.issues) h += sec("Open issues", steList(s.issues, "desc"), "issues");
+    if (s.next) h += sec("Next action", steHTML(s.next, "proc"));
+    if (s.files) h += sec("Source", "<ul class=\"files\">" + arr(s.files).map(function (f) { return "<li><code>" + esc(f.p) + (f.l ? ":" + esc(f.l) : "") + "</code>" + (f.n ? " " + inline(f.n) : "") + "</li>"; }).join("") + "</ul>");
+    if (s.refs) h += sec("Records", "<p class=\"ste\">" + arr(s.refs).map(inline).join(" \u00b7 ") + "</p>");
+    if (s._paths.length) h += sec("Paths through this part", "<div class=\"chips\">" + s._paths.map(function (pid) {
+      var p = PATHS[pid]; return "<button type=\"button\" class=\"chip kpill kpill-" + esc(p.pill || "tan") + "\" data-tour=\"" + esc(pid) + "\" data-at=\"" + esc(s.id) + "\">Follow: " + esc(p.title) + "</button>";
+    }).join("") + "</div>");
+    return h;
+  }
+  function zoneReader(z) {
+    var h = "<p class=\"r-eyebrow\">" + esc(z.eyebrow || "") + "</p><h2 class=\"r-title\">" + esc(z.title) + "</h2>" + (z.intro ? steHTML(z.intro, "desc") : "");
+    h += sec("Parts", "<ol class=\"zlist\">" + z._steps.map(function (s) {
+      return "<li><button type=\"button\" data-go=\"" + esc(s.id) + "\"><span class=\"n\">" + s._num + "</span><span>" + esc(s.title) + "</span><span class=\"d\">" + esc(kindOf(s).short || kindOf(s).label) + (arr(s.issues).length ? " \u00b7 !" : "") + "</span></button></li>";
+    }).join("") + "</ol>");
+    if (z._notes.length) h += sec("Questions", z._notes.map(function (n) { return "<p class=\"ste\"><b>" + esc(n.q) + "</b> " + spans(n.a, 25) + "</p>"; }).join(""));
+    var ps = (C.paths || []).filter(function (p) { return p.steps.some(function (id) { return STEPS[id].zone === z.id; }); });
+    if (ps.length) h += sec("Paths", "<div class=\"chips\">" + ps.map(function (p) { return "<button type=\"button\" class=\"chip kpill kpill-" + esc(p.pill || "tan") + "\" data-tour=\"" + esc(p.id) + "\">Follow: " + esc(p.title) + "</button>"; }).join("") + "</div>");
+    return h;
+  }
+  function openReader(html) { var r = $("#reader"); r.hidden = false; $("#reader-body").innerHTML = html; $("#reader-body").scrollTop = 0; }
+  function closeReader() { $("#reader").hidden = true; $$(".step.sel").forEach(function (e) { e.classList.remove("sel"); }); drawLinks(null, []); sel = null; }
+  function select(id, opts) {
+    opts = opts || {};
+    var s = STEPS[id];
+    if (!s) { if (NOTES[id]) return focusNote(id); if (ZONES[id]) return focusZone(id); return; }
+    $$(".step.sel").forEach(function (e) { e.classList.remove("sel"); });
+    $("#s-" + id).classList.add("sel");
+    sel = id;
+    openReader(stepReader(s));
+    drawLinks(s, refList(s));
+    setHash(id);
+    if (opts.fly !== false) flyTo(camFor(s, { pad: 40, kmin: 0.62, kmax: 0.95 }));
+  }
+  function focusZone(id) {
+    var z = ZONES[id]; if (!z) return;
+    openReader(zoneReader(z)); drawLinks(null, []); setHash(id);
+    flyTo(camFor(z, { pad: 30 }));
+  }
+  function focusNote(id) {
+    var n = NOTES[id]; if (!n) return;
+    drawLinks(n, arr(n.links)); setHash(id);
+    flyTo(camFor(boxOf([id].concat(arr(n.links))), { pad: 50, kmax: 0.9 }));
+  }
+
+  /* ---------------- tours ---------------- */
+  function renderTour() {
+    var tb = $("#tourbar");
+    if (!tour) { tb.hidden = true; return; }
+    var p = PATHS[tour.id], n = p.steps.length, i = tour.i;
+    tb.hidden = false;
+    tb.innerHTML = "<span class=\"tq\">" + esc(p.question || p.title) + "</span><span class=\"tc\">" + (i < 0 ? n + " steps" : "Step " + (i + 1) + " of " + n) + "</span>" +
+      "<button type=\"button\" class=\"tbtn kpill kpill-tan\" data-tnav=\"-1\"" + (i < 0 ? " disabled" : "") + ">\u2190 Back</button>" +
+      "<button type=\"button\" class=\"tbtn kpill kpill-" + esc(p.pill || "scarlet") + "\" data-tnav=\"1\"" + (i >= n - 1 ? " disabled" : "") + ">" + (i < 0 ? "Start \u2192" : "Next \u2192") + "</button>" +
+      "<button type=\"button\" class=\"tbtn kpill kpill-charcoal\" data-tnav=\"0\">End</button>";
+    $$(".ppill").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-path") === tour.id)); });
+  }
+  function startTour(id, at) {
+    var p = PATHS[id]; if (!p) return;
+    tour = { id: id, i: at && p.steps.indexOf(at) >= 0 ? p.steps.indexOf(at) : -1 };
+    world.classList.add("touring");
+    $$(".th,.th-sh").forEach(function (e) { e.classList.toggle("on", e.getAttribute("data-path") === id); });
+    $$(".step").forEach(function (e) { e.classList.toggle("on", p.steps.indexOf(e.getAttribute("data-step")) >= 0); });
+    $("#hint").style.opacity = 0;
+    renderTour();
+    if (tour.i < 0) { closeReader(); setHash(id); flyTo(camFor(boxOf(p.steps), { pad: 40, kmax: 0.62 })); }
+    else select(p.steps[tour.i]);
+  }
+  function tourStep(d) {
+    if (!tour) return;
+    var p = PATHS[tour.id];
+    tour.i = clamp(tour.i + d, 0, p.steps.length - 1);
+    renderTour(); select(p.steps[tour.i]);
+  }
+  function endTour() {
+    tour = null; world.classList.remove("touring");
+    $$(".th.on,.th-sh.on,.step.on").forEach(function (e) { e.classList.remove("on"); });
+    $$(".ppill").forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
+    renderTour();
+  }
+
+  /* ---------------- minimap ---------------- */
+  var mmK = 1;
+  function buildMinimap() {
+    var box = $("#mm-in"), w = 204; mmK = w / W;
+    box.style.width = w + "px"; box.style.height = H * mmK + "px";
+    var colors = { board: "#cdbd9c", cream: "#e2d6bd" };
+    box.innerHTML = C.zones.map(function (z) {
+      return "<div class=\"mm-z\" style=\"left:" + z.x * mmK + "px;top:" + z.y * mmK + "px;width:" + z.w * mmK + "px;height:" + z.h * mmK + "px;background:" + (z.mm || colors[z.ground] || "#cdbd9c") + "\"></div>";
+    }).join("") + "<div class=\"mm-view\" id=\"mm-view\"></div>";
+  }
+  function updateMinimap() {
+    var v = $("#mm-view"); if (!v) return;
+    var s = vpSize();
+    $("#minimap").style.visibility = (s[0] / cam.k >= W * 0.9 && s[1] / cam.k >= H * 0.9) ? "hidden" : "visible";
+    v.style.left = (-cam.x / cam.k) * mmK + "px"; v.style.top = (-cam.y / cam.k) * mmK + "px";
+    v.style.width = (s[0] / cam.k) * mmK + "px"; v.style.height = (s[1] / cam.k) * mmK + "px";
+  }
+
+  /* ---------------- key drawer ---------------- */
+  var CHECK = checkAll();
+  function drawerHTML() {
+    var h = "<h2>Map key</h2>";
+    h += sec("Patches", "<div class=\"legend\">" + Object.keys(C.kinds).map(function (k) {
+      var o = C.kinds[k]; return "<span class=\"sw kp kp-" + esc(o.fabric) + "\"></span><span>" + esc(o.label) + "</span>";
+    }).join("") + "<span class=\"mpill kpill kpill-scarlet\">! issue</span><span>Open issue. Click the patch to read it.</span>" +
+      "<span class=\"mpill kpill kpill-charcoal\">Not live</span><span>A state other than live</span></div>");
+    h += sec("Threads", "<div class=\"legend\">" + (C.paths || []).map(function (p) {
+      return "<svg class=\"thsw\" viewBox=\"0 0 46 12\"><path d=\"M2 6 H44\" stroke=\"" + esc(p.color || "#b8402e") + "\" stroke-width=\"4\" stroke-dasharray=\"7 5\" stroke-linecap=\"round\"/></svg><button type=\"button\" class=\"term\" data-tour=\"" + esc(p.id) + "\">" + esc(p.question || p.title) + "</button>";
+    }).join("") + "<svg class=\"thsw\" viewBox=\"0 0 46 12\"><path d=\"M2 6 H44\" stroke=\"#2c3f5c\" stroke-width=\"3\" stroke-dasharray=\"1 6\" stroke-linecap=\"round\"/></svg><span>A part that the selected patch reads, writes or calls</span></div>");
+    var issues = [];
+    C.steps.forEach(function (s) { arr(s.issues).forEach(function (t) { issues.push([s, t]); }); });
+    if (issues.length) h += sec("All open issues (" + issues.length + ")", "<ol class=\"zlist\">" + issues.map(function (x) {
+      return "<li><button type=\"button\" data-go=\"" + esc(x[0].id) + "\"><span class=\"n\">!</span><span><b>" + esc(x[0].title) + ".</b> " + inline(x[1]) + "</span></button></li>";
+    }).join("") + "</ol>", "issues");
+    if (DICT.length) h += sec("Words", "<dl class=\"dict\">" + DICT.map(function (d) {
+      return "<dt id=\"dict-" + esc(d.id) + "\" class=\"" + (d.status === "not" ? "not" : "") + "\">" + esc(d.term) + " <span>(" + esc(d.pos || "") + ")" + (d.status === "not" ? " not approved, use " + esc(d.use || "") : "") + "</span></dt><dd>" + spans(d.meaning, 25) + "</dd>";
+    }).join("") + "</dl>");
+    var bad = CHECK.over.length + CHECK.na.length + CHECK.para.length;
+    h += sec("Facts and text", "<p class=\"ste\">" + inline(C.verified || "") + "</p><p class=\"ste\">Text check: " + CHECK.n + " sentences, " + CHECK.over.length + " over the limit, " + CHECK.na.length + " not-approved words. " +
+      "<button type=\"button\" class=\"term\" id=\"ste-toggle\">Show word counts</button></p>" +
+      (bad ? "<ul class=\"ste-list\">" + CHECK.over.map(function (o) { return "<li>" + esc(o.where) + ": " + o.n + " words. " + esc(o.s) + "</li>"; }).join("") + CHECK.na.map(function (o) { return "<li>" + esc(o.where) + ": \"" + esc(o.w) + "\"</li>"; }).join("") + "</ul>" : ""));
+    return h;
+  }
+  function renderProblems() {
+    var pr = $("#problems"), bad = CHECK.over.length + CHECK.na.length + CHECK.para.length;
+    pr.setAttribute("data-sentences", CHECK.n); pr.setAttribute("data-problems", bad);
+    pr.innerHTML = bad ? "<ul>" + CHECK.over.map(function (o) { return "<li>" + esc(o.where) + ": " + o.n + " words (limit " + o.lim + "). " + esc(o.s) + "</li>"; }).join("") +
+      CHECK.na.map(function (o) { return "<li>" + esc(o.where) + ": not approved \"" + esc(o.w) + "\".</li>"; }).join("") +
+      CHECK.para.map(function (o) { return "<li>" + esc(o.where) + ": " + o.n + " sentences in one paragraph.</li>"; }).join("") + "</ul>" : "";
+    var bad2 = [];
+    C.steps.forEach(function (s) { refList(s).length; arr(s.reads).concat(arr(s.writes), arr(s.model), arr(s.links)).forEach(function (id) { if (!STEPS[id] && !NOTES[id]) bad2.push(s.id + " -> " + id); }); });
+    (C.paths || []).forEach(function (p) { if (!p.steps.length) bad2.push("path " + p.id + " has no steps"); });
+    pr.setAttribute("data-broken-refs", bad2.length);
+    if (bad2.length) pr.innerHTML += "<ul>" + bad2.map(function (b) { return "<li>broken reference: " + esc(b) + "</li>"; }).join("") + "</ul>";
+  }
+
+  /* ---------------- term popover ---------------- */
+  function showTerm(btn) {
+    var d = TERM[btn.getAttribute("data-term")], pop = $("#pop"); if (!d) return;
+    pop.innerHTML = "<b>" + esc(d.term) + "</b>" + (d.pos ? " (" + esc(d.pos) + ")" : "") + steHTML(d.meaning, "desc");
+    pop.hidden = false;
+    var r = btn.getBoundingClientRect();
+    pop.style.left = clamp(r.left, 8, window.innerWidth - pop.offsetWidth - 8) + "px";
+    pop.style.top = Math.min(r.bottom + 6, window.innerHeight - pop.offsetHeight - 8) + "px";
+  }
+
+  /* ---------------- find ---------------- */
+  function findMatches(q) {
+    q = q.trim().toLowerCase(); if (!q) return [];
+    var out = [];
+    C.steps.forEach(function (s) {
+      var hay = (s.title + " " + (s.sub || "") + " " + ZONES[s.zone].title + " " + arr(s.what).join(" ")).toLowerCase();
+      var score = s.title.toLowerCase().indexOf(q) >= 0 ? 0 : (s.sub || "").toLowerCase().indexOf(q) >= 0 ? 1 : hay.indexOf(q) >= 0 ? 2 : -1;
+      if (score >= 0) out.push([score, s]);
+    });
+    return out.sort(function (a, b) { return a[0] - b[0]; }).slice(0, 10).map(function (x) { return x[1]; });
+  }
+  function renderFind() {
+    var ms = findMatches($("#find-in").value), ul = $("#find-list");
+    ul.hidden = !ms.length;
+    ul.innerHTML = ms.map(function (s) { return "<li><button type=\"button\" data-go=\"" + esc(s.id) + "\"><b>" + esc(s.title) + "</b><span>" + esc(ZONES[s.zone].title) + " \u00b7 " + esc(s.sub || "") + "</span></button></li>"; }).join("");
+  }
+
+  /* ---------------- input ---------------- */
+  var ptrs = {}, drag = null, pinch = null;
+  function wire() {
+    vp.addEventListener("wheel", function (e) {
+      if (e.target.closest(".reader,.drawer,.minimap,.tourbar")) return;
+      e.preventDefault(); cancelAnimationFrame(anim);
+      var r = vp.getBoundingClientRect(), dy = e.deltaY * (e.deltaMode === 1 ? 16 : 1), dx = e.deltaX * (e.deltaMode === 1 ? 16 : 1);
+      if (!e.ctrlKey && Math.abs(dx) > Math.abs(dy) * 1.2) { cam.x -= dx; cam.y -= dy; apply(); return; }
+      zoomAt(e.clientX - r.left, e.clientY - r.top, Math.exp(-dy * (e.ctrlKey ? 0.012 : 0.0016)));
+      $("#hint").style.opacity = 0;
+    }, { passive: false });
+    vp.addEventListener("pointerdown", function (e) {
+      if (e.button !== 0 || e.target.closest(".reader,.drawer,.minimap,.tourbar")) return;
+      ptrs[e.pointerId] = [e.clientX, e.clientY];
+      var ids = Object.keys(ptrs);
+      if (ids.length === 2) {
+        var a = ptrs[ids[0]], b = ptrs[ids[1]];
+        pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; drag = null;
+        try { vp.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+      } else drag = { x: e.clientX, y: e.clientY, cx: cam.x, cy: cam.y, moved: false, id: e.pointerId };
+    });
+    vp.addEventListener("pointermove", function (e) {
+      if (!ptrs[e.pointerId]) return;
+      ptrs[e.pointerId] = [e.clientX, e.clientY];
+      var ids = Object.keys(ptrs);
+      if (pinch && ids.length === 2) {
+        var a = ptrs[ids[0]], b = ptrs[ids[1]], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], r = vp.getBoundingClientRect();
+        cam.x += m[0] - pinch.m[0]; cam.y += m[1] - pinch.m[1];
+        zoomAt(m[0] - r.left, m[1] - r.top, d / pinch.d); pinch = { d: d, m: m }; return;
+      }
+      if (!drag) return;
+      var ddx = e.clientX - drag.x, ddy = e.clientY - drag.y;
+      if (!drag.moved && Math.hypot(ddx, ddy) > 5) {
+        drag.moved = true; vp.classList.add("dragging"); cancelAnimationFrame(anim);
+        try { vp.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+        $("#hint").style.opacity = 0;
+      }
+      if (drag.moved) { cam.x = drag.cx + ddx; cam.y = drag.cy + ddy; apply(); }
+    });
+    function up(e) {
+      delete ptrs[e.pointerId];
+      if (Object.keys(ptrs).length < 2) pinch = null;
+      if (drag && drag.id === e.pointerId) {
+        if (drag.moved) { drag.suppress = true; setTimeout(function () { drag = null; }, 0); } else drag = null;
+        vp.classList.remove("dragging");
+      }
+    }
+    vp.addEventListener("pointerup", up); vp.addEventListener("pointercancel", up);
+    vp.addEventListener("dblclick", function (e) {
+      if (e.target.closest(".step,.note,.zone-tag,.reader,.drawer,.minimap,.tourbar")) return;
+      var r = vp.getBoundingClientRect(), sx = e.clientX - r.left, sy = e.clientY - r.top, k = clamp(cam.k * 2, KMIN, KMAX);
+      flyTo({ k: k, x: sx - (sx - cam.x) * (k / cam.k), y: sy - (sy - cam.y) * (k / cam.k) });
+    });
+    document.addEventListener("click", function (e) {
+      if (drag && drag.suppress) return;
+      var t;
+      if ((t = e.target.closest(".term[data-term]"))) { e.preventDefault(); showTerm(t); return; }
+      if (!e.target.closest("#pop")) $("#pop").hidden = true;
+      if (!e.target.closest(".find")) $("#find-list").hidden = true;
+      if ((t = e.target.closest("[data-tour]"))) { $("#drawer").hidden = true; startTour(t.getAttribute("data-tour"), t.getAttribute("data-at")); return; }
+      if ((t = e.target.closest("[data-path]"))) { var pid = t.getAttribute("data-path"); if (tour && tour.id === pid) endTour(); else startTour(pid); return; }
+      if ((t = e.target.closest("[data-tnav]"))) { var d = +t.getAttribute("data-tnav"); if (d === 0) endTour(); else tourStep(d); return; }
+      if ((t = e.target.closest("[data-go]"))) { $("#find-list").hidden = true; if (e.target.closest("#drawer")) $("#drawer").hidden = true; select(t.getAttribute("data-go")); return; }
+      if ((t = e.target.closest(".step"))) { select(t.getAttribute("data-step")); return; }
+      if ((t = e.target.closest(".note"))) { focusNote(t.getAttribute("data-note")); return; }
+      if ((t = e.target.closest(".zone-tag"))) { focusZone(t.getAttribute("data-zone")); return; }
+      if (e.target.closest("#minimap")) {
+        var r = $("#mm-in").getBoundingClientRect(), wx = (e.clientX - r.left) / mmK, wy = (e.clientY - r.top) / mmK, s = vpSize();
+        flyTo({ k: cam.k, x: s[0] / 2 - wx * cam.k, y: s[1] / 2 - wy * cam.k }); return;
+      }
+    });
+    $("#reader-x").addEventListener("click", closeReader);
+    $("#drawer-x").addEventListener("click", function () { $("#drawer").hidden = true; $("#btn-about").setAttribute("aria-expanded", "false"); });
+    $("#btn-about").addEventListener("click", function () {
+      var d = $("#drawer"), open = d.hidden; d.hidden = !open; this.setAttribute("aria-expanded", String(open));
+      if (open) { $("#drawer-body").innerHTML = drawerHTML(); $("#drawer-body").scrollTop = 0; }
+    });
+    document.addEventListener("click", function (e) {
+      if (e.target && e.target.id === "ste-toggle") { var on = !document.documentElement.classList.contains("ste-on"); document.documentElement.classList.toggle("ste-on", on); e.target.textContent = on ? "Hide word counts" : "Show word counts"; }
+    });
+    $("#btn-fit").addEventListener("click", function () { fitAll(true); });
+    $("#btn-in").addEventListener("click", function () { var s = vpSize(); cancelAnimationFrame(anim); var k = clamp(cam.k * 1.6, KMIN, KMAX); flyTo({ k: k, x: s[0] / 2 - (s[0] / 2 - cam.x) * k / cam.k, y: s[1] / 2 - (s[1] / 2 - cam.y) * k / cam.k }); });
+    $("#btn-out").addEventListener("click", function () { var s = vpSize(); cancelAnimationFrame(anim); var k = clamp(cam.k / 1.6, KMIN, KMAX); flyTo({ k: k, x: s[0] / 2 - (s[0] / 2 - cam.x) * k / cam.k, y: s[1] / 2 - (s[1] / 2 - cam.y) * k / cam.k }); });
+    $("#find-in").addEventListener("input", renderFind);
+    $("#find-in").addEventListener("keydown", function (e) { if (e.key === "Enter") { var m = findMatches(this.value); if (m[0]) { $("#find-list").hidden = true; select(m[0].id); } } if (e.key === "Escape") { this.value = ""; renderFind(); } });
+    layer.addEventListener("focusin", function (e) {
+      var t = e.target.closest(".step");
+      if (t && t.matches(":focus-visible") && sel !== t.getAttribute("data-step")) select(t.getAttribute("data-step"));
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.target.closest && e.target.closest("input")) return;
+      var s = vpSize();
+      if (e.key === "Escape") { if (!$("#pop").hidden) $("#pop").hidden = true; else if (!$("#drawer").hidden) $("#drawer").hidden = true; else if (!$("#reader").hidden) closeReader(); else if (tour) endTour(); return; }
+      if (tour && (e.key === "ArrowRight" || e.key === "ArrowLeft") && !e.target.closest(".step")) { e.preventDefault(); tourStep(e.key === "ArrowRight" ? 1 : -1); return; }
+      if (e.target !== vp && e.target !== document.body) return;
+      if (e.key === "+" || e.key === "=") zoomAt(s[0] / 2, s[1] / 2, 1.25);
+      else if (e.key === "-" || e.key === "_") zoomAt(s[0] / 2, s[1] / 2, 0.8);
+      else if (e.key === "0") fitAll(true);
+      else if (e.key.indexOf("Arrow") === 0) { e.preventDefault(); var st = 90; if (e.key === "ArrowLeft") cam.x += st; if (e.key === "ArrowRight") cam.x -= st; if (e.key === "ArrowUp") cam.y += st; if (e.key === "ArrowDown") cam.y -= st; apply(); }
+    });
+    var rt = 0;
+    window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(function () { updateMinimap(); groundReset(); }, 120); });
+  }
+
+  /* ---------------- start ---------------- */
+  build();
+  layout();
+  wire();
+  groundInit();
+  renderProblems();
+  window.__steCheck = CHECK;
+  startView();
+  var h0 = (location.hash || "").slice(1);
+  if (h0) setTimeout(function () { if (PATHS[h0]) startTour(h0); else select(h0); }, 60);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { layout(); if (!h0 && !sel && !tour) startView(); });
+})();
+</script>
+</html>

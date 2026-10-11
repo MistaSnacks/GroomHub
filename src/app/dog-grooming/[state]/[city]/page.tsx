@@ -4,10 +4,11 @@ import { notFound } from "next/navigation";
 import { ensureCanonicalCityRoute } from "@/lib/city-route";
 import { CaretRight, MapPin, Park, MapTrifold, Storefront, TreeStructure, Question } from "@phosphor-icons/react/dist/ssr";
 import { CityListingsClient } from "@/components/city-listings-client";
-import { getListingsByCity, getCitiesByState, getCityBySlug, getFeaturedByCity, getCities } from "@/lib/supabase/queries";
+import { getListingsByCity, getCitiesByState, getCityBySlug, getFeaturedByCity, getCities, getMobileGroomersVisitingCity } from "@/lib/supabase/queries";
 import { FeaturedSection } from "@/components/featured-section";
+import { VisitingMobileGroomers } from "@/components/visiting-mobile-groomers";
 import { stateNameFromSlug, stateAbbrFromSlug, stateSlugFromAbbr, buildCityPath, getNearbyCities, isValidStateSlug } from "@/lib/geography";
-import { getMetroNeighbors } from "@/lib/metro-clusters";
+import { getMetroNeighbors, getMetroNeighborSlugs, getMetroClusterForCity } from "@/lib/metro-clusters";
 import { buildDogGroomingFaqs } from "@/lib/city-faqs";
 import { getEnrichedCityContent } from "@/lib/city-content";
 import { cityPageSchema } from "@/lib/schema";
@@ -104,18 +105,20 @@ export default async function CityPage({ params }: CityPageProps) {
   const stateAbbr = stateAbbrFromSlug(state);
   const stateName = stateNameFromSlug(state);
 
-  const [listings, cityData, relatedCities, featuredListings] = await Promise.all([
+  const [listings, cityData, relatedCities, featuredListings, visiting] = await Promise.all([
     getListingsByCity(city, stateAbbr),
     getCityBySlug(city, stateAbbr),
     getCitiesByState(stateAbbr),
     getFeaturedByCity(city, stateAbbr),
+    getMobileGroomersVisitingCity(city, stateAbbr),
   ]);
+  const metroName = getMetroClusterForCity(city, stateAbbr)?.name ?? "";
 
   const content = getEnrichedCityContent(stateAbbr, city);
   if (!cityData && !content) notFound();
 
   const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
-  const nearby = getNearbyCities(city, relatedCities, getMetroNeighbors(city), 6);
+  const nearby = getNearbyCities(city, relatedCities, getMetroNeighborSlugs(city, stateAbbr), 6);
 
   const faqs = buildDogGroomingFaqs(cityName, stateAbbr, listings, content?.dogParks?.length ?? 0);
 
@@ -141,6 +144,11 @@ export default async function CityPage({ params }: CityPageProps) {
             <MapPin weight="fill" className="w-5 h-5 text-brand-secondary" />
             {listings.length} listed groomers
           </p>
+          {metroName && (
+            <p className="mt-2 text-sm text-text-muted">
+              Region: <span className="font-semibold text-brand-primary">{metroName}</span>
+            </p>
+          )}
 
           {content && (
             <p className="mt-4 text-text-muted text-sm leading-relaxed max-w-3xl">
@@ -149,7 +157,7 @@ export default async function CityPage({ params }: CityPageProps) {
           )}
           <CityStatsBlock
             groomerCount={listings.length}
-            metroCityCount={getMetroNeighbors(city).length + 1}
+            metroCityCount={getMetroNeighbors(city, stateAbbr).length + 1}
             serviceCount={new Set(listings.flatMap((l) => l.service_tags ?? [])).size}
             lastUpdated={new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" })}
           />
@@ -185,6 +193,7 @@ export default async function CityPage({ params }: CityPageProps) {
               </Link>
             </div>
           )}
+          <VisitingMobileGroomers listings={visiting} cityName={cityName} metroName={metroName} />
         </div>
       </section>
 

@@ -6,6 +6,7 @@ import { getListingsByOwner } from "@/lib/supabase/queries";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { StatusBanner } from "./status-banner";
 import { tierDisplayName } from "@/lib/pricing";
+import { BadgeCard } from "./badge-card";
 
 const tierColors: Record<string, string> = {
   free: "bg-border text-text-muted",
@@ -61,6 +62,21 @@ export default async function DashboardPage({
         const { data } = await supabase.from("business_listings").select("slug,name").eq("email", user.email.toLowerCase()).is("owner_id", null).limit(1).maybeSingle();
         if (data) pendingClaim = { slug: data.slug, name: data.name };
       }
+    }
+  }
+
+  // Where each listing's website badge has been seen (service role: the table has no public policies).
+  const installsByListing = new Map<string, { host: string; lastSeen: string }[]>();
+  if (listings.length > 0) {
+    const { data: installs } = await createAdminClient()
+      .from("badge_installs")
+      .select("listing_id, host, last_seen")
+      .in("listing_id", listings.map((l) => l.id))
+      .order("last_seen", { ascending: false });
+    for (const row of installs ?? []) {
+      const list = installsByListing.get(row.listing_id as string) ?? [];
+      list.push({ host: row.host as string, lastSeen: row.last_seen as string });
+      installsByListing.set(row.listing_id as string, list);
     }
   }
 
@@ -195,6 +211,10 @@ export default async function DashboardPage({
           ))}
         </div>
       )}
+
+      {listings.map((listing) => (
+        <BadgeCard key={`badge-${listing.slug}`} slug={listing.slug} name={listing.name} installs={installsByListing.get(listing.id) ?? []} />
+      ))}
     </div>
   );
 }

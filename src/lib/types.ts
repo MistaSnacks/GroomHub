@@ -46,6 +46,9 @@ export interface BusinessListing {
   subscription_tier?: "free" | "basic" | "premium";
   claimed_at?: string;
   sponsor_paid_until?: string | null;
+  sponsor_comp?: boolean;
+  /** Metro a mobile groomer travels across (METRO_CLUSTERS slug); null for none. */
+  service_metro?: string | null;
   updated_at?: string | null;
 }
 

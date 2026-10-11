@@ -24,7 +24,7 @@ export function ClaimPlansClient({ slug }: { slug: string }) {
             <li>Services, specialties, pricing and up to {getLimits("free").photos} photos during beta</li>
             <li>Owner Confirmed badge and contact inquiries</li>
           </ul>
-          <p className="text-xs text-text-muted">By confirming, you state that you are authorized to manage this business. Claims from an email at the business&apos;s own website domain are approved instantly; others are reviewed by a person, usually within one business day.</p>
+          <p className="text-xs text-text-muted">By confirming, you state that you are authorized to manage this business. Most claims are approved instantly. If your email looks unrelated to the business, a person reviews it first, usually within one business day.</p>
           <form action={processClaim}>
             <input type="hidden" name="slug" value={slug} />
             <ConfirmButton />

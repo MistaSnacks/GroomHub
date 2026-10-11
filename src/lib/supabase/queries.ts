@@ -5,7 +5,7 @@ import { activeSponsorshipFilter, sortRegularList } from "@/lib/listing-rules";
 import { supabase } from "./client";
 import { normalizeTags } from "../tags";
 import type { BusinessListing, NormalizedListing, CityWithCount } from "../types";
-import { getMetroNeighbors, FEATURED_SPOTS_PER_CITY } from "../metro-clusters";
+import { getMetroNeighbors, FEATURED_SPOTS_PER_CITY, getMetroClusterForCity, visitsCityViaMetro } from "../metro-clusters";
 
 /**
  * Cache tag for the full-table reads that back search + city browse.
@@ -327,8 +327,9 @@ export async function getFeaturedByCity(
     return localListings.slice(0, FEATURED_SPOTS_PER_CITY);
   }
 
-  // Otherwise: fill from metro neighbors
-  const neighbors = getMetroNeighbors(citySlug);
+  // Otherwise: fill from metro neighbors. A metro can cross the state line
+  // (Vancouver WA is in Portland Metro), so query each neighbor in its own state.
+  const neighbors = getMetroNeighbors(citySlug, stateAbbr);
   if (neighbors.length === 0) {
     return localListings;
   }
@@ -336,34 +337,74 @@ export async function getFeaturedByCity(
   const remaining = FEATURED_SPOTS_PER_CITY - localListings.length;
   const localIds = new Set(localListings.map((l) => l.id));
 
-  // Build all slug variants for neighbor cities
-  const neighborSlugs = neighbors.flatMap((n) => citySlugVariants(n, stateAbbr));
+  const byState = new Map<string, string[]>();
+  for (const n of neighbors) {
+    byState.set(n.state, [...(byState.get(n.state) ?? []), ...citySlugVariants(n.slug, n.state)]);
+  }
 
-  const { data: neighborData, error: neighborError } = await supabase
-    .from("business_listings")
-    .select("*")
-    .not("slug", "in", PUBLIC_EXCLUDED_FILTER)
-    .eq("is_featured", true)
-    .or(activeSponsorshipFilter())
-    .eq("state", stateAbbr.toUpperCase())
-    .in("city_slug", neighborSlugs)
-    .order("rating", { ascending: false })
-    .limit(remaining + 5); // fetch a few extra to account for dedup
+  const results = await Promise.all(
+    [...byState].map(([state, slugs]) =>
+      supabase
+        .from("business_listings")
+        .select("*")
+        .not("slug", "in", PUBLIC_EXCLUDED_FILTER)
+        .eq("is_featured", true)
+        .or(activeSponsorshipFilter())
+        .eq("state", state)
+        .in("city_slug", slugs)
+        .order("rating", { ascending: false })
+        .limit(remaining + 5) // fetch a few extra to account for dedup
+    )
+  );
 
+  const neighborError = results.find((r) => r.error)?.error;
   if (neighborError) {
     console.error("getFeaturedByCity neighbor error:", neighborError.message);
     return localListings;
   }
 
-  const neighborListings: FeaturedCityListing[] = withTagsAll(
-    (neighborData ?? []) as BusinessListing[]
-  )
+  const neighborRows = results
+    .flatMap((r) => (r.data ?? []) as BusinessListing[])
+    .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+
+  const neighborListings: FeaturedCityListing[] = withTagsAll(neighborRows)
     .filter(hasKnownCity)
     .filter((l) => !localIds.has(l.id))
     .slice(0, remaining)
     .map((l) => ({ ...l, isSpillover: true }));
 
   return [...localListings, ...neighborListings];
+}
+
+/**
+ * Mobile groomers based in another city who chose this city's metro as their
+ * service area. Shown in their own labeled section, never mixed into the city's
+ * main list or its groomer count (which decides indexing).
+ */
+export async function getMobileGroomersVisitingCity(
+  citySlug: string,
+  stateAbbr: string
+): Promise<NormalizedListing[]> {
+  const cluster = getMetroClusterForCity(citySlug, stateAbbr);
+  if (!cluster) return [];
+
+  // Direct query (not the 5-minute row cache) so a groomer's new choice shows on the next page render.
+  const { data, error } = await supabase
+    .from("business_listings")
+    .select("*")
+    .not("slug", "in", PUBLIC_EXCLUDED_FILTER)
+    .eq("service_metro", cluster.slug)
+    .limit(50);
+
+  if (error) {
+    console.error("getMobileGroomersVisitingCity error:", error.message);
+    return [];
+  }
+  return applyHierarchy(
+    withTagsAll((data ?? []) as BusinessListing[])
+      .filter(hasKnownCity)
+      .filter((l) => visitsCityViaMetro(l, citySlug, stateAbbr))
+  );
 }
 
 /**

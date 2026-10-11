@@ -4,13 +4,14 @@ import { notFound } from "next/navigation";
 import { ensureCanonicalCityRoute } from "@/lib/city-route";
 import { CaretRight, MapPin, Van, Question } from "@phosphor-icons/react/dist/ssr";
 import { CityListingsClient } from "@/components/city-listings-client";
-import { getListingsByServiceTag, getCitiesByState, getCityBySlug, getFeaturedByCity } from "@/lib/supabase/queries";
+import { getListingsByServiceTag, getCitiesByState, getCityBySlug, getFeaturedByCity, getMobileGroomersVisitingCity } from "@/lib/supabase/queries";
 import { stateAbbrFromSlug, stateNameFromSlug, getNearbyCities, buildServiceCityPath, buildCityPath, isValidStateSlug } from "@/lib/geography";
-import { getMetroNeighbors } from "@/lib/metro-clusters";
+import { getMetroNeighbors, getMetroNeighborSlugs, getMetroClusterForCity } from "@/lib/metro-clusters";
 import { buildMobileGroomingFaqs } from "@/lib/city-faqs";
 import { getEnrichedCityContent } from "@/lib/city-content";
 import { serviceCityPageSchema } from "@/lib/schema";
 import { FeaturedSection } from "@/components/featured-section";
+import { VisitingMobileGroomers } from "@/components/visiting-mobile-groomers";
 import { WaveDivider } from "@/components/wave-divider";
 import { CityStatsBlock } from "@/components/city-stats-block";
 import { clampDescription, clampTitle } from "@/lib/seo-utils";
@@ -75,17 +76,19 @@ export default async function MobileGroomingCityPage({ params }: Props) {
   const stateAbbr = stateAbbrFromSlug(state);
   const stateName = stateNameFromSlug(state);
 
-  const [listings, cityData, relatedCities, featuredListings] = await Promise.all([
+  const [listings, cityData, relatedCities, featuredListings, visiting] = await Promise.all([
     getListingsByServiceTag("mobile-grooming", city, stateAbbr),
     getCityBySlug(city, stateAbbr),
     getCitiesByState(stateAbbr),
     getFeaturedByCity(city, stateAbbr),
+    getMobileGroomersVisitingCity(city, stateAbbr),
   ]);
+  const metroName = getMetroClusterForCity(city, stateAbbr)?.name ?? "";
 
   if (!cityData && !getEnrichedCityContent(stateAbbr, city)) notFound();
 
   const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
-  const nearby = getNearbyCities(city, relatedCities, getMetroNeighbors(city), 6);
+  const nearby = getNearbyCities(city, relatedCities, getMetroNeighborSlugs(city, stateAbbr), 6);
   const faqs = buildMobileGroomingFaqs(cityName, stateAbbr, listings.length);
   const hasListings = listings.length > 0;
 
@@ -116,7 +119,7 @@ export default async function MobileGroomingCityPage({ params }: Props) {
               </p>
               <CityStatsBlock
                 groomerCount={listings.length}
-                metroCityCount={getMetroNeighbors(city).length + 1}
+                metroCityCount={getMetroNeighbors(city, stateAbbr).length + 1}
                 serviceCount={new Set(listings.flatMap((l) => l.service_tags ?? [])).size}
                 lastUpdated={new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" })}
               />
@@ -138,6 +141,7 @@ export default async function MobileGroomingCityPage({ params }: Props) {
                 heading={`Mobile Groomers in ${cityName}`}
                 preFilterService="mobile-grooming"
               />
+              <VisitingMobileGroomers listings={visiting} cityName={cityName} metroName={metroName} />
             </div>
           </section>
 
@@ -178,7 +182,7 @@ export default async function MobileGroomingCityPage({ params }: Props) {
         <section className="bg-bg flex-1">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 w-full text-center">
             <p className="font-heading text-lg text-brand-primary">
-              No mobile groomers are listed in {cityName} yet.
+              No mobile groomers are {visiting.length > 0 ? "based" : "listed"} in {cityName} yet.
             </p>
             <p className="text-sm text-text-muted mt-2">
               Browse dog groomers in {cityName} instead.
@@ -189,6 +193,9 @@ export default async function MobileGroomingCityPage({ params }: Props) {
             >
               Dog groomers in {cityName}, {stateAbbr}
             </Link>
+            <div className="text-left">
+              <VisitingMobileGroomers listings={visiting} cityName={cityName} metroName={metroName} />
+            </div>
           </div>
         </section>
       )}

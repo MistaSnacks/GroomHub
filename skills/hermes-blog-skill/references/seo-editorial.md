@@ -63,7 +63,9 @@ empty results separately from tool errors.
   across directory listings.
 - Avoid filler and stock phrases such as “game-changer,” “seamless,” “delve,”
   “leverage,” “elevate,” “holistic,” “it's worth noting,” and “at the end of the day.”
-  Follow additional content rules in the current checkout.
+  Follow additional content rules in the current checkout. The humanize pass
+  (`scripts/ai_tells.py`, see [humanize](humanize.md)) checks these phrases,
+  em dashes and other AI-writing patterns mechanically.
 
 ## Report and review
 

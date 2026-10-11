@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { ArrowRight, CheckCircle, WarningCircle } from "@phosphor-icons/react";
 import { submitListing } from "./actions";
 
@@ -9,6 +10,7 @@ type Status = "idle" | "submitting" | "success" | "error";
 export function GetListedForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [result, setResult] = useState<{ slug?: string; created?: boolean }>({});
   const [isPending, startTransition] = useTransition();
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -23,6 +25,7 @@ export function GetListedForm() {
       try {
       const result = await submitListing(formData);
       if (result.ok) {
+        setResult({ slug: result.slug, created: result.created });
         setStatus("success");
       } else {
         setStatus("error");
@@ -33,6 +36,34 @@ export function GetListedForm() {
         setErrorMsg("Unable to submit right now. Your entries are still here; please try again.");
       }
     });
+  }
+
+  if (status === "success" && result.slug) {
+    return (
+      <div className="bg-white rounded-2xl border border-border p-6 md:p-8 text-center">
+        <CheckCircle weight="fill" className="w-12 h-12 text-brand-secondary mx-auto mb-4" />
+        <h2 className="font-heading text-2xl font-bold text-brand-primary mb-2">
+          {result.created ? "You're listed!" : "You're already in the directory"}
+        </h2>
+        <p className="text-text-muted mb-6">
+          {result.created
+            ? "Your free listing is live now. Create your account with the same email to manage it, add photos and hours, and get the Owner Confirmed badge."
+            : "We found your business already listed. Claim it with your account to edit it, add photos and get the Owner Confirmed badge."}
+        </p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <Link
+            href={`/claim/${result.slug}`}
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-brand-primary font-semibold hover:bg-brand-primary/90"
+            style={{ color: "#FFFFFF" }}
+          >
+            Set up my account <ArrowRight weight="bold" className="w-4 h-4" />
+          </Link>
+          <Link href={`/groomer/${result.slug}`} className="text-sm font-semibold text-brand-accent hover:underline">
+            View my listing
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   if (status === "success") {
@@ -117,7 +148,7 @@ export function GetListedForm() {
           className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full bg-brand-primary font-semibold hover:bg-brand-primary/90 transition-colors disabled:opacity-60"
           style={{ color: "#FFFFFF" }}
         >
-          {isPending ? "Submitting..." : "Submit My Business"}
+          {isPending ? "Adding..." : "Add My Business"}
           {!isPending && <ArrowRight weight="bold" className="w-4 h-4" />}
         </button>
       </form>

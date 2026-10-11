@@ -45,7 +45,7 @@ export default function GetListedPage() {
             </h1>
           </div>
           <p className="text-text-muted text-lg max-w-2xl">
-            Not in our directory yet? We&apos;d love to add you. Fill out the form below and we&apos;ll get your listing live within 48 hours.
+            Not in our directory yet? We&apos;d love to add you. Search for your business first. If you&apos;re not here, add yourself below and your free listing goes live right away.
           </p>
         </div>
       </section>
@@ -87,7 +87,7 @@ export default function GetListedPage() {
                   <h3 className="font-heading font-bold text-brand-primary">Quick Setup</h3>
                 </div>
                 <p className="text-sm text-text-muted">
-                  We&apos;ll review your submission and get your listing live within 48 hours.
+                  Your listing goes live as soon as you submit. Make an account to add photos and hours.
                 </p>
               </div>
 

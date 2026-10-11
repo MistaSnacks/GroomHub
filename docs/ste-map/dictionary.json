@@ -1,0 +1,41 @@
+{
+  "terms": [
+    {
+      "id": "listing",
+      "term": "listing",
+      "pos": "noun",
+      "meaning": "One database record for one business location."
+    },
+    {
+      "id": "claim",
+      "term": "claim",
+      "pos": "noun",
+      "meaning": "A request from an account to control a listing."
+    },
+    {
+      "id": "snapshot",
+      "term": "snapshot",
+      "pos": "noun",
+      "meaning": "A saved copy of the outreach records at one time."
+    },
+    {
+      "id": "redirect",
+      "term": "redirect",
+      "pos": "noun",
+      "meaning": "An HTTP response that sends the visitor to the kept public URL."
+    },
+    {
+      "id": "guard",
+      "term": "guard",
+      "pos": "noun",
+      "meaning": "A database condition that stops a write when a field changes."
+    },
+    {
+      "id": "backup",
+      "term": "backup",
+      "pos": "noun",
+      "meaning": "A stored copy of the records before this cleanup changes them."
+    }
+  ],
+  "loose": []
+}

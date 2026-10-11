@@ -138,7 +138,7 @@ export function renderBrandedEmail(opts: BrandedEmailOptions): string {
     <tr><td align="center">
       <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="width:600px;max-width:600px;background:${BRAND.card};border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(30,41,59,0.08);border:1px solid ${BRAND.border};">
 
-        <!-- HEADER: mirrors the site nav — light, left-aligned logo -->
+        <!-- HEADER: mirrors the site nav, light, left-aligned logo -->
         <tr>
           <td style="padding:22px 32px;border-bottom:1px solid ${BRAND.border};">
             <table role="presentation" cellpadding="0" cellspacing="0"><tr>

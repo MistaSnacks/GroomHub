@@ -1,0 +1,1124 @@
+{
+  "generated": "2026-09-30T20:32:04",
+  "thresholds": {
+    "CITY_INDEX_MIN_LISTINGS": 5,
+    "CITY_FLOOR_LISTINGS": 3,
+    "CITY_INDEX_MIN_ENRICHED": 3,
+    "CITY_SMALL_MIN_ENRICHED": 2,
+    "HUB_MIN_LISTINGS": 8,
+    "MERGE_RADIUS_MILES": 15.0,
+    "HUB_SAME_STATE_ONLY": true,
+    "PTS_PHONE": 1,
+    "PTS_WEBSITE": 1,
+    "PTS_HOURS": 1,
+    "PTS_SERVICES": 1,
+    "PTS_PRICE": 1,
+    "PTS_PHOTO_ONE": 1,
+    "PTS_PHOTO_MANY": 2,
+    "PTS_UNIQUE_DESC": 2,
+    "PTS_CLAIMED": 2,
+    "PTS_BOOKING": 1,
+    "MIN_REAL_PHOTOS": 2,
+    "UNIQUE_DESC_MIN_CHARS": 150,
+    "THUMBNAIL_MAX_PX": 200,
+    "PROFILE_INDEX_MIN_SCORE": 7,
+    "PROFILE_IMPROVE_MIN_SCORE": 4,
+    "PROFILE_ENRICHED_MIN_SCORE": 5,
+    "PROFILE_VIEW_PROTECT_MIN": 1,
+    "GSC_IMPRESSIONS_PROTECT_MIN": 1,
+    "VIEWS_WINDOW_DAYS": 90,
+    "LASTMOD_UNIFORM_SHARE": 0.9,
+    "LIVE_SAMPLE_SIZE": 8,
+    "TOP_IMPROVE_PROFILES": 30
+  },
+  "counts": {
+    "dog-grooming": {
+      "INDEX": 2,
+      "IMPROVE": 79,
+      "MERGE": 98,
+      "NOINDEX": 89
+    },
+    "cat-grooming": {
+      "INDEX": 1,
+      "IMPROVE": 8,
+      "MERGE": 8,
+      "NOINDEX": 95
+    },
+    "mobile-grooming": {
+      "MERGE": 2,
+      "NOINDEX": 34
+    },
+    "groomer": {
+      "IMPROVE": 1114,
+      "NOINDEX-UNTIL-ENRICHED": 9,
+      "INDEX": 7
+    }
+  },
+  "profiles": {
+    "total": 1130,
+    "protected_by_views_only": 475,
+    "with_any_view_90d": 1106,
+    "template_description": 1070,
+    "score_distribution": {
+      "0": 4,
+      "1": 20,
+      "2": 165,
+      "3": 295,
+      "4": 607,
+      "5": 22,
+      "6": 10,
+      "7": 3,
+      "8": 3,
+      "12": 1
+    },
+    "views_window_days": 90,
+    "views_include_bots": true
+  },
+  "hubs": [
+    {
+      "hub": "Salem",
+      "hub_key": "OR:salem",
+      "hub_listings": 16,
+      "absorbs": [
+        {
+          "city": "Silverton",
+          "listings": 4,
+          "miles": 14.0,
+          "currently_indexable": true
+        },
+        {
+          "city": "Dallas",
+          "listings": 2,
+          "miles": 12.1,
+          "currently_indexable": false
+        },
+        {
+          "city": "Monmouth",
+          "listings": 2,
+          "miles": 10.4,
+          "currently_indexable": false
+        },
+        {
+          "city": "Stayton",
+          "listings": 2,
+          "miles": 13.5,
+          "currently_indexable": false
+        },
+        {
+          "city": "Aumsville",
+          "listings": 1,
+          "miles": 8.1,
+          "currently_indexable": false
+        },
+        {
+          "city": "Independence",
+          "listings": 1,
+          "miles": 8.3,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Bellevue",
+      "hub_key": "WA:bellevue",
+      "hub_listings": 10,
+      "absorbs": [
+        {
+          "city": "Issaquah",
+          "listings": 4,
+          "miles": 7.3,
+          "currently_indexable": true
+        },
+        {
+          "city": "Carnation",
+          "listings": 3,
+          "miles": 12.1,
+          "currently_indexable": true
+        },
+        {
+          "city": "Sammamish",
+          "listings": 2,
+          "miles": 5.8,
+          "currently_indexable": false
+        },
+        {
+          "city": "Mercer Island",
+          "listings": 1,
+          "miles": 4.5,
+          "currently_indexable": false
+        },
+        {
+          "city": "Newcastle",
+          "listings": 1,
+          "miles": 5.5,
+          "currently_indexable": false
+        },
+        {
+          "city": "Union Hill-Novelty Hill",
+          "listings": 1,
+          "miles": 7.4,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Spokane",
+      "hub_key": "WA:spokane",
+      "hub_listings": 18,
+      "absorbs": [
+        {
+          "city": "Cheney",
+          "listings": 4,
+          "miles": 14.5,
+          "currently_indexable": true
+        },
+        {
+          "city": "Airway Heights",
+          "listings": 1,
+          "miles": 9.2,
+          "currently_indexable": false
+        },
+        {
+          "city": "Fairwood",
+          "listings": 1,
+          "miles": 4.9,
+          "currently_indexable": false
+        },
+        {
+          "city": "Mead",
+          "listings": 1,
+          "miles": 5.3,
+          "currently_indexable": false
+        },
+        {
+          "city": "Nine Mile Falls",
+          "listings": 1,
+          "miles": 10.2,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Monroe",
+      "hub_key": "WA:monroe",
+      "hub_listings": 10,
+      "absorbs": [
+        {
+          "city": "Snohomish",
+          "listings": 4,
+          "miles": 7.6,
+          "currently_indexable": true
+        },
+        {
+          "city": "Mill Creek",
+          "listings": 3,
+          "miles": 10.0,
+          "currently_indexable": true
+        },
+        {
+          "city": "Duvall",
+          "listings": 2,
+          "miles": 9.2,
+          "currently_indexable": false
+        },
+        {
+          "city": "Gold Bar",
+          "listings": 1,
+          "miles": 11.8,
+          "currently_indexable": false
+        },
+        {
+          "city": "Sultan",
+          "listings": 1,
+          "miles": 6.9,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Lake Oswego",
+      "hub_key": "OR:lake-oswego",
+      "hub_listings": 8,
+      "absorbs": [
+        {
+          "city": "Happy Valley",
+          "listings": 3,
+          "miles": 5.5,
+          "currently_indexable": true
+        },
+        {
+          "city": "West Linn",
+          "listings": 3,
+          "miles": 2.2,
+          "currently_indexable": true
+        },
+        {
+          "city": "Clackamas",
+          "listings": 2,
+          "miles": 4.6,
+          "currently_indexable": false
+        },
+        {
+          "city": "Gladstone",
+          "listings": 1,
+          "miles": 4.1,
+          "currently_indexable": false
+        },
+        {
+          "city": "Oak Grove",
+          "listings": 1,
+          "miles": 2.1,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Kent",
+      "hub_key": "WA:kent",
+      "hub_listings": 8,
+      "absorbs": [
+        {
+          "city": "Maple Valley",
+          "listings": 3,
+          "miles": 8.6,
+          "currently_indexable": true
+        },
+        {
+          "city": "SeaTac",
+          "listings": 3,
+          "miles": 7.7,
+          "currently_indexable": true
+        },
+        {
+          "city": "Tukwila",
+          "listings": 2,
+          "miles": 5.9,
+          "currently_indexable": false
+        },
+        {
+          "city": "Covington",
+          "listings": 1,
+          "miles": 5.0,
+          "currently_indexable": false
+        },
+        {
+          "city": "Des Moines",
+          "listings": 1,
+          "miles": 5.7,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Yakima",
+      "hub_key": "WA:yakima",
+      "hub_listings": 14,
+      "absorbs": [
+        {
+          "city": "Moxee",
+          "listings": 1,
+          "miles": 8.2,
+          "currently_indexable": false
+        },
+        {
+          "city": "Naches",
+          "listings": 1,
+          "miles": 5.3,
+          "currently_indexable": false
+        },
+        {
+          "city": "Selah",
+          "listings": 1,
+          "miles": 7.3,
+          "currently_indexable": false
+        },
+        {
+          "city": "Union Gap",
+          "listings": 1,
+          "miles": 3.9,
+          "currently_indexable": false
+        },
+        {
+          "city": "Wapato",
+          "listings": 1,
+          "miles": 12.5,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Tigard",
+      "hub_key": "OR:tigard",
+      "hub_listings": 8,
+      "absorbs": [
+        {
+          "city": "Newberg",
+          "listings": 4,
+          "miles": 12.7,
+          "currently_indexable": true
+        },
+        {
+          "city": "Tualatin",
+          "listings": 3,
+          "miles": 3.8,
+          "currently_indexable": true
+        },
+        {
+          "city": "Wilsonville",
+          "listings": 3,
+          "miles": 9.5,
+          "currently_indexable": true
+        },
+        {
+          "city": "King City",
+          "listings": 1,
+          "miles": 2.1,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Gresham",
+      "hub_key": "OR:gresham",
+      "hub_listings": 8,
+      "absorbs": [
+        {
+          "city": "Sandy",
+          "listings": 4,
+          "miles": 10.3,
+          "currently_indexable": true
+        },
+        {
+          "city": "Boring",
+          "listings": 1,
+          "miles": 5.1,
+          "currently_indexable": false
+        },
+        {
+          "city": "Eagle Creek",
+          "listings": 1,
+          "miles": 12.0,
+          "currently_indexable": false
+        },
+        {
+          "city": "Troutdale",
+          "listings": 1,
+          "miles": 1.9,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Vancouver",
+      "hub_key": "WA:vancouver",
+      "hub_listings": 21,
+      "absorbs": [
+        {
+          "city": "Washougal",
+          "listings": 4,
+          "miles": 12.0,
+          "currently_indexable": true
+        },
+        {
+          "city": "Battle Ground",
+          "listings": 3,
+          "miles": 9.0,
+          "currently_indexable": true
+        },
+        {
+          "city": "Ridgefield",
+          "listings": 2,
+          "miles": 10.1,
+          "currently_indexable": false
+        },
+        {
+          "city": "Brush Prairie",
+          "listings": 1,
+          "miles": 5.6,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Puyallup",
+      "hub_key": "WA:puyallup",
+      "hub_listings": 14,
+      "absorbs": [
+        {
+          "city": "Buckley",
+          "listings": 2,
+          "miles": 11.0,
+          "currently_indexable": false
+        },
+        {
+          "city": "Edgewood",
+          "listings": 2,
+          "miles": 5.0,
+          "currently_indexable": false
+        },
+        {
+          "city": "Orting",
+          "listings": 1,
+          "miles": 5.9,
+          "currently_indexable": false
+        },
+        {
+          "city": "Sumner",
+          "listings": 1,
+          "miles": 5.1,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Albany",
+      "hub_key": "OR:albany",
+      "hub_listings": 11,
+      "absorbs": [
+        {
+          "city": "Lebanon",
+          "listings": 4,
+          "miles": 11.7,
+          "currently_indexable": true
+        },
+        {
+          "city": "Adair Village",
+          "listings": 1,
+          "miles": 5.7,
+          "currently_indexable": false
+        },
+        {
+          "city": "Philomath",
+          "listings": 1,
+          "miles": 14.5,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Longview",
+      "hub_key": "WA:longview",
+      "hub_listings": 10,
+      "absorbs": [
+        {
+          "city": "Kalama",
+          "listings": 4,
+          "miles": 11.9,
+          "currently_indexable": true
+        },
+        {
+          "city": "Castle Rock",
+          "listings": 1,
+          "miles": 10.9,
+          "currently_indexable": false
+        },
+        {
+          "city": "Kelso",
+          "listings": 1,
+          "miles": 3.1,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Bellingham",
+      "hub_key": "WA:bellingham",
+      "hub_listings": 15,
+      "absorbs": [
+        {
+          "city": "Lynden",
+          "listings": 4,
+          "miles": 9.3,
+          "currently_indexable": true
+        },
+        {
+          "city": "Ferndale",
+          "listings": 3,
+          "miles": 8.8,
+          "currently_indexable": true
+        },
+        {
+          "city": "Everson",
+          "listings": 1,
+          "miles": 7.6,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Richland",
+      "hub_key": "WA:richland",
+      "hub_listings": 8,
+      "absorbs": [
+        {
+          "city": "Pasco",
+          "listings": 4,
+          "miles": 4.2,
+          "currently_indexable": true
+        },
+        {
+          "city": "West Richland",
+          "listings": 3,
+          "miles": 3.4,
+          "currently_indexable": true
+        },
+        {
+          "city": "Benton City",
+          "listings": 2,
+          "miles": 9.1,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Seattle",
+      "hub_key": "WA:seattle",
+      "hub_listings": 51,
+      "absorbs": [
+        {
+          "city": "Edmonds",
+          "listings": 3,
+          "miles": 9.8,
+          "currently_indexable": true
+        },
+        {
+          "city": "Mountlake Terrace",
+          "listings": 3,
+          "miles": 10.7,
+          "currently_indexable": true
+        },
+        {
+          "city": "Kenmore",
+          "listings": 1,
+          "miles": 9.2,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Medford",
+      "hub_key": "OR:medford",
+      "hub_listings": 14,
+      "absorbs": [
+        {
+          "city": "Ashland",
+          "listings": 2,
+          "miles": 13.4,
+          "currently_indexable": false
+        },
+        {
+          "city": "Eagle Point",
+          "listings": 2,
+          "miles": 8.1,
+          "currently_indexable": false
+        },
+        {
+          "city": "White City",
+          "listings": 2,
+          "miles": 4.0,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Yelm",
+      "hub_key": "WA:yelm",
+      "hub_listings": 9,
+      "absorbs": [
+        {
+          "city": "Eatonville",
+          "listings": 2,
+          "miles": 10.9,
+          "currently_indexable": false
+        },
+        {
+          "city": "McKenna",
+          "listings": 1,
+          "miles": 1.5,
+          "currently_indexable": false
+        },
+        {
+          "city": "Rainier",
+          "listings": 1,
+          "miles": 6.1,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Lakewood",
+      "hub_key": "WA:lakewood",
+      "hub_listings": 10,
+      "absorbs": [
+        {
+          "city": "University Place",
+          "listings": 4,
+          "miles": 3.4,
+          "currently_indexable": true
+        },
+        {
+          "city": "DuPont",
+          "listings": 1,
+          "miles": 7.7,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Bremerton",
+      "hub_key": "WA:bremerton",
+      "hub_listings": 8,
+      "absorbs": [
+        {
+          "city": "Bainbridge Island",
+          "listings": 3,
+          "miles": 7.4,
+          "currently_indexable": true
+        },
+        {
+          "city": "Silverdale",
+          "listings": 3,
+          "miles": 4.9,
+          "currently_indexable": true
+        }
+      ]
+    },
+    {
+      "hub": "Auburn",
+      "hub_key": "WA:auburn",
+      "hub_listings": 8,
+      "absorbs": [
+        {
+          "city": "Enumclaw",
+          "listings": 3,
+          "miles": 13.1,
+          "currently_indexable": true
+        },
+        {
+          "city": "Black Diamond",
+          "listings": 1,
+          "miles": 10.0,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Spokane Valley",
+      "hub_key": "WA:spokane-valley",
+      "hub_listings": 11,
+      "absorbs": [
+        {
+          "city": "Liberty Lake",
+          "listings": 3,
+          "miles": 6.7,
+          "currently_indexable": true
+        },
+        {
+          "city": "Millwood",
+          "listings": 3,
+          "miles": 2.2,
+          "currently_indexable": true
+        }
+      ]
+    },
+    {
+      "hub": "Hillsboro",
+      "hub_key": "OR:hillsboro",
+      "hub_listings": 10,
+      "absorbs": [
+        {
+          "city": "Cornelius",
+          "listings": 2,
+          "miles": 6.2,
+          "currently_indexable": false
+        },
+        {
+          "city": "Gaston",
+          "listings": 1,
+          "miles": 11.9,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Roseburg",
+      "hub_key": "OR:roseburg",
+      "hub_listings": 12,
+      "absorbs": [
+        {
+          "city": "Sutherlin",
+          "listings": 2,
+          "miles": 13.3,
+          "currently_indexable": false
+        },
+        {
+          "city": "Winston",
+          "listings": 1,
+          "miles": 6.0,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Grants Pass",
+      "hub_key": "OR:grants-pass",
+      "hub_listings": 15,
+      "absorbs": [
+        {
+          "city": "Merlin",
+          "listings": 1,
+          "miles": 9.5,
+          "currently_indexable": false
+        },
+        {
+          "city": "Rogue River",
+          "listings": 1,
+          "miles": 8.3,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Stanwood",
+      "hub_key": "WA:stanwood",
+      "hub_listings": 8,
+      "absorbs": [
+        {
+          "city": "Camano",
+          "listings": 1,
+          "miles": 3.9,
+          "currently_indexable": false
+        },
+        {
+          "city": "Mount Vernon",
+          "listings": 1,
+          "miles": 11.3,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Port Orchard",
+      "hub_key": "WA:port-orchard",
+      "hub_listings": 8,
+      "absorbs": [
+        {
+          "city": "Vashon",
+          "listings": 3,
+          "miles": 9.4,
+          "currently_indexable": true
+        }
+      ]
+    },
+    {
+      "hub": "Olympia",
+      "hub_key": "WA:olympia",
+      "hub_listings": 13,
+      "absorbs": [
+        {
+          "city": "Tumwater",
+          "listings": 2,
+          "miles": 4.2,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Eugene",
+      "hub_key": "OR:eugene",
+      "hub_listings": 15,
+      "absorbs": [
+        {
+          "city": "Junction City",
+          "listings": 1,
+          "miles": 11.1,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Springfield",
+      "hub_key": "OR:springfield",
+      "hub_listings": 8,
+      "absorbs": [
+        {
+          "city": "Pleasant Hill",
+          "listings": 1,
+          "miles": 7.1,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Port Angeles",
+      "hub_key": "WA:port-angeles",
+      "hub_listings": 11,
+      "absorbs": [
+        {
+          "city": "Carlsborg",
+          "listings": 1,
+          "miles": 12.1,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Tacoma",
+      "hub_key": "WA:tacoma",
+      "hub_listings": 22,
+      "absorbs": [
+        {
+          "city": "Fircrest",
+          "listings": 1,
+          "miles": 3.7,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Anacortes",
+      "hub_key": "WA:anacortes",
+      "hub_listings": 8,
+      "absorbs": [
+        {
+          "city": "La Conner",
+          "listings": 1,
+          "miles": 9.1,
+          "currently_indexable": false
+        }
+      ]
+    },
+    {
+      "hub": "Poulsbo",
+      "hub_key": "WA:poulsbo",
+      "hub_listings": 8,
+      "absorbs": [
+        {
+          "city": "Port Ludlow",
+          "listings": 1,
+          "miles": 13.2,
+          "currently_indexable": false
+        }
+      ]
+    }
+  ],
+  "sitemap": {
+    "index_lastmods": [
+      "2026-09-02",
+      "2026-09-02",
+      "2026-09-02"
+    ],
+    "children": {
+      "https://groomlocal.com/sitemap/0.xml": {
+        "status": 200,
+        "types": {
+          "other": 68
+        },
+        "lastmod": {
+          "urls": 68,
+          "with_lastmod": 68,
+          "top_value": "2026-09-02",
+          "top_share": 0.691,
+          "uniform": false
+        }
+      },
+      "https://groomlocal.com/sitemap/1.xml": {
+        "status": 200,
+        "types": {
+          "groomer": 1130
+        },
+        "lastmod": {
+          "urls": 1130,
+          "with_lastmod": 1130,
+          "top_value": "2026-09-02",
+          "top_share": 1.0,
+          "uniform": true
+        }
+      },
+      "https://groomlocal.com/sitemap/2.xml": {
+        "status": 200,
+        "types": {
+          "dog-grooming": 131,
+          "cat-grooming": 17,
+          "mobile-grooming": 2
+        },
+        "lastmod": {
+          "urls": 150,
+          "with_lastmod": 150,
+          "top_value": "2026-09-02",
+          "top_share": 1.0,
+          "uniform": true
+        }
+      }
+    },
+    "total_urls": 1348,
+    "urls_in_sitemap_with_non_index_verdict": 69,
+    "non_index_by_verdict": {
+      "MERGE": 41,
+      "NOINDEX": 19,
+      "NOINDEX-UNTIL-ENRICHED": 9
+    },
+    "non_index_examples": [
+      "/cat-grooming/or/salem",
+      "/cat-grooming/or/tigard",
+      "/cat-grooming/wa/federal-way",
+      "/cat-grooming/wa/kent",
+      "/cat-grooming/wa/kirkland",
+      "/cat-grooming/wa/lakewood",
+      "/cat-grooming/wa/renton",
+      "/cat-grooming/wa/richland",
+      "/dog-grooming/or/coos-bay",
+      "/dog-grooming/or/happy-valley",
+      "/dog-grooming/or/hermiston",
+      "/dog-grooming/or/lebanon",
+      "/dog-grooming/or/newberg",
+      "/dog-grooming/or/newport",
+      "/dog-grooming/or/north-bend",
+      "/dog-grooming/or/ontario",
+      "/dog-grooming/or/sandy",
+      "/dog-grooming/or/seaside",
+      "/dog-grooming/or/silverton",
+      "/dog-grooming/or/st-helens",
+      "/dog-grooming/or/sweet-home",
+      "/dog-grooming/or/the-dalles",
+      "/dog-grooming/or/tualatin",
+      "/dog-grooming/or/west-linn",
+      "/dog-grooming/or/wilsonville"
+    ],
+    "sitemap_urls_not_matching_any_page": [],
+    "index_verdict_pages_missing_from_sitemap": [],
+    "listing_table_has_updated_at": false,
+    "smallest_40_city_pages_count_distribution": {
+      "3": 33,
+      "4": 7
+    }
+  },
+  "live_samples": [
+    {
+      "url": "https://groomlocal.com/dog-grooming/or/coos-bay",
+      "status": 200,
+      "db_count": 3,
+      "shown_count": 3,
+      "robots": "",
+      "canonical": "https://groomlocal.com/dog-grooming/or/coos-bay",
+      "csr_bailout": true,
+      "groomer_anchor_links": 0,
+      "jsonld_list_items": 7
+    },
+    {
+      "url": "https://groomlocal.com/dog-grooming/or/happy-valley",
+      "status": 200,
+      "db_count": 3,
+      "shown_count": 3,
+      "robots": "",
+      "canonical": "https://groomlocal.com/dog-grooming/or/happy-valley",
+      "csr_bailout": true,
+      "groomer_anchor_links": 0,
+      "jsonld_list_items": 7
+    },
+    {
+      "url": "https://groomlocal.com/dog-grooming/or/hermiston",
+      "status": 200,
+      "db_count": 3,
+      "shown_count": 3,
+      "robots": "",
+      "canonical": "https://groomlocal.com/dog-grooming/or/hermiston",
+      "csr_bailout": true,
+      "groomer_anchor_links": 0,
+      "jsonld_list_items": 7
+    },
+    {
+      "url": "https://groomlocal.com/dog-grooming/or/newport",
+      "status": 200,
+      "db_count": 3,
+      "shown_count": 3,
+      "robots": "",
+      "canonical": "https://groomlocal.com/dog-grooming/or/newport",
+      "csr_bailout": true,
+      "groomer_anchor_links": 0,
+      "jsonld_list_items": 7
+    },
+    {
+      "url": "https://groomlocal.com/dog-grooming/or/north-bend",
+      "status": 200,
+      "db_count": 3,
+      "shown_count": 3,
+      "robots": "",
+      "canonical": "https://groomlocal.com/dog-grooming/or/north-bend",
+      "csr_bailout": true,
+      "groomer_anchor_links": 0,
+      "jsonld_list_items": 7
+    },
+    {
+      "url": "https://groomlocal.com/dog-grooming/or/ontario",
+      "status": 200,
+      "db_count": 3,
+      "shown_count": 3,
+      "robots": "",
+      "canonical": "https://groomlocal.com/dog-grooming/or/ontario",
+      "csr_bailout": true,
+      "groomer_anchor_links": 0,
+      "jsonld_list_items": 7
+    },
+    {
+      "url": "https://groomlocal.com/dog-grooming/or/portland",
+      "status": 200,
+      "db_count": 30,
+      "shown_count": 30,
+      "robots": "",
+      "canonical": "https://groomlocal.com/dog-grooming/or/portland",
+      "csr_bailout": true,
+      "groomer_anchor_links": 0,
+      "jsonld_list_items": 24
+    },
+    {
+      "url": "https://groomlocal.com/dog-grooming/wa/seattle",
+      "status": 200,
+      "db_count": 51,
+      "shown_count": 51,
+      "robots": "",
+      "canonical": "https://groomlocal.com/dog-grooming/wa/seattle",
+      "csr_bailout": true,
+      "groomer_anchor_links": 0,
+      "jsonld_list_items": 24
+    }
+  ],
+  "facets": {
+    "facet_link_emitters": [
+      "src/app/specialties/[slug]/page.tsx:158",
+      "src/app/services/[slug]/page.tsx:211"
+    ],
+    "facet_links_from_hubs": {
+      "services": 569,
+      "specialties": 213
+    },
+    "facet_links_to_noindex_city_pages": 272,
+    "facet_links_where_filter_matches_every_listing": 361,
+    "full_groom_is_default_tag": true,
+    "city_page_reads_searchParams_server_side": false,
+    "city_page_canonical_strips_params": true,
+    "robots_txt_blocks_params": false,
+    "x_robots_tag_for_params": false,
+    "client_filter_uses_router_replace": true,
+    "live": {
+      "sample": "https://groomlocal.com/dog-grooming/or/canby",
+      "canonical_status": 200,
+      "facet_status": 200,
+      "junk_facet_status": 200,
+      "facet_html_identical_to_canonical": true,
+      "junk_facet_html_identical_to_canonical": true,
+      "facet_canonical": "https://groomlocal.com/dog-grooming/or/canby",
+      "facet_robots": "",
+      "csr_bailout": true,
+      "groomer_anchor_links": 0
+    }
+  },
+  "legacy_cities_table": {
+    "rows": 275,
+    "rows_with_count_mismatch": 275,
+    "note": "Site derives cities from business_listings; the cities table is not used for counts."
+  },
+  "stale_city_enrichment_counts": 26,
+  "featured_listings": 0,
+  "caveat": "Do not ship structural changes (bulk noindex, merges, redirects, sitemap pruning) until Google's September 2026 spam update finishes rolling out (expected around Oct 8, 2026). Changing many URLs mid-rollout makes it impossible to tell our changes from the update."
+}

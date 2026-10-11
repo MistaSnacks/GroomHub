@@ -4,10 +4,17 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { sendEmail } from "@/lib/email/send";
 import { headers } from "next/headers";
 import { rateLimit, clientKey } from "@/lib/rate-limit";
+import { createListingFromSubmission } from "@/lib/listing-create";
+import { isDisposableEmail } from "@/lib/claims";
+import { revalidatePath, updateTag } from "next/cache";
 
 interface SubmitResult {
   ok: boolean;
   error?: string;
+  /** The live listing the submitter should claim next. Missing if creation failed and the row waits for an admin. */
+  slug?: string;
+  /** False when the business was already listed and we pointed them at the existing page. */
+  created?: boolean;
 }
 
 interface SubmissionRow {
@@ -27,7 +34,7 @@ function clean(value: unknown, max = 500): string {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
 }
 
-async function notify(r: SubmissionRow, submissionId: string): Promise<void> {
+async function notify(r: SubmissionRow, submissionId: string, listing: { slug?: string; created?: boolean }): Promise<void> {
   const to = process.env.LISTING_NOTIFY_EMAIL;
   if (!to) {
     console.error(JSON.stringify({ scope: "email", site: "listing_submission", ok: false, error: "missing LISTING_NOTIFY_EMAIL", submissionId }));
@@ -36,9 +43,14 @@ async function notify(r: SubmissionRow, submissionId: string): Promise<void> {
   await sendEmail({
     site: "listing_submission",
     to,
-    subject: `New listing submission: ${r.business_name}`,
+    subject: listing.slug
+      ? `${listing.created ? "New listing live" : "Existing listing matched"}: ${r.business_name}`
+      : `Listing submission needs manual setup: ${r.business_name}`,
     replyTo: r.email,
     text: [
+      listing.slug
+        ? `${listing.created ? "Created and live" : "Already listed"}: https://groomlocal.com/groomer/${listing.slug}\nThe submitter was sent to claim it. If it is spam, delete the row in business_listings.\n`
+        : "Automatic listing creation failed. Create it by hand from the admin inbox.\n",
       `Business: ${r.business_name}`,
       `Contact: ${r.contact_name || "N/A"}`,
       `Location: ${r.city}, ${r.state}`,
@@ -99,6 +111,10 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
     return { ok: false, error: "Please enter a valid email address." };
   }
 
+  if (isDisposableEmail(email)) {
+    return { ok: false, error: "Please use your business or personal email, not a temporary inbox." };
+  }
+
   const supabase = createAdminClient();
 
   const row: SubmissionRow = {
@@ -119,7 +135,20 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
     return { ok: false, error: "Something went wrong. Please try again." };
   }
 
-  await notify(row, data.id as string);
+  const submissionId = data.id as string;
+  const created = await createListingFromSubmission(supabase, row);
+  if (!created.ok) {
+    console.error(JSON.stringify({ scope: "listing_submission", event: "listing_create_failed", submissionId, error: created.error }));
+    await notify(row, submissionId, {});
+    return { ok: true };
+  }
 
-  return { ok: true };
+  await supabase.from("listing_submissions").update({ status: "handled" }).eq("id", submissionId);
+  if (created.created) {
+    updateTag("listings");
+    revalidatePath(`/groomer/${created.slug}`);
+  }
+  await notify(row, submissionId, created);
+
+  return { ok: true, slug: created.slug, created: created.created };
 }

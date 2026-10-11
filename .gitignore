@@ -76,3 +76,6 @@ __pycache__/
 
 # outreach contact lists are business data, not source
 /outreach/contacted-list.md
+
+# admin console: cached copy of the outreach list (business contact emails)
+/.admin-cache/

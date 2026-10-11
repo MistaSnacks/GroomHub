@@ -15,6 +15,8 @@ export interface SendEmailInput {
   html?: string;
   text?: string;
   replyTo?: string;
+  /** Extra message headers, e.g. List-Unsubscribe. */
+  headers?: Record<string, string>;
   /** Extra identifiers for the log line (listing slug, row id). Never PII. */
   context?: Record<string, string | number | boolean | null | undefined>;
 }
@@ -79,6 +81,7 @@ export async function sendEmail(input: SendEmailInput): Promise<SendEmailResult>
         ...(input.html ? { html: input.html } : {}),
         ...(input.text ? { text: input.text } : {}),
         ...(input.replyTo ? { reply_to: input.replyTo } : {}),
+        ...(input.headers ? { headers: input.headers } : {}),
       }),
       signal: AbortSignal.timeout(10_000),
     });

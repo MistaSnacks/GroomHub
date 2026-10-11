@@ -7,7 +7,10 @@
 screenshots
 temp_scripts
 grill-me-v1-takeaways
-outreach
+# Root folder only: an unanchored name also dropped src/app/admin/dashboard/outreach.
+/outreach
+# Private outreach snapshots and cleanup evidence stay on the owner's machine.
+/.admin-cache
 *.log
 *.mp4
 *.tsbuildinfo

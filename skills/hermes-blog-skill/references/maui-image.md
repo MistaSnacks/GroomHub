@@ -23,7 +23,7 @@ Invocation:
 /maui-image <slug> "<scene description>"
 ```
 
-Use a kebab-case illustration identifier and a short description of Maui's action, pose, and relevant props. Match the article's subject; choose a simple scene from the supplied article when no scene is specified. Ask only when the subject or intended scene cannot be inferred. Keep appearance rules in the canonical base prompt.
+Use a kebab-case illustration identifier and a short description of Maui's action and relevant props (what he is doing with them, not just standing beside them); the art loop's pose rotation supplies the body position, including bipedal poses, unless a pose is required. Match the article's subject; choose a simple scene from the supplied article when no scene is specified. Ask only when the subject or intended scene cannot be inferred. Keep appearance rules in the canonical base prompt.
 
 From the project root, the existing helper is:
 

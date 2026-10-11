@@ -57,7 +57,7 @@ export default async function ClaimSuccessPage({
                             Your claim is under review
                         </h1>
                         <p className="text-lg text-text-muted mb-4">
-                            Thanks for claiming <strong className="text-brand-primary">{listing.name}</strong>. Because your account email is not at the business&apos;s website domain, a person will verify the claim before editing is unlocked. This usually takes one business day.
+                            Thanks for claiming <strong className="text-brand-primary">{listing.name}</strong>. Your email does not look connected to this business, so a person will check the claim before editing is unlocked. This usually takes one business day.
                         </p>
                         <p className="text-sm text-text-muted mb-8 max-w-md mx-auto">
                             You will get an email at {user.email} when it is approved. Nothing else is needed from you.

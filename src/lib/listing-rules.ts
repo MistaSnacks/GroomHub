@@ -11,6 +11,38 @@
 export interface SponsorshipFields {
   is_featured?: boolean | null;
   sponsor_paid_until?: string | null;
+  /** True for a free promotional spot. Looks sponsored to visitors but is not a paying seat. */
+  sponsor_comp?: boolean | null;
+}
+
+/**
+ * End of the one-time free promo window: 11:59 pm Pacific on 2026-12-31.
+ * A comped spot carries this as `sponsor_paid_until`, so `isSponsored` and
+ * `activeSponsorshipFilter` drop it automatically with no job to run.
+ */
+export const FREE_PROMO_ENDS_AT = "2027-01-01T08:00:00.000Z";
+
+/** Columns that take a listing out of any sponsored placement, comped or paid. */
+export const NO_PLACEMENT = {
+  is_featured: false,
+  subscription_tier: "free",
+  sponsor_paid_until: null,
+  sponsor_comp: false,
+} as const;
+
+export type FreePromoResult =
+  | { ok: true; fields: { is_featured: true; subscription_tier: "premium"; sponsor_paid_until: string; sponsor_comp: true } }
+  | { ok: false; error: string };
+
+/** The columns for a free promo spot, or an error once the promo window has closed. */
+export function freePromoPlacement(now: number = Date.now()): FreePromoResult {
+  if (now >= Date.parse(FREE_PROMO_ENDS_AT)) {
+    return { ok: false, error: "The free promo window ended on December 31, 2026. Set a paid placement by hand instead." };
+  }
+  return {
+    ok: true,
+    fields: { is_featured: true, subscription_tier: "premium", sponsor_paid_until: FREE_PROMO_ENDS_AT, sponsor_comp: true },
+  };
 }
 
 /**

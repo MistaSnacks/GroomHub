@@ -26,7 +26,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2.5 group">
             <div className="flex h-12 w-12 items-center justify-center rounded-full overflow-hidden border-[2.5px] border-brand-secondary flex-shrink-0">
-              <Image src="/maui-logo.svg" alt="GroomLocal" width={48} height={48} className="h-full w-full object-cover" />
+              <Image src="/maui-logo-circle.svg" alt="GroomLocal" width={48} height={48} className="h-full w-full object-cover" />
             </div>
             <span className="font-heading text-2xl font-bold text-brand-primary">GroomLocal</span>
           </Link>
