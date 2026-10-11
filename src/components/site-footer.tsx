@@ -93,6 +93,12 @@ export function SiteFooter() {
           <p className="text-xs text-slate-600">
             &copy; {new Date().getFullYear()} GroomLocal. Made with <Heart weight="fill" className="inline h-3 w-3 text-fun-pop" /> in the PNW
           </p>
+          <p className="text-xs text-slate-600">
+            Site by McMathematics · Powered by{" "}
+            <a href="https://snackboxcms.com" target="_blank" rel="noopener" className="hover:text-slate-900 underline-offset-2 hover:underline">
+              SnackBox
+            </a>
+          </p>
         </div>
       </div>
     </footer>
