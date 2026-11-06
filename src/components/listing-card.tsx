@@ -218,7 +218,7 @@ function HorizontalCard({
 }) {
   return (
     <article
-      className="relative bg-white rounded-xl border border-border group hover:shadow-md transition-all animate-fade-slide-up"
+      className="relative bg-white rounded-xl border border-border group hover:shadow-md has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-brand-accent transition-all animate-fade-slide-up"
       style={{ animationDelay: `${index * 60}ms` }}
     >
       <div className="flex flex-col sm:flex-row h-full">
@@ -235,7 +235,7 @@ function HorizontalCard({
             </div>
           )}
           {listing.logo_url && (
-            <div className="absolute top-2 left-2 z-10 w-8 h-8 rounded-lg overflow-hidden border-2 border-white shadow-sm bg-white">
+            <div className="pointer-events-none absolute top-2 left-2 z-10 w-8 h-8 rounded-lg overflow-hidden border-2 border-white shadow-sm bg-white">
               <Image src={listing.logo_url} alt="" fill className="object-cover" sizes="32px" />
             </div>
           )}

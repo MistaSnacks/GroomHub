@@ -27,7 +27,6 @@ export interface GuideLink {
 }
 
 export type LinkContext =
-  | { kind: "home" }
   | { kind: "city"; state: string; citySlug: string; cityName: string; hasMobile: boolean }
   | { kind: "groomer"; state: string; citySlug: string; cityName: string; isMobile: boolean }
   | { kind: "service"; slug: string }
@@ -43,23 +42,23 @@ function guide(slug: GuideSlug, anchor: string, sentence: string): GuideLink {
 
 const MOBILE_COST_ANCHOR = "mobile dog grooming cost";
 
-const HOME_LINKS: readonly GuideLink[] = [
-  guide(COST, "what a dog groom costs in Washington and Oregon", `Read ${LINK_TOKEN}.`),
-  guide(MOBILE, MOBILE_COST_ANCHOR, `Read ${LINK_TOKEN}.`),
-  guide("dog-nail-trimming-cost-guide", "dog nail trimming cost", `Read ${LINK_TOKEN}.`),
-  guide("how-much-to-tip-dog-groomer", "how much to tip a dog groomer", `Read ${LINK_TOKEN}.`),
-];
+/** Home page cards, in order. The cards use each post's title as the anchor. */
+const HOME_GUIDES: readonly GuideSlug[] = [COST, MOBILE, "dog-nail-trimming-cost-guide", "how-much-to-tip-dog-groomer"];
+
+export function homeGuideSlugs(published: ReadonlySet<string>): GuideSlug[] {
+  return HOME_GUIDES.filter((slug) => published.has(slug));
+}
 
 const SERVICE_LINKS: Readonly<Record<string, readonly GuideLink[]>> = {
   "mobile-grooming": [
     guide(MOBILE, MOBILE_COST_ANCHOR, `See our guide to ${LINK_TOKEN} for typical prices and what drives them.`),
   ],
   "dog-bath": [
-    guide(COST, "dog bath prices in Seattle and Portland", `See typical bath prices in our guide to ${LINK_TOKEN}.`),
+    guide(COST, "dog bath prices", `See typical ${LINK_TOKEN} by dog size in Seattle and Portland.`),
     guide(MOBILE, "mobile dog wash prices", `Prefer a bath at your door? See ${LINK_TOKEN}.`),
   ],
   "self-wash": [
-    guide(COST, "dog bath prices in Seattle and Portland", `To compare with a groomer's bath, see ${LINK_TOKEN}.`),
+    guide(COST, "what a groomer charges for a bath", `To compare with a self-serve wash, see ${LINK_TOKEN}.`),
   ],
   "nail-care": [
     guide("dog-nail-trimming-cost-guide", "dog nail trimming cost", `See our guide to ${LINK_TOKEN} for typical prices.`),
@@ -120,10 +119,10 @@ const SPECIALTY_LINKS: Readonly<Record<string, readonly GuideLink[]>> = {
     guide("cat-grooming-what-to-expect", "what to expect at a cat grooming appointment", `First time with a cat? Read ${LINK_TOKEN}.`),
   ],
   "small-dogs": [
-    guide(COST, "what small dogs cost to groom", `For typical prices by dog size, see ${LINK_TOKEN}.`),
+    guide(COST, "small dog grooming prices", `For typical prices by dog size, see ${LINK_TOKEN}.`),
   ],
   "large-dogs": [
-    guide(COST, "what large dogs cost to groom", `For typical prices by dog size, see ${LINK_TOKEN}.`),
+    guide(COST, "large dog grooming prices", `For typical prices by dog size, see ${LINK_TOKEN}.`),
   ],
 };
 
@@ -134,34 +133,36 @@ function cityMetro(state: string, cityName: string): "seattle" | "portland" | nu
   return null;
 }
 
-function cityCostAnchor(state: string, cityName: string): string {
+// Place-name anchors only on metro suburbs; the core city pages own their own
+// "{city} dog grooming prices" query, so they link with the question phrasing.
+function cityCostAnchor(state: string, citySlug: string, cityName: string): string {
   const metro = cityMetro(state, cityName);
+  if (metro && citySlug === metro) return "how much dog grooming costs";
   if (metro === "seattle") return "Seattle dog grooming prices";
   if (metro === "portland") return "Portland dog grooming prices";
-  return state === "OR" ? "what dog grooming costs in Oregon" : "what dog grooming costs in Washington";
+  return state === "OR" ? "how much it costs to groom a dog in Oregon" : "how much dog grooming costs in Washington";
 }
 
 function linksFor(ctx: LinkContext): readonly GuideLink[] {
   switch (ctx.kind) {
-    case "home":
-      return HOME_LINKS;
     case "city": {
       const links = [
-        guide(COST, cityCostAnchor(ctx.state, ctx.cityName), `For a closer look at prices, read our guide to ${LINK_TOKEN}.`),
+        guide(COST, cityCostAnchor(ctx.state, ctx.citySlug, ctx.cityName), `For a closer look at prices, see ${LINK_TOKEN}.`),
       ];
       if (ctx.hasMobile) {
-        links.push(guide(MOBILE, "what mobile groomers charge", `Thinking about a groomer who comes to you? See ${LINK_TOKEN}.`));
+        links.push(guide(MOBILE, "mobile dog grooming prices by size", `Thinking about a groomer who comes to you? See ${LINK_TOKEN}.`));
       }
       return links;
     }
     case "groomer": {
       if (ctx.isMobile) {
-        return [guide(MOBILE, "mobile vs. salon prices", `Curious how mobile grooming compares? See ${LINK_TOKEN} for the same service.`)];
+        const anchor = ctx.state === "OR" ? "mobile dog grooming cost per hour" : "how much mobile dog groomers cost";
+        return [guide(MOBILE, anchor, `Wondering how mobile prices compare with a salon? See ${LINK_TOKEN}.`)];
       }
       const metro = cityMetro(ctx.state, ctx.cityName);
       if (metro) {
-        const area = metro === "seattle" ? "Seattle-area" : "Portland-area";
-        return [guide(COST, `${area} grooming prices`, `To compare prices, see our guide to ${LINK_TOKEN}.`)];
+        const area = metro === "seattle" ? "Seattle" : "Portland";
+        return [guide(COST, `how much a groom costs around ${area}`, `To compare prices, see ${LINK_TOKEN}.`)];
       }
       return [];
     }

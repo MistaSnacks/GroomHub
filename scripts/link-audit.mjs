@@ -16,6 +16,9 @@ const MAX_PAGES = Number(args.max || 2500);
 const PROD_HOSTS = new Set(["groomlocal.com", "www.groomlocal.com", new URL(BASE).host]);
 const SKIP = /^\/(api|_next|admin|dashboard|login|signup|reset-password|claim|badge|auth)(\/|$)|\.(xml|svg|png|jpe?g|webp|ico|txt|json)$/i;
 
+// Tagged links that existed before the registry (blog index and related cards) are not counted as template links.
+const NAVIGATION_BLOCKS = new Set(["blog-card"]);
+
 export const COST_GUIDES = [
   "/blog/dog-grooming-cost-seattle-portland-2026",
   "/blog/mobile-dog-grooming-cost-guide",
@@ -58,7 +61,8 @@ function parse(html, from) {
   }
   const robots = html.match(/<meta name="robots" content="([^"]*)"/i)?.[1] || "";
   const canonical = html.match(/<link rel="canonical" href="([^"]*)"/i)?.[1] || "";
-  return { links, noindex: /noindex/i.test(robots), canonical };
+  const cityPage = from.startsWith("/groomer/") ? links.find((l) => /^\/dog-grooming\/[^/]+\/[^/]+$/.test(l.to))?.to || null : null;
+  return { links, noindex: /noindex/i.test(robots), canonical, cityPage };
 }
 
 async function fetchText(url) {
@@ -118,7 +122,7 @@ function analyze({ pages, inSitemap }) {
       if (!indexable(from) || link.zone !== "main") continue;
       e.mainIdx.add(from);
       if (link.editorial) e.editorialIdx.add(from);
-      if (link.src) e.templateIdx.add(from);
+      if (link.src && !NAVIGATION_BLOCKS.has(link.src)) e.templateIdx.add(from);
       const a = link.anchor.toLowerCase().slice(0, 80);
       if (!a) continue;
       e.anchors.set(a, (e.anchors.get(a) || 0) + 1);
@@ -142,10 +146,11 @@ function analyze({ pages, inSitemap }) {
       path: p, section: section(p), inSitemap: inSitemap.has(p), noindex: page.noindex,
       depth: depth.get(p) ?? null, inbound: e?.sources.size || 0, inboundMain: e?.mainIdx.size || 0,
       editorial: e?.editorialIdx.size || 0, template: e?.templateIdx.size || 0,
-      distinctAnchors: anchors.length, anchorLinks: anchors.reduce((n, [, c]) => n + c, 0), topAnchors: anchors.slice(0, 10),
+      distinctAnchors: anchors.length, anchorLinks: anchors.reduce((n, [, c]) => n + c, 0), topAnchors: anchors.slice(0, 10), allAnchors: anchors,
       anchorPageCounts: Object.fromEntries([...(e?.anchorPages || [])].map(([a, set]) => [a, set.size])),
       outMain: new Set(main.map((l) => l.to)).size,
       outMainBlog: new Set(main.filter((l) => l.to.startsWith("/blog/")).map((l) => l.to)).size,
+      cityPage: page.cityPage || null,
       ...(p === "/" ? { homeBlogTargets: [...new Set(main.filter((l) => l.to.startsWith("/blog/")).map((l) => l.to))] } : {}),
     };
   });
@@ -159,17 +164,23 @@ export function gates({ rows, broken }) {
   const [costGuide, mobileGuide] = COST_GUIDES.map(by);
   const topShare = (r) => (r?.anchorLinks ? (r.topAnchors[0]?.[1] || 0) / r.anchorLinks : 0);
   const profiles = idx.filter((r) => r.section === "groomer");
-  const weakProfiles = profiles.filter((r) => r.inboundMain < 2).length;
+  const indexableCity = new Set(idx.filter((r) => r.section === "dog-grooming:city").map((r) => r.path));
+  const reachable = profiles.filter((r) => r.cityPage && indexableCity.has(r.cityPage));
+  const weakProfiles = reachable.filter((r) => r.inboundMain < 2).length;
+  const questionShare = (r) => (r?.anchorLinks ? r.allAnchors.filter(([a]) => /how much|cost|fee/.test(a)).reduce((n, [, c]) => n + c, 0) / r.anchorLinks : 0);
   const profileOut = median(profiles.map((r) => r.outMain));
   const homeBlog = home?.outMainBlog || 0;
   const posts = idx.filter((r) => r.section === "blog" && r.path !== "/blog");
   return [
     ["no internal links to non-200 pages", broken.length === 0, `${broken.length} broken`],
     ["home links both cost guides + 2 more posts", homeBlog >= 4 && COST_GUIDES.every((g) => home?.homeBlogTargets?.includes(g)), `home -> ${homeBlog} posts`],
-    ["mobile guide has 40+ indexable template sources", (mobileGuide?.template || 0) >= 40, `${mobileGuide?.template || 0}`],
+    ["cost guide has 300+ indexable template sources", (costGuide?.template || 0) >= 300, `${costGuide?.template || 0}`],
+    ["mobile guide has 80+ indexable template sources", (mobileGuide?.template || 0) >= 80, `${mobileGuide?.template || 0}`],
     ["cost guide top anchor <= 40% of indexable anchor links", topShare(costGuide) <= 0.4, `${(topShare(costGuide) * 100).toFixed(0)}% "${costGuide?.topAnchors[0]?.[0] || ""}"`],
+    ["mobile guide top anchor <= 40% of indexable anchor links", topShare(mobileGuide) <= 0.4, `${(topShare(mobileGuide) * 100).toFixed(0)}% "${mobileGuide?.topAnchors[0]?.[0] || ""}"`],
+    ['cost guide anchors with "how much", "cost" or "fee" >= 25%', questionShare(costGuide) >= 0.25, `${(questionShare(costGuide) * 100).toFixed(0)}%`],
     ['"dog grooming prices" anchor on <= 20 indexable pages', (costGuide?.anchorPageCounts["dog grooming prices"] || 0) <= 20, `${costGuide?.anchorPageCounts["dog grooming prices"] || 0}`],
-    ["indexable profiles with < 2 indexable in-content inbound: < 60", weakProfiles < 60, `${weakProfiles} of ${profiles.length}`],
+    ["profiles in indexable cities with < 2 indexable in-content inbound: < 20", weakProfiles < 20, `${weakProfiles} of ${reachable.length} (all profiles: ${profiles.filter((r) => r.inboundMain < 2).length} of ${profiles.length})`],
     ["profile in-content outbound median <= 15", profileOut <= 15, `${profileOut}`],
     ["profile click depth <= 3", profiles.every((r) => r.depth !== null && r.depth <= 3), `max ${Math.max(...profiles.map((r) => r.depth ?? 99))}`],
     ["blog post click depth <= 2", posts.every((r) => r.depth !== null && r.depth <= 2), `max ${Math.max(...posts.map((r) => r.depth ?? 99))}`],

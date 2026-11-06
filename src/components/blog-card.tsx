@@ -16,7 +16,7 @@ export function BlogCard({ post, featured = false, linkSrc = "blog-card" }: Blog
 
   return (
     <article
-      className={`group relative block card-lift bg-white rounded-2xl border border-border overflow-hidden ${featured ? "md:flex" : ""}`}
+      className={`group relative block card-lift bg-white rounded-2xl border border-border overflow-hidden has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-brand-accent ${featured ? "md:flex" : ""}`}
     >
       {/* Image */}
       <div className={`relative bg-gradient-to-br from-bg to-brand-secondary/5 flex items-center justify-center ${featured ? "md:w-2/5 aspect-[4/3] md:aspect-auto" : "aspect-[16/9]"}`}>

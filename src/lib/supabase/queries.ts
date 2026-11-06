@@ -194,7 +194,8 @@ const getCachedListingRows = unstable_cache(fetchAllListingRows, ["all-listing-r
 
 /** Groomers to show on a profile: same city first, then same-state metro neighbors, in a fixed order. */
 export async function getNearbyGroomers(listing: NormalizedListing): Promise<NearbyGroomers<NormalizedListing>> {
-  const all = withTagsAll(await getCachedListingRows()).filter(hasKnownCity);
+  const all = dedupeBySlug(withTagsAll(await getCachedListingRows()).filter(hasKnownCity))
+    .filter((l) => l.slug !== listing.slug);
   const state = listing.state.toUpperCase();
   const citySlug = plainSlug(listing.city_slug);
   const neighborSlugs = new Set(getMetroNeighborSlugs(citySlug, state));

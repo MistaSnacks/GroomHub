@@ -4,6 +4,7 @@ import {
   GUIDE_SLUGS,
   LINK_TOKEN,
   guideLinksFor,
+  homeGuideSlugs,
   type GuideLink,
   type LinkContext,
 } from "@/lib/internal-links";
@@ -31,7 +32,6 @@ const groomer = (cityName: string, state: string, isMobile = false): LinkContext
 });
 
 const everyContext: LinkContext[] = [
-  { kind: "home" },
   { kind: "mobile-hub" },
   city("Seattle", "WA", true),
   city("Spokane", "WA", true),
@@ -44,17 +44,18 @@ const everyContext: LinkContext[] = [
 const costAnchor = (links: GuideLink[]) => links.find((l) => l.slug === COST)?.anchor;
 
 test("city pages anchor the cost guide by metro", () => {
-  assert.equal(costAnchor(guideLinksFor(city("Seattle", "WA"), ALL_LIVE)), "Seattle dog grooming prices");
+  assert.equal(costAnchor(guideLinksFor(city("Seattle", "WA"), ALL_LIVE)), "how much dog grooming costs");
+  assert.equal(costAnchor(guideLinksFor(city("Portland", "OR"), ALL_LIVE)), "how much dog grooming costs");
+  assert.equal(costAnchor(guideLinksFor(city("Bellevue", "WA"), ALL_LIVE)), "Seattle dog grooming prices");
   assert.equal(costAnchor(guideLinksFor(city("Mercer Island", "WA"), ALL_LIVE)), "Seattle dog grooming prices");
-  assert.equal(costAnchor(guideLinksFor(city("Portland", "OR"), ALL_LIVE)), "Portland dog grooming prices");
   assert.equal(costAnchor(guideLinksFor(city("Oregon City", "OR"), ALL_LIVE)), "Portland dog grooming prices");
-  assert.equal(costAnchor(guideLinksFor(city("Spokane", "WA"), ALL_LIVE)), "what dog grooming costs in Washington");
-  assert.equal(costAnchor(guideLinksFor(city("Tacoma", "WA"), ALL_LIVE)), "what dog grooming costs in Washington");
-  assert.equal(costAnchor(guideLinksFor(city("Bend", "OR"), ALL_LIVE)), "what dog grooming costs in Oregon");
+  assert.equal(costAnchor(guideLinksFor(city("Spokane", "WA"), ALL_LIVE)), "how much dog grooming costs in Washington");
+  assert.equal(costAnchor(guideLinksFor(city("Tacoma", "WA"), ALL_LIVE)), "how much dog grooming costs in Washington");
+  assert.equal(costAnchor(guideLinksFor(city("Bend", "OR"), ALL_LIVE)), "how much it costs to groom a dog in Oregon");
 });
 
 test("a metro city name in the wrong state does not take the metro anchor", () => {
-  assert.equal(costAnchor(guideLinksFor(city("Portland", "WA"), ALL_LIVE)), "what dog grooming costs in Washington");
+  assert.equal(costAnchor(guideLinksFor(city("Portland", "WA"), ALL_LIVE)), "how much dog grooming costs in Washington");
 });
 
 test("the mobile guide appears on a city page only when the page shows mobile groomers", () => {
@@ -68,7 +69,7 @@ test("a groomer profile gets one sentence at most", () => {
   assert.deepEqual(guideLinksFor(groomer("Bend", "OR"), ALL_LIVE), []);
   assert.deepEqual(guideLinksFor(groomer("Spokane", "WA"), ALL_LIVE), []);
   assert.deepEqual(guideLinksFor(groomer("Bellevue", "WA"), ALL_LIVE).map((l) => l.slug), [COST]);
-  assert.equal(costAnchor(guideLinksFor(groomer("Beaverton", "OR"), ALL_LIVE)), "Portland-area grooming prices");
+  assert.equal(costAnchor(guideLinksFor(groomer("Beaverton", "OR"), ALL_LIVE)), "how much a groom costs around Portland");
   assert.deepEqual(guideLinksFor(groomer("Bend", "OR", true), ALL_LIVE).map((l) => l.slug), [MOBILE]);
 });
 
@@ -78,7 +79,6 @@ test("a mobile groomer in a metro city links the mobile guide, not the cost guid
 
 test("the mobile guide shows only in mobile contexts", () => {
   const allowed = (ctx: LinkContext) =>
-    ctx.kind === "home" ||
     ctx.kind === "mobile-hub" ||
     (ctx.kind === "city" && ctx.hasMobile) ||
     (ctx.kind === "groomer" && ctx.isMobile) ||
@@ -101,7 +101,7 @@ test("no link is returned for a slug that is not published", () => {
 });
 
 test("the home section lists the two cost guides first, then nail trim and tipping", () => {
-  assert.deepEqual(guideLinksFor({ kind: "home" }, ALL_LIVE).map((l) => l.slug), [
+  assert.deepEqual(homeGuideSlugs(ALL_LIVE), [
     COST,
     MOBILE,
     "dog-nail-trimming-cost-guide",

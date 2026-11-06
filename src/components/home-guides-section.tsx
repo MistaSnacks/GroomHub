@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { BlogCard } from "@/components/blog-card";
-import { getLinkableBlogPosts } from "@/lib/blog";
-import { guideLinksFor } from "@/lib/internal-links";
+import { getBlogPosts, getLinkableBlogSlugs } from "@/lib/blog";
+import { homeGuideSlugs } from "@/lib/internal-links";
 
 export async function HomeGuidesSection() {
-  const posts = await getLinkableBlogPosts();
+  const [posts, linkable] = await Promise.all([getBlogPosts(undefined, true), getLinkableBlogSlugs()]);
   const bySlug = new Map(posts.map((post) => [post.slug, post]));
-  const guides = guideLinksFor({ kind: "home" }, new Set(bySlug.keys()))
-    .map((link) => bySlug.get(link.slug))
+  const guides = homeGuideSlugs(linkable)
+    .map((slug) => bySlug.get(slug))
     .filter((post) => post !== undefined);
   if (guides.length === 0) return null;
 

@@ -1,6 +1,7 @@
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { readCollection, imageUrl, plainText, sectionText, type CmsAsset, type CmsSection, type CmsSeo, type PortableBlock } from "./cms/content";
-import { stegaClean } from "./cms/sdk";
+import { cacheTags, stegaClean } from "./cms/sdk";
 
 export interface BlogAuthor { name: string; avatar: string | null; bio: string }
 export interface BlogPostMeta {
@@ -53,18 +54,22 @@ export const getBlogPosts = cache(async (category?: string, publishedOnly = fals
   return category ? posts.filter(p=>p.category===category) : posts;
 });
 
-/** Posts a template may link to: published and indexable. Empty when the CMS is down, so a link drops instead of the page failing. */
-export const getLinkableBlogPosts = cache(async (): Promise<BlogPostFull[]> => {
-  try {
-    return (await getBlogPosts(undefined, true)).filter(post => !post.seo?.noIndex);
-  } catch (error) {
-    console.error("getLinkableBlogPosts error:", error);
-    return [];
-  }
-});
+// About 2,000 ISR pages read this set for their template links. Caching it here
+// keeps the CMS SDK's 15 s fetch TTL from shortening those pages' 300 s window,
+// and a failed refresh keeps serving the last good set.
+const getCachedLinkableSlugs = unstable_cache(
+  async () => (await getBlogPosts(undefined, true)).filter(post => !post.seo?.noIndex).map(post => post.slug),
+  ["linkable-blog-slugs"],
+  { revalidate: 300, tags: [cacheTags.project("groomlocal"), cacheTags.type("groomlocal", "blogPost")] },
+);
 
 export async function getLinkableBlogSlugs(): Promise<ReadonlySet<string>> {
-  return new Set((await getLinkableBlogPosts()).map(post => post.slug));
+  try {
+    return new Set(await getCachedLinkableSlugs());
+  } catch (error) {
+    console.error("getLinkableBlogSlugs error:", error);
+    return new Set();
+  }
 }
 
 export const getGuideTopics = cache(async (): Promise<GuideTopic[]> => {
