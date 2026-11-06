@@ -18,6 +18,8 @@ import { clampDescription, clampTitle } from "@/lib/seo-utils";
 import { CityStatsBlock } from "@/components/city-stats-block";
 import { CityPricingSection } from "@/components/city-pricing-section";
 import { getCityPricingBreakdown } from "@/lib/city-pricing";
+import { getLinkableBlogSlugs } from "@/lib/blog";
+import { guideLinksFor } from "@/lib/internal-links";
 import { jsonLd } from "@/lib/json-ld";
 
 export const revalidate = 300;
@@ -105,12 +107,13 @@ export default async function CityPage({ params }: CityPageProps) {
   const stateAbbr = stateAbbrFromSlug(state);
   const stateName = stateNameFromSlug(state);
 
-  const [listings, cityData, relatedCities, featuredListings, visiting] = await Promise.all([
+  const [listings, cityData, relatedCities, featuredListings, visiting, linkableSlugs] = await Promise.all([
     getListingsByCity(city, stateAbbr),
     getCityBySlug(city, stateAbbr),
     getCitiesByState(stateAbbr),
     getFeaturedByCity(city, stateAbbr),
     getMobileGroomersVisitingCity(city, stateAbbr),
+    getLinkableBlogSlugs(),
   ]);
   const metroName = getMetroClusterForCity(city, stateAbbr)?.name ?? "";
 
@@ -119,6 +122,9 @@ export default async function CityPage({ params }: CityPageProps) {
 
   const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
   const nearby = getNearbyCities(city, relatedCities, getMetroNeighborSlugs(city, stateAbbr), 6);
+
+  const hasMobile = visiting.length > 0 || listings.some((l) => l.service_tags.includes("mobile-grooming"));
+  const guideLinks = guideLinksFor({ kind: "city", state: stateAbbr, citySlug: city, cityName, hasMobile }, linkableSlugs);
 
   const faqs = buildDogGroomingFaqs(cityName, stateAbbr, listings, content?.dogParks?.length ?? 0);
 
@@ -374,6 +380,7 @@ export default async function CityPage({ params }: CityPageProps) {
         cityName={cityName}
         pricing={getCityPricingBreakdown(cityName, "dog-grooming")}
         serviceLabel="Dog Grooming"
+        guideLinks={guideLinks}
       />
 
       {/* FAQ Section */}
@@ -454,13 +461,6 @@ export default async function CityPage({ params }: CityPageProps) {
               <Link href="/blog/how-often-should-you-groom-your-dog" className="text-brand-accent underline hover:text-brand-primary">
                 how often you should groom your dog
               </Link>{" "}based on breed and coat type.
-              {stateAbbr === "WA" || stateAbbr === "OR" ? (
-                <> For local pricing, see our{" "}
-                  <Link href="/blog/dog-grooming-cost-seattle-portland-2026" className="text-brand-accent underline hover:text-brand-primary">
-                    Seattle and Portland grooming cost guide
-                  </Link>.
-                </>
-              ) : null}
             </p>
           </div>
         </div>

@@ -1,10 +1,13 @@
 import { Dog, Cat } from "@phosphor-icons/react/dist/ssr";
 import type { PricingBreakdown } from "@/lib/city-pricing";
+import type { GuideLink } from "@/lib/internal-links";
+import { GuideLinkSentence } from "@/components/guide-link";
 
 interface CityPricingSectionProps {
   cityName: string;
   pricing: PricingBreakdown;
   serviceLabel: string;
+  guideLinks?: GuideLink[];
 }
 
 const SIZE_CONFIG = [
@@ -13,7 +16,7 @@ const SIZE_CONFIG = [
   { key: "large" as const, label: "Large Dogs", note: "Over 50 lbs", icon: Dog },
 ];
 
-export function CityPricingSection({ cityName, pricing, serviceLabel }: CityPricingSectionProps) {
+export function CityPricingSection({ cityName, pricing, serviceLabel, guideLinks = [] }: CityPricingSectionProps) {
   if (serviceLabel.toLowerCase().includes("cat")) {
     return (
       <section className="bg-white py-10">
@@ -54,6 +57,13 @@ export function CityPricingSection({ cityName, pricing, serviceLabel }: CityPric
             );
           })}
         </div>
+        {guideLinks.length > 0 && (
+          <div className="mt-5 space-y-1.5">
+            {guideLinks.map((link) => (
+              <GuideLinkSentence key={link.slug} link={link} source="city-pricing" />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
