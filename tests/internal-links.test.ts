@@ -48,21 +48,13 @@ test("city pages anchor the cost guide by metro", () => {
   assert.equal(costAnchor(guideLinksFor(city("Mercer Island", "WA"), ALL_LIVE)), "Seattle dog grooming prices");
   assert.equal(costAnchor(guideLinksFor(city("Portland", "OR"), ALL_LIVE)), "Portland dog grooming prices");
   assert.equal(costAnchor(guideLinksFor(city("Oregon City", "OR"), ALL_LIVE)), "Portland dog grooming prices");
-  assert.equal(
-    costAnchor(guideLinksFor(city("Spokane", "WA"), ALL_LIVE)),
-    "what a dog groom costs in Washington and Oregon",
-  );
-  assert.equal(
-    costAnchor(guideLinksFor(city("Tacoma", "WA"), ALL_LIVE)),
-    "what a dog groom costs in Washington and Oregon",
-  );
+  assert.equal(costAnchor(guideLinksFor(city("Spokane", "WA"), ALL_LIVE)), "what dog grooming costs in Washington");
+  assert.equal(costAnchor(guideLinksFor(city("Tacoma", "WA"), ALL_LIVE)), "what dog grooming costs in Washington");
+  assert.equal(costAnchor(guideLinksFor(city("Bend", "OR"), ALL_LIVE)), "what dog grooming costs in Oregon");
 });
 
 test("a metro city name in the wrong state does not take the metro anchor", () => {
-  assert.equal(
-    costAnchor(guideLinksFor(city("Portland", "WA"), ALL_LIVE)),
-    "what a dog groom costs in Washington and Oregon",
-  );
+  assert.equal(costAnchor(guideLinksFor(city("Portland", "WA"), ALL_LIVE)), "what dog grooming costs in Washington");
 });
 
 test("the mobile guide appears on a city page only when the page shows mobile groomers", () => {
@@ -76,7 +68,7 @@ test("a groomer profile gets one sentence at most", () => {
   assert.deepEqual(guideLinksFor(groomer("Bend", "OR"), ALL_LIVE), []);
   assert.deepEqual(guideLinksFor(groomer("Spokane", "WA"), ALL_LIVE), []);
   assert.deepEqual(guideLinksFor(groomer("Bellevue", "WA"), ALL_LIVE).map((l) => l.slug), [COST]);
-  assert.equal(costAnchor(guideLinksFor(groomer("Beaverton", "OR"), ALL_LIVE)), "Portland dog grooming prices");
+  assert.equal(costAnchor(guideLinksFor(groomer("Beaverton", "OR"), ALL_LIVE)), "Portland-area grooming prices");
   assert.deepEqual(guideLinksFor(groomer("Bend", "OR", true), ALL_LIVE).map((l) => l.slug), [MOBILE]);
 });
 

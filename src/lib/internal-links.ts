@@ -134,11 +134,11 @@ function cityMetro(state: string, cityName: string): "seattle" | "portland" | nu
   return null;
 }
 
-function costAnchor(state: string, cityName: string): string {
+function cityCostAnchor(state: string, cityName: string): string {
   const metro = cityMetro(state, cityName);
   if (metro === "seattle") return "Seattle dog grooming prices";
   if (metro === "portland") return "Portland dog grooming prices";
-  return "what a dog groom costs in Washington and Oregon";
+  return state === "OR" ? "what dog grooming costs in Oregon" : "what dog grooming costs in Washington";
 }
 
 function linksFor(ctx: LinkContext): readonly GuideLink[] {
@@ -147,19 +147,21 @@ function linksFor(ctx: LinkContext): readonly GuideLink[] {
       return HOME_LINKS;
     case "city": {
       const links = [
-        guide(COST, costAnchor(ctx.state, ctx.cityName), `For a closer look at prices, read our guide to ${LINK_TOKEN}.`),
+        guide(COST, cityCostAnchor(ctx.state, ctx.cityName), `For a closer look at prices, read our guide to ${LINK_TOKEN}.`),
       ];
       if (ctx.hasMobile) {
-        links.push(guide(MOBILE, MOBILE_COST_ANCHOR, `Thinking about a groomer who comes to you? Read our guide to ${LINK_TOKEN}.`));
+        links.push(guide(MOBILE, "what mobile groomers charge", `Thinking about a groomer who comes to you? See ${LINK_TOKEN}.`));
       }
       return links;
     }
     case "groomer": {
       if (ctx.isMobile) {
-        return [guide(MOBILE, MOBILE_COST_ANCHOR, `Curious how mobile grooming prices compare? See our guide to ${LINK_TOKEN}.`)];
+        return [guide(MOBILE, "mobile vs. salon prices", `Curious how mobile grooming compares? See ${LINK_TOKEN} for the same service.`)];
       }
-      if (cityMetro(ctx.state, ctx.cityName)) {
-        return [guide(COST, costAnchor(ctx.state, ctx.cityName), `To compare prices, see our guide to ${LINK_TOKEN}.`)];
+      const metro = cityMetro(ctx.state, ctx.cityName);
+      if (metro) {
+        const area = metro === "seattle" ? "Seattle-area" : "Portland-area";
+        return [guide(COST, `${area} grooming prices`, `To compare prices, see our guide to ${LINK_TOKEN}.`)];
       }
       return [];
     }
@@ -168,7 +170,7 @@ function linksFor(ctx: LinkContext): readonly GuideLink[] {
     case "specialty":
       return SPECIALTY_LINKS[ctx.slug] ?? [];
     case "mobile-hub":
-      return [guide(MOBILE, MOBILE_COST_ANCHOR, `Wondering what mobile grooming costs? Read our guide to ${LINK_TOKEN}.`)];
+      return [guide(MOBILE, "how much mobile dog grooming costs", `Before you book, see ${LINK_TOKEN} by dog size.`)];
   }
 }
 
