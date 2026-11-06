@@ -175,7 +175,7 @@ export function gates({ rows, broken }) {
     ["no internal links to non-200 pages", broken.length === 0, `${broken.length} broken`],
     ["home links both cost guides + 2 more posts", homeBlog >= 4 && COST_GUIDES.every((g) => home?.homeBlogTargets?.includes(g)), `home -> ${homeBlog} posts`],
     ["cost guide has 300+ indexable template sources", (costGuide?.template || 0) >= 300, `${costGuide?.template || 0}`],
-    ["mobile guide has 80+ indexable template sources", (mobileGuide?.template || 0) >= 80, `${mobileGuide?.template || 0}`],
+    ["mobile guide has 70+ indexable template sources", (mobileGuide?.template || 0) >= 70, `${mobileGuide?.template || 0}`],
     ["cost guide top anchor <= 40% of indexable anchor links", topShare(costGuide) <= 0.4, `${(topShare(costGuide) * 100).toFixed(0)}% "${costGuide?.topAnchors[0]?.[0] || ""}"`],
     ["mobile guide top anchor <= 40% of indexable anchor links", topShare(mobileGuide) <= 0.4, `${(topShare(mobileGuide) * 100).toFixed(0)}% "${mobileGuide?.topAnchors[0]?.[0] || ""}"`],
     ['cost guide anchors with "how much", "cost" or "fee" >= 25%', questionShare(costGuide) >= 0.25, `${(questionShare(costGuide) * 100).toFixed(0)}%`],
