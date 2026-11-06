@@ -24,7 +24,7 @@ import { ListingCard } from "@/components/listing-card";
 import { AdSlot } from "@/components/ad-slot";
 import { WaveDivider } from "@/components/wave-divider";
 import { ContactForm } from "@/components/contact-form";
-import { getListingBySlug, getListingsByCity, canonicalCitySlug } from "@/lib/supabase/queries";
+import { getListingBySlug, getNearbyGroomers, canonicalCitySlug } from "@/lib/supabase/queries";
 import { getServiceLabel, getSpecialtyLabel, getServiceTag, getSpecialtyTag } from "@/lib/tags";
 import { usableListingImages } from "@/lib/images";
 import { localBusinessSchema, breadcrumbSchema } from "@/lib/schema";
@@ -33,6 +33,9 @@ import { PageViewTracker } from "@/components/page-view-tracker";
 import { clampDescription, clampTitle } from "@/lib/seo-utils";
 import { jsonLd } from "@/lib/json-ld";
 import { TrackedLink } from "@/components/tracked-website-link";
+import { GuideLinkSentence } from "@/components/guide-link";
+import { getLinkableBlogSlugs } from "@/lib/blog";
+import { guideLinksFor } from "@/lib/internal-links";
 
 export const revalidate = 300;
 
@@ -121,8 +124,17 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
     notFound();
   }
 
-  const similarListings = await getListingsByCity(listing.city_slug, listing.state);
-  const similar = similarListings.filter((l) => l.slug !== listing.slug).slice(0, 2);
+  const [nearby, linkableSlugs] = await Promise.all([getNearbyGroomers(listing), getLinkableBlogSlugs()]);
+  const guideLinks = guideLinksFor(
+    {
+      kind: "groomer",
+      state: listing.state,
+      citySlug: canonicalCitySlug(listing.city_slug),
+      cityName: listing.city,
+      isMobile: listing.service_tags.includes("mobile-grooming"),
+    },
+    linkableSlugs,
+  );
   const stateSlug = stateSlugFromAbbr(listing.state);
   const stateName = stateNameFromAbbr(listing.state);
   // Breadcrumb data
@@ -421,6 +433,9 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                   )}
                 </div>
               </div>
+              {guideLinks.map((link) => (
+                <GuideLinkSentence key={link.slug} link={link} source="profile-guide" className="mt-4 text-sm text-text-muted leading-relaxed" />
+              ))}
             </div>
 
             {/* Pricing */}
@@ -463,15 +478,15 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
               </div>
             )}
 
-            {/* Similar Groomers */}
-            {similar.length > 0 && (
+            {/* Nearby groomers */}
+            {nearby.listings.length > 0 && (
               <div>
                 <h2 className="font-heading text-xl font-semibold text-brand-primary mb-4">
-                  Similar Groomers in {listing.city}
+                  {nearby.allInCity ? `Similar Groomers in ${listing.city}` : `Groomers Near ${listing.city}`}
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {similar.map((l, i) => (
-                    <ListingCard key={l.slug} listing={l} index={i} />
+                <div className="grid grid-cols-1 gap-4">
+                  {nearby.listings.map((l, i) => (
+                    <ListingCard key={l.slug} listing={l} index={i} variant="horizontal" linkSrc="profile-nearby" />
                   ))}
                 </div>
               </div>

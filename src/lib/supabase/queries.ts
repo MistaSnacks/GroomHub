@@ -5,7 +5,8 @@ import { activeSponsorshipFilter, sortRegularList } from "@/lib/listing-rules";
 import { supabase } from "./client";
 import { normalizeTags } from "../tags";
 import type { BusinessListing, NormalizedListing, CityWithCount } from "../types";
-import { getMetroNeighbors, FEATURED_SPOTS_PER_CITY, getMetroClusterForCity, visitsCityViaMetro } from "../metro-clusters";
+import { getMetroNeighbors, getMetroNeighborSlugs, FEATURED_SPOTS_PER_CITY, getMetroClusterForCity, visitsCityViaMetro } from "../metro-clusters";
+import { pickNearbyGroomers, type NearbyGroomers } from "../nearby-groomers";
 
 /**
  * Cache tag for the full-table reads that back search + city browse.
@@ -190,6 +191,20 @@ const getCachedListingRows = unstable_cache(fetchAllListingRows, ["all-listing-r
   revalidate: 300,
   tags: [LISTINGS_CACHE_TAG],
 });
+
+/** Groomers to show on a profile: same city first, then same-state metro neighbors, in a fixed order. */
+export async function getNearbyGroomers(listing: NormalizedListing): Promise<NearbyGroomers<NormalizedListing>> {
+  const all = withTagsAll(await getCachedListingRows()).filter(hasKnownCity);
+  const state = listing.state.toUpperCase();
+  const citySlug = plainSlug(listing.city_slug);
+  const neighborSlugs = new Set(getMetroNeighborSlugs(citySlug, state));
+  const inState = all.filter((l) => l.state.toUpperCase() === state);
+  return pickNearbyGroomers(
+    listing,
+    inState.filter((l) => plainSlug(l.city_slug) === citySlug),
+    inState.filter((l) => neighborSlugs.has(plainSlug(l.city_slug))),
+  );
+}
 
 export async function getListingsByServiceTag(
   serviceTag: string,

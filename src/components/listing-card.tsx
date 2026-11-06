@@ -17,6 +17,8 @@ interface ListingCardProps {
   index?: number;
   compact?: boolean;
   variant?: "vertical" | "horizontal";
+  /** Block name for `data-link-src` on the profile link (horizontal variant). */
+  linkSrc?: string;
 }
 
 function isNormalized(listing: CardListing): listing is NormalizedListing | ListingCardData {
@@ -29,7 +31,7 @@ function listingBlurb(listing: CardListing): string {
   return "";
 }
 
-export function ListingCard({ listing, index = 0, compact = false, variant = "vertical" }: ListingCardProps) {
+export function ListingCard({ listing, index = 0, compact = false, variant = "vertical", linkSrc }: ListingCardProps) {
   const normalized = isNormalized(listing);
   const serviceTags = normalized ? listing.service_tags.slice(0, 4) : [];
   const specialtyTags = normalized ? listing.specialty_tags.slice(0, 3) : [];
@@ -38,7 +40,7 @@ export function ListingCard({ listing, index = 0, compact = false, variant = "ve
   const hasImage = isUsableListingImage(firstImage);
 
   if (variant === "horizontal") {
-    return <HorizontalCard listing={listing} normalized={normalized} serviceTags={serviceTags} specialtyTags={specialtyTags} hasImage={hasImage} index={index} />;
+    return <HorizontalCard listing={listing} normalized={normalized} serviceTags={serviceTags} specialtyTags={specialtyTags} hasImage={hasImage} index={index} linkSrc={linkSrc} />;
   }
 
   // Paid placement is disclosed with a "Sponsored" label. Badges are never derived from payment.
@@ -204,6 +206,7 @@ function HorizontalCard({
   specialtyTags,
   hasImage,
   index,
+  linkSrc,
 }: {
   listing: CardListing;
   normalized: boolean;
@@ -211,13 +214,14 @@ function HorizontalCard({
   specialtyTags: string[];
   hasImage: boolean;
   index: number;
+  linkSrc?: string;
 }) {
   return (
     <article
-      className="bg-white rounded-xl border border-border group hover:shadow-md transition-all animate-fade-slide-up"
+      className="relative bg-white rounded-xl border border-border group hover:shadow-md transition-all animate-fade-slide-up"
       style={{ animationDelay: `${index * 60}ms` }}
     >
-      <Link href={`/groomer/${listing.slug}`} className="flex flex-col sm:flex-row h-full">
+      <div className="flex flex-col sm:flex-row h-full">
         {/* Image */}
         <div className="sm:w-40 md:w-48 shrink-0 relative">
           {hasImage ? (
@@ -242,7 +246,9 @@ function HorizontalCard({
           {/* Name + badges */}
           <div className="mb-1">
             <h3 className="font-heading font-semibold text-base text-brand-primary leading-tight truncate group-hover:text-brand-accent-ink transition-colors mb-1">
-              {listing.name}
+              <Link href={`/groomer/${listing.slug}`} data-link-src={linkSrc} className="after:absolute after:inset-0">
+                {listing.name}
+              </Link>
             </h3>
 
             {(listing.owner_id || isSponsored(listing) || (listing.badges && listing.badges.length > 0)) && (
@@ -317,7 +323,7 @@ function HorizontalCard({
             <ArrowRight weight="bold" className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </span>
         </div>
-      </Link>
+      </div>
     </article>
   );
 }
