@@ -7,15 +7,16 @@ import { formatBlogDate, getCategoryLabel } from "@/lib/blog";
 interface BlogCardProps {
   post: BlogPostFull;
   featured?: boolean;
+  /** Block name for `data-link-src`; the home page passes its own. */
+  linkSrc?: string;
 }
 
-export function BlogCard({ post, featured = false }: BlogCardProps) {
+export function BlogCard({ post, featured = false, linkSrc = "blog-card" }: BlogCardProps) {
   const categoryLabel = getCategoryLabel(post.category);
 
   return (
-    <Link
-      href={`/blog/${post.slug}`}
-      className={`group block card-lift bg-white rounded-2xl border border-border overflow-hidden ${featured ? "md:flex" : ""}`}
+    <article
+      className={`group relative block card-lift bg-white rounded-2xl border border-border overflow-hidden ${featured ? "md:flex" : ""}`}
     >
       {/* Image */}
       <div className={`relative bg-gradient-to-br from-bg to-brand-secondary/5 flex items-center justify-center ${featured ? "md:w-2/5 aspect-[4/3] md:aspect-auto" : "aspect-[16/9]"}`}>
@@ -42,7 +43,13 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
         </span>
 
         <h3 className={`font-heading font-bold text-brand-primary group-hover:text-brand-accent transition-colors mb-2 leading-tight ${featured ? "text-xl md:text-2xl" : "text-lg"}`}>
-          {post.title}
+          <Link
+            href={`/blog/${post.slug}`}
+            data-link-src={linkSrc}
+            className="after:absolute after:inset-0"
+          >
+            {post.title}
+          </Link>
         </h3>
 
         <p className={`text-text-muted leading-relaxed mb-4 ${featured ? "text-base" : "text-sm line-clamp-2"}`}>
@@ -66,6 +73,6 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
           <span className="font-medium text-brand-primary">{post.author.name}</span>
         </div>
       </div>
-    </Link>
+    </article>
   );
 }
