@@ -15,6 +15,9 @@ import { servicePageSchema } from "@/lib/schema";
 import { WaveDivider } from "@/components/wave-divider";
 import { clampDescription, clampTitle } from "@/lib/seo-utils";
 import { AnimatedSection, AnimatedItem } from "@/components/animated-section";
+import { GuideLinkSentence } from "@/components/guide-link";
+import { getLinkableBlogSlugs } from "@/lib/blog";
+import { guideLinksFor } from "@/lib/internal-links";
 import type { NormalizedListing } from "@/lib/types";
 import { jsonLd } from "@/lib/json-ld";
 
@@ -91,7 +94,8 @@ export default async function SpecialtyLandingPage({ params }: Props) {
   if (!isValidSpecialtySlug(slug)) notFound();
   const tag = getSpecialtyTag(slug)!;
 
-  const listings = await getListingsBySpecialtyTag(slug);
+  const [listings, linkableSlugs] = await Promise.all([getListingsBySpecialtyTag(slug), getLinkableBlogSlugs()]);
+  const guideLinks = guideLinksFor({ kind: "specialty", slug }, linkableSlugs);
   const stateMap = groupByStateAndCity(listings);
 
   const schema = servicePageSchema(slug, tag.label, "specialty", listings);
@@ -129,6 +133,9 @@ export default async function SpecialtyLandingPage({ params }: Props) {
             <MapPin weight="fill" className="w-5 h-5 text-brand-secondary" />
             {listings.length} specialist groomers across the Pacific Northwest
           </p>
+          {guideLinks.map((link) => (
+            <GuideLinkSentence key={link.slug} link={link} source="specialty-guide" className="mt-4 max-w-3xl text-text-muted leading-relaxed" />
+          ))}
         </div>
       </section>
 

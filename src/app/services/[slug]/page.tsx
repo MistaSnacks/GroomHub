@@ -16,6 +16,9 @@ import { getServiceContent } from "@/lib/service-content";
 import { WaveDivider } from "@/components/wave-divider";
 import { clampDescription, clampTitle } from "@/lib/seo-utils";
 import { AnimatedSection, AnimatedItem } from "@/components/animated-section";
+import { GuideLinkSentence } from "@/components/guide-link";
+import { getLinkableBlogSlugs } from "@/lib/blog";
+import { guideLinksFor } from "@/lib/internal-links";
 import type { NormalizedListing } from "@/lib/types";
 import { jsonLd } from "@/lib/json-ld";
 
@@ -85,7 +88,8 @@ export default async function ServiceLandingPage({ params }: Props) {
   if (!isValidServiceSlug(slug)) notFound();
   const tag = getServiceTag(slug)!;
 
-  const listings = await getListingsByServiceTag(slug);
+  const [listings, linkableSlugs] = await Promise.all([getListingsByServiceTag(slug), getLinkableBlogSlugs()]);
+  const guideLinks = guideLinksFor({ kind: "service", slug }, linkableSlugs);
   const stateMap = groupByStateAndCity(listings);
   const serviceContent = getServiceContent(slug);
 
@@ -136,6 +140,9 @@ export default async function ServiceLandingPage({ params }: Props) {
             <div className="space-y-4 text-text-muted leading-relaxed">
               {serviceContent.body.map((paragraph, i) => (
                 <p key={i}>{paragraph}</p>
+              ))}
+              {guideLinks.map((link) => (
+                <GuideLinkSentence key={link.slug} link={link} source="service-guide" className="font-medium" />
               ))}
             </div>
 

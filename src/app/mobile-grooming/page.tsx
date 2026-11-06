@@ -4,6 +4,11 @@ import { CaretRight, Van } from "@phosphor-icons/react/dist/ssr";
 import { getAllCitiesWithCounts } from "@/lib/supabase/queries";
 import { stateSlugFromAbbr } from "@/lib/geography";
 import { WaveDivider } from "@/components/wave-divider";
+import { GuideLinkSentence } from "@/components/guide-link";
+import { getLinkableBlogSlugs } from "@/lib/blog";
+import { guideLinksFor } from "@/lib/internal-links";
+
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Mobile Dog Groomers | Grooming at Your Door",
@@ -26,7 +31,8 @@ export const metadata: Metadata = {
 };
 
 export default async function MobileGroomingHub() {
-  const allCities = await getAllCitiesWithCounts();
+  const [allCities, linkableSlugs] = await Promise.all([getAllCitiesWithCounts(), getLinkableBlogSlugs()]);
+  const guideLinks = guideLinksFor({ kind: "mobile-hub" }, linkableSlugs);
   const waCities = allCities.filter((c) => c.state_abbr === "WA");
   const orCities = allCities.filter((c) => c.state_abbr === "OR");
 
@@ -46,6 +52,9 @@ export default async function MobileGroomingHub() {
             </h1>
           </div>
           <p className="text-text-muted text-lg">Grooming that comes to your door. Browse cities below.</p>
+          {guideLinks.map((link) => (
+            <GuideLinkSentence key={link.slug} link={link} source="mobile-hub-guide" className="mt-3 max-w-3xl text-text-muted leading-relaxed" />
+          ))}
         </div>
       </section>
 
