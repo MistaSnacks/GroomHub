@@ -53,6 +53,20 @@ export const getBlogPosts = cache(async (category?: string, publishedOnly = fals
   return category ? posts.filter(p=>p.category===category) : posts;
 });
 
+/** Posts a template may link to: published and indexable. Empty when the CMS is down, so a link drops instead of the page failing. */
+export const getLinkableBlogPosts = cache(async (): Promise<BlogPostFull[]> => {
+  try {
+    return (await getBlogPosts(undefined, true)).filter(post => !post.seo?.noIndex);
+  } catch (error) {
+    console.error("getLinkableBlogPosts error:", error);
+    return [];
+  }
+});
+
+export async function getLinkableBlogSlugs(): Promise<ReadonlySet<string>> {
+  return new Set((await getLinkableBlogPosts()).map(post => post.slug));
+}
+
 export const getGuideTopics = cache(async (): Promise<GuideTopic[]> => {
   const [topics, posts] = await Promise.all([readCollection<{slug:string;title:string;description:string}>("guideTopic"),getBlogPosts()]);
   return topics.map(t=>({id:clean(t.slug), title:t.title, subtitle:t.description, slugs:posts.filter(p=>p.topic===clean(t.slug)).map(p=>p.slug)}));

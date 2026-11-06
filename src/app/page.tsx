@@ -11,6 +11,7 @@ import { HomeHero } from "@/components/home-hero";
 import { ListingCard } from "@/components/listing-card";
 import { PremiumPlaceholderCard } from "@/components/premium-placeholder-card";
 import { PromoFindGroomers } from "@/components/promo-find-groomers";
+import { HomeGuidesSection } from "@/components/home-guides-section";
 import { PromoClaimListing } from "@/components/promo-claim-listing";
 import { AdSlot, ADS_ENABLED } from "@/components/ad-slot";
 import { WaveDivider } from "@/components/wave-divider";
@@ -121,6 +122,9 @@ export default async function HomePage() {
 
       {/* BROWSE BY SPECIALTY */}
       <BrowseBySpecialtySection copy={section("specialties")} />
+
+      {/* GROOMING COST GUIDES */}
+      <HomeGuidesSection />
 
       {/* White → Coral wave before claim CTA */}
       <WaveDivider variant="gentle" fromColor="#FFFFFF" toColor="#FF7E67" />
