@@ -49,7 +49,9 @@ const MOBILE_GROOMING_PRICES = {
   default:  { small: { min: 45, max: 80 },  medium: { min: 60, max: 110 }, large: { min: 80, max: 145 } },
 };
 
-function getMetroTier(cityName: string): "seattle" | "portland" | "tacoma" | "default" {
+export type MetroTier = "seattle" | "portland" | "tacoma" | "default";
+
+export function getMetroTier(cityName: string): MetroTier {
   const lower = cityName.toLowerCase();
   if (SEATTLE_METRO.has(lower)) return "seattle";
   if (PORTLAND_METRO.has(lower)) return "portland";
