@@ -163,6 +163,8 @@ const SUBJECT_PHRASE: Record<OwnerMetricKey, (n: string) => string> = {
   googleClicks: (n) => `got ${n} clicks from Google`,
 };
 
+const lowerFirst = (text: string) => text.charAt(0).toLowerCase() + text.slice(1);
+
 const dayLabel = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", timeZone: "UTC" });
 
 /** Big numbers in a row. Tables, because email clients ignore flexbox. */
@@ -231,7 +233,7 @@ export function monthlyReportEmail(input: MonthlyReportInput): BuiltEmail {
   const text = [
     `Here is how ${listingName} did on GroomLocal in ${monthLabel}.`,
     "",
-    ...metrics.map((m) => `${OWNER_METRIC_LABELS[m.key].label}: ${m.value.toLocaleString("en-US")} (${OWNER_METRIC_LABELS[m.key].caption.toLowerCase()})`),
+    ...metrics.map((m) => `${OWNER_METRIC_LABELS[m.key].label}: ${m.value.toLocaleString("en-US")} (${lowerFirst(OWNER_METRIC_LABELS[m.key].caption)})`),
     ...(top.length ? ["", "Your page showed in Google for searches like:", ...top.map((q) => `- ${q}`)] : []),
     ...(badgeHost ? ["", `Your badge is live on ${badgeHost}. Thanks for linking to us.`] : []),
     ...(gaps.length ? ["", "Still missing from your profile:", ...gapText(gaps)] : []),

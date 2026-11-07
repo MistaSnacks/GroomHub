@@ -34,7 +34,7 @@ export interface OwnerReportBatch {
   period: ReportPeriod;
   /** Null when Search Console answered; otherwise why the Google numbers are missing. */
   googleError: string | null;
-  /** First Pacific day with real-visit tracking, when that falls inside the period; null when the whole month counted. */
+  /** First Pacific day with real-visit tracking, when that falls inside the period. Null when tracking covered the whole month or has not started (then no visit metric can qualify). */
   countedFrom: string | null;
   reports: OwnerReport[];
 }
