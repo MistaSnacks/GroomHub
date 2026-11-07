@@ -39,6 +39,12 @@ export interface ListingRow {
 type Field = "services" | "specialties" | "booking_url" | "grooms_cats" | "year_established";
 export const FIELDS: Field[] = ["services", "specialties", "booking_url", "grooms_cats", "year_established"];
 
+/** Listings left out after the owner review of the 2026-11-06 dry run. */
+export const EXCLUDED_SLUGS: Record<string, string> = {
+  "clean-cut-the-barber-company-ellensburg-ellensburg": "a human barber shop, not a dog groomer",
+  "pet-pros-bonney-lake": "website is a brand page for several EarthWise Pet stores; booking link names another store",
+};
+
 interface Evidence {
   value: unknown;
   verified?: boolean;
@@ -221,8 +227,13 @@ async function main() {
   const plans: Plan[] = [];
   const unmatchedCounts = new Map<string, number>();
   const missing: string[] = [];
+  const excluded: string[] = [];
   for (const p of proposals) {
     if (!Object.keys(p.fields).some((k) => (FIELDS as string[]).includes(k))) continue;
+    if (EXCLUDED_SLUGS[p.slug]) {
+      excluded.push(`${p.slug} (${EXCLUDED_SLUGS[p.slug]})`);
+      continue;
+    }
     const listing = bySlug.get(p.slug) ?? bySlug.get(LISTING_REDIRECTS[p.slug] ?? "");
     if (!listing) {
       missing.push(p.slug);
@@ -250,6 +261,7 @@ async function main() {
     `# Enrichment apply plan (${apply ? "apply" : "dry run"}), ${new Date().toISOString()}`,
     "",
     `Proposals with a target field: ${plans.length + missing.length}. Matched to a current listing: ${plans.length}. Not found: ${missing.length}${missing.length ? ` (${missing.join(", ")})` : ""}.`,
+    `Excluded by hand: ${excluded.length}${excluded.length ? ` (${excluded.join("; ")})` : ""}.`,
     `Listings that change: ${changing.length}. Placeholder services replaced: ${placeholderReplaced}. Claimed listings touched: ${claimedTouched.length}.`,
     "",
     "| Field | Will change | Skipped (reason: count) |",
