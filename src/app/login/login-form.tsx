@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ArrowRight } from "@phosphor-icons/react";
 import { createClient } from "@/lib/supabase/browser";
 import { safeRedirectPath } from "@/lib/safe-redirect";
+import { useTurnstile, TURNSTILE_NOT_READY } from "@/components/turnstile";
 
 interface LoginFormProps {
   redirectTo?: string;
@@ -30,9 +31,14 @@ export function LoginForm({ redirectTo, authError }: LoginFormProps) {
   );
   const [loading, setLoading] = useState(false);
   const [resetSent, setResetSent] = useState(false);
+  const captcha = useTurnstile("login");
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!captcha.ready) {
+      setError(TURNSTILE_NOT_READY);
+      return;
+    }
     setLoading(true);
     setError(null);
 
@@ -40,7 +46,9 @@ export function LoginForm({ redirectTo, authError }: LoginFormProps) {
     const { error: signInErr } = await supabase.auth.signInWithPassword({
       email,
       password,
+      options: { captchaToken: captcha.token },
     });
+    captcha.reset();
 
     if (signInErr) {
       setError(signInErr.message);
@@ -57,14 +65,20 @@ export function LoginForm({ redirectTo, authError }: LoginFormProps) {
       setError("Enter your email address first, then click forgot password.");
       return;
     }
+    if (!captcha.ready) {
+      setError(TURNSTILE_NOT_READY);
+      return;
+    }
     setError(null);
     setLoading(true);
 
     const supabase = createClient();
     const { error: resetErr } = await supabase.auth.resetPasswordForEmail(email, {
+      captchaToken: captcha.token,
       redirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(`/reset-password?next=${encodeURIComponent(safeRedirectPath(redirectTo))}`)}`,
     });
 
+    captcha.reset();
     setLoading(false);
 
     if (resetErr) {
@@ -131,6 +145,8 @@ export function LoginForm({ redirectTo, authError }: LoginFormProps) {
           minLength={8}
         />
       </div>
+
+      {captcha.widget}
 
       <div className="pt-2">
         <button

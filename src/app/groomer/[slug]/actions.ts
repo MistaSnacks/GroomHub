@@ -5,6 +5,7 @@ import { sendEmail } from "@/lib/email/send";
 import { headers } from "next/headers";
 import { after } from "next/server";
 import { rateLimit, clientKey } from "@/lib/rate-limit";
+import { verifyTurnstile, TURNSTILE_FIELD, TURNSTILE_FAILED } from "@/lib/turnstile";
 import {
   renderBrandedEmail,
   emailDetailCard,
@@ -63,8 +64,13 @@ export async function sendGroomerMessage(
     return { ok: true };
   }
 
-  if (!rateLimit(`lead:${clientKey(await headers())}`, 5, 10 * 60_000).ok) {
+  const requestHeaders = await headers();
+  if (!rateLimit(`lead:${clientKey(requestHeaders)}`, 5, 10 * 60_000).ok) {
     return { ok: false, error: "Too many messages from this connection. Please try again in a few minutes." };
+  }
+
+  if (!(await verifyTurnstile(formData.get(TURNSTILE_FIELD), clientKey(requestHeaders)))) {
+    return { ok: false, error: TURNSTILE_FAILED };
   }
 
   const listingId = formData.get("listingId")?.toString().trim() || "";

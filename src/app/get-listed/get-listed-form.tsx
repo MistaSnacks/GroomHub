@@ -4,19 +4,27 @@ import { useState, useTransition } from "react";
 import Link from "next/link";
 import { ArrowRight, CheckCircle, WarningCircle } from "@phosphor-icons/react";
 import { submitListing } from "./actions";
+import { useTurnstile, TURNSTILE_NOT_READY } from "@/components/turnstile";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
 export function GetListedForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const captcha = useTurnstile("get_listed");
   const [result, setResult] = useState<{ slug?: string; created?: boolean }>({});
   const [isPending, startTransition] = useTransition();
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!captcha.ready) {
+      setStatus("error");
+      setErrorMsg(TURNSTILE_NOT_READY);
+      return;
+    }
     const form = e.currentTarget;
     const formData = new FormData(form);
+    captcha.reset();
 
     setStatus("submitting");
     setErrorMsg("");
@@ -143,6 +151,7 @@ export function GetListedForm() {
           <label htmlFor="listed-notes" className="block text-sm font-medium text-brand-primary mb-1.5">Anything else?</label>
           <textarea id="listed-notes" name="notes" rows={3} className="w-full rounded-xl border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent resize-none" placeholder="Services offered, hours, anything we should know..." />
         </div>
+        {captcha.widget}
         <button
           type="submit"
           disabled={isPending}

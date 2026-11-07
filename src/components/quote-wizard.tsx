@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useTurnstile, TURNSTILE_NOT_READY } from "@/components/turnstile";
 import {
   ArrowLeft,
   ArrowRight,
@@ -41,6 +42,7 @@ export function QuoteWizard() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const hpRef = useRef<HTMLInputElement>(null);
+  const captcha = useTurnstile("quote");
   const [form, setForm] = useState({
     petType: "" as string,
     petName: "",
@@ -113,14 +115,19 @@ export function QuoteWizard() {
       setError(message);
       return;
     }
+    if (!captcha.ready) {
+      setError(TURNSTILE_NOT_READY);
+      return;
+    }
     setError("");
     setSubmitting(true);
     try {
       const res = await fetch("/api/quotes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, hp_field: hpRef.current?.value ?? "" }),
+        body: JSON.stringify({ ...form, hp_field: hpRef.current?.value ?? "", "cf-turnstile-response": captcha.token }),
       });
+      captcha.reset();
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         setError(data.error || "Something went wrong. Please try again.");
@@ -441,6 +448,8 @@ export function QuoteWizard() {
         className="hidden"
         defaultValue=""
       />
+
+      {captcha.widget}
 
       {/* Validation / submit error */}
       {error && (

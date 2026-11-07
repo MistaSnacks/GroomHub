@@ -3,15 +3,24 @@
 import { useState } from "react";
 import { EnvelopeSimple, Check, CircleNotch } from "@phosphor-icons/react";
 import { DecorativePaws } from "./decorative-paws";
+import { useTurnstile, TURNSTILE_NOT_READY } from "@/components/turnstile";
 
 export function NewsletterCta() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [engaged, setEngaged] = useState(false);
+  const captcha = useTurnstile("newsletter", engaged);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!email.trim()) return;
+    if (!captcha.ready) {
+      setEngaged(true);
+      setStatus("error");
+      setErrorMsg(TURNSTILE_NOT_READY);
+      return;
+    }
 
     setStatus("loading");
     setErrorMsg("");
@@ -24,8 +33,10 @@ export function NewsletterCta() {
         body: JSON.stringify({
           email,
           hp_field: typeof hpField === "string" ? hpField : "",
+          "cf-turnstile-response": captcha.token,
         }),
       });
+      captcha.reset();
 
       const data = await res.json();
 
@@ -64,7 +75,7 @@ export function NewsletterCta() {
             You&apos;re on the list. We only send when there is something worth reading.
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+          <form onSubmit={handleSubmit} onFocus={() => setEngaged(true)} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <input type="text" name="hp_field" tabIndex={-1} autoComplete="off" className="hidden" />
             <input
               type="email"
@@ -88,6 +99,9 @@ export function NewsletterCta() {
               )}
             </button>
           </form>
+        )}
+        {status !== "success" && captcha.widget && (
+          <div className="mt-3">{captcha.widget}</div>
         )}
 
         {status === "error" && (

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, EnvelopeSimple, ArrowCounterClockwise } from "@phosphor-icons/react";
 import { createClient } from "@/lib/supabase/browser";
+import { useTurnstile, TURNSTILE_NOT_READY } from "@/components/turnstile";
 
 interface ClaimFormProps {
     listingSlug: string;
@@ -22,6 +23,7 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
     const [mode, setMode] = useState<Mode>("signup");
     const [resending, setResending] = useState(false);
     const [resent, setResent] = useState(false);
+    const captcha = useTurnstile("claim");
 
     const redirectUrl = `${typeof window !== "undefined" ? location.origin : ""}/auth/callback?next=/claim/${listingSlug}/plans`;
 
@@ -42,8 +44,9 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
         const { error: signUpErr, data } = await supabase.auth.signUp({
             email,
             password,
-            options: { emailRedirectTo: redirectUrl },
+            options: { emailRedirectTo: redirectUrl, captchaToken: captcha.token },
         });
+        captcha.reset();
 
         if (signUpErr) {
             if (signUpErr.message.toLowerCase().includes("already registered")) {
@@ -71,7 +74,9 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
         const { error: signInErr } = await supabase.auth.signInWithPassword({
             email,
             password,
+            options: { captchaToken: captcha.token },
         });
+        captcha.reset();
 
         if (signInErr) {
             if (signInErr.message.toLowerCase().includes("email not confirmed")) {
@@ -89,13 +94,15 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
 
     const handleResendConfirmation = async () => {
         if (!email) return;
+        if (!captcha.ready) { setError(TURNSTILE_NOT_READY); return; }
         setResending(true);
         const supabase = createClient();
         const { error: resendError } = await supabase.auth.resend({
             type: "signup",
             email,
-            options: { emailRedirectTo: redirectUrl },
+            options: { emailRedirectTo: redirectUrl, captchaToken: captcha.token },
         });
+        captcha.reset();
         setResending(false);
         if (resendError) { setError(resendError.message); return; }
         setError(null);
@@ -108,10 +115,16 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
             setError("Enter your email address first, then click forgot password.");
             return;
         }
+        if (!captcha.ready) {
+            setError(TURNSTILE_NOT_READY);
+            return;
+        }
         const supabase = createClient();
         const { error: resetErr } = await supabase.auth.resetPasswordForEmail(email, {
+            captchaToken: captcha.token,
             redirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(`/reset-password?next=/claim/${listingSlug}/plans`)}`,
         });
+        captcha.reset();
         if (resetErr) {
             setError(resetErr.message);
             return;
@@ -124,6 +137,10 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
         e.preventDefault();
         if (password.length < 8) {
             setError("Password must be at least 8 characters.");
+            return;
+        }
+        if (!captcha.ready) {
+            setError(TURNSTILE_NOT_READY);
             return;
         }
         setStatus("loading");
@@ -164,6 +181,7 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
                 </div>
 
                 {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
+                {captcha.widget}
                 <div className="flex flex-col gap-2">
                     {status === "confirm-email" && (
                     <button
@@ -269,6 +287,8 @@ export function ClaimForm({ listingSlug, listingName }: ClaimFormProps) {
                     minLength={8}
                 />
             </div>
+
+            {captcha.widget}
 
             <div className="pt-2">
                 <button

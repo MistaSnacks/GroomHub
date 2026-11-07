@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { PaperPlaneRight, CheckCircle } from "@phosphor-icons/react/dist/ssr";
 import { sendGroomerMessage } from "@/app/groomer/[slug]/actions";
+import { useTurnstile, TURNSTILE_NOT_READY } from "@/components/turnstile";
 
 interface ContactFormProps {
     listingId: string;
@@ -17,11 +18,19 @@ export function ContactForm({ listingId, listingSlug, listingName }: ContactForm
     const [status, setStatus] = useState<"idle" | "success">("idle");
     const [errorMsg, setErrorMsg] = useState("");
     const [isPending, startTransition] = useTransition();
+    const [engaged, setEngaged] = useState(false);
+    const captcha = useTurnstile("contact", engaged);
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+        if (!captcha.ready) {
+            setEngaged(true);
+            setErrorMsg(TURNSTILE_NOT_READY);
+            return;
+        }
         const form = e.currentTarget;
         const formData = new FormData(form);
+        captcha.reset();
         setErrorMsg("");
 
         startTransition(async () => {
@@ -55,7 +64,7 @@ export function ContactForm({ listingId, listingSlug, listingName }: ContactForm
     }
 
     return (
-        <form onSubmit={handleSubmit} className="rounded-2xl border border-border bg-white p-5 shadow-sm space-y-4">
+        <form onSubmit={handleSubmit} onFocus={() => setEngaged(true)} className="rounded-2xl border border-border bg-white p-5 shadow-sm space-y-4">
             <input type="hidden" name="listingId" value={listingId} />
             <input type="hidden" name="listingSlug" value={listingSlug} />
             <input
@@ -138,6 +147,8 @@ export function ContactForm({ listingId, listingSlug, listingName }: ContactForm
                     placeholder="What services are you looking for?"
                 />
             </div>
+
+            {captcha.widget}
 
             <button
                 type="submit"

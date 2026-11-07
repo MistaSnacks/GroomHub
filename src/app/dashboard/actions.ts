@@ -102,7 +102,14 @@ export async function updatePassword(formData: FormData) {
   if (!user.email || !currentPassword) {
     redirect("/dashboard/settings?error=Enter your current password");
   }
-  const { error: reauthError } = await supabase.auth.signInWithPassword({ email: user.email, password: currentPassword });
+  const { error: reauthError } = await supabase.auth.signInWithPassword({
+    email: user.email,
+    password: currentPassword,
+    options: { captchaToken: (formData.get("cf-turnstile-response") as string | null) || undefined },
+  });
+  if (reauthError?.code === "captcha_failed") {
+    redirect("/dashboard/settings?error=The security check failed. Try again");
+  }
   if (reauthError) {
     redirect("/dashboard/settings?error=Current password is incorrect");
   }

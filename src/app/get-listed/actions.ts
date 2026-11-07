@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { sendEmail } from "@/lib/email/send";
 import { headers } from "next/headers";
 import { rateLimit, clientKey } from "@/lib/rate-limit";
+import { verifyTurnstile, TURNSTILE_FIELD, TURNSTILE_FAILED } from "@/lib/turnstile";
 import { createListingFromSubmission } from "@/lib/listing-create";
 import { isDisposableEmail } from "@/lib/claims";
 import { revalidatePath, updateTag } from "next/cache";
@@ -78,8 +79,13 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
     return { ok: true };
   }
 
-  if (!rateLimit(`submit:${clientKey(await headers())}`, 5, 10 * 60_000).ok) {
+  const requestHeaders = await headers();
+  if (!rateLimit(`submit:${clientKey(requestHeaders)}`, 5, 10 * 60_000).ok) {
     return { ok: false, error: "Too many submissions from this connection. Please try again in a few minutes." };
+  }
+
+  if (!(await verifyTurnstile(formData.get(TURNSTILE_FIELD), clientKey(requestHeaders)))) {
+    return { ok: false, error: TURNSTILE_FAILED };
   }
 
   let payloadSize = 0;

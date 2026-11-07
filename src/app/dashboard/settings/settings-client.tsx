@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Key, Warning, Trash, ArrowsClockwise } from "@phosphor-icons/react/dist/ssr";
 import { unclaimListing, updatePassword, deleteAccount } from "../actions";
 import { tierDisplayName } from "@/lib/pricing";
+import { useTurnstile } from "@/components/turnstile";
 
 interface SettingsClientProps {
   userEmail: string;
@@ -17,6 +18,7 @@ interface SettingsClientProps {
 
 export function SettingsClient({ userEmail, listings }: SettingsClientProps) {
   const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const captcha = useTurnstile("change_password", showPasswordForm);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteText, setDeleteText] = useState("");
   const [unclaimSlug, setUnclaimSlug] = useState<string | null>(null);
@@ -43,7 +45,16 @@ export function SettingsClient({ userEmail, listings }: SettingsClientProps) {
               Change Password
             </button>
           ) : (
-            <form action={updatePassword} className="space-y-3 pt-2">
+            <form
+              action={async (formData) => {
+                try {
+                  await updatePassword(formData);
+                } finally {
+                  captcha.reset();
+                }
+              }}
+              className="space-y-3 pt-2"
+            >
               <div>
                 <label className="block text-sm font-medium text-text mb-1.5" htmlFor="currentPassword">
                   Current Password
@@ -73,6 +84,7 @@ export function SettingsClient({ userEmail, listings }: SettingsClientProps) {
                   autoComplete="new-password"
                 />
               </div>
+              {captcha.widget}
               <div className="flex items-center gap-3">
                 <button
                   type="submit"

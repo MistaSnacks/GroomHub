@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/browser";
 import { safeRedirectPath } from "@/lib/safe-redirect";
+import { useTurnstile, TURNSTILE_NOT_READY } from "@/components/turnstile";
 import { WaveDivider } from "@/components/wave-divider";
 
 export default function SignupPage() {
@@ -21,9 +22,14 @@ function SignupForm() {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
+    const captcha = useTurnstile("signup");
 
     const handleSignup = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!captcha.ready) {
+            setError(TURNSTILE_NOT_READY);
+            return;
+        }
         setLoading(true);
         setError(null);
 
@@ -34,8 +40,10 @@ function SignupForm() {
             password,
             options: {
                 emailRedirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`,
+                captchaToken: captcha.token,
             },
         });
+        captcha.reset();
 
         if (error) {
             setError(error.message);
@@ -122,6 +130,7 @@ function SignupForm() {
                                 </div>
 
                                 <p className="text-xs text-text-muted">Use at least 8 characters. By signing up, you agree to our <Link href="/terms" className="underline">Terms</Link> and <Link href="/privacy" className="underline">Privacy Policy</Link>.</p>
+                                {captcha.widget}
                                 <div className="pt-2">
                                     <button
                                         type="submit"

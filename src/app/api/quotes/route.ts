@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendEmail } from "@/lib/email/send";
 import { rateLimit, clientKey } from "@/lib/rate-limit";
+import { verifyTurnstile, TURNSTILE_FIELD, TURNSTILE_FAILED } from "@/lib/turnstile";
 
 const VALID_PET_TYPES = ["dog", "cat"];
 const VALID_SIZES = ["small", "medium", "large", "xlarge", ""];
@@ -161,6 +162,10 @@ export async function POST(request: NextRequest) {
 
   if (typeof body.hp_field === "string" && body.hp_field.length > 0) {
     return NextResponse.json({ success: true });
+  }
+
+  if (!(await verifyTurnstile((body as Record<string, unknown>)[TURNSTILE_FIELD], clientKey(request.headers)))) {
+    return NextResponse.json({ error: TURNSTILE_FAILED }, { status: 403 });
   }
 
   const { data, error } = validate(body);

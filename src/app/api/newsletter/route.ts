@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { rateLimit, clientKey } from "@/lib/rate-limit";
+import { verifyTurnstile, TURNSTILE_FIELD, TURNSTILE_FAILED } from "@/lib/turnstile";
 
 const MAX_PAYLOAD_BYTES = 20_000;
 
@@ -24,10 +25,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid request." }, { status: 400 });
     }
 
-    const body = JSON.parse(raw) as { email?: unknown; hp_field?: unknown };
+    const body = JSON.parse(raw) as { email?: unknown; hp_field?: unknown; [TURNSTILE_FIELD]?: unknown };
 
     if (typeof body.hp_field === "string" && body.hp_field.length > 0) {
       return NextResponse.json({ success: true });
+    }
+
+    if (!(await verifyTurnstile(body[TURNSTILE_FIELD], clientKey(request.headers)))) {
+      return NextResponse.json({ error: TURNSTILE_FAILED }, { status: 403 });
     }
 
     const email = clean(body.email, 200).toLowerCase();
