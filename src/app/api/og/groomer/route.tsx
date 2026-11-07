@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
       return new Response("Listing not found", { status: 404 });
     }
 
-    const services = listing.service_tags.slice(0, 3).map(getServiceLabel);
+    const services = listing.listed_service_tags.slice(0, 3).map(getServiceLabel);
     const location = `${listing.city}, ${listing.state}`;
 
     return new ImageResponse(
@@ -117,9 +117,9 @@ export async function GET(req: NextRequest) {
                     {s}
                   </div>
                 ))}
-                {listing.service_tags.length > 3 && (
+                {listing.listed_service_tags.length > 3 && (
                   <div style={{ color: "#94A3B8", padding: "8px 12px", fontSize: "18px" }}>
-                    +{listing.service_tags.length - 3} more
+                    +{listing.listed_service_tags.length - 3} more
                   </div>
                 )}
               </div>

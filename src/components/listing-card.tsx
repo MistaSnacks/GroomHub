@@ -33,7 +33,8 @@ function listingBlurb(listing: CardListing): string {
 
 export function ListingCard({ listing, index = 0, compact = false, variant = "vertical", linkSrc }: ListingCardProps) {
   const normalized = isNormalized(listing);
-  const serviceTags = normalized ? listing.service_tags.slice(0, 4) : [];
+  const listedTags = normalized ? listing.listed_service_tags ?? [] : [];
+  const serviceTags = listedTags.slice(0, 4);
   const specialtyTags = normalized ? listing.specialty_tags.slice(0, 3) : [];
 
   const firstImage = listing.images && listing.images.length > 0 ? listing.images[0] : "";
@@ -127,9 +128,9 @@ export function ListingCard({ listing, index = 0, compact = false, variant = "ve
                   {getServiceLabel(slug)}
                 </span>
               ))}
-              {listing.service_tags.length > 4 && (
+              {listedTags.length > 4 && (
                 <span className="text-xs px-2 py-0.5 rounded-full bg-surface text-text-muted">
-                  +{listing.service_tags.length - 4} more
+                  +{listedTags.length - 4} more
                 </span>
               )}
             </div>

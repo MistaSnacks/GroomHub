@@ -18,12 +18,12 @@ import { join } from "node:path";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { getServiceLabel, getSpecialtyLabel, matchServiceTag, matchSpecialtyTag } from "../src/lib/tags";
 import { LISTING_REDIRECTS } from "../src/lib/listing-review";
+import { isPlaceholderServices } from "../src/lib/listing-facts";
 
 export const BACKUP_TABLE = "business_listings_backup_enrichment_20261106";
 const SOURCE = join(__dirname, "..", "..", "analysis", "enrichment-full-2026-10-14", "proposals.verified.jsonl");
 const OUT_DIR = join(__dirname, "..", "..", "analysis", "enrichment-full-2026-10-14", "apply-2026-11-06");
 
-export const PLACEHOLDER_SERVICES = ["full groom"];
 
 export interface ListingRow {
   id: string;
@@ -80,9 +80,6 @@ const ENRICHMENT_ALIASES: Record<string, { service?: string; specialty?: string 
 const serviceTag = (raw: string) => matchServiceTag(raw) ?? ENRICHMENT_ALIASES[raw.trim().toLowerCase()]?.service ?? null;
 const specialtyTag = (raw: string) => matchSpecialtyTag(raw) ?? ENRICHMENT_ALIASES[raw.trim().toLowerCase()]?.specialty ?? null;
 
-export function isPlaceholderServices(services: string[] | null | undefined): boolean {
-  return !!services && services.length === 1 && services[0].trim().toLowerCase() === PLACEHOLDER_SERVICES[0];
-}
 
 const isEmptyList = (v: string[] | null | undefined) => !v || v.length === 0;
 

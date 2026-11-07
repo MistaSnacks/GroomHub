@@ -19,6 +19,7 @@ export function toListingCardData(listing: NormalizedListing): ListingCardData {
     badges: listing.badges ?? [],
     subscription_tier: listing.subscription_tier,
     service_tags: listing.service_tags,
+    listed_service_tags: listing.listed_service_tags,
     specialty_tags: listing.specialty_tags,
     feature_tags: listing.feature_tags,
     price_tag: listing.price_tag,

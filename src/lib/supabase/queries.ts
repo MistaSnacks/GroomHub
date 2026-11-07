@@ -4,6 +4,7 @@ import { cache } from "react";
 import { activeSponsorshipFilter, sortRegularList } from "@/lib/listing-rules";
 import { supabase } from "./client";
 import { normalizeTags } from "../tags";
+import { listedServiceTags } from "../listing-facts";
 import type { BusinessListing, NormalizedListing, CityWithCount } from "../types";
 import { getMetroNeighbors, getMetroNeighborSlugs, FEATURED_SPOTS_PER_CITY, getMetroClusterForCity, visitsCityViaMetro } from "../metro-clusters";
 import { pickNearbyGroomers, type NearbyGroomers } from "../nearby-groomers";
@@ -31,7 +32,13 @@ function withTags(listing: BusinessListing): NormalizedListing {
     walk_ins_accepted: listing.walk_ins_accepted,
     vaccination_required: listing.vaccination_required,
   });
-  return { ...listing, description: cleanListingDescription(listing.description), short_description: cleanListingDescription(listing.short_description), ...tags };
+  return {
+    ...listing,
+    description: cleanListingDescription(listing.description),
+    short_description: cleanListingDescription(listing.short_description),
+    ...tags,
+    listed_service_tags: listedServiceTags(listing, tags.service_tags),
+  };
 }
 
 function withTagsAll(listings: BusinessListing[]): NormalizedListing[] {

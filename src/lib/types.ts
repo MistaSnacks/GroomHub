@@ -54,7 +54,10 @@ export interface BusinessListing {
 
 /** Listing with normalized tag arrays (post-migration) */
 export interface NormalizedListing extends BusinessListing {
+  /** Every matched service tag, including the inferred "full-groom". Search and filters use these. */
   service_tags: string[];
+  /** The service tags a page may show as offered: empty when the services are unknown (src/lib/listing-facts.ts). */
+  listed_service_tags: string[];
   specialty_tags: string[];
   feature_tags: string[];
   price_tag: PriceTag;
@@ -76,6 +79,7 @@ export interface ListingCardData {
   badges: Badge[];
   subscription_tier?: "free" | "basic" | "premium";
   service_tags: string[];
+  listed_service_tags: string[];
   specialty_tags: string[];
   feature_tags: string[];
   price_tag: PriceTag;

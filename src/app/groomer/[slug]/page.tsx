@@ -25,7 +25,7 @@ import { AdSlot } from "@/components/ad-slot";
 import { WaveDivider } from "@/components/wave-divider";
 import { ContactForm } from "@/components/contact-form";
 import { getListingBySlug, getNearbyGroomers, canonicalCitySlug } from "@/lib/supabase/queries";
-import { getServiceLabel, getSpecialtyLabel, getServiceTag, getSpecialtyTag } from "@/lib/tags";
+import { getServiceLabel, getSpecialtyLabel, getSpecialtyTag } from "@/lib/tags";
 import { usableListingImages } from "@/lib/images";
 import { localBusinessSchema, breadcrumbSchema } from "@/lib/schema";
 import { stateSlugFromAbbr, stateNameFromAbbr } from "@/lib/geography";
@@ -36,6 +36,8 @@ import { TrackedLink } from "@/components/tracked-website-link";
 import { GuideLinkSentence } from "@/components/guide-link";
 import { getLinkableBlogSlugs } from "@/lib/blog";
 import { guideLinksFor } from "@/lib/internal-links";
+import { harvestedPricesFor, shouldShowHarvestedPrices } from "@/lib/harvested-prices";
+import { HarvestedPricesSection, HoursSection, ServicesSection } from "@/components/profile/profile-sections";
 
 export const revalidate = 300;
 
@@ -135,6 +137,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
     },
     linkableSlugs,
   );
+  const harvested = harvestedPricesFor(listing.id);
   const stateSlug = stateSlugFromAbbr(listing.state);
   const stateName = stateNameFromAbbr(listing.state);
   // Breadcrumb data
@@ -336,41 +339,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
               </div>
             </div>}
 
-            {/* Services (normalized tags) */}
-            <div className="rounded-2xl border border-border bg-white p-6">
-              <h2 className="font-heading text-xl font-semibold text-brand-primary mb-4">
-                Services
-              </h2>
-              {listing.service_tags.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {listing.service_tags.map((slug) => {
-                    const tag = getServiceTag(slug);
-                    return (
-                      <div key={slug} className="rounded-xl bg-brand-secondary/5 border border-brand-secondary/15 p-3">
-                        <span className="text-sm font-semibold text-brand-primary">
-                          {getServiceLabel(slug)}
-                        </span>
-                        {tag?.description && (
-                          <p className="text-xs text-text-muted mt-1 leading-relaxed">
-                            {tag.description}
-                          </p>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : listing.services.length > 0 ? (
-                <div className="divide-y divide-border">
-                  {listing.services.map((service, i) => (
-                    <div key={`${service}-${i}`} className="flex items-center justify-between py-3">
-                      <span className="text-sm text-text">{service}</span>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-sm text-text-muted">No services listed yet.</p>
-              )}
-            </div>
+            <ServicesSection listing={listing} />
 
             {/* Specialties */}
             {listing.specialty_tags.length > 0 && (
@@ -459,24 +428,9 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
               </div>
             )}
 
-            {/* Hours */}
-            {Array.isArray(listing.hours) && listing.hours.length > 0 && (
-              <div className="rounded-2xl border border-border bg-white p-6">
-                <h2 className="font-heading text-xl font-semibold text-brand-primary mb-4">
-                  Business Hours
-                </h2>
-                <div className="divide-y divide-border">
-                  {listing.hours.map((h) => (
-                    <div key={h.day} className="flex items-center justify-between py-2.5">
-                      <span className="text-sm font-medium text-text">{h.day}</span>
-                      <span className={`text-sm ${h.closed ? "text-fun-pop" : "text-text-muted"}`}>
-                        {h.closed ? "Closed" : `${h.open} - ${h.close}`}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            {shouldShowHarvestedPrices(listing, harvested) && <HarvestedPricesSection name={listing.name} set={harvested} />}
+
+            <HoursSection hours={listing.hours} />
 
             {/* Nearby groomers */}
             {nearby.listings.length > 0 && (
@@ -586,13 +540,13 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
               </div>
 
               {/* Service Tags Sidebar */}
-              {listing.service_tags.length > 0 && (
+              {listing.listed_service_tags.length > 0 && (
                 <div className="rounded-2xl border border-border bg-white p-5">
                   <h3 className="font-heading text-sm font-semibold text-brand-primary mb-3">
                     Services Offered
                   </h3>
                   <div className="flex flex-wrap gap-1.5">
-                    {listing.service_tags.map((slug) => (
+                    {listing.listed_service_tags.map((slug) => (
                       <span
                         key={slug}
                         className="rounded-full bg-brand-secondary/10 px-3 py-1 text-xs font-medium text-brand-secondary"

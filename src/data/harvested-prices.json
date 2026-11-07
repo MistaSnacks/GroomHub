@@ -1,0 +1,3647 @@
+{
+ "01f6d9ed-acf2-49c6-9db0-5f3d4af24b98": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 40,
+    "sourceUrl": "https://www.mzwoodscreekkennels.com/other-services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://www.mzwoodscreekkennels.com/other-services"
+   }
+  ]
+ },
+ "067c8763-352f-41a1-9a84-34f4cdafb19e": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 60,
+    "sourceUrl": "https://www.thegrandfurlodge.com/grooming"
+   },
+   {
+    "service": "bath",
+    "from": 40,
+    "sourceUrl": "https://www.thegrandfurlodge.com/grooming"
+   },
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://www.thegrandfurlodge.com/grooming"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 10,
+    "sourceUrl": "https://www.thegrandfurlodge.com/grooming"
+   },
+   {
+    "service": "teeth",
+    "from": 15,
+    "sourceUrl": "https://www.thegrandfurlodge.com/grooming"
+   }
+  ]
+ },
+ "0816d2b4-9f71-49f9-ba3a-75f68c03d6bc": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 55,
+    "sourceUrl": "https://www.dogsofstylegrooming.com/"
+   },
+   {
+    "service": "bath",
+    "from": 35,
+    "sourceUrl": "https://www.dogsofstylegrooming.com/"
+   }
+  ]
+ },
+ "08ac0b39-68e1-4438-b04d-2a038088415a": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "http://www.paulyspawspa.com/services.html"
+   },
+   {
+    "service": "deshed",
+    "from": 10,
+    "sourceUrl": "http://www.paulyspawspa.com/services.html"
+   },
+   {
+    "service": "teeth",
+    "from": 15,
+    "sourceUrl": "http://www.paulyspawspa.com/services.html"
+   }
+  ]
+ },
+ "08e916bf-8b92-4359-81ef-5f6ff5494af6": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 45,
+    "sourceUrl": "https://whitecitypetgrooming.groomore.com/"
+   },
+   {
+    "service": "bath",
+    "from": 40,
+    "sourceUrl": "https://whitecitypetgrooming.groomore.com/"
+   },
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://whitecitypetgrooming.groomore.com/"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 10,
+    "sourceUrl": "https://whitecitypetgrooming.groomore.com/"
+   }
+  ]
+ },
+ "0da2157f-fb95-42b0-bdea-531339c13a1d": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 8,
+    "sourceUrl": "https://farmerlinda24.wixsite.com/farmerlindapetcarean/book-online"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 25,
+    "sourceUrl": "https://farmerlinda24.wixsite.com/farmerlindapetcarean/book-online"
+   }
+  ]
+ },
+ "0e148934-7d8d-4237-bf8b-ca9ac7d18941": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 85,
+    "sourceUrl": "https://tailspetresort.com/pawsh-grooming"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://tailspetresort.com/pawsh-grooming"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 15,
+    "sourceUrl": "https://tailspetresort.com/pawsh-grooming"
+   },
+   {
+    "service": "deshed",
+    "from": 65,
+    "sourceUrl": "https://tailspetresort.com/pawsh-grooming"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://tailspetresort.com/pawsh-grooming"
+   }
+  ]
+ },
+ "107bf13e-b265-4cc7-a52b-500d3137e2a4": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 22,
+    "sourceUrl": "https://www.wetnosesdrypaws.com/pricing"
+   },
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://www.wetnosesdrypaws.com/pricing"
+   }
+  ]
+ },
+ "1285bef9-7706-403e-9b8b-f29ea269a459": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 30,
+    "sourceUrl": "https://www.biscuitsdoggiedaycare.com/services/grooming"
+   },
+   {
+    "service": "nail_trim",
+    "from": 12,
+    "sourceUrl": "https://www.biscuitsdoggiedaycare.com/services/grooming"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 20,
+    "sourceUrl": "https://www.biscuitsdoggiedaycare.com/services/grooming"
+   }
+  ]
+ },
+ "129b1673-8bcc-45d4-aed3-3851f26bb03a": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://pawsuppetgroom.com/"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 15,
+    "sourceUrl": "https://pawsuppetgroom.com/"
+   },
+   {
+    "service": "deshed",
+    "from": 30,
+    "sourceUrl": "https://pawsuppetgroom.com/"
+   },
+   {
+    "service": "teeth",
+    "from": 15,
+    "sourceUrl": "https://pawsuppetgroom.com/"
+   }
+  ]
+ },
+ "134935c6-8f7c-4f26-b9f5-e52979a835b4": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 90,
+    "sourceUrl": "https://tailoredpetservices.com/rates"
+   },
+   {
+    "service": "bath",
+    "from": 50,
+    "sourceUrl": "https://tailoredpetservices.com/rates"
+   }
+  ]
+ },
+ "144af64b-0552-46a4-b66f-98b622399fc4": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 78,
+    "sourceUrl": "http://www.mpgrooming.com/grooming-services"
+   },
+   {
+    "service": "bath",
+    "from": 45,
+    "sourceUrl": "http://www.mpgrooming.com/grooming-services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "http://www.mpgrooming.com/grooming-services"
+   },
+   {
+    "service": "teeth",
+    "from": 15,
+    "sourceUrl": "http://www.mpgrooming.com/grooming-services"
+   }
+  ]
+ },
+ "15b5ae9e-c830-4d9a-88f5-d91069a56414": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 64,
+    "sourceUrl": "https://www.spokanepawprints.com/"
+   }
+  ]
+ },
+ "17651c35-7d73-4f62-9922-2d0fef75e04b": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 85,
+    "sourceUrl": "https://barklandia-pdx.com/grooming"
+   },
+   {
+    "service": "bath",
+    "from": 25,
+    "sourceUrl": "https://barklandia-pdx.com/grooming"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://barklandia-pdx.com/grooming"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 12,
+    "sourceUrl": "https://barklandia-pdx.com/grooming"
+   },
+   {
+    "service": "deshed",
+    "from": 25,
+    "sourceUrl": "https://barklandia-pdx.com/grooming"
+   },
+   {
+    "service": "teeth",
+    "from": 15,
+    "sourceUrl": "https://barklandia-pdx.com/grooming"
+   }
+  ]
+ },
+ "18b5ff78-883f-4ab5-a3bd-18e6dd4fbba2": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 45,
+    "sourceUrl": "https://www.abathandabiscuit.com/bio"
+   },
+   {
+    "service": "bath",
+    "from": 35,
+    "sourceUrl": "https://www.abathandabiscuit.com/bio"
+   },
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://www.abathandabiscuit.com/bio"
+   }
+  ]
+ },
+ "1d2ad00d-d258-4171-a578-193b8bfc79eb": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 100,
+    "sourceUrl": "https://thelittledogsalon.groomore.com/"
+   },
+   {
+    "service": "bath",
+    "from": 60,
+    "sourceUrl": "https://thelittledogsalon.groomore.com/"
+   }
+  ]
+ },
+ "1f1bf83f-66f5-48f8-8ebc-b24ce9d83b5f": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://littlepawsinc.com/rates-specials"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 5,
+    "sourceUrl": "https://littlepawsinc.com/rates-specials"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://littlepawsinc.com/rates-specials"
+   }
+  ]
+ },
+ "1f2b4f16-ea8b-4a1d-8876-a56cd061f538": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://centraliapetresort.com/"
+   }
+  ]
+ },
+ "218871a7-f93f-43b1-92e7-9bdee16c5345": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://naturally4paws.com/grooming"
+   },
+   {
+    "service": "deshed",
+    "from": 15,
+    "sourceUrl": "https://naturally4paws.com/grooming"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://naturally4paws.com/grooming"
+   }
+  ]
+ },
+ "22d42b6d-a97b-46d7-8c59-bb43a447c589": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 85,
+    "sourceUrl": "https://www.thegroomshoppdx.com/services"
+   },
+   {
+    "service": "bath",
+    "from": 55,
+    "sourceUrl": "https://www.thegroomshoppdx.com/services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 12,
+    "sourceUrl": "https://www.thegroomshoppdx.com/services"
+   },
+   {
+    "service": "deshed",
+    "from": 25,
+    "sourceUrl": "https://www.thegroomshoppdx.com/services"
+   },
+   {
+    "service": "teeth",
+    "from": 15,
+    "sourceUrl": "https://www.thegroomshoppdx.com/services"
+   }
+  ]
+ },
+ "234d9316-2320-41a1-98a7-8c9257bc6afc": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 70,
+    "sourceUrl": "https://theurbanbark.com/"
+   },
+   {
+    "service": "bath",
+    "from": 45,
+    "sourceUrl": "https://theurbanbark.com/"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://theurbanbark.com/"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 55,
+    "sourceUrl": "https://theurbanbark.com/"
+   }
+  ]
+ },
+ "23f8ad14-a6a1-476c-b141-7559a7e0a238": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 80,
+    "sourceUrl": "https://pawznbubbles.com/pricing"
+   },
+   {
+    "service": "bath",
+    "from": 115,
+    "sourceUrl": "https://pawznbubbles.com/pricing"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://pawznbubbles.com/pricing"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 15,
+    "sourceUrl": "https://pawznbubbles.com/pricing"
+   }
+  ]
+ },
+ "242d467d-cf12-4eb5-b28d-3fa8c729a175": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 25,
+    "sourceUrl": "https://www.paradisepetlodge.com/grooming-salon"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 7.5,
+    "sourceUrl": "https://www.paradisepetlodge.com/grooming-salon"
+   },
+   {
+    "service": "deshed",
+    "from": 20,
+    "sourceUrl": "https://www.paradisepetlodge.com/grooming-salon"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://www.paradisepetlodge.com/grooming-salon"
+   }
+  ]
+ },
+ "24575491-24dc-48a8-9bc3-447f6ebab3a1": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 80,
+    "sourceUrl": "https://www.phasespetsalon.com/Booking"
+   },
+   {
+    "service": "bath",
+    "from": 65,
+    "sourceUrl": "https://www.phasespetsalon.com/Booking"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://www.phasespetsalon.com/Booking"
+   }
+  ]
+ },
+ "261ae305-f7bf-4742-bbcb-fc629c7926e0": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 25,
+    "sourceUrl": "https://www.adogshideaway.com/general-7"
+   }
+  ]
+ },
+ "2a558dc2-7903-4e2d-8826-295bc5462590": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 75,
+    "sourceUrl": "https://www.snugglebuggrooming.com/services-3"
+   },
+   {
+    "service": "bath",
+    "from": 35,
+    "sourceUrl": "https://www.snugglebuggrooming.com/services-3"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://www.snugglebuggrooming.com/services-3"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 55,
+    "sourceUrl": "https://www.snugglebuggrooming.com/services-3"
+   }
+  ]
+ },
+ "2c8d0c06-2fbc-4f45-8c1f-a4c182f53454": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://www.howllywoodpetgrooming.com/services-pricing"
+   }
+  ]
+ },
+ "2e425bee-b71c-4c9d-9354-78df06712a1a": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://www.pooch-palace.biz/pricing"
+   }
+  ]
+ },
+ "2f10a121-c502-413d-90eb-2fcb1f34566e": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 30,
+    "sourceUrl": "https://www.doghairdontcare.com/vans-at-the-dog-park"
+   }
+  ]
+ },
+ "30409d64-e5e2-497f-89f6-8bdca38a2659": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 5,
+    "sourceUrl": "https://www.kathleenspetgrooming.com/services"
+   }
+  ]
+ },
+ "31caf38b-41bf-4e87-8d42-1c574b634188": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 70,
+    "sourceUrl": "https://spokanedoggrooming.com/pricing"
+   },
+   {
+    "service": "bath",
+    "from": 35,
+    "sourceUrl": "https://spokanedoggrooming.com/pricing"
+   },
+   {
+    "service": "nail_trim",
+    "from": 5,
+    "sourceUrl": "https://spokanedoggrooming.com/pricing"
+   },
+   {
+    "service": "deshed",
+    "from": 20,
+    "sourceUrl": "https://spokanedoggrooming.com/pricing"
+   },
+   {
+    "service": "teeth",
+    "from": 15,
+    "sourceUrl": "https://spokanedoggrooming.com/pricing"
+   }
+  ]
+ },
+ "329a7431-5f3d-41bb-b3ca-937c559cf632": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 80,
+    "sourceUrl": "https://biscuitspetplace.com/grooming"
+   },
+   {
+    "service": "bath",
+    "from": 55,
+    "sourceUrl": "https://biscuitspetplace.com/grooming"
+   },
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://biscuitspetplace.com/grooming"
+   },
+   {
+    "service": "deshed",
+    "from": 25,
+    "sourceUrl": "https://biscuitspetplace.com/grooming"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://biscuitspetplace.com/grooming"
+   }
+  ]
+ },
+ "33d1bb0a-ee7c-4011-90e5-aeffa745f509": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 70,
+    "sourceUrl": "https://www.coastalcutsgrooming.com/Services"
+   },
+   {
+    "service": "bath",
+    "from": 40,
+    "sourceUrl": "https://www.coastalcutsgrooming.com/Services"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 55,
+    "sourceUrl": "https://www.coastalcutsgrooming.com/Services"
+   }
+  ]
+ },
+ "3613987b-85f9-4689-a699-e7dec70f3c8a": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 30,
+    "sourceUrl": "https://thesoggydoggy.com/self-service-dog-wash"
+   }
+  ]
+ },
+ "3690eef4-a009-49dd-9869-d4dac81edc76": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 50,
+    "sourceUrl": "https://www.canineaesthetics.com/services.html"
+   },
+   {
+    "service": "nail_trim",
+    "from": 25,
+    "sourceUrl": "https://www.canineaesthetics.com/services.html"
+   }
+  ]
+ },
+ "387052ff-11b9-4f95-9fb4-d3c06569881b": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 45,
+    "sourceUrl": "https://www.addiedoggrooming.com/"
+   },
+   {
+    "service": "bath",
+    "from": 25,
+    "sourceUrl": "https://www.addiedoggrooming.com/"
+   },
+   {
+    "service": "nail_trim",
+    "from": 5,
+    "sourceUrl": "https://www.addiedoggrooming.com/"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 10,
+    "sourceUrl": "https://www.addiedoggrooming.com/"
+   }
+  ]
+ },
+ "3c535ceb-3300-4912-baa1-81f8767358ec": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 100,
+    "sourceUrl": "https://polished-paws.com/"
+   },
+   {
+    "service": "bath",
+    "from": 45,
+    "sourceUrl": "https://polished-paws.com/"
+   },
+   {
+    "service": "nail_trim",
+    "from": 5,
+    "sourceUrl": "https://polished-paws.com/"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 10,
+    "sourceUrl": "https://polished-paws.com/"
+   },
+   {
+    "service": "deshed",
+    "from": 10,
+    "sourceUrl": "https://polished-paws.com/"
+   },
+   {
+    "service": "teeth",
+    "from": 8,
+    "sourceUrl": "https://polished-paws.com/"
+   }
+  ]
+ },
+ "3c93225e-f276-49f3-86c1-16ffd1463521": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 100,
+    "sourceUrl": "https://thedogstop.com/locations/oregon/sherwood/services"
+   },
+   {
+    "service": "bath",
+    "from": 30,
+    "sourceUrl": "https://thedogstop.com/locations/oregon/sherwood/services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://thedogstop.com/locations/oregon/sherwood/services"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 15,
+    "sourceUrl": "https://thedogstop.com/locations/oregon/sherwood/services"
+   },
+   {
+    "service": "deshed",
+    "from": 35,
+    "sourceUrl": "https://thedogstop.com/locations/oregon/sherwood/services"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://thedogstop.com/locations/oregon/sherwood/services"
+   }
+  ]
+ },
+ "3eb26f1e-541f-45b5-a7e3-02637a767ca4": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 95,
+    "sourceUrl": "https://www.gigharborkennel.com/services/tidy-paws-salon.php"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://www.gigharborkennel.com/services/tidy-paws-salon.php"
+   },
+   {
+    "service": "teeth",
+    "from": 8,
+    "sourceUrl": "https://www.gigharborkennel.com/services/tidy-paws-salon.php"
+   }
+  ]
+ },
+ "3f05bc84-a1dc-4931-8999-e3b26114f23a": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://www.allysdogspa.com/"
+   },
+   {
+    "service": "teeth",
+    "from": 8,
+    "sourceUrl": "https://www.allysdogspa.com/"
+   }
+  ]
+ },
+ "403eae5c-c1af-404a-8573-262d5f9b2830": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 5,
+    "sourceUrl": "https://www.kungfushihtzugrooming.com/services.htm"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://www.kungfushihtzugrooming.com/services.htm"
+   }
+  ]
+ },
+ "41299cbe-c6cc-4604-9f72-53a5779444e3": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "face_feet_fanny",
+    "from": 25,
+    "sourceUrl": "https://www.groomingartsnw.com/estimate-your-groom"
+   }
+  ]
+ },
+ "42876cf3-92f6-4b8c-8474-270c1366333b": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 110,
+    "sourceUrl": "https://grooming4pets.com/"
+   },
+   {
+    "service": "bath",
+    "from": 65,
+    "sourceUrl": "https://grooming4pets.com/"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://grooming4pets.com/"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 20,
+    "sourceUrl": "https://grooming4pets.com/"
+   },
+   {
+    "service": "deshed",
+    "from": 15,
+    "sourceUrl": "https://grooming4pets.com/"
+   },
+   {
+    "service": "teeth",
+    "from": 20,
+    "sourceUrl": "https://grooming4pets.com/"
+   }
+  ]
+ },
+ "44221688-52c0-4f00-a157-8e2a3ca688cb": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 17,
+    "sourceUrl": "https://www.gvgroom.com/pricing-list"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 15,
+    "sourceUrl": "https://www.gvgroom.com/pricing-list"
+   },
+   {
+    "service": "deshed",
+    "from": 15,
+    "sourceUrl": "https://www.gvgroom.com/pricing-list"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://www.gvgroom.com/pricing-list"
+   }
+  ]
+ },
+ "4dd681f9-8b41-4385-ae14-6de0cc47a43a": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 65,
+    "sourceUrl": "https://thebathhousepetsalon.com/Services"
+   },
+   {
+    "service": "bath",
+    "from": 35,
+    "sourceUrl": "https://thebathhousepetsalon.com/Services"
+   }
+  ]
+ },
+ "4df5b722-a8e8-4dc5-8ff9-d552fc8e7faa": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 125,
+    "sourceUrl": "https://www.picklesplayland.dog/grooming"
+   },
+   {
+    "service": "bath",
+    "from": 35,
+    "sourceUrl": "https://www.picklesplayland.dog/grooming"
+   },
+   {
+    "service": "nail_trim",
+    "from": 12,
+    "sourceUrl": "https://www.picklesplayland.dog/grooming"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 22,
+    "sourceUrl": "https://www.picklesplayland.dog/grooming"
+   },
+   {
+    "service": "deshed",
+    "from": 28,
+    "sourceUrl": "https://www.picklesplayland.dog/grooming"
+   },
+   {
+    "service": "teeth",
+    "from": 12,
+    "sourceUrl": "https://www.picklesplayland.dog/grooming"
+   }
+  ]
+ },
+ "4f0975fd-2dbd-422c-805e-b90c1f90fc2b": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 41,
+    "sourceUrl": "https://www.landofpawsashland.com/rates.html"
+   },
+   {
+    "service": "bath",
+    "from": 32,
+    "sourceUrl": "https://www.landofpawsashland.com/rates.html"
+   },
+   {
+    "service": "nail_trim",
+    "from": 12,
+    "sourceUrl": "https://www.landofpawsashland.com/rates.html"
+   }
+  ]
+ },
+ "5151f6e3-b5d7-4b72-b138-194cdf0869ab": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 65,
+    "sourceUrl": "https://mariasspaw.com/services"
+   },
+   {
+    "service": "bath",
+    "from": 30,
+    "sourceUrl": "https://mariasspaw.com/services"
+   },
+   {
+    "service": "puppy_groom",
+    "from": 45,
+    "sourceUrl": "https://mariasspaw.com/services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://mariasspaw.com/services"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 45,
+    "sourceUrl": "https://mariasspaw.com/services"
+   },
+   {
+    "service": "deshed",
+    "from": 10,
+    "sourceUrl": "https://mariasspaw.com/services"
+   }
+  ]
+ },
+ "51fa8576-945f-4a6b-a2f1-19c951f9cefc": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 82,
+    "sourceUrl": "https://www.simplyirresistiblepets.com/services"
+   },
+   {
+    "service": "bath",
+    "from": 65,
+    "sourceUrl": "https://www.simplyirresistiblepets.com/services"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 72,
+    "sourceUrl": "https://www.simplyirresistiblepets.com/services"
+   }
+  ]
+ },
+ "52b55bd1-8b69-422d-b480-1bea511df3bc": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 90,
+    "sourceUrl": "https://sendroverover.com/prices"
+   },
+   {
+    "service": "bath",
+    "from": 40,
+    "sourceUrl": "https://sendroverover.com/prices"
+   }
+  ]
+ },
+ "558e36c5-3e30-40ed-a229-deefff74794f": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 65,
+    "sourceUrl": "https://www.oakgrovekennel.com/dog-grooming"
+   },
+   {
+    "service": "bath",
+    "from": 50,
+    "sourceUrl": "https://www.oakgrovekennel.com/dog-grooming"
+   },
+   {
+    "service": "nail_trim",
+    "from": 5,
+    "sourceUrl": "https://www.oakgrovekennel.com/dog-grooming"
+   },
+   {
+    "service": "deshed",
+    "from": 15,
+    "sourceUrl": "https://www.oakgrovekennel.com/dog-grooming"
+   },
+   {
+    "service": "teeth",
+    "from": 8,
+    "sourceUrl": "https://www.oakgrovekennel.com/dog-grooming"
+   }
+  ]
+ },
+ "55c354b6-680b-4142-b68a-a8c2f712d01f": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 55,
+    "sourceUrl": "https://www.goodgriefgrooming.com/"
+   },
+   {
+    "service": "bath",
+    "from": 40,
+    "sourceUrl": "https://www.goodgriefgrooming.com/"
+   },
+   {
+    "service": "nail_trim",
+    "from": 25,
+    "sourceUrl": "https://www.goodgriefgrooming.com/"
+   },
+   {
+    "service": "deshed",
+    "from": 10,
+    "sourceUrl": "https://www.goodgriefgrooming.com/"
+   },
+   {
+    "service": "teeth",
+    "from": 5,
+    "sourceUrl": "https://www.goodgriefgrooming.com/"
+   }
+  ]
+ },
+ "56a58ab1-4286-4e39-9d21-0817f80eaa6f": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 5,
+    "sourceUrl": "http://bowzersbandb.com/"
+   }
+  ]
+ },
+ "56eee875-24c2-421f-8c3d-a610eb17b420": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 52,
+    "sourceUrl": "https://www.barkyes.com/grooming"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://www.barkyes.com/grooming"
+   },
+   {
+    "service": "deshed",
+    "from": 82,
+    "sourceUrl": "https://www.barkyes.com/grooming"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://www.barkyes.com/grooming"
+   }
+  ]
+ },
+ "578a9f62-0d82-468d-80fe-eeb6b1590233": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 30,
+    "sourceUrl": "https://www.k9tofive.net/dog-grooming-vancouver-washington"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://www.k9tofive.net/dog-grooming-vancouver-washington"
+   }
+  ]
+ },
+ "59a0aa1c-02ee-4d93-9895-92d4686e1df2": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 140,
+    "sourceUrl": "https://www.combncollar.com/pricing"
+   },
+   {
+    "service": "bath",
+    "from": 120,
+    "sourceUrl": "https://www.combncollar.com/pricing"
+   }
+  ]
+ },
+ "5a20f8e3-080a-4a2c-b0ef-a7f5d973c189": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 7.5,
+    "sourceUrl": "https://www.thelaundromuttselfservicedogwash.com/services"
+   }
+  ]
+ },
+ "5b1aee9a-cea1-465d-acae-031ef0969571": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 80,
+    "sourceUrl": "https://www.puffypawspetsalon.com/services"
+   },
+   {
+    "service": "bath",
+    "from": 50,
+    "sourceUrl": "https://www.puffypawspetsalon.com/services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://www.puffypawspetsalon.com/services"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 15,
+    "sourceUrl": "https://www.puffypawspetsalon.com/services"
+   },
+   {
+    "service": "deshed",
+    "from": 20,
+    "sourceUrl": "https://www.puffypawspetsalon.com/services"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://www.puffypawspetsalon.com/services"
+   }
+  ]
+ },
+ "5b7789cd-5641-4307-830f-b9ab79d2be22": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://www.hautepaws.com/services.html"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 15,
+    "sourceUrl": "https://www.hautepaws.com/services.html"
+   },
+   {
+    "service": "teeth",
+    "from": 15,
+    "sourceUrl": "https://www.hautepaws.com/services.html"
+   }
+  ]
+ },
+ "5c2f0dcb-7030-41a0-a339-9adbcef30094": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 65,
+    "sourceUrl": "https://www.wildtailsgrooming.com/services"
+   },
+   {
+    "service": "bath",
+    "from": 40,
+    "sourceUrl": "https://www.wildtailsgrooming.com/services"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 50,
+    "sourceUrl": "https://www.wildtailsgrooming.com/services"
+   }
+  ]
+ },
+ "5e39eb85-9ae3-4e53-afb0-560ee7336e90": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 30,
+    "sourceUrl": "https://www.karenscritters.club/dog-grooming"
+   }
+  ]
+ },
+ "5fa317d5-d1c8-441d-b409-d53f1de603cb": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 60,
+    "sourceUrl": "https://doggoselfwash.com/price-list"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://doggoselfwash.com/price-list"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 33,
+    "sourceUrl": "https://doggoselfwash.com/price-list"
+   }
+  ]
+ },
+ "5fdcb9e3-d694-4472-9908-8fc473ddc8bb": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 22,
+    "sourceUrl": "https://www.floofpetgrooming.com/services"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 25,
+    "sourceUrl": "https://www.floofpetgrooming.com/services"
+   }
+  ]
+ },
+ "600405fb-8e65-4095-8af7-ac300a92948c": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 78,
+    "sourceUrl": "https://portlandcitypetgroomers.com/services"
+   },
+   {
+    "service": "bath",
+    "from": 55,
+    "sourceUrl": "https://portlandcitypetgroomers.com/services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 23,
+    "sourceUrl": "https://portlandcitypetgroomers.com/services"
+   }
+  ]
+ },
+ "60a56289-43ec-45d1-9288-58e5ba5cf075": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 80,
+    "sourceUrl": "https://ruffroadsmobilegrooming.com/book-now"
+   },
+   {
+    "service": "bath",
+    "from": 130,
+    "sourceUrl": "https://ruffroadsmobilegrooming.com/book-now"
+   }
+  ]
+ },
+ "628ae133-9ba3-4a63-aa5d-87a56e9c7869": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 80,
+    "sourceUrl": "https://www.loving-paws.org/grooming-services"
+   },
+   {
+    "service": "bath",
+    "from": 55,
+    "sourceUrl": "https://www.loving-paws.org/grooming-services"
+   },
+   {
+    "service": "puppy_groom",
+    "from": 50,
+    "sourceUrl": "https://www.loving-paws.org/grooming-services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://www.loving-paws.org/grooming-services"
+   },
+   {
+    "service": "deshed",
+    "from": 20,
+    "sourceUrl": "https://www.loving-paws.org/grooming-services"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://www.loving-paws.org/grooming-services"
+   }
+  ]
+ },
+ "684d380e-b15e-4cc9-8953-08d627c18562": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 40,
+    "sourceUrl": "https://emilyswoofpack.com/servicespricing"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://emilyswoofpack.com/servicespricing"
+   }
+  ]
+ },
+ "68c50a0d-8432-4aa2-9665-80113aa24891": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 55,
+    "sourceUrl": "https://doggroomingbylou.com/prices.html"
+   },
+   {
+    "service": "bath",
+    "from": 40,
+    "sourceUrl": "https://doggroomingbylou.com/prices.html"
+   }
+  ]
+ },
+ "6a3be783-730c-40d4-8c2e-c966ea108714": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 90,
+    "sourceUrl": "https://www.smarterthanyourdog.com/grooming/pricing"
+   },
+   {
+    "service": "bath",
+    "from": 45,
+    "sourceUrl": "https://www.smarterthanyourdog.com/grooming/pricing"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://www.smarterthanyourdog.com/grooming/pricing"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://www.smarterthanyourdog.com/grooming/pricing"
+   }
+  ]
+ },
+ "6a7bc1c4-b650-4d1b-a96e-edd73997c4d0": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 65,
+    "sourceUrl": "https://anniesgrooming.com/prices"
+   },
+   {
+    "service": "bath",
+    "from": 35,
+    "sourceUrl": "https://anniesgrooming.com/prices"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://anniesgrooming.com/prices"
+   }
+  ]
+ },
+ "6ca44cc2-e013-4e05-89a5-572b3cc82736": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 85,
+    "sourceUrl": "https://thedogstop.com/locations/washington/bothell/services"
+   },
+   {
+    "service": "bath",
+    "from": 50,
+    "sourceUrl": "https://thedogstop.com/locations/washington/bothell/services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://thedogstop.com/locations/washington/bothell/services"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 75,
+    "sourceUrl": "https://thedogstop.com/locations/washington/bothell/services"
+   },
+   {
+    "service": "teeth",
+    "from": 15,
+    "sourceUrl": "https://thedogstop.com/locations/washington/bothell/services"
+   }
+  ]
+ },
+ "6d75617a-d47e-4cfd-a70a-41df4ea26434": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 100,
+    "sourceUrl": "http://www.olygroomingco.com/pricing.html"
+   },
+   {
+    "service": "bath",
+    "from": 50,
+    "sourceUrl": "http://www.olygroomingco.com/pricing.html"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "http://www.olygroomingco.com/pricing.html"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 35,
+    "sourceUrl": "http://www.olygroomingco.com/pricing.html"
+   }
+  ]
+ },
+ "6f4b883d-82d7-4f2c-916e-19e17c33a497": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 70,
+    "sourceUrl": "https://abcdsupplies.net/Services"
+   },
+   {
+    "service": "bath",
+    "from": 30,
+    "sourceUrl": "https://abcdsupplies.net/Services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 5,
+    "sourceUrl": "https://abcdsupplies.net/Services"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 5,
+    "sourceUrl": "https://abcdsupplies.net/Services"
+   },
+   {
+    "service": "deshed",
+    "from": 25,
+    "sourceUrl": "https://abcdsupplies.net/Services"
+   },
+   {
+    "service": "teeth",
+    "from": 5,
+    "sourceUrl": "https://abcdsupplies.net/Services"
+   }
+  ]
+ },
+ "716c175d-0f5b-4d76-99ac-02f0ab8af97f": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 18,
+    "sourceUrl": "https://www.bonneylakedoghouse.com/services-7"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://www.bonneylakedoghouse.com/services-7"
+   }
+  ]
+ },
+ "72b46114-bb8d-4a6d-b29c-d602aafa0036": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "puppy_groom",
+    "from": 40,
+    "sourceUrl": "https://www.furtician.com/services"
+   }
+  ]
+ },
+ "72edb5cf-0473-4016-b759-6481a9404b74": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 20,
+    "sourceUrl": "https://www.dogtownsend.com/special-services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 25,
+    "sourceUrl": "https://www.dogtownsend.com/special-services"
+   },
+   {
+    "service": "deshed",
+    "from": 15,
+    "sourceUrl": "https://www.dogtownsend.com/special-services"
+   },
+   {
+    "service": "teeth",
+    "from": 3,
+    "sourceUrl": "https://www.dogtownsend.com/special-services"
+   }
+  ]
+ },
+ "72ee67a6-c3fa-4291-996c-2fe39b5727d4": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://www.barkzone.com/self-service-dog-wash"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://www.barkzone.com/self-service-dog-wash"
+   }
+  ]
+ },
+ "7320ed32-9520-4096-8500-15009a8f63ab": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 50,
+    "sourceUrl": "https://k9designgroomingsalon.com/bathing-services"
+   },
+   {
+    "service": "teeth",
+    "from": 12,
+    "sourceUrl": "https://k9designgroomingsalon.com/bathing-services"
+   }
+  ]
+ },
+ "7336664c-e707-4525-802b-85ce496202fe": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 15,
+    "sourceUrl": "https://happytalespetresort.com/"
+   }
+  ]
+ },
+ "74e22fb8-a3c4-4d21-b930-d995cf992415": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 60,
+    "sourceUrl": "https://www.barknbubble.net/book"
+   },
+   {
+    "service": "bath",
+    "from": 28,
+    "sourceUrl": "https://www.barknbubble.net/book"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 48,
+    "sourceUrl": "https://www.barknbubble.net/book"
+   }
+  ]
+ },
+ "74f88c52-4654-4683-970a-f81728c66855": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 75,
+    "sourceUrl": "https://www.pawsnpalsdoggydaycare.com/rates"
+   },
+   {
+    "service": "bath",
+    "from": 50,
+    "sourceUrl": "https://www.pawsnpalsdoggydaycare.com/rates"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://www.pawsnpalsdoggydaycare.com/rates"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 10,
+    "sourceUrl": "https://www.pawsnpalsdoggydaycare.com/rates"
+   },
+   {
+    "service": "deshed",
+    "from": 15,
+    "sourceUrl": "https://www.pawsnpalsdoggydaycare.com/rates"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://www.pawsnpalsdoggydaycare.com/rates"
+   }
+  ]
+ },
+ "76b7e572-de0d-436f-8dac-aec88c5d4f21": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 70,
+    "sourceUrl": "https://thepetbiz.com/"
+   },
+   {
+    "service": "bath",
+    "from": 45,
+    "sourceUrl": "https://thepetbiz.com/"
+   }
+  ]
+ },
+ "7741c8b3-63b8-4228-a461-2eac92d535ef": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 60,
+    "sourceUrl": "https://nellys-ark.com/grooming-services"
+   },
+   {
+    "service": "bath",
+    "from": 30,
+    "sourceUrl": "https://nellys-ark.com/grooming-services"
+   }
+  ]
+ },
+ "78fdfbd7-8de4-4cd6-8d87-7b2aced11a76": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 55,
+    "sourceUrl": "https://www.thecompletek9.org/_files/ugd/373701_e42718fefb5f455288c407ad0f7433c9.pdf"
+   },
+   {
+    "service": "bath",
+    "from": 30,
+    "sourceUrl": "https://www.thecompletek9.org/_files/ugd/373701_e42718fefb5f455288c407ad0f7433c9.pdf"
+   }
+  ]
+ },
+ "7dd14813-2de3-4d32-9dfc-5e670533cf0d": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 60,
+    "sourceUrl": "https://book.heygoldie.com/Liz-s-Best-Grooming"
+   },
+   {
+    "service": "bath",
+    "from": 35,
+    "sourceUrl": "https://book.heygoldie.com/Liz-s-Best-Grooming"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://book.heygoldie.com/Liz-s-Best-Grooming"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 10,
+    "sourceUrl": "https://book.heygoldie.com/Liz-s-Best-Grooming"
+   },
+   {
+    "service": "deshed",
+    "from": 10,
+    "sourceUrl": "https://book.heygoldie.com/Liz-s-Best-Grooming"
+   },
+   {
+    "service": "teeth",
+    "from": 8,
+    "sourceUrl": "https://book.heygoldie.com/Liz-s-Best-Grooming"
+   }
+  ]
+ },
+ "7f6efe19-ca6b-4a5f-a38b-39bf1bb27714": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 75,
+    "sourceUrl": "https://theshedpetgrooming.com/services"
+   },
+   {
+    "service": "bath",
+    "from": 35,
+    "sourceUrl": "https://theshedpetgrooming.com/services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://theshedpetgrooming.com/services"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 55,
+    "sourceUrl": "https://theshedpetgrooming.com/services"
+   },
+   {
+    "service": "deshed",
+    "from": 10,
+    "sourceUrl": "https://theshedpetgrooming.com/services"
+   }
+  ]
+ },
+ "7fe22a12-3d78-4569-aaee-2a566b8fe7c2": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 30,
+    "sourceUrl": "http://www.cookiespetcornerandwash.com/pet-baths"
+   }
+  ]
+ },
+ "87981326-43bc-4549-88c0-5dbf0bc92554": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 75,
+    "sourceUrl": "https://www.groomingangel.com/dog-services"
+   },
+   {
+    "service": "bath",
+    "from": 25,
+    "sourceUrl": "https://www.groomingangel.com/dog-services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://www.groomingangel.com/dog-services"
+   },
+   {
+    "service": "deshed",
+    "from": 10,
+    "sourceUrl": "https://www.groomingangel.com/dog-services"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://www.groomingangel.com/dog-services"
+   }
+  ]
+ },
+ "87c2ab8b-0f59-49fb-9240-0bf8fb463dc0": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://www.sudspetspa.com/spa-upgrades"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 15,
+    "sourceUrl": "https://www.sudspetspa.com/spa-upgrades"
+   },
+   {
+    "service": "deshed",
+    "from": 25,
+    "sourceUrl": "https://www.sudspetspa.com/spa-upgrades"
+   },
+   {
+    "service": "teeth",
+    "from": 15,
+    "sourceUrl": "https://www.sudspetspa.com/spa-upgrades"
+   }
+  ]
+ },
+ "8afc0013-25b6-4e75-ba91-06e0d88582b3": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 75,
+    "sourceUrl": "https://gopugethound.com/grooming"
+   },
+   {
+    "service": "bath",
+    "from": 60,
+    "sourceUrl": "https://gopugethound.com/grooming"
+   }
+  ]
+ },
+ "8bc465d8-e379-4a84-856e-b806c2f29a4e": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 70,
+    "sourceUrl": "https://doggroomingeugene.com/"
+   },
+   {
+    "service": "bath",
+    "from": 40,
+    "sourceUrl": "https://doggroomingeugene.com/"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://doggroomingeugene.com/"
+   }
+  ]
+ },
+ "8d2df53f-1c42-44ad-b64b-b42ae094aa5e": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 65,
+    "sourceUrl": "https://salem.naturespetmarket.com/content/other/grooming"
+   },
+   {
+    "service": "bath",
+    "from": 40,
+    "sourceUrl": "https://salem.naturespetmarket.com/content/other/grooming"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://salem.naturespetmarket.com/content/other/grooming"
+   }
+  ]
+ },
+ "8eab0252-0a33-4872-997d-b98491115594": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 85,
+    "sourceUrl": "https://classypawsdog.myonlineappointment.com/Services"
+   },
+   {
+    "service": "bath",
+    "from": 65,
+    "sourceUrl": "https://classypawsdog.myonlineappointment.com/Services"
+   },
+   {
+    "service": "puppy_groom",
+    "from": 45,
+    "sourceUrl": "https://classypawsdog.myonlineappointment.com/Services"
+   }
+  ]
+ },
+ "8ff4ef53-f28a-4287-aea2-f765ab0cc333": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 85,
+    "sourceUrl": "https://www.pawfectharmonypupspa.com/"
+   },
+   {
+    "service": "bath",
+    "from": 55,
+    "sourceUrl": "https://www.pawfectharmonypupspa.com/"
+   }
+  ]
+ },
+ "902c2af7-0e5f-43f9-9238-18caf8811cf2": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 80,
+    "sourceUrl": "https://groomingatfirst.com/services"
+   },
+   {
+    "service": "bath",
+    "from": 35,
+    "sourceUrl": "https://groomingatfirst.com/services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://groomingatfirst.com/services"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 50,
+    "sourceUrl": "https://groomingatfirst.com/services"
+   }
+  ]
+ },
+ "91003815-5109-451e-ba00-0f720b0ec276": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 50,
+    "sourceUrl": "https://adamsonacrespetspa.net/services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://adamsonacrespetspa.net/services"
+   },
+   {
+    "service": "deshed",
+    "from": 15,
+    "sourceUrl": "https://adamsonacrespetspa.net/services"
+   }
+  ]
+ },
+ "9248467b-c2d8-4459-9788-d06152d6a049": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 100,
+    "sourceUrl": "https://seattlecanineclub.com/services/dog-grooming-seattle"
+   },
+   {
+    "service": "bath",
+    "from": 55,
+    "sourceUrl": "https://seattlecanineclub.com/services/dog-grooming-seattle"
+   },
+   {
+    "service": "puppy_groom",
+    "from": 70,
+    "sourceUrl": "https://seattlecanineclub.com/services/dog-grooming-seattle"
+   },
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://seattlecanineclub.com/services/dog-grooming-seattle"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 35,
+    "sourceUrl": "https://seattlecanineclub.com/services/dog-grooming-seattle"
+   },
+   {
+    "service": "deshed",
+    "from": 15,
+    "sourceUrl": "https://seattlecanineclub.com/services/dog-grooming-seattle"
+   },
+   {
+    "service": "teeth",
+    "from": 12,
+    "sourceUrl": "https://seattlecanineclub.com/services/dog-grooming-seattle"
+   }
+  ]
+ },
+ "93840165-0f42-4aa9-ac6c-1107e037ad20": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 75,
+    "sourceUrl": "https://diamondintheruffdoggrooming.myonlineappointment.com/Services"
+   },
+   {
+    "service": "bath",
+    "from": 35,
+    "sourceUrl": "https://diamondintheruffdoggrooming.myonlineappointment.com/Services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://diamondintheruffdoggrooming.myonlineappointment.com/Services"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://diamondintheruffdoggrooming.myonlineappointment.com/Services"
+   }
+  ]
+ },
+ "9431463b-30c5-4c9b-ab45-ac6b4e92c39f": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 30,
+    "sourceUrl": "https://rub-a-dub-dog.godaddysites.com/"
+   },
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://rub-a-dub-dog.godaddysites.com/"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 10,
+    "sourceUrl": "https://rub-a-dub-dog.godaddysites.com/"
+   },
+   {
+    "service": "deshed",
+    "from": 15,
+    "sourceUrl": "https://rub-a-dub-dog.godaddysites.com/"
+   }
+  ]
+ },
+ "95e54ee6-a251-4ee1-af14-a84f3654123e": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://www.cascadekennels.com/dog-grooming"
+   },
+   {
+    "service": "deshed",
+    "from": 15,
+    "sourceUrl": "https://www.cascadekennels.com/dog-grooming"
+   },
+   {
+    "service": "teeth",
+    "from": 20,
+    "sourceUrl": "https://www.cascadekennels.com/dog-grooming"
+   }
+  ]
+ },
+ "963df589-b1ce-48e4-811c-65c727e907ba": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 115,
+    "sourceUrl": "https://www.ruffdraft.dog/dog-grooming"
+   },
+   {
+    "service": "bath",
+    "from": 85,
+    "sourceUrl": "https://www.ruffdraft.dog/dog-grooming"
+   },
+   {
+    "service": "nail_trim",
+    "from": 25,
+    "sourceUrl": "https://www.ruffdraft.dog/dog-grooming"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 15,
+    "sourceUrl": "https://www.ruffdraft.dog/dog-grooming"
+   }
+  ]
+ },
+ "96eaeece-627b-40ae-ab54-6aea988f7c2a": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 85,
+    "sourceUrl": "https://www.burlingtondogworks.us/pricing"
+   },
+   {
+    "service": "bath",
+    "from": 23,
+    "sourceUrl": "https://www.burlingtondogworks.us/pricing"
+   },
+   {
+    "service": "nail_trim",
+    "from": 18,
+    "sourceUrl": "https://www.burlingtondogworks.us/pricing"
+   },
+   {
+    "service": "teeth",
+    "from": 7,
+    "sourceUrl": "https://www.burlingtondogworks.us/pricing"
+   }
+  ]
+ },
+ "9836b42a-1dfe-4f38-b462-9844eade5e7e": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 90,
+    "sourceUrl": "https://www.gooddogmonroe.com/"
+   },
+   {
+    "service": "bath",
+    "from": 50,
+    "sourceUrl": "https://www.gooddogmonroe.com/"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://www.gooddogmonroe.com/"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 70,
+    "sourceUrl": "https://www.gooddogmonroe.com/"
+   },
+   {
+    "service": "deshed",
+    "from": 10,
+    "sourceUrl": "https://www.gooddogmonroe.com/"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://www.gooddogmonroe.com/"
+   }
+  ]
+ },
+ "988f1dc5-1aa8-4194-8325-f39eec27754c": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 55,
+    "sourceUrl": "https://baybreeze.dog/"
+   },
+   {
+    "service": "bath",
+    "from": 25,
+    "sourceUrl": "https://baybreeze.dog/"
+   }
+  ]
+ },
+ "99a23445-6190-41cb-8445-6aee654137cd": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 14,
+    "sourceUrl": "https://thepetnailplace.com/services"
+   }
+  ]
+ },
+ "9af5348a-2cc8-44c5-ab97-916aef5d202b": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 35,
+    "sourceUrl": "https://www.acrespetresort.com/rates"
+   },
+   {
+    "service": "deshed",
+    "from": 25,
+    "sourceUrl": "https://www.acrespetresort.com/rates"
+   }
+  ]
+ },
+ "9b3aca43-813e-47f7-8249-4ca6ba70bd46": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "http://pup-a-razzi.com/dog-grooming/dog-wash"
+   }
+  ]
+ },
+ "9b4f687c-c345-46da-a016-1a610a836616": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 99,
+    "sourceUrl": "https://www.superduperpetgroomin.com/service-page/dog-grooming-prices-99-189-1"
+   }
+  ]
+ },
+ "9d81421a-0f07-4b39-85a7-be79c31d20fb": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 60,
+    "sourceUrl": "https://www.bugaboopetgrooming.com/about-5"
+   },
+   {
+    "service": "bath",
+    "from": 30,
+    "sourceUrl": "https://www.bugaboopetgrooming.com/about-5"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://www.bugaboopetgrooming.com/about-5"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 10,
+    "sourceUrl": "https://www.bugaboopetgrooming.com/about-5"
+   },
+   {
+    "service": "deshed",
+    "from": 15,
+    "sourceUrl": "https://www.bugaboopetgrooming.com/about-5"
+   }
+  ]
+ },
+ "9e558dcb-68a0-4b20-ac6b-76692ef298eb": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 20,
+    "sourceUrl": "https://www.lexidog.com/social-club-pricing"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://www.lexidog.com/social-club-pricing"
+   }
+  ]
+ },
+ "a3d733aa-2d7c-4d8f-aa41-e461f01ab994": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 55,
+    "sourceUrl": "https://lewisandbark.dog/"
+   },
+   {
+    "service": "bath",
+    "from": 35,
+    "sourceUrl": "https://lewisandbark.dog/"
+   }
+  ]
+ },
+ "a3ed436b-3ca0-4e20-a819-8f5204e36de1": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "puppy_groom",
+    "from": 20,
+    "sourceUrl": "https://rivercitygrooming.com/services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://rivercitygrooming.com/services"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 5,
+    "sourceUrl": "https://rivercitygrooming.com/services"
+   },
+   {
+    "service": "deshed",
+    "from": 10,
+    "sourceUrl": "https://rivercitygrooming.com/services"
+   }
+  ]
+ },
+ "aeedc590-f888-44d4-80c2-88fa01688c29": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 100,
+    "sourceUrl": "https://www.wishbonedogs.com/grooming"
+   },
+   {
+    "service": "bath",
+    "from": 40,
+    "sourceUrl": "https://www.wishbonedogs.com/grooming"
+   },
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://www.wishbonedogs.com/grooming"
+   },
+   {
+    "service": "deshed",
+    "from": 20,
+    "sourceUrl": "https://www.wishbonedogs.com/grooming"
+   },
+   {
+    "service": "teeth",
+    "from": 12,
+    "sourceUrl": "https://www.wishbonedogs.com/grooming"
+   }
+  ]
+ },
+ "b0161926-38a3-4564-85a4-e98378e86dac": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 33,
+    "sourceUrl": "https://petmotel.net/services-and-rates"
+   },
+   {
+    "service": "nail_trim",
+    "from": 16,
+    "sourceUrl": "https://petmotel.net/services-and-rates"
+   }
+  ]
+ },
+ "b02d3df3-9dd8-49ba-81e1-03b156a41abb": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 30,
+    "sourceUrl": "https://dogtownpdx.com/dog-bathing"
+   },
+   {
+    "service": "nail_trim",
+    "from": 14,
+    "sourceUrl": "https://dogtownpdx.com/dog-bathing"
+   }
+  ]
+ },
+ "b766f481-601a-443e-92f6-be2363f06231": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://www.friendlygrove.com/grooming/spa-a-la-cart-menu"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 10,
+    "sourceUrl": "https://www.friendlygrove.com/grooming/spa-a-la-cart-menu"
+   },
+   {
+    "service": "deshed",
+    "from": 18,
+    "sourceUrl": "https://www.friendlygrove.com/grooming/spa-a-la-cart-menu"
+   },
+   {
+    "service": "teeth",
+    "from": 15,
+    "sourceUrl": "https://www.friendlygrove.com/grooming/spa-a-la-cart-menu"
+   }
+  ]
+ },
+ "b8cc2ec5-9f1b-4aa2-a814-be0235859d16": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 20,
+    "sourceUrl": "https://www.ritchardsgrooming.com/services"
+   },
+   {
+    "service": "puppy_groom",
+    "from": 45,
+    "sourceUrl": "https://www.ritchardsgrooming.com/services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://www.ritchardsgrooming.com/services"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 40,
+    "sourceUrl": "https://www.ritchardsgrooming.com/services"
+   },
+   {
+    "service": "teeth",
+    "from": 20,
+    "sourceUrl": "https://www.ritchardsgrooming.com/services"
+   }
+  ]
+ },
+ "ba2687f2-9a4e-4b3f-95ba-dd4ba1443cdc": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 45,
+    "sourceUrl": "https://heart-of-caregiving-pets-llc-dba-shampooches.ueniweb.com/?utm_campaign=gmb"
+   }
+  ]
+ },
+ "beast-brush": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 60,
+    "sourceUrl": "https://beastandbrush.com/treatment-menu"
+   },
+   {
+    "service": "bath",
+    "from": 45,
+    "sourceUrl": "https://beastandbrush.com/treatment-menu"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://beastandbrush.com/treatment-menu"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://beastandbrush.com/treatment-menu"
+   }
+  ]
+ },
+ "bellevue-pet-spa-bellevue": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://www.bellevuepet-spa.com/policies"
+   }
+  ]
+ },
+ "bfda33c2-4b5e-4d23-b68b-b97fffab11d1": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 140,
+    "sourceUrl": "https://samanthamineo.com/pawparazzi-pricing"
+   },
+   {
+    "service": "nail_trim",
+    "from": 35,
+    "sourceUrl": "https://samanthamineo.com/pawparazzi-pricing"
+   }
+  ]
+ },
+ "bows-and-biscuits-grooming-treats-boutique-marysville": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 100,
+    "sourceUrl": "https://www.bowsandbiscuitsgrooming.com/services"
+   }
+  ]
+ },
+ "butler-s-pet-grooming-beaverton": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 70,
+    "sourceUrl": "http://www.butlerspetgrooming.com/pet-grooming.html"
+   },
+   {
+    "service": "bath",
+    "from": 45,
+    "sourceUrl": "http://www.butlerspetgrooming.com/pet-grooming.html"
+   }
+  ]
+ },
+ "c2911d3e-a1c6-485a-a999-95ed3302993d": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 75,
+    "sourceUrl": "https://fourpawsspa.net/"
+   },
+   {
+    "service": "bath",
+    "from": 50,
+    "sourceUrl": "https://fourpawsspa.net/"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://fourpawsspa.net/"
+   },
+   {
+    "service": "teeth",
+    "from": 25,
+    "sourceUrl": "https://fourpawsspa.net/"
+   }
+  ]
+ },
+ "c643a5c9-01ab-4708-a6a2-961e0d566dd0": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://www.wigglebutzdogboutique.com/"
+   }
+  ]
+ },
+ "c746e2b9-53f1-4d76-81e5-c1ff2e9086d9": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 90,
+    "sourceUrl": "https://bigvalleypetresort.com/groom-menu-%26-pricing-1"
+   },
+   {
+    "service": "bath",
+    "from": 25,
+    "sourceUrl": "https://bigvalleypetresort.com/groom-menu-%26-pricing-1"
+   },
+   {
+    "service": "nail_trim",
+    "from": 25,
+    "sourceUrl": "https://bigvalleypetresort.com/groom-menu-%26-pricing-1"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 15,
+    "sourceUrl": "https://bigvalleypetresort.com/groom-menu-%26-pricing-1"
+   },
+   {
+    "service": "deshed",
+    "from": 30,
+    "sourceUrl": "https://bigvalleypetresort.com/groom-menu-%26-pricing-1"
+   },
+   {
+    "service": "teeth",
+    "from": 15,
+    "sourceUrl": "https://bigvalleypetresort.com/groom-menu-%26-pricing-1"
+   }
+  ]
+ },
+ "c83d7353-cc03-4f29-a8b5-550025649c8d": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 100,
+    "sourceUrl": "https://seattlecanineclub.com/services/dog-grooming-seattle"
+   },
+   {
+    "service": "bath",
+    "from": 55,
+    "sourceUrl": "https://seattlecanineclub.com/services/dog-grooming-seattle"
+   },
+   {
+    "service": "puppy_groom",
+    "from": 70,
+    "sourceUrl": "https://seattlecanineclub.com/services/dog-grooming-seattle"
+   },
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://seattlecanineclub.com/services/dog-grooming-seattle"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 35,
+    "sourceUrl": "https://seattlecanineclub.com/services/dog-grooming-seattle"
+   },
+   {
+    "service": "deshed",
+    "from": 15,
+    "sourceUrl": "https://seattlecanineclub.com/services/dog-grooming-seattle"
+   },
+   {
+    "service": "teeth",
+    "from": 12,
+    "sourceUrl": "https://seattlecanineclub.com/services/dog-grooming-seattle"
+   }
+  ]
+ },
+ "d32ca304-2dd6-4d16-a65c-e6d64dc821d2": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 60,
+    "sourceUrl": "https://www.valleygrooming.com/pricing.asp"
+   },
+   {
+    "service": "bath",
+    "from": 45,
+    "sourceUrl": "https://www.valleygrooming.com/pricing.asp"
+   }
+  ]
+ },
+ "d49ab16f-8e48-4623-bd0a-622b9f29e2b1": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 75,
+    "sourceUrl": "https://www.oodlesofpoodlesspa.com/blank-2"
+   },
+   {
+    "service": "bath",
+    "from": 50,
+    "sourceUrl": "https://www.oodlesofpoodlesspa.com/blank-2"
+   },
+   {
+    "service": "puppy_groom",
+    "from": 65,
+    "sourceUrl": "https://www.oodlesofpoodlesspa.com/blank-2"
+   },
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://www.oodlesofpoodlesspa.com/blank-2"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 10,
+    "sourceUrl": "https://www.oodlesofpoodlesspa.com/blank-2"
+   },
+   {
+    "service": "teeth",
+    "from": 5,
+    "sourceUrl": "https://www.oodlesofpoodlesspa.com/blank-2"
+   }
+  ]
+ },
+ "d5f801bb-c386-40e0-9401-e0bc034c7aab": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 30,
+    "sourceUrl": "https://www.cerberuspals.com/copy-of-surcharges"
+   },
+   {
+    "service": "bath",
+    "from": 30,
+    "sourceUrl": "https://www.cerberuspals.com/copy-of-surcharges"
+   },
+   {
+    "service": "puppy_groom",
+    "from": 20,
+    "sourceUrl": "https://www.cerberuspals.com/copy-of-surcharges"
+   }
+  ]
+ },
+ "d7d9be80-0091-4831-badb-3ba3a1323ced": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 95,
+    "sourceUrl": "https://www.ashwaypetspa.com/Services"
+   },
+   {
+    "service": "bath",
+    "from": 50,
+    "sourceUrl": "https://www.ashwaypetspa.com/Services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://www.ashwaypetspa.com/Services"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 65,
+    "sourceUrl": "https://www.ashwaypetspa.com/Services"
+   }
+  ]
+ },
+ "dbd47ad6-4d5f-4d14-bcc5-b1752a711554": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 45,
+    "sourceUrl": "https://aldercreekpetlodge.com/dog-services-and-pricing"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://aldercreekpetlodge.com/dog-services-and-pricing"
+   }
+  ]
+ },
+ "dbf92dd0-7c90-470e-b0f6-bb9e2bc0475e": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://www.coats-n-tails.com/services.html"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://www.coats-n-tails.com/services.html"
+   }
+  ]
+ },
+ "dc4da4ed-ac67-472c-b84b-c58fc7c4ada5": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 32,
+    "sourceUrl": "https://muddypaws.us/see-services-%26-pricing"
+   },
+   {
+    "service": "nail_trim",
+    "from": 16,
+    "sourceUrl": "https://muddypaws.us/see-services-%26-pricing"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 12,
+    "sourceUrl": "https://muddypaws.us/see-services-%26-pricing"
+   }
+  ]
+ },
+ "dcce31b3-2501-4840-8d86-5e065fc0a2d7": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 35,
+    "sourceUrl": "https://www.rainydaygrooming.com/dog-bathing-services"
+   },
+   {
+    "service": "deshed",
+    "from": 15,
+    "sourceUrl": "https://www.rainydaygrooming.com/dog-bathing-services"
+   }
+  ]
+ },
+ "dd65ebc8-6dc3-4161-a6b9-139697bfd41c": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 95,
+    "sourceUrl": "https://www.countrypuppetservices.com/services-6"
+   },
+   {
+    "service": "bath",
+    "from": 60,
+    "sourceUrl": "https://www.countrypuppetservices.com/services-6"
+   },
+   {
+    "service": "puppy_groom",
+    "from": 45,
+    "sourceUrl": "https://www.countrypuppetservices.com/services-6"
+   },
+   {
+    "service": "nail_trim",
+    "from": 12,
+    "sourceUrl": "https://www.countrypuppetservices.com/services-6"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 75,
+    "sourceUrl": "https://www.countrypuppetservices.com/services-6"
+   },
+   {
+    "service": "deshed",
+    "from": 80,
+    "sourceUrl": "https://www.countrypuppetservices.com/services-6"
+   }
+  ]
+ },
+ "ddc19ebb-b69e-44f8-966c-0446aa40e520": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 45,
+    "sourceUrl": "https://www.hairystylespetsalon.com/services-6"
+   },
+   {
+    "service": "bath",
+    "from": 30,
+    "sourceUrl": "https://www.hairystylespetsalon.com/services-6"
+   },
+   {
+    "service": "puppy_groom",
+    "from": 35,
+    "sourceUrl": "https://www.hairystylespetsalon.com/services-6"
+   }
+  ]
+ },
+ "der-pet-haus": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 5,
+    "sourceUrl": "http://derpethaus.com/additional-services"
+   },
+   {
+    "service": "deshed",
+    "from": 20,
+    "sourceUrl": "http://derpethaus.com/additional-services"
+   }
+  ]
+ },
+ "df2c7897-9fae-47d7-8dba-7c31ecf61712": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://www.joyfulpetgrooming.com/"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 20,
+    "sourceUrl": "https://www.joyfulpetgrooming.com/"
+   },
+   {
+    "service": "teeth",
+    "from": 15,
+    "sourceUrl": "https://www.joyfulpetgrooming.com/"
+   }
+  ]
+ },
+ "dogcity-west-seattle-seattle": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 100,
+    "sourceUrl": "https://dogcityseattle.com/pet-grooming-west-seattle"
+   },
+   {
+    "service": "bath",
+    "from": 55,
+    "sourceUrl": "https://dogcityseattle.com/pet-grooming-west-seattle"
+   },
+   {
+    "service": "puppy_groom",
+    "from": 95,
+    "sourceUrl": "https://dogcityseattle.com/pet-grooming-west-seattle"
+   },
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://dogcityseattle.com/pet-grooming-west-seattle"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 30,
+    "sourceUrl": "https://dogcityseattle.com/pet-grooming-west-seattle"
+   },
+   {
+    "service": "deshed",
+    "from": 20,
+    "sourceUrl": "https://dogcityseattle.com/pet-grooming-west-seattle"
+   },
+   {
+    "service": "teeth",
+    "from": 15,
+    "sourceUrl": "https://dogcityseattle.com/pet-grooming-west-seattle"
+   }
+  ]
+ },
+ "downtown-dog-lounge-seattle": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 27,
+    "sourceUrl": "https://www.downtowndoglounge.com/services/bathing"
+   },
+   {
+    "service": "puppy_groom",
+    "from": 22,
+    "sourceUrl": "https://www.downtowndoglounge.com/services/bathing"
+   },
+   {
+    "service": "nail_trim",
+    "from": 18,
+    "sourceUrl": "https://www.downtowndoglounge.com/services/bathing"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 14,
+    "sourceUrl": "https://www.downtowndoglounge.com/services/bathing"
+   },
+   {
+    "service": "deshed",
+    "from": 22,
+    "sourceUrl": "https://www.downtowndoglounge.com/services/bathing"
+   },
+   {
+    "service": "teeth",
+    "from": 17,
+    "sourceUrl": "https://www.downtowndoglounge.com/services/bathing"
+   }
+  ]
+ },
+ "e11f35ba-c198-4db5-aeaf-5976464bbda4": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 120,
+    "sourceUrl": "https://www.tesslandogspa.com/services.html"
+   },
+   {
+    "service": "bath",
+    "from": 65,
+    "sourceUrl": "https://www.tesslandogspa.com/services.html"
+   },
+   {
+    "service": "nail_trim",
+    "from": 25,
+    "sourceUrl": "https://www.tesslandogspa.com/services.html"
+   }
+  ]
+ },
+ "e24ef544-92b8-44ed-806a-aebfd634bb4b": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "teeth",
+    "from": 20,
+    "sourceUrl": "https://dogboardingseattle.com/prices"
+   }
+  ]
+ },
+ "e361d214-4067-4340-8816-4427c1d9e88f": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://www.shortclawshealthypaws.com/"
+   }
+  ]
+ },
+ "e4edc00d-e57b-4347-b1fb-3ad8b2e848bd": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 64,
+    "sourceUrl": "https://www.silverdalegroomingco.com/services"
+   },
+   {
+    "service": "bath",
+    "from": 56,
+    "sourceUrl": "https://www.silverdalegroomingco.com/services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://www.silverdalegroomingco.com/services"
+   }
+  ]
+ },
+ "e6c3d3e3-3a83-4fa2-b710-5a02f514a87b": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 5,
+    "sourceUrl": "https://vanityfurpdx.com/"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 20,
+    "sourceUrl": "https://vanityfurpdx.com/"
+   }
+  ]
+ },
+ "e70927dc-eed9-4f67-8beb-fc0f49111cb0": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 45,
+    "sourceUrl": "https://www.highdesertgroomingparlor.com/"
+   },
+   {
+    "service": "bath",
+    "from": 30,
+    "sourceUrl": "https://www.highdesertgroomingparlor.com/"
+   },
+   {
+    "service": "puppy_groom",
+    "from": 20,
+    "sourceUrl": "https://www.highdesertgroomingparlor.com/"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://www.highdesertgroomingparlor.com/"
+   }
+  ]
+ },
+ "e78d5d7f-d7cf-4879-9d83-4cf68d8ef013": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 115,
+    "sourceUrl": "https://perfectpawshpaws.com/services"
+   },
+   {
+    "service": "bath",
+    "from": 80,
+    "sourceUrl": "https://perfectpawshpaws.com/services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 25,
+    "sourceUrl": "https://perfectpawshpaws.com/services"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 25,
+    "sourceUrl": "https://perfectpawshpaws.com/services"
+   },
+   {
+    "service": "deshed",
+    "from": 30,
+    "sourceUrl": "https://perfectpawshpaws.com/services"
+   }
+  ]
+ },
+ "e80db883-9cd3-47b8-908a-058efde13ea0": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 70,
+    "sourceUrl": "https://lapdoglegends.myonlineappointment.com/Services"
+   },
+   {
+    "service": "bath",
+    "from": 40,
+    "sourceUrl": "https://lapdoglegends.myonlineappointment.com/Services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://lapdoglegends.myonlineappointment.com/Services"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 50,
+    "sourceUrl": "https://lapdoglegends.myonlineappointment.com/Services"
+   }
+  ]
+ },
+ "e8f02288-34b3-4ba3-96e3-52e090dfa1a9": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 55,
+    "sourceUrl": "https://www.dogs-day-out-daycare.com/grooming"
+   },
+   {
+    "service": "bath",
+    "from": 20,
+    "sourceUrl": "https://www.dogs-day-out-daycare.com/grooming"
+   },
+   {
+    "service": "nail_trim",
+    "from": 25,
+    "sourceUrl": "https://www.dogs-day-out-daycare.com/grooming"
+   },
+   {
+    "service": "deshed",
+    "from": 25,
+    "sourceUrl": "https://www.dogs-day-out-daycare.com/grooming"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://www.dogs-day-out-daycare.com/grooming"
+   }
+  ]
+ },
+ "ea93b239-3989-40c0-af24-0e8fb2f1dfd7": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 45,
+    "sourceUrl": "https://ghgrooming.com/"
+   },
+   {
+    "service": "bath",
+    "from": 35,
+    "sourceUrl": "https://ghgrooming.com/"
+   }
+  ]
+ },
+ "eaa3809f-9291-4ae2-8941-cbdf8a3c8a84": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 100,
+    "sourceUrl": "https://www.nanasherriesdoghouse.com/book-online"
+   }
+  ]
+ },
+ "eb7fdd4e-055b-4a74-afa5-06e85cd67e9e": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 70,
+    "sourceUrl": "https://www.pawsvip.com/"
+   }
+  ]
+ },
+ "ec8bd81e-78b1-43ea-a292-9af2579413fd": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 200,
+    "sourceUrl": "https://www.lushpupsspa.com/services"
+   },
+   {
+    "service": "bath",
+    "from": 150,
+    "sourceUrl": "https://www.lushpupsspa.com/services"
+   },
+   {
+    "service": "puppy_groom",
+    "from": 45,
+    "sourceUrl": "https://www.lushpupsspa.com/services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 50,
+    "sourceUrl": "https://www.lushpupsspa.com/services"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 25,
+    "sourceUrl": "https://www.lushpupsspa.com/services"
+   },
+   {
+    "service": "deshed",
+    "from": 30,
+    "sourceUrl": "https://www.lushpupsspa.com/services"
+   },
+   {
+    "service": "teeth",
+    "from": 15,
+    "sourceUrl": "https://www.lushpupsspa.com/services"
+   }
+  ]
+ },
+ "edd98a9e-bb02-445d-9984-1eba84bd5fe8": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 50,
+    "sourceUrl": "https://houseofdogsddc.wixsite.com/houseofdogs"
+   },
+   {
+    "service": "bath",
+    "from": 35,
+    "sourceUrl": "https://houseofdogsddc.wixsite.com/houseofdogs"
+   }
+  ]
+ },
+ "ef4ddebe-2718-41b5-8154-f1c8fc78a70a": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 75,
+    "sourceUrl": "https://www.skinnydipperspetsalon.com/"
+   },
+   {
+    "service": "bath",
+    "from": 45,
+    "sourceUrl": "https://www.skinnydipperspetsalon.com/"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://www.skinnydipperspetsalon.com/"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://www.skinnydipperspetsalon.com/"
+   }
+  ]
+ },
+ "f15cbe0f-9223-436f-b368-8455c5ee192e": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 19,
+    "sourceUrl": "https://hylinehotel.com/pet-grooming"
+   },
+   {
+    "service": "teeth",
+    "from": 13,
+    "sourceUrl": "https://hylinehotel.com/pet-grooming"
+   }
+  ]
+ },
+ "f4191553-31f1-4e9f-816e-438221f1af2a": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 12,
+    "sourceUrl": "http://www.sooscreekkennels.com/pet-grooming.html"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "http://www.sooscreekkennels.com/pet-grooming.html"
+   }
+  ]
+ },
+ "f5064309-3bae-439a-bdb9-1e9baad72c57": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 80,
+    "sourceUrl": "https://doggroomingbendoregon.com/grooming"
+   },
+   {
+    "service": "bath",
+    "from": 37,
+    "sourceUrl": "https://doggroomingbendoregon.com/grooming"
+   },
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://doggroomingbendoregon.com/grooming"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 10,
+    "sourceUrl": "https://doggroomingbendoregon.com/grooming"
+   },
+   {
+    "service": "teeth",
+    "from": 15,
+    "sourceUrl": "https://doggroomingbendoregon.com/grooming"
+   }
+  ]
+ },
+ "f571d38b-cfdd-4295-a2f5-af1aa6662463": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 45,
+    "sourceUrl": "http://www.laurelspetgrooming.com/services.html"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "http://www.laurelspetgrooming.com/services.html"
+   },
+   {
+    "service": "deshed",
+    "from": 15,
+    "sourceUrl": "http://www.laurelspetgrooming.com/services.html"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "http://www.laurelspetgrooming.com/services.html"
+   }
+  ]
+ },
+ "f7edb989-96de-42d0-9eb7-8dd34d2a8fc9": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 42,
+    "sourceUrl": "http://www.doggycomeplay.com/daycare-rates-and-hours.html"
+   },
+   {
+    "service": "nail_trim",
+    "from": 17,
+    "sourceUrl": "http://www.doggycomeplay.com/daycare-rates-and-hours.html"
+   }
+  ]
+ },
+ "fa056074-149b-4661-98b9-4fdd972a9c2b": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 100,
+    "sourceUrl": "https://www.wanderlustgrooming.com/salonservices"
+   },
+   {
+    "service": "bath",
+    "from": 60,
+    "sourceUrl": "https://www.wanderlustgrooming.com/salonservices"
+   },
+   {
+    "service": "nail_trim",
+    "from": 30,
+    "sourceUrl": "https://www.wanderlustgrooming.com/salonservices"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 70,
+    "sourceUrl": "https://www.wanderlustgrooming.com/salonservices"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://www.wanderlustgrooming.com/salonservices"
+   }
+  ]
+ },
+ "fad4376e-c10b-4943-93ed-96a5a0135564": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 85,
+    "sourceUrl": "https://www.centennialkennels.com/grooming"
+   },
+   {
+    "service": "bath",
+    "from": 50,
+    "sourceUrl": "https://www.centennialkennels.com/grooming"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://www.centennialkennels.com/grooming"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 70,
+    "sourceUrl": "https://www.centennialkennels.com/grooming"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://www.centennialkennels.com/grooming"
+   }
+  ]
+ },
+ "fc138cb7-6418-49bf-a4eb-2e95b8c6ee85": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 85,
+    "sourceUrl": "https://www.leshasdoggrooming.com/services"
+   },
+   {
+    "service": "bath",
+    "from": 50,
+    "sourceUrl": "https://www.leshasdoggrooming.com/services"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 25,
+    "sourceUrl": "https://www.leshasdoggrooming.com/services"
+   },
+   {
+    "service": "teeth",
+    "from": 15,
+    "sourceUrl": "https://www.leshasdoggrooming.com/services"
+   }
+  ]
+ },
+ "fdd058b2-55ad-4c67-81df-eff8c31dbe59": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 70,
+    "sourceUrl": "https://oregoncitydoggroomers.com/services"
+   },
+   {
+    "service": "bath",
+    "from": 50,
+    "sourceUrl": "https://oregoncitydoggroomers.com/services"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://oregoncitydoggroomers.com/services"
+   }
+  ]
+ },
+ "hug-a-bubba-s-doggie-daycare-grooming-portland": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://hugabubbas.com/rates-scappoose.html"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 15,
+    "sourceUrl": "https://hugabubbas.com/rates-scappoose.html"
+   }
+  ]
+ },
+ "muddy-paws-bend": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 110,
+    "sourceUrl": "https://www.muddypawsbend.com/pricing"
+   },
+   {
+    "service": "bath",
+    "from": 55,
+    "sourceUrl": "https://www.muddypawsbend.com/pricing"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 85,
+    "sourceUrl": "https://www.muddypawsbend.com/pricing"
+   }
+  ]
+ },
+ "olive-my-grooming-to-you-seattle": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "deshed",
+    "from": 25,
+    "sourceUrl": "https://www.omg2you.com/"
+   }
+  ]
+ },
+ "posh-paws-seattle": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://poshpawsseattle.com/PetGrooming.html"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://poshpawsseattle.com/PetGrooming.html"
+   }
+  ]
+ },
+ "puppy-pad-on-the-hill-spokane": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 44,
+    "sourceUrl": "https://puppypadspokane.com/grooming-2"
+   },
+   {
+    "service": "bath",
+    "from": 33,
+    "sourceUrl": "https://puppypadspokane.com/grooming-2"
+   },
+   {
+    "service": "nail_trim",
+    "from": 12,
+    "sourceUrl": "https://puppypadspokane.com/grooming-2"
+   },
+   {
+    "service": "deshed",
+    "from": 10,
+    "sourceUrl": "https://puppypadspokane.com/grooming-2"
+   },
+   {
+    "service": "teeth",
+    "from": 8,
+    "sourceUrl": "https://puppypadspokane.com/grooming-2"
+   }
+  ]
+ },
+ "seattle-canine-club-seattle": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 100,
+    "sourceUrl": "https://seattlecanineclub.com/services/dog-grooming-seattle"
+   },
+   {
+    "service": "bath",
+    "from": 55,
+    "sourceUrl": "https://seattlecanineclub.com/services/dog-grooming-seattle"
+   },
+   {
+    "service": "puppy_groom",
+    "from": 70,
+    "sourceUrl": "https://seattlecanineclub.com/services/dog-grooming-seattle"
+   },
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://seattlecanineclub.com/services/dog-grooming-seattle"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 35,
+    "sourceUrl": "https://seattlecanineclub.com/services/dog-grooming-seattle"
+   },
+   {
+    "service": "deshed",
+    "from": 15,
+    "sourceUrl": "https://seattlecanineclub.com/services/dog-grooming-seattle"
+   },
+   {
+    "service": "teeth",
+    "from": 12,
+    "sourceUrl": "https://seattlecanineclub.com/services/dog-grooming-seattle"
+   }
+  ]
+ },
+ "the-wash-dog": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 30,
+    "sourceUrl": "https://thewashdog.com/services"
+   },
+   {
+    "service": "teeth",
+    "from": 18,
+    "sourceUrl": "https://thewashdog.com/services"
+   }
+  ]
+ },
+ "urban-doggie-kirkland": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 190,
+    "sourceUrl": "https://www.urbandoggie.net/"
+   }
+  ]
+ },
+ "what-the-fluff-kent": {
+  "seenOn": "2026-10-01",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 100,
+    "sourceUrl": "https://www.whatthefluffkentwa.com/"
+   },
+   {
+    "service": "bath",
+    "from": 59,
+    "sourceUrl": "https://www.whatthefluffkentwa.com/"
+   },
+   {
+    "service": "face_feet_fanny",
+    "from": 75,
+    "sourceUrl": "https://www.whatthefluffkentwa.com/"
+   },
+   {
+    "service": "teeth",
+    "from": 14,
+    "sourceUrl": "https://www.whatthefluffkentwa.com/"
+   }
+  ]
+ }
+}

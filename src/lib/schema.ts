@@ -2,6 +2,7 @@
 import type { NormalizedListing } from "./types";
 import type { BlogPostFull } from "./blog";
 import { getServiceTag } from "./tags";
+import { isDefaultHours } from "./listing-facts";
 
 const BASE_URL = "https://groomlocal.com";
 
@@ -56,7 +57,7 @@ function isValidTime(time: string): boolean {
 export function localBusinessSchema(listing: NormalizedListing) {
   const image = safeImageUrl(listing.images?.[0]);
   const validWebsite = safeWebsiteUrl(listing.website);
-  const hours = listing.hours?.filter(
+  const hours = isDefaultHours(listing.hours) ? [] : listing.hours?.filter(
     (h) => !h.closed && h.open && h.close && VALID_DAYS.has(h.day) && isValidTime(h.open) && isValidTime(h.close)
   );
 
@@ -115,11 +116,11 @@ export function localBusinessSchema(listing: NormalizedListing) {
   }
 
   // Service catalog with proper Offer types
-  if (listing.service_tags && listing.service_tags.length > 0) {
+  if (listing.listed_service_tags && listing.listed_service_tags.length > 0) {
     schema.hasOfferCatalog = {
       "@type": "OfferCatalog",
       name: "Grooming Services",
-      itemListElement: listing.service_tags.map((slug) => {
+      itemListElement: listing.listed_service_tags.map((slug) => {
         const tag = getServiceTag(slug);
         const offer: Record<string, unknown> = {
           "@type": "Offer",
