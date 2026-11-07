@@ -7,6 +7,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { StatusBanner } from "./status-banner";
 import { tierDisplayName } from "@/lib/pricing";
 import { BadgeCard } from "./badge-card";
+import { ListingStats } from "./listing-stats";
+import { ownerDashboardStats } from "@/lib/owner-dashboard-stats";
 
 const tierColors: Record<string, string> = {
   free: "bg-border text-text-muted",
@@ -79,6 +81,8 @@ export default async function DashboardPage({
       installsByListing.set(row.listing_id as string, list);
     }
   }
+
+  const statsByListing = await ownerDashboardStats(listings);
 
   const errorMessage =
     params.error === "not-authorized"
@@ -187,10 +191,11 @@ export default async function DashboardPage({
                 {listing.city}, {listing.state}
               </p>
               {listing.claimed_at && (
-                <p className="text-xs text-text-muted mb-4">
+                <p className="text-xs text-text-muted mb-3">
                   Claimed on {new Date(listing.claimed_at).toLocaleDateString("en-US", { timeZone: "America/Los_Angeles", month: "short", day: "numeric", year: "numeric" })}
                 </p>
               )}
+              <ListingStats periods={statsByListing.get(listing.id) ?? []} />
               <div className="flex items-center gap-3">
                 <Link
                   href={`/dashboard/listing/${listing.slug}`}
