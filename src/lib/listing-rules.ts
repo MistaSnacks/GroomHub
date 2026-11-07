@@ -2,10 +2,10 @@
  * Business rules about paid placement, kept in one place so ordering, labeling,
  * the featured block, the admin toggle and the re-feature cron all agree.
  *
- * Product promise (pricing page): "Sponsored businesses pay for a labeled spot at
- * the top of their city page, limited to three per city. The Sponsored label is
- * always visible. Payment never changes your badge or where you appear in the
- * regular list."
+ * Product promise (pricing page FAQ): a Sponsored spot sits at the top of its city
+ * page, is always labeled Sponsored, and never changes a badge or the regular list
+ * order. Sponsored is closed to new businesses since 2026-11-06; the comped seats
+ * keep their label.
  */
 
 export interface SponsorshipFields {
