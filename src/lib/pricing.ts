@@ -1,10 +1,12 @@
 import type { PricingTier } from "./types";
 import { BETA_MODE, TIER_LIMITS } from "./tiers";
 
-// Two offers, revised 2026-09-04 after the Astra strategy review:
-// a generous Free listing and one labeled Sponsored placement (DB slug stays "premium").
-// "basic" remains a valid DB tier for compatibility but is no longer sold.
-// Annual prices are "two months free" (monthly * 10 / 12).
+// One public offer since 2026-11-06: the Free listing. Sponsored (DB slug "premium")
+// is closed to new businesses; the comped seats keep their label. "basic" remains a
+// valid DB tier for compatibility but is not sold.
+/** Shown wherever Sponsored used to be sold. Sponsored is closed to new businesses (plan of 2026-11-06). */
+export const SPONSORED_CLOSED_LINE = "Sponsored spots are not open to new businesses right now.";
+
 /** Human name for a stored tier slug ("premium" is sold as "Sponsored"). */
 export function tierDisplayName(slug: string | null | undefined): string {
   const found = pricingTiers.find((t) => t.slug === slug);
@@ -13,6 +15,7 @@ export function tierDisplayName(slug: string | null | undefined): string {
   return "Free";
 }
 
+// The Sponsored entry stays for tierDisplayName() and the admin console's revenue math. It is not offered anywhere public.
 export const pricingTiers: PricingTier[] = [
   {
     name: "Free",
@@ -27,7 +30,6 @@ export const pricingTiers: PricingTier[] = [
       { text: BETA_MODE ? `Up to ${TIER_LIMITS.free.photos} photos & your logo (${TIER_LIMITS.premium.photos} during beta)` : `Up to ${TIER_LIMITS.free.photos} photos & your logo`, included: true },
       { text: '"Owner Confirmed" badge once you claim', included: true },
       { text: "Contact form inquiries sent to your inbox", included: true },
-      { text: "Sponsored spot at the top of your city page", included: false },
     ],
     isPopular: true,
     ctaText: "Claim Your Listing - Free",
@@ -49,3 +51,5 @@ export const pricingTiers: PricingTier[] = [
     ctaText: "Reserve a Sponsored Spot",
   },
 ];
+
+export const freePlan: PricingTier = pricingTiers.find((t) => t.slug === "free")!;

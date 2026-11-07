@@ -30,7 +30,7 @@ export function ClaimPlansClient({ slug }: { slug: string }) {
             <ConfirmButton />
           </form>
         </div>
-        <p className="text-sm text-text-muted text-center">Interested in a Sponsored spot? <Link href="/contact" className="text-brand-primary underline">Contact us about availability</Link>. This claim creates a free listing and does not reserve a paid placement.</p>
+        <p className="text-sm text-text-muted text-center">This claim creates a free listing. There is nothing to pay.</p>
         <Link href={`/groomer/${slug}`} className="block text-center text-sm text-brand-primary underline">Back to business profile</Link>
       </div>
     </section>

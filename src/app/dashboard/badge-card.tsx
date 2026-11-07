@@ -102,7 +102,7 @@ export function BadgeCard({ slug, name, installs }: BadgeCardProps) {
           <h2 className="font-heading text-xl font-semibold text-brand-primary">Show you&apos;re Owner Confirmed on your website</h2>
           <p className="mt-2 text-sm text-text-muted">
             Add this badge to your own website. It links to your GroomLocal page for {name}, where customers can see your photos and
-            hours and send you a message. It also helps more people find your page. While your listing is featured, the badge code
+            hours and send you a message. While your listing is featured, the badge code
             shows &quot;Featured on GroomLocal&quot;.
           </p>
         </div>

@@ -71,10 +71,9 @@ export default async function ClaimPage({
             Take control of your business info, add an Owner Confirmed badge on your listing, and start connecting with local pet parents.
           </p>
 
-          {/* Founding member callout */}
           <div className="mt-6 inline-flex items-center gap-2 bg-brand-accent/10 border border-brand-accent/20 rounded-full px-5 py-2">
-            <span className="text-sm font-semibold text-brand-accent">Founding Member Offer</span>
-            <span className="text-sm text-text-muted">Free listing, no credit card required</span>
+            <span className="text-sm font-semibold text-brand-accent">Free listing</span>
+            <span className="text-sm text-text-muted">No credit card required</span>
           </div>
         </div>
       </section>

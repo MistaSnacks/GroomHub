@@ -8,7 +8,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   Users,
-  TrendUp,
+  ChatCircleText,
   ChartBar,
   ShieldCheck,
   Check,
@@ -20,11 +20,11 @@ import { AnimatedSection, AnimatedItem } from "@/components/animated-section";
 const fallbackMetadata: Metadata = {
   title: "For Groomers | List Your Business",
   description:
-    "Get your grooming business in front of thousands of pet owners in the PNW. Free to list, powerful tools to grow. Join the pack today.",
+    "List your grooming business where Washington and Oregon dog owners look for a groomer. Free to list and free to keep.",
   alternates: { canonical: "/for-groomers" },
   openGraph: {
     title: "For Groomers | List Your Business",
-    description: "Get your grooming business in front of thousands of pet owners in the PNW. Free to list, powerful tools to grow.",
+    description: "List your grooming business where Washington and Oregon dog owners look for a groomer. Free to list and free to keep.",
     type: "website",
     url: "/for-groomers",
     siteName: "GroomLocal",
@@ -33,7 +33,7 @@ const fallbackMetadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "For Groomers | List Your Business",
-    description: "Get your grooming business in front of thousands of pet owners in the PNW. Free to list, powerful tools to grow.",
+    description: "List your grooming business where Washington and Oregon dog owners look for a groomer. Free to list and free to keep.",
     images: ["/og-image.png"],
   },
 };
@@ -46,9 +46,9 @@ const features = [
     colored: false,
   },
   {
-    icon: TrendUp,
-    title: "Grow Your Bookings",
-    desc: "Get qualified leads delivered to your inbox. No fake leads, no aggressive upsells.",
+    icon: ChatCircleText,
+    title: "Hear From Pet Parents",
+    desc: "Pet parents can send you a message from your profile. It goes to your email and your dashboard inbox.",
     colored: true,
     color: "teal" as const,
   },
@@ -102,7 +102,7 @@ export default async function ForGroomersPage() {
                 {copy?.eyebrow ?? "For Groomers"}
               </p>
               <h1 {...(copy?._id ? editableField(copy._id,"title") : {})} className="font-heading text-4xl md:text-5xl font-bold mb-4 text-brand-primary">
-                <MarketingHeading text={copy?.title ?? "Get more clients. Grow your business."} emphasis={copy?.emphasis ?? "Grow your business."} className="text-brand-secondary italic" />
+                <MarketingHeading text={copy?.title ?? "Help local dog owners find you."} emphasis={copy?.emphasis ?? "find you."} className="text-brand-secondary italic" />
               </h1>
               <p className="text-lg text-text-muted mb-8 max-w-xl mx-auto lg:mx-0">
                 {copy?.intro ?? "Help local pet parents discover your business, explore your services, and contact you directly."}
@@ -122,7 +122,7 @@ export default async function ForGroomersPage() {
                 </Link>
               </div>
               <div className="mt-8 flex flex-wrap gap-6 justify-center lg:justify-start text-sm text-text-muted">
-                <span className="flex items-center gap-1.5"><Check weight="bold" className="text-brand-accent" /> {copy?.badges?.[0] ?? "Free tier available"}</span>
+                <span className="flex items-center gap-1.5"><Check weight="bold" className="text-brand-accent" /> {copy?.badges?.[0] ?? "Free to list"}</span>
                 <span className="flex items-center gap-1.5"><Check weight="bold" className="text-brand-accent" /> {copy?.badges?.[1] ?? "No credit card required"}</span>
                 <span className="flex items-center gap-1.5"><Check weight="bold" className="text-brand-accent" /> {copy?.badges?.[2] ?? "Set up in 5 minutes"}</span>
               </div>
@@ -145,7 +145,7 @@ export default async function ForGroomersPage() {
               {section("features").eyebrow ?? "Why GroomLocal"}
             </p>
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-brand-primary mb-2">
-              {section("features").heading ?? "Everything you need to grow"}
+              {section("features").heading ?? "What you get"}
             </h2>
             <p className="text-text-muted">{section("features").intro ?? "Tools built specifically for PNW pet grooming businesses."}</p>
           </div>
@@ -223,10 +223,10 @@ export default async function ForGroomersPage() {
             </div>
             <div className="flex-[1.5] text-center md:text-left text-white">
               <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4">
-                {section("closing").heading ?? "Ready to get more clients?"}
+                {section("closing").heading ?? "Ready to claim your listing?"}
               </h2>
               <p className="text-lg text-white/90 mb-8 max-w-xl mx-auto md:mx-0">
-                {section("closing").intro ?? "Join the PNW's best pet grooming directory today. Start free, upgrade when you're ready."}
+                {section("closing").intro ?? "Your listing is free to claim and free to keep."}
               </p>
               <Link
                 href={section("closing").cta?.href || "/get-listed#claim"}

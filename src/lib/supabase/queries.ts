@@ -423,48 +423,6 @@ export async function getMobileGroomersVisitingCity(
   );
 }
 
-/**
- * Count how many featured spots are taken in a city (local only, no spillover).
- * Used on the pricing page for scarcity signals.
- */
-export async function getFeaturedCountByCity(
-  citySlug: string,
-  stateAbbr: string
-): Promise<number> {
-  const localSlugs = citySlugVariants(citySlug, stateAbbr);
-
-  const { count, error } = await supabase
-    .from("business_listings")
-    .select("*", { count: "exact", head: true })
-    .not("slug", "in", PUBLIC_EXCLUDED_FILTER)
-    .eq("is_featured", true)
-    .or(activeSponsorshipFilter())
-    .eq("state", stateAbbr.toUpperCase())
-    .in("city_slug", localSlugs);
-
-  if (error) {
-    console.error("getFeaturedCountByCity error:", error.message);
-    return 0;
-  }
-  return count ?? 0;
-}
-
-/**
- * Get featured listing counts for a list of cities.
- * Used on the pricing page for scarcity signals.
- */
-export async function getFeaturedCountsForCities(
-  cities: { slug: string; name: string; stateAbbr: string }[]
-): Promise<{ cityName: string; taken: number }[]> {
-  const results = await Promise.all(
-    cities.map(async ({ slug, name, stateAbbr }) => ({
-      cityName: name,
-      taken: await getFeaturedCountByCity(slug, stateAbbr),
-    }))
-  );
-  return results;
-}
-
 export async function getAllListings(): Promise<NormalizedListing[]> {
   return withTagsAll(await getCachedListingRows()).filter(hasKnownCity);
 }

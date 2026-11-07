@@ -87,7 +87,7 @@ export default async function ClaimSuccessPage({
                     </div>
 
                     <h1 className="font-heading text-3xl md:text-5xl font-bold text-brand-primary mb-4">
-                        Welcome, Founding Member!
+                        Welcome to GroomLocal!
                     </h1>
                     <p className="text-lg text-text-muted mb-4">
                         You now have full control over <strong className="text-brand-primary">{listing.name}</strong>. Your listing now shows an Owner Confirmed badge to pet parents.
