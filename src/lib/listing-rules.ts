@@ -16,11 +16,15 @@ export interface SponsorshipFields {
 }
 
 /**
- * End of the one-time free promo window: 11:59 pm Pacific on 2026-12-31.
- * A comped spot carries this as `sponsor_paid_until`, so `isSponsored` and
- * `activeSponsorshipFilter` drop it automatically with no job to run.
+ * End of the free comp window: 11:59 pm Pacific on 2027-12-31 (extended from
+ * 2026-12-31 by the 2026-11-06 plan, no renewal ask). A comped spot carries this
+ * as `sponsor_paid_until`, so `isSponsored` and `activeSponsorshipFilter` drop it
+ * automatically with no job to run.
  */
-export const FREE_PROMO_ENDS_AT = "2027-01-01T08:00:00.000Z";
+export const FREE_PROMO_ENDS_AT = "2028-01-01T08:00:00.000Z";
+
+/** The last day of the comp window, for admin copy. */
+export const FREE_PROMO_LAST_DAY = "Dec 31, 2027";
 
 /** Columns that take a listing out of any sponsored placement, comped or paid. */
 export const NO_PLACEMENT = {
@@ -37,7 +41,7 @@ export type FreePromoResult =
 /** The columns for a free promo spot, or an error once the promo window has closed. */
 export function freePromoPlacement(now: number = Date.now()): FreePromoResult {
   if (now >= Date.parse(FREE_PROMO_ENDS_AT)) {
-    return { ok: false, error: "The free promo window ended on December 31, 2026. Set a paid placement by hand instead." };
+    return { ok: false, error: `The free promo window ended on ${FREE_PROMO_LAST_DAY}. Set a paid placement by hand instead.` };
   }
   return {
     ok: true,

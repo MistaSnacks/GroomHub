@@ -4,7 +4,7 @@ import { loadOutreach } from "@/lib/admin-console/outreach";
 import { contactIndex, daysToClaim, externalOwners } from "@/lib/admin-console/insights";
 import { formatDay, relativeTime } from "@/lib/admin-console/metrics";
 import { FIRST_REMINDER_AFTER_DAYS, MAX_REMINDERS, REMINDER_EVERY_DAYS, reminderDecision } from "@/lib/owner-reminders";
-import { FREE_PROMO_ENDS_AT } from "@/lib/listing-rules";
+import { FREE_PROMO_ENDS_AT, FREE_PROMO_LAST_DAY } from "@/lib/listing-rules";
 import { MIN_PHOTOS } from "@/lib/profile-completeness";
 import { listingSearchStats, searchConsoleConfigured, searchWindow, type PageSearchStats } from "@/lib/search-console";
 import { reportPeriod } from "@/lib/owner-report";
@@ -112,7 +112,7 @@ export default async function OwnersPage() {
           <StatTile label="Outside owners" value={external.length} sub={`${owners.length - external.length} of your own accounts or the house listing not counted`} />
           <StatTile label="Finished profiles" value={`${complete} of ${external.length}`} sub="Photos, logo, description, services, specialties" tone={complete < external.length ? "warn" : "ok"} />
           <StatTile label="Signed in this week" value={signedInRecently} sub="Outside owners only" />
-          <StatTile label="Sponsored spots in use" value={sponsored} sub={promoOpen ? "Free promo available through Dec 31" : "Promo window closed"} />
+          <StatTile label="Sponsored spots in use" value={sponsored} sub={promoOpen ? `Free promo available through ${FREE_PROMO_LAST_DAY}` : "Promo window closed"} />
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">

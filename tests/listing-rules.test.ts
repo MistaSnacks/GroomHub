@@ -37,11 +37,13 @@ test("activeSponsorshipFilter is a PostgREST or() fragment", () => {
   assert.equal(f, "sponsor_paid_until.is.null,sponsor_paid_until.gt.2026-09-24T12:00:00.000Z");
 });
 
-test("the free promo ends at 11:59 pm Pacific on December 31, 2026", () => {
-  assert.equal(FREE_PROMO_ENDS_AT, "2027-01-01T08:00:00.000Z");
+test("the free promo ends at 11:59 pm Pacific on December 31, 2027", () => {
+  assert.equal(FREE_PROMO_ENDS_AT, "2028-01-01T08:00:00.000Z");
   // 11:59 pm PST on Dec 31 is 07:59 UTC on Jan 1, still inside the window; midnight PST is the cutoff.
-  assert.equal(freePromoPlacement(Date.parse("2027-01-01T07:59:00Z")).ok, true);
-  assert.equal(freePromoPlacement(Date.parse("2027-01-01T08:00:00Z")).ok, false);
+  assert.equal(freePromoPlacement(Date.parse("2028-01-01T07:59:00Z")).ok, true);
+  const closed = freePromoPlacement(Date.parse("2028-01-01T08:00:00Z"));
+  assert.equal(closed.ok, false);
+  if (!closed.ok) assert.match(closed.error, /Dec 31, 2027/);
 });
 
 test("freePromoPlacement features the listing, marks it comped and gives it an end date", () => {
@@ -60,7 +62,7 @@ test("freePromoPlacement features the listing, marks it comped and gives it an e
 });
 
 test("freePromoPlacement refuses after the window closes", () => {
-  const r = freePromoPlacement(Date.parse("2027-02-01T00:00:00Z"));
+  const r = freePromoPlacement(Date.parse("2028-02-01T00:00:00Z"));
   assert.equal(r.ok, false);
   if (!r.ok) assert.match(r.error, /ended/);
 });

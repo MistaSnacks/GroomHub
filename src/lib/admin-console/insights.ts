@@ -1,7 +1,7 @@
 import type { AdminListing, Core, OwnerRecord } from "./data";
 import type { OutreachData, OutreachSnapshot } from "./outreach";
 import type { DnsCheck, SearchConsoleReport } from "./checks";
-import { FREE_PROMO_ENDS_AT } from "@/lib/listing-rules";
+import { FREE_PROMO_ENDS_AT, FREE_PROMO_LAST_DAY } from "@/lib/listing-rules";
 import { MIN_PHOTOS } from "@/lib/profile-completeness";
 import { addDays, pacificDay, pacificTime } from "./metrics";
 
@@ -145,7 +145,7 @@ export function buildTasks(input: {
         id: "promo-ready",
         tone: "info",
         title: `${plural(ready.length, "owner")} with a full photo set and no Sponsored spot`,
-        detail: `${names(ready.map((o) => o.listing.name))}. The free promo spot runs to Dec 31 if you want to offer it.`,
+        detail: `${names(ready.map((o) => o.listing.name))}. The free promo spot runs to ${FREE_PROMO_LAST_DAY} if you want to offer it.`,
         href: "/admin/dashboard/listings",
         cta: "See owners",
       });

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Star } from "lucide-react";
 import { toggleFeatured } from "./actions";
 import { revokeClaim } from "@/app/admin/dashboard/claims/actions";
+import { FREE_PROMO_LAST_DAY } from "@/lib/listing-rules";
 
 /**
  * Per-owner controls. Featuring here is the free promo spot (see toggleFeatured);
@@ -39,7 +40,7 @@ export function OwnerActions({
         setMessage({ tone: "fail", text: result.error });
         return;
       }
-      setMessage({ tone: "ok", text: next ? "Free Sponsored spot is on through Dec 31." : "Spot removed." });
+      setMessage({ tone: "ok", text: next ? `Free Sponsored spot is on through ${FREE_PROMO_LAST_DAY}.` : "Spot removed." });
       router.refresh();
     });
   }
@@ -75,7 +76,7 @@ export function OwnerActions({
             type="button"
             disabled={pending || !promoOpen}
             onClick={() => feature(true)}
-            title={promoOpen ? "Sponsored-labeled spot at the top of their city page, free through Dec 31, 2026" : "The free promo window has ended"}
+            title={promoOpen ? `Sponsored-labeled spot at the top of their city page, free through ${FREE_PROMO_LAST_DAY}` : "The free promo window has ended"}
             className="inline-flex items-center gap-1.5 rounded-lg border border-adm-line bg-white px-2.5 py-1.5 text-xs font-medium text-stone-700 hover:border-amber-400 hover:text-amber-800 disabled:opacity-50"
           >
             <Star className="h-3.5 w-3.5" aria-hidden />
