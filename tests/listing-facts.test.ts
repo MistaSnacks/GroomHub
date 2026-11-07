@@ -133,5 +133,5 @@ test("the harvested block shows starting prices, the date seen, and each source"
   assert.match(html, /Seen on their website, Oct 1, 2026/);
   assert.match(html, /Starting at \$65/);
   assert.match(html, /href="https:\/\/acme\.example\/full"/);
-  assert.doesNotMatch(html, /[–—]/);
+  assert.doesNotMatch(html, /[\u2013\u2014]/);
 });
