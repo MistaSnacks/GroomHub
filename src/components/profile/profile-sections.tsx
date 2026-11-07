@@ -1,11 +1,15 @@
 import { ArrowSquareOut } from "@phosphor-icons/react/dist/ssr";
 import { getServiceLabel, getServiceTag } from "@/lib/tags";
-import { isDefaultHours, SERVICES_NOT_LISTED_LINE, UNCONFIRMED_HOURS_LINE } from "@/lib/listing-facts";
+import { hoursUnconfirmed, SERVICES_NOT_LISTED_LINE, UNCONFIRMED_HOURS_LINE } from "@/lib/listing-facts";
 import { dollars, harvestedServiceLabel, seenOnLabel, type HarvestedPriceSet } from "@/lib/harvested-prices";
 
-/** Profile "Services" card. Unknown services (see listing-facts) show one neutral line, not a guessed list. */
-export function ServicesSection({ listing }: { listing: { listed_service_tags: string[] } }) {
+/**
+ * Profile "Services" card. Unknown services (see listing-facts) show one neutral line, not a guessed list.
+ * With hideWhenUnknown (the harvested price list is on the page), unknown services show nothing.
+ */
+export function ServicesSection({ listing, hideWhenUnknown = false }: { listing: { listed_service_tags: string[] }; hideWhenUnknown?: boolean }) {
   const tags = listing.listed_service_tags;
+  if (tags.length === 0 && hideWhenUnknown) return null;
   return (
     <div className="rounded-2xl border border-border bg-white p-6">
       <h2 className="font-heading text-xl font-semibold text-brand-primary mb-4">Services</h2>
@@ -60,10 +64,10 @@ interface HoursEntry {
   closed?: boolean;
 }
 
-/** "Business Hours" card. The import's default week shows as unconfirmed instead of as fact. */
-export function HoursSection({ hours }: { hours: HoursEntry[] | null | undefined }) {
+/** "Business Hours" card. The import's default week shows as unconfirmed on unclaimed listings. */
+export function HoursSection({ hours, ownerId = null }: { hours: HoursEntry[] | null | undefined; ownerId?: string | null }) {
   if (!Array.isArray(hours) || hours.length === 0) return null;
-  const unconfirmed = isDefaultHours(hours);
+  const unconfirmed = hoursUnconfirmed({ hours, owner_id: ownerId });
   return (
     <div className="rounded-2xl border border-border bg-white p-6">
       <h2 className="font-heading text-xl font-semibold text-brand-primary mb-4">Business Hours</h2>

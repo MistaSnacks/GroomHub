@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { isDefaultHours, listedServiceTags, servicesUnknown, SERVICES_NOT_LISTED_LINE, UNCONFIRMED_HOURS_LINE } from "@/lib/listing-facts";
+import { hoursUnconfirmed, isDefaultHours, listedServiceTags, servicesUnknown, SERVICES_NOT_LISTED_LINE, UNCONFIRMED_HOURS_LINE } from "@/lib/listing-facts";
 import { dollars, selectHarvestedPrices, shouldShowHarvestedPrices, type PriceRow } from "@/lib/harvested-prices";
 import { HarvestedPricesSection, HoursSection, ServicesSection } from "@/components/profile/profile-sections";
 import { localBusinessSchema } from "@/lib/schema";
@@ -63,6 +63,21 @@ test("the hours card says hours are unconfirmed for the default week", () => {
   assert.doesNotMatch(html, /Monday/);
   const real = renderToStaticMarkup(createElement(HoursSection, { hours: week("8:00 AM", "6:00 PM") }));
   assert.match(real, /Monday/);
+});
+
+test("a claimed listing's default-looking hours count as the owner's", () => {
+  const html = renderToStaticMarkup(createElement(HoursSection, { hours: week("9:00 AM", "5:00 PM"), ownerId: "owner-1" }));
+  assert.match(html, /Monday/);
+  assert.doesNotMatch(html, new RegExp(UNCONFIRMED_HOURS_LINE.replace(".", "\\.")));
+  assert.equal(hoursUnconfirmed({ hours: week("9:00 AM", "5:00 PM"), owner_id: "owner-1" }), false);
+  assert.equal(hoursUnconfirmed({ hours: week("9:00 AM", "5:00 PM"), owner_id: null }), true);
+});
+
+test("unknown services show nothing when the harvested price list is on the page", () => {
+  const html = renderToStaticMarkup(createElement(ServicesSection, { listing: { listed_service_tags: [] }, hideWhenUnknown: true }));
+  assert.equal(html, "");
+  const known = renderToStaticMarkup(createElement(ServicesSection, { listing: { listed_service_tags: ["nail-care"] }, hideWhenUnknown: true }));
+  assert.match(known, /Services/);
 });
 
 test("JSON-LD drops default hours and unknown services", () => {

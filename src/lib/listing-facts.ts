@@ -50,8 +50,8 @@ function minutes(value: string | undefined): number | null {
 
 /**
  * The import default: all seven days open 9:00 to 17:00, in either time format (the
- * owner editor also fills missing days with 09:00 to 17:00). The database does not
- * record who set the hours, so this applies to every listing, claimed or not.
+ * owner editor also fills missing days with 09:00 to 17:00). Callers use hoursUnconfirmed(),
+ * which trusts a claimed listing's hours as the owner's.
  */
 export function isDefaultHours(hours: unknown): boolean {
   if (!Array.isArray(hours) || hours.length !== 7) return false;
@@ -65,6 +65,11 @@ export function isDefaultHours(hours: unknown): boolean {
     if (minutes(h.open) !== 9 * 60 || minutes(h.close) !== 17 * 60) return false;
   }
   return seen.size === 7;
+}
+
+/** Default hours on a listing no owner has claimed. A claimed listing's hours count as the owner's. */
+export function hoursUnconfirmed(listing: { hours?: unknown; owner_id?: string | null }): boolean {
+  return !listing.owner_id && isDefaultHours(listing.hours);
 }
 
 export const UNCONFIRMED_HOURS_LINE = "Hours not confirmed. Call to check.";

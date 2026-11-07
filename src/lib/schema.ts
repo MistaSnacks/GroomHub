@@ -2,7 +2,7 @@
 import type { NormalizedListing } from "./types";
 import type { BlogPostFull } from "./blog";
 import { getServiceTag } from "./tags";
-import { isDefaultHours } from "./listing-facts";
+import { hoursUnconfirmed } from "./listing-facts";
 
 const BASE_URL = "https://groomlocal.com";
 
@@ -57,7 +57,7 @@ function isValidTime(time: string): boolean {
 export function localBusinessSchema(listing: NormalizedListing) {
   const image = safeImageUrl(listing.images?.[0]);
   const validWebsite = safeWebsiteUrl(listing.website);
-  const hours = isDefaultHours(listing.hours) ? [] : listing.hours?.filter(
+  const hours = hoursUnconfirmed(listing) ? [] : listing.hours?.filter(
     (h) => !h.closed && h.open && h.close && VALID_DAYS.has(h.day) && isValidTime(h.open) && isValidTime(h.close)
   );
 

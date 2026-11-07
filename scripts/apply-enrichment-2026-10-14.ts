@@ -216,16 +216,35 @@ function shuffle<T>(items: T[], seed: number): T[] {
   return out;
 }
 
+interface BackupFile {
+  rows: (ListingRow & Record<string, unknown>)[];
+  changes: { id: string; changes: Change[] }[];
+}
+
+/**
+ * Puts back only the fields this script changed, and only where the value is still the one it wrote.
+ * A field an owner edited after the apply keeps the owner's value.
+ */
 async function restore(db: SupabaseClient, file: string) {
-  const rows = JSON.parse(readFileSync(file, "utf8")) as (ListingRow & Record<string, unknown>)[];
+  const backup = JSON.parse(readFileSync(file, "utf8")) as BackupFile;
+  const rowsById = new Map(backup.rows.map((r) => [r.id, r]));
   let restored = 0;
-  for (const row of rows) {
-    const patch = Object.fromEntries(FIELDS.map((f) => [f, row[f]]));
-    const { error } = await db.from("business_listings").update(patch).eq("id", row.id);
-    if (error) console.error(`fail ${row.slug}: ${error.message}`);
+  for (const { id, changes } of backup.changes) {
+    const before = rowsById.get(id);
+    const { data: now, error } = await db.from("business_listings").select(COLUMNS).eq("id", id).single();
+    if (!before || error || !now) {
+      console.error(`skip ${id}: ${error?.message ?? "not in backup"}`);
+      continue;
+    }
+    const fields = changes.filter((c) => sameValue((now as ListingRow)[c.field], c.to)).map((c) => c.field);
+    const kept = changes.length - fields.length;
+    if (kept) console.log(`keep ${before.slug}: ${kept} field(s) changed since the apply`);
+    if (!fields.length) continue;
+    const { error: updateError } = await db.from("business_listings").update(Object.fromEntries(fields.map((f) => [f, before[f]]))).eq("id", id);
+    if (updateError) console.error(`fail ${before.slug}: ${updateError.message}`);
     else restored++;
   }
-  console.log(`Restored ${restored} of ${rows.length} rows from ${file}`);
+  console.log(`Restored ${restored} of ${backup.changes.length} rows from ${file}`);
 }
 
 async function main() {
@@ -238,6 +257,7 @@ async function main() {
     if (!file || !existsSync(file)) throw new Error("--restore needs the path of a backup-rows-*.json file.");
     return restore(db, file);
   }
+  if (!existsSync(SOURCE)) throw new Error(`Missing ${SOURCE}.`);
 
   const proposals: Proposal[] = readFileSync(SOURCE, "utf8").split("\n").filter(Boolean).map((l) => JSON.parse(l));
   const listings = await readListings(db);
@@ -313,7 +333,8 @@ async function main() {
   }
   if (backupRows.length !== ids.length) throw new Error(`Backup holds ${backupRows.length} of ${ids.length} rows. Nothing was written.`);
   const backupFile = join(OUT_DIR, `backup-rows-${new Date().toISOString().replace(/[:.]/g, "-")}.json`);
-  writeFileSync(backupFile, JSON.stringify(backupRows, null, 1));
+  const backup: BackupFile = { rows: backupRows as BackupFile["rows"], changes: changing.map((p) => ({ id: p.listing.id, changes: p.changes })) };
+  writeFileSync(backupFile, JSON.stringify(backup, null, 1));
   console.log(`Backed up ${backupRows.length} rows to ${backupFile}`);
 
   const log: string[] = [];
@@ -330,8 +351,12 @@ async function main() {
       continue;
     }
     const patch = Object.fromEntries(p.changes.map((c) => [c.field, c.to]));
-    const { error: updateError } = await db.from("business_listings").update(patch).eq("id", p.listing.id);
+    // Conditional on the owner seen in the re-read, so a claim that lands in between is not overwritten.
+    let update = db.from("business_listings").update(patch).eq("id", p.listing.id);
+    update = p.listing.owner_id ? update.eq("owner_id", p.listing.owner_id) : update.is("owner_id", null);
+    const { data: updated, error: updateError } = await update.select("id");
     if (updateError) log.push(`fail ${p.listing.slug}: ${updateError.message}`);
+    else if (!updated?.length) log.push(`skip ${p.listing.slug}: owner changed during the apply`);
     else {
       applied++;
       log.push(`ok ${p.listing.slug}: ${Object.keys(patch).join(", ")}`);
@@ -342,7 +367,7 @@ async function main() {
   console.log(`Applied ${applied} of ${changing.length}. Log: ${logFile}`);
 }
 
-if (process.argv[1] && /apply-enrichment-2026-10-14\.ts$/.test(process.argv[1]) && existsSync(SOURCE)) {
+if (process.argv[1] && /apply-enrichment-2026-10-14\.ts$/.test(process.argv[1])) {
   main().catch((err) => {
     console.error(err);
     process.exit(1);

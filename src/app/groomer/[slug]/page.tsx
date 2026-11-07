@@ -339,7 +339,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
               </div>
             </div>}
 
-            <ServicesSection listing={listing} />
+            <ServicesSection listing={listing} hideWhenUnknown={shouldShowHarvestedPrices(listing, harvested)} />
 
             {/* Specialties */}
             {listing.specialty_tags.length > 0 && (
@@ -398,7 +398,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                       {listingPriceLabel(listing)}
                     </p>
                   ) : (
-                    <p className="text-sm font-semibold text-brand-primary">{/^\${1,4}$/.test(listing.price_range || "") ? listing.price_range : "Ask for a quote"}</p>
+                    <p className="text-sm font-semibold text-brand-primary">{shouldShowHarvestedPrices(listing, harvested) ? "See prices below" : /^\${1,4}$/.test(listing.price_range || "") ? listing.price_range : "Ask for a quote"}</p>
                   )}
                 </div>
               </div>
@@ -430,7 +430,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
 
             {shouldShowHarvestedPrices(listing, harvested) && <HarvestedPricesSection name={listing.name} set={harvested} />}
 
-            <HoursSection hours={listing.hours} />
+            <HoursSection hours={listing.hours} ownerId={listing.owner_id} />
 
             {/* Nearby groomers */}
             {nearby.listings.length > 0 && (

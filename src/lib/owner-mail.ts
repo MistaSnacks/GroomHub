@@ -102,6 +102,17 @@ export async function sendMonthlyReport(
   db: SupabaseClient,
   opts: { listingId: string; userId: string; to: string; period: string; report: Omit<MonthlyReportInput, "optOutUrl"> }
 ): Promise<boolean> {
+  // Claim the (listing, period) slot first. The unique index owner_email_log_monthly_once makes a
+  // second, overlapping run (a cron retry plus a manual run) fail here instead of sending twice.
+  const { data: claimed, error: claimError } = await db
+    .from("owner_email_log")
+    .insert({ listing_id: opts.listingId, user_id: opts.userId, kind: "monthly_report", period: opts.period })
+    .select("id")
+    .single();
+  if (claimError || !claimed) {
+    log("monthly_report_slot_taken", { listingId: opts.listingId, period: opts.period, code: claimError?.code });
+    return false;
+  }
   const unsubscribe = optOutUrl(opts.userId);
   const email = monthlyReportEmail({ ...opts.report, optOutUrl: unsubscribe });
   const result = await sendEmail({
@@ -113,6 +124,7 @@ export async function sendMonthlyReport(
     headers: unsubscribeHeaders(unsubscribe),
     context: { slug: opts.report.slug, kind: "monthly_report", period: opts.period },
   });
-  if (result.ok) await recordSent(db, opts.listingId, opts.userId, "monthly_report", opts.period);
+  // Send failed: free the slot so the next run can retry.
+  if (!result.ok) await db.from("owner_email_log").delete().eq("id", claimed.id);
   return result.ok;
 }
