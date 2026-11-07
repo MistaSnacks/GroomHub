@@ -66,6 +66,7 @@ export function GetListedForm() {
     );
   }
 
+  // Reached when automatic listing creation failed (the admin gets a "needs manual setup" email).
   if (status === "success") {
     return (
       <div className="bg-white rounded-2xl border border-border p-6 md:p-8 text-center">
@@ -74,7 +75,7 @@ export function GetListedForm() {
           Submission received!
         </h2>
         <p className="text-text-muted">
-          We&apos;ll review your business and get your listing live within 48 hours.
+          Your details are saved, but your listing did not go live automatically. We will set it up by hand and reply to the email you gave us.
         </p>
       </div>
     );
