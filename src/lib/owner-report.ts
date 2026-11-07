@@ -2,7 +2,8 @@
 // Data gathering lives in src/lib/owner-report-data.ts, the email in
 // src/lib/email/owner-emails.ts, and the cron in src/app/api/cron/owner-reports.
 
-import { epochHour, pacificDay } from "@/lib/admin-console/metrics";
+import { pacificDay } from "@/lib/admin-console/metrics";
+import type { OwnerMetric } from "@/lib/real-visits";
 
 export interface ReportPeriod {
   /** "2026-09" */
@@ -50,72 +51,20 @@ export function previousPeriod(period: ReportPeriod, now: Date = new Date()): Re
   return periodFromString(monthBefore(y, m), now)!;
 }
 
-export interface ReportEvent {
-  at: string;
-  type: string;
-  listingId: string | null;
-  url: string | null;
-}
-
-export interface MonthStats {
-  views: number;
-  /** Views that arrived through the owner's website badge. Included in `views`. */
-  badgeClicks: number;
-  taps: { website: number; phone: number; directions: number; total: number };
-}
-
-export function isBadgeVisit(url: string | null): boolean {
-  if (!url) return false;
-  try {
-    return new URL(url).searchParams.get("ref") === "badge";
-  } catch {
-    return false;
-  }
-}
-
-/**
- * Views and contact taps for one listing in the period. `keys` holds every value an
- * event may carry for this listing (its id, its slug, old redirected slugs).
- * Views in crawler hours are left out, the same rule the admin console uses.
- */
-export function monthStats(events: ReportEvent[], keys: Set<string>, period: ReportPeriod, crawler: Set<number>): MonthStats {
-  const stats: MonthStats = { views: 0, badgeClicks: 0, taps: { website: 0, phone: 0, directions: 0, total: 0 } };
-  for (const e of events) {
-    if (!e.listingId || !keys.has(e.listingId)) continue;
-    if (e.url?.startsWith("http://localhost") || e.url?.startsWith("http://127.0.0.1")) continue;
-    const day = pacificDay(e.at);
-    if (day < period.startDate || day > period.endDate) continue;
-    if (e.type === "page_view") {
-      if (crawler.has(epochHour(e.at))) continue;
-      stats.views++;
-      if (isBadgeVisit(e.url)) stats.badgeClicks++;
-    } else if (e.type === "website_click") {
-      stats.taps.website++;
-    } else if (e.type === "phone_click") {
-      stats.taps.phone++;
-    } else if (e.type === "directions_click") {
-      stats.taps.directions++;
-    }
-  }
-  stats.taps.total = stats.taps.website + stats.taps.phone + stats.taps.directions;
-  return stats;
-}
-
 export type ReportDecision =
   | { send: true }
-  | { send: false; reason: "opted_out" | "already_sent" | "nothing_to_report" | "no_owner_email" };
+  | { send: false; reason: "opted_out" | "already_sent" | "below_threshold" | "no_owner_email" };
 
-/** A month with no views, no taps and no Google impressions is not worth an email. */
+/** Send only when at least one metric reaches MIN_SHOWN_COUNT (`shown` is the output of shownOwnerMetrics()). */
 export function reportDecision(opts: {
   optedOut: boolean;
   alreadySent: boolean;
   hasEmail: boolean;
-  stats: MonthStats;
-  googleImpressions: number;
+  shown: OwnerMetric[];
 }): ReportDecision {
   if (opts.optedOut) return { send: false, reason: "opted_out" };
   if (opts.alreadySent) return { send: false, reason: "already_sent" };
   if (!opts.hasEmail) return { send: false, reason: "no_owner_email" };
-  if (opts.stats.views + opts.stats.taps.total + opts.googleImpressions === 0) return { send: false, reason: "nothing_to_report" };
+  if (opts.shown.length === 0) return { send: false, reason: "below_threshold" };
   return { send: true };
 }

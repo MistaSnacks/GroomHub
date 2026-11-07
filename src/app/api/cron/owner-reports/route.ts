@@ -48,6 +48,7 @@ export async function GET(request: NextRequest) {
     dryRun,
     period: period.period,
     googleError: batch.googleError,
+    countedFrom: batch.countedFrom,
     owners: batch.reports.length,
     reports: batch.reports.map((r) => ({
       slug: r.listing.slug,
@@ -55,6 +56,7 @@ export async function GET(request: NextRequest) {
       reason: r.decision.send ? undefined : r.decision.reason,
       views: r.stats.views,
       taps: r.stats.taps.total,
+      shown: r.email.metrics.map((m) => m.key),
       googleImpressions: r.google?.impressions ?? null,
       topQuery: r.google?.queries[0]?.query ?? null,
       badge: r.badge?.host ?? null,

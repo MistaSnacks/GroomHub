@@ -12,7 +12,7 @@ export const metadata = { title: "Monthly report preview" };
 const REASON: Record<string, string> = {
   opted_out: "The owner turned off reminders and reports.",
   already_sent: "This month's report already went out.",
-  nothing_to_report: "No views, taps or Google impressions this month, so no email.",
+  below_threshold: "No metric reached the minimum the owner sees this month, so no email.",
   no_owner_email: "The owner account has no email address.",
 };
 

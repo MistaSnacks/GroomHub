@@ -2,6 +2,7 @@
 
 import type { ProfileGap } from "@/lib/profile-completeness";
 import { MAX_REMINDERS } from "@/lib/owner-reminders";
+import { OWNER_METRIC_LABELS, type OwnerMetric, type OwnerMetricKey } from "@/lib/real-visits";
 import { BRAND, emailParagraph, escapeHtml, renderBrandedEmail } from "@/lib/email/template";
 
 export interface BuiltEmail {
@@ -143,31 +144,35 @@ export interface MonthlyReportInput {
   slug: string;
   /** "September" */
   monthLabel: string;
-  views: number;
-  taps: { website: number; phone: number; directions: number; total: number };
-  /** Null when Search Console data is not available; the Google column is then left out. */
-  google: { impressions: number; clicks: number; queries: { query: string; impressions: number }[] } | null;
+  /** First Pacific day counted, when real-visit tracking began inside the month; null when the whole month counted. */
+  countedFrom: string | null;
+  /** Only the metrics that reached MIN_SHOWN_COUNT (shownOwnerMetrics()). The cron sends nothing when this is empty. */
+  metrics: OwnerMetric[];
+  /** Top Google searches for the page. Only filled when Google impressions are among `metrics`. */
+  searches: string[];
   /** Where the owner's website badge was seen, if anywhere. */
   badgeHost: string | null;
-  badgeClicks: number;
   gaps: ProfileGap[];
   optOutUrl?: string | null;
 }
 
-const BADGE_IMAGE = `${SITE}/badges/groomlocal-owner-confirmed.png`;
+const SUBJECT_PHRASE: Record<OwnerMetricKey, (n: string) => string> = {
+  googleImpressions: (n) => `showed up on Google ${n} times`,
+  views: (n) => `had ${n} profile views`,
+  taps: (n) => `got ${n} contact taps`,
+  googleClicks: (n) => `got ${n} clicks from Google`,
+};
 
-function plural(n: number, one: string, many: string): string {
-  return `${n.toLocaleString("en-US")} ${n === 1 ? one : many}`;
-}
+const dayLabel = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", timeZone: "UTC" });
 
-/** Three big numbers in a row. Tables, because email clients ignore flexbox. */
-function statRow(cells: Array<{ value: number; label: string; caption: string }>): string {
-  const width = Math.floor(100 / cells.length);
-  const tds = cells
-    .map(
-      (c) =>
-        `<td width="${width}%" style="padding:16px 8px;text-align:center;vertical-align:top;"><div style="font-size:30px;line-height:1.1;font-weight:800;color:${BRAND.ink};font-family:${BRAND.headingFont};">${c.value.toLocaleString("en-US")}</div><div style="margin-top:6px;font-size:14px;font-weight:700;color:${BRAND.ink};">${escapeHtml(c.label)}</div><div style="margin-top:2px;font-size:12px;line-height:1.4;color:${BRAND.muted};">${escapeHtml(c.caption)}</div></td>`
-    )
+/** Big numbers in a row. Tables, because email clients ignore flexbox. */
+function statRow(metrics: OwnerMetric[]): string {
+  const width = Math.floor(100 / metrics.length);
+  const tds = metrics
+    .map((m) => {
+      const { label, caption } = OWNER_METRIC_LABELS[m.key];
+      return `<td width="${width}%" style="padding:16px 8px;text-align:center;vertical-align:top;"><div style="font-size:30px;line-height:1.1;font-weight:800;color:${BRAND.ink};font-family:${BRAND.headingFont};">${m.value.toLocaleString("en-US")}</div><div style="margin-top:6px;font-size:14px;font-weight:700;color:${BRAND.ink};">${escapeHtml(label)}</div><div style="margin-top:2px;font-size:12px;line-height:1.4;color:${BRAND.muted};">${escapeHtml(caption)}</div></td>`;
+    })
     .join("");
   return `
   <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:${BRAND.cream};border:1px solid ${BRAND.border};border-radius:14px;margin:8px 0 24px 0;">
@@ -175,81 +180,47 @@ function statRow(cells: Array<{ value: number; label: string; caption: string }>
   </table>`;
 }
 
-function tapBreakdown(t: MonthlyReportInput["taps"]): string {
-  const parts = [
-    t.phone ? plural(t.phone, "call", "calls") : null,
-    t.website ? plural(t.website, "website visit", "website visits") : null,
-    t.directions ? plural(t.directions, "directions request", "directions requests") : null,
-  ].filter(Boolean);
-  return parts.join(", ");
-}
-
-export function monthlyReportSubject(input: Pick<MonthlyReportInput, "monthLabel" | "views" | "taps" | "google">): string {
-  const impressions = input.google?.impressions ?? 0;
-  if (impressions > 0 && impressions >= input.views) {
-    return `Your GroomLocal listing showed up on Google ${plural(impressions, "time", "times")} in ${input.monthLabel}`;
-  }
-  if (input.views > 0) return `Your GroomLocal listing had ${plural(input.views, "view", "views")} in ${input.monthLabel}`;
-  return `Your GroomLocal listing in ${input.monthLabel}`;
+/** The subject leads with the biggest metric shown. */
+export function monthlyReportSubject(input: Pick<MonthlyReportInput, "monthLabel" | "metrics">): string {
+  const top = [...input.metrics].sort((a, b) => b.value - a.value)[0];
+  if (!top) return `Your GroomLocal listing in ${input.monthLabel}`;
+  return `Your GroomLocal listing ${SUBJECT_PHRASE[top.key](top.value.toLocaleString("en-US"))} in ${input.monthLabel}`;
 }
 
 export function monthlyReportEmail(input: MonthlyReportInput): BuiltEmail {
-  const { listingName, monthLabel, views, taps, google, badgeHost, badgeClicks, gaps, optOutUrl } = input;
+  const { listingName, monthLabel, countedFrom, metrics, searches, badgeHost, gaps, optOutUrl } = input;
   const dashboard = `${SITE}/dashboard`;
-  const badgeUrl = `${SITE}/dashboard#badge`;
+  const hasViews = metrics.some((m) => m.key === "views");
+  const hasVisits = hasViews || metrics.some((m) => m.key === "taps");
 
-  // Only numbers above zero: a row of zeros reads as bad news. The cron never sends
-  // a report where all three are zero, so at least one cell remains.
-  const allCells = [
-    { value: views, label: "Profile views", short: "profile views", caption: "Visits to your GroomLocal page" },
-    { value: taps.total, label: "Contact taps", short: "contact taps", caption: "Calls, website and directions" },
-    { value: google?.impressions ?? 0, label: "Google views", short: "Google views", caption: "Times your page showed in Google results" },
-  ];
-  const nonZero = allCells.filter((c) => c.value > 0);
-  const cells = nonZero.length ? nonZero : allCells.slice(0, 1);
+  const countedNote = countedFrom && hasVisits
+    ? `Visits are counted from ${dayLabel.format(new Date(`${countedFrom}T12:00:00Z`))}, when we started to filter out bots. `
+    : "";
+  const footer = `${countedNote}${hasViews ? "Profile views leave out known bots but include your own visits. " : ""}Reply to this email with any questions.`;
 
-  const footer = `${views > 0 ? "Profile views count every visit to your page, including your own. " : ""}Reply to this email with any questions.`;
-
-  const queries = (google?.queries ?? []).filter((q) => q.impressions > 0).slice(0, 3);
-  const queryBlock = queries.length
-    ? emailParagraph("People found your page by searching for:") +
-      `<ul style="margin:0 0 20px 0;padding-left:20px;font-size:15px;line-height:1.7;color:${BRAND.body};">${queries
-        .map((q) => `<li><strong style="color:${BRAND.ink};">${escapeHtml(q.query)}</strong> <span style="color:${BRAND.muted};">(${plural(q.impressions, "time", "times")})</span></li>`)
+  const top = searches.slice(0, 3);
+  const searchBlock = top.length
+    ? emailParagraph("Your page showed in Google for searches like:") +
+      `<ul style="margin:0 0 20px 0;padding-left:20px;font-size:15px;line-height:1.7;color:${BRAND.body};">${top
+        .map((q) => `<li><strong style="color:${BRAND.ink};">${escapeHtml(q)}</strong></li>`)
         .join("")}</ul>`
     : "";
 
-  const tapsLine = taps.total > 0 ? emailParagraph(`Dog owners tapped to reach you ${plural(taps.total, "time", "times")}: ${escapeHtml(tapBreakdown(taps))}.`) : "";
-
   const badgeBlock = badgeHost
-    ? emailParagraph(
-        badgeClicks > 0
-          ? `Your badge on <strong style="color:${BRAND.ink};">${escapeHtml(badgeHost)}</strong> sent ${plural(badgeClicks, "visitor", "visitors")} to your page. Thanks for linking to us.`
-          : `Your badge is live on <strong style="color:${BRAND.ink};">${escapeHtml(badgeHost)}</strong>. Thanks for linking to us.`
-      )
-    : `
-  <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border:1px solid ${BRAND.border};border-radius:14px;margin:8px 0 24px 0;">
-    <tr><td style="padding:18px 22px;">
-      <p style="margin:0 0 10px 0;font-size:15px;font-weight:700;color:${BRAND.ink};">Add the Owner Confirmed badge to your website</p>
-      <img src="${BADGE_IMAGE}" width="220" height="64" alt="Owner Confirmed on GroomLocal" style="display:block;width:220px;height:64px;margin:0 0 12px 0;">
-      <p style="margin:0 0 10px 0;font-size:14px;line-height:1.6;color:${BRAND.body};">It links to your GroomLocal page, so customers can see your photos and hours and send you a message. It also helps more people find your page.</p>
-      <a href="${badgeUrl}" style="font-size:14px;font-weight:700;color:${BRAND.tealDark};">Get your badge code</a>
-    </td></tr>
-  </table>`;
-
-  const gapBlock = gaps.length
-    ? emailParagraph("Still missing from your profile:") + gapChecklist(gaps)
+    ? emailParagraph(`Your badge is live on <strong style="color:${BRAND.ink};">${escapeHtml(badgeHost)}</strong>. Thanks for linking to us.`)
     : "";
+
+  const gapBlock = gaps.length ? emailParagraph("Still missing from your profile:") + gapChecklist(gaps) : "";
 
   const body =
     emailParagraph(`Here is how your GroomLocal listing did in ${escapeHtml(monthLabel)}.`) +
-    statRow(cells) +
-    tapsLine +
-    queryBlock +
+    statRow(metrics) +
+    searchBlock +
     badgeBlock +
     gapBlock;
 
   const html = renderBrandedEmail({
-    preheader: `${listingName} on GroomLocal in ${monthLabel}: ${cells.map((c) => `${c.value.toLocaleString("en-US")} ${c.short}`).join(", ")}.`,
+    preheader: `${listingName} on GroomLocal in ${monthLabel}: ${metrics.map((m) => `${m.value.toLocaleString("en-US")} ${OWNER_METRIC_LABELS[m.key].label.toLowerCase()}`).join(", ")}.`,
     heading: `${listingName} in ${monthLabel}`,
     body,
     cta: { label: "Open your dashboard", url: dashboard },
@@ -260,12 +231,9 @@ export function monthlyReportEmail(input: MonthlyReportInput): BuiltEmail {
   const text = [
     `Here is how ${listingName} did on GroomLocal in ${monthLabel}.`,
     "",
-    ...cells.map((c) => `${c.label}: ${c.value}${c.label === "Contact taps" ? ` (${tapBreakdown(taps)})` : c.label === "Google views" ? " (times your page showed in Google results)" : ""}`),
-    ...(queries.length ? ["", "People found your page by searching for:", ...queries.map((q) => `- ${q.query} (${q.impressions})`)] : []),
-    "",
-    badgeHost
-      ? `Your badge is live on ${badgeHost}.${badgeClicks ? ` It sent ${badgeClicks} visitors to your page.` : ""} Thanks for linking to us.`
-      : `Add the Owner Confirmed badge to your website: ${badgeUrl}`,
+    ...metrics.map((m) => `${OWNER_METRIC_LABELS[m.key].label}: ${m.value.toLocaleString("en-US")} (${OWNER_METRIC_LABELS[m.key].caption.toLowerCase()})`),
+    ...(top.length ? ["", "Your page showed in Google for searches like:", ...top.map((q) => `- ${q}`)] : []),
+    ...(badgeHost ? ["", `Your badge is live on ${badgeHost}. Thanks for linking to us.`] : []),
     ...(gaps.length ? ["", "Still missing from your profile:", ...gapText(gaps)] : []),
     "",
     `Open your dashboard: ${dashboard}`,

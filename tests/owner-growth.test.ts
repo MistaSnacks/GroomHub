@@ -1,9 +1,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { badgeHostFromReferer, badgeLinkUrl, badgeSnippet, badgeSvg, badgeVariant, slugFromBadgeFile } from "@/lib/badge";
-import { monthStats, periodFromString, previousPeriod, reportDecision, reportPeriod, type ReportEvent } from "@/lib/owner-report";
+import { periodFromString, previousPeriod, reportDecision, reportPeriod } from "@/lib/owner-report";
 import { foldListingRows, listingSlugFromPageUrl, searchWindow } from "@/lib/search-console";
 import { monthlyReportEmail, monthlyReportSubject } from "@/lib/email/owner-emails";
+import { MIN_SHOWN_COUNT, shownOwnerMetrics } from "@/lib/real-visits";
 import { profileGaps } from "@/lib/profile-completeness";
 
 // --- Badge -------------------------------------------------------------------
@@ -67,52 +68,21 @@ test("report period is the previous calendar month in Pacific time", () => {
   assert.equal(previousPeriod(periodFromString("2026-01")!).period, "2025-12");
 });
 
-// --- Month stats -------------------------------------------------------------
+const ok = { optedOut: false, alreadySent: false, hasEmail: true };
+const views12 = shownOwnerMetrics({ views: 12, taps: 3, googleImpressions: 4, googleClicks: 0 });
 
-const SEPT = periodFromString("2026-09", new Date("2026-10-03T00:00:00Z"))!;
-const keys = new Set(["id-1", "acme", "acme-old"]);
-const ev = (at: string, type: string, listingId: string | null, url: string | null = "https://groomlocal.com/groomer/acme"): ReportEvent => ({ at, type, listingId, url });
-
-test("monthStats counts this listing's views and taps inside the Pacific month only", () => {
-  const events = [
-    ev("2026-09-10T18:00:00Z", "page_view", "acme"),
-    ev("2026-09-11T18:00:00Z", "page_view", "id-1", "https://groomlocal.com/groomer/acme?ref=badge"),
-    ev("2026-09-12T18:00:00Z", "page_view", "acme-old"),
-    ev("2026-09-12T18:05:00Z", "phone_click", "acme"),
-    ev("2026-09-13T18:05:00Z", "website_click", "acme"),
-    ev("2026-09-13T18:06:00Z", "directions_click", "id-1"),
-    ev("2026-09-14T18:00:00Z", "page_view", "someone-else"),
-    // Sep 1 00:30 Pacific (07:30 UTC) is in; Oct 1 02:00 UTC is still Sep 30 Pacific, so also in.
-    ev("2026-09-01T07:30:00Z", "page_view", "acme"),
-    ev("2026-10-01T02:00:00Z", "page_view", "acme"),
-    // Aug 31 22:00 Pacific is out.
-    ev("2026-09-01T05:00:00Z", "page_view", "acme"),
-    // Local development traffic is out.
-    ev("2026-09-15T18:00:00Z", "page_view", "acme", "http://localhost:3005/groomer/acme"),
-  ];
-  const stats = monthStats(events, keys, SEPT, new Set());
-  assert.equal(stats.views, 5);
-  assert.equal(stats.badgeClicks, 1);
-  assert.deepEqual(stats.taps, { website: 1, phone: 1, directions: 1, total: 3 });
+test("reportDecision skips opted-out owners, repeats and months under the threshold", () => {
+  assert.deepEqual(reportDecision({ ...ok, shown: views12 }), { send: true });
+  assert.deepEqual(reportDecision({ ...ok, optedOut: true, shown: views12 }), { send: false, reason: "opted_out" });
+  assert.deepEqual(reportDecision({ ...ok, alreadySent: true, shown: views12 }), { send: false, reason: "already_sent" });
+  assert.deepEqual(reportDecision({ ...ok, hasEmail: false, shown: views12 }), { send: false, reason: "no_owner_email" });
 });
 
-test("monthStats leaves out views in crawler hours", () => {
-  const at = "2026-09-20T10:15:00Z";
-  const crawler = new Set([Math.floor(Date.parse(at) / 3_600_000)]);
-  const stats = monthStats([ev(at, "page_view", "acme"), ev(at, "phone_click", "acme")], keys, SEPT, crawler);
-  assert.equal(stats.views, 0);
-  assert.equal(stats.taps.total, 1);
-});
-
-test("reportDecision skips opted-out owners, repeats and empty months", () => {
-  const stats = { views: 3, badgeClicks: 0, taps: { website: 0, phone: 0, directions: 0, total: 0 } };
-  const zero = { views: 0, badgeClicks: 0, taps: { website: 0, phone: 0, directions: 0, total: 0 } };
-  assert.deepEqual(reportDecision({ optedOut: false, alreadySent: false, hasEmail: true, stats, googleImpressions: 0 }), { send: true });
-  assert.deepEqual(reportDecision({ optedOut: false, alreadySent: false, hasEmail: true, stats: zero, googleImpressions: 40 }), { send: true });
-  assert.deepEqual(reportDecision({ optedOut: true, alreadySent: false, hasEmail: true, stats, googleImpressions: 0 }), { send: false, reason: "opted_out" });
-  assert.deepEqual(reportDecision({ optedOut: false, alreadySent: true, hasEmail: true, stats, googleImpressions: 0 }), { send: false, reason: "already_sent" });
-  assert.deepEqual(reportDecision({ optedOut: false, alreadySent: false, hasEmail: false, stats, googleImpressions: 0 }), { send: false, reason: "no_owner_email" });
-  assert.deepEqual(reportDecision({ optedOut: false, alreadySent: false, hasEmail: true, stats: zero, googleImpressions: 0 }), { send: false, reason: "nothing_to_report" });
+test("the report skips a listing whose metrics are all under MIN_SHOWN_COUNT", () => {
+  const under = MIN_SHOWN_COUNT - 1;
+  const shown = shownOwnerMetrics({ views: under, taps: under, googleImpressions: under, googleClicks: under });
+  assert.deepEqual(shown, []);
+  assert.deepEqual(reportDecision({ ...ok, shown }), { send: false, reason: "below_threshold" });
 });
 
 // --- Search Console folding --------------------------------------------------
@@ -157,46 +127,37 @@ const BASE = {
   listingName: "K9 by Design",
   slug: "k9-by-design-port-orchard",
   monthLabel: "September",
-  views: 12,
-  taps: { website: 1, phone: 2, directions: 0, total: 3 },
-  google: { impressions: 223, clicks: 2, queries: [{ query: "k9 by design", impressions: 120 }, { query: "<b>dog groomer</b>", impressions: 5 }] },
+  countedFrom: null,
+  metrics: shownOwnerMetrics({ views: 12, taps: 3, googleImpressions: 223, googleClicks: 2 }),
+  searches: ["k9 by design", "<b>dog groomer</b>"],
   badgeHost: null,
-  badgeClicks: 0,
   gaps: [],
 };
 
-test("monthly subject leads with the biggest honest number", () => {
+test("monthly subject leads with the biggest metric shown", () => {
   assert.equal(monthlyReportSubject(BASE), "Your GroomLocal listing showed up on Google 223 times in September");
-  assert.equal(monthlyReportSubject({ ...BASE, google: { impressions: 4, clicks: 0, queries: [] } }), "Your GroomLocal listing had 12 views in September");
-  assert.equal(monthlyReportSubject({ ...BASE, views: 1, google: null }), "Your GroomLocal listing had 1 view in September");
+  assert.equal(monthlyReportSubject({ ...BASE, metrics: shownOwnerMetrics({ views: 12, taps: 3, googleImpressions: 4, googleClicks: 0 }) }), "Your GroomLocal listing had 12 profile views in September");
 });
 
-test("monthly email shows the numbers, escapes queries, and asks for the badge only when it is missing", () => {
-  const withoutBadge = monthlyReportEmail({ ...BASE, optOutUrl: "https://groomlocal.com/api/owner-reminders/unsubscribe?u=x&token=y" });
-  assert.match(withoutBadge.html, />223</);
-  assert.match(withoutBadge.html, /&lt;b&gt;dog groomer&lt;\/b&gt;/);
-  assert.doesNotMatch(withoutBadge.html, /<b>dog groomer<\/b>/);
-  assert.match(withoutBadge.html, /dashboard#badge/);
-  assert.match(withoutBadge.html, /Unsubscribe/);
-  assert.match(withoutBadge.text, /2 calls, 1 website visit/);
-  assert.doesNotMatch(withoutBadge.html, /—/);
+test("monthly email shows only the metrics at or over the threshold, and escapes searches", () => {
+  const email = monthlyReportEmail({ ...BASE, optOutUrl: "https://groomlocal.com/api/owner-reminders/unsubscribe?u=x&token=y" });
+  assert.match(email.html, />223</);
+  assert.match(email.html, />12</);
+  assert.match(email.html, /Profile views/);
+  assert.match(email.html, /Google impressions/);
+  assert.doesNotMatch(email.html, /Contact taps/);
+  assert.doesNotMatch(email.html, /Google clicks/);
+  assert.doesNotMatch(email.text, /Contact taps|Google clicks/);
+  assert.match(email.html, /&lt;b&gt;dog groomer&lt;\/b&gt;/);
+  assert.doesNotMatch(email.html, /<b>dog groomer<\/b>/);
+  assert.match(email.html, /Unsubscribe/);
+  assert.doesNotMatch(email.html, /dashboard#badge/);
+  assert.doesNotMatch(email.html + email.text, /[\u2013\u2014]/);
 
-  const withBadge = monthlyReportEmail({ ...BASE, badgeHost: "k9bydesign.com", badgeClicks: 4, gaps: profileGaps({ images: [], logo_url: null, description: "", services: [], specialties: [] }) });
-  assert.doesNotMatch(withBadge.html, /dashboard#badge/);
-  assert.match(withBadge.html, /sent 4 visitors/);
+  const withBadge = monthlyReportEmail({ ...BASE, badgeHost: "k9bydesign.com", gaps: profileGaps({ images: [], logo_url: null, description: "", services: [], specialties: [] }) });
+  assert.match(withBadge.html, /Your badge is live on/);
   assert.match(withBadge.html, /Still missing from your profile/);
 
-  const noGoogle = monthlyReportEmail({ ...BASE, google: null });
-  assert.doesNotMatch(noGoogle.html, /Google views/);
-});
-
-test("monthly email leaves zero numbers out of the stat row", () => {
-  const viewsOnly = monthlyReportEmail({ ...BASE, taps: { website: 0, phone: 0, directions: 0, total: 0 }, google: { impressions: 0, clicks: 0, queries: [] } });
-  assert.match(viewsOnly.html, /Profile views/);
-  assert.doesNotMatch(viewsOnly.html, /Contact taps/);
-  assert.doesNotMatch(viewsOnly.html, /Google views/);
-  assert.doesNotMatch(viewsOnly.text, /: 0/);
-  const googleOnly = monthlyReportEmail({ ...BASE, views: 0, taps: { website: 0, phone: 0, directions: 0, total: 0 } });
-  assert.doesNotMatch(googleOnly.html, /Profile views/);
-  assert.match(googleOnly.html, />223</);
+  const partial = monthlyReportEmail({ ...BASE, countedFrom: "2026-11-12" });
+  assert.match(partial.text, /counted from November 12/);
 });
