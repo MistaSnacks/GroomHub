@@ -5,6 +5,7 @@ import { getAdminEmails } from "@/lib/admin";
 import { profileGaps, type ProfileGapKey } from "@/lib/profile-completeness";
 import { isSponsored } from "@/lib/listing-rules";
 import { canonicalCityRouteSlug } from "@/lib/city-route";
+import { realVisits, type VisitEvent } from "@/lib/real-visits";
 import { addDays, crawlerHours, dayRange, epochHour, pacificDay, quality, viewsByDay, type DayPoint, type QualityFields, type QualityKey } from "./metrics";
 
 /**
@@ -275,6 +276,8 @@ export interface Core {
   localEventCount: number;
   /** Epoch hours that look like a crawler (see crawlerHours). Page views in them are left out of every count. */
   crawler: Set<number>;
+  /** The same window through realVisits(): the rule owners' numbers use. */
+  realEvents: VisitEvent[];
   users: AdminUser[];
   userById: Map<string, AdminUser>;
   claims: ClaimRow[];
@@ -304,8 +307,8 @@ async function fetchCore(): Promise<Core> {
 
   const [listingRows, eventRows, users, claims, submissions, staging, quotes, leads, subscribers, ownerEmails, optouts, badgeInstalls] = await Promise.all([
     selectAll<ListingDbRow>(db, "business_listings", LISTING_COLUMNS, "id"),
-    selectAll<{ created_at: string; event_type: string; listing_id: string | null; url: string | null }>(
-      db, "analytics_events", "created_at, event_type, listing_id, url", "created_at", { column: "created_at", iso: since }
+    selectAll<{ created_at: string; event_type: string; listing_id: string | null; url: string | null; session_id: string | null }>(
+      db, "analytics_events", "created_at, event_type, listing_id, url, session_id", "created_at", { column: "created_at", iso: since }
     ),
     listUsers(db),
     small<{ id: string; listing_id: string; listing_slug: string; user_id: string; user_email: string; status: string; verification: string; created_at: string; reviewed_at: string | null; reviewed_by: string | null }>(
@@ -360,6 +363,7 @@ async function fetchCore(): Promise<Core> {
     events,
     localEventCount,
     crawler: crawlerHours(events.filter((e) => e.type === "page_view")),
+    realEvents: realVisits(eventRows.map((e) => ({ at: e.created_at, type: e.event_type, listingId: e.listing_id, url: e.url, sessionId: e.session_id }))),
     users,
     userById: new Map(users.map((u) => [u.id, u])),
     claims: claims.map((c) => ({
@@ -492,26 +496,40 @@ export function buildTraffic(core: Core, range: number): Traffic {
 export interface ListingTraffic {
   views: number;
   actions: number;
+  /** Views and contact taps that pass realVisits(), the numbers an owner sees. */
+  realViews: number;
+  realActions: number;
   /** Views that came through the owner's website badge. Included in `views`. */
   badgeViews: number;
 }
 
-/** Views and contact clicks per listing id over the window, crawler hours left out. */
+/** Views and contact clicks per listing id over the window, crawler hours left out, plus the real-visit counts. */
 export function trafficByListing(core: Core, traffic: Traffic): Map<string, ListingTraffic> {
   const counted = new Set(traffic.views.map((p) => p.day));
   const out = new Map<string, ListingTraffic>();
+  const entryFor = (listingId: string | null, day: string): ListingTraffic | null => {
+    if (!listingId || !counted.has(day)) return null;
+    const listing = core.listingByKey.get(listingId);
+    if (!listing) return null;
+    const entry = out.get(listing.id) ?? { views: 0, actions: 0, realViews: 0, realActions: 0, badgeViews: 0 };
+    out.set(listing.id, entry);
+    return entry;
+  };
   for (const e of core.events) {
-    if (!e.listingId || !counted.has(pacificDay(e.at))) continue;
     if (e.type === "page_view" && core.crawler.has(epochHour(e.at))) continue;
-    const listing = core.listingByKey.get(e.listingId);
-    if (!listing) continue;
-    const entry = out.get(listing.id) ?? { views: 0, actions: 0, badgeViews: 0 };
+    const entry = entryFor(e.listingId, pacificDay(e.at));
+    if (!entry) continue;
     if (e.type === "page_view") {
       entry.views++;
       if (e.fromBadge) entry.badgeViews++;
     }
     else if (isAction(e.type)) entry.actions++;
-    out.set(listing.id, entry);
+  }
+  for (const e of core.realEvents) {
+    const entry = entryFor(e.listingId, pacificDay(e.at));
+    if (!entry) continue;
+    if (e.type === "page_view") entry.realViews++;
+    else if (isAction(e.type)) entry.realActions++;
   }
   return out;
 }

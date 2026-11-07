@@ -224,16 +224,18 @@ export default async function OwnersPage() {
 
                   <dl className="mt-4 grid grid-cols-2 gap-2 text-center sm:grid-cols-4">
                     <div className="rounded-lg border border-adm-line py-2">
-                      <dt className="text-[10px] uppercase tracking-wide text-stone-500">Views 30d</dt>
-                      <dd className="text-lg font-semibold tabular-nums text-brand-primary">{t?.views ?? 0}</dd>
+                      <dt className="text-[10px] uppercase tracking-wide text-stone-500">Real views 30d</dt>
+                      <dd className="text-lg font-semibold tabular-nums text-brand-primary">{t?.realViews ?? 0}</dd>
+                      <dd className="text-[10px] tabular-nums text-stone-500">{t?.views ?? 0} before bot filter</dd>
                     </div>
                     <div className="rounded-lg border border-adm-line py-2">
-                      <dt className="text-[10px] uppercase tracking-wide text-stone-500">Clicks 30d</dt>
-                      <dd className="text-lg font-semibold tabular-nums text-brand-primary">{t?.actions ?? 0}</dd>
+                      <dt className="text-[10px] uppercase tracking-wide text-stone-500">Real taps 30d</dt>
+                      <dd className="text-lg font-semibold tabular-nums text-brand-primary">{t?.realActions ?? 0}</dd>
+                      <dd className="text-[10px] tabular-nums text-stone-500">{t?.actions ?? 0} before bot filter</dd>
                     </div>
                     <div className="rounded-lg border border-adm-line py-2" title={g?.queries[0] ? `Top search: ${g.queries[0].query}` : undefined}>
                       <dt className="text-[10px] uppercase tracking-wide text-stone-500">Google 28d</dt>
-                      <dd className="text-lg font-semibold tabular-nums text-brand-primary">{google ? (g?.impressions ?? 0) : "–"}</dd>
+                      <dd className="text-lg font-semibold tabular-nums text-brand-primary">{google ? (g?.impressions ?? 0) : "n/a"}</dd>
                     </div>
                     <div className="rounded-lg border border-adm-line py-2">
                       <dt className="text-[10px] uppercase tracking-wide text-stone-500">Emails</dt>
