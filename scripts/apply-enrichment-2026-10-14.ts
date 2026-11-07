@@ -279,6 +279,8 @@ async function main() {
       continue;
     }
     const { plan, unmatched } = planListing(listing, p);
+    // A verified value can equal the current one (a site that lists only "full groom"); that is not a change.
+    plan.changes = plan.changes.filter((c) => !sameValue(c.from, c.to));
     for (const u of unmatched) unmatchedCounts.set(u, (unmatchedCounts.get(u) ?? 0) + 1);
     plans.push(plan);
   }
