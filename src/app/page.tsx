@@ -9,7 +9,6 @@ import { BrowseByCitySection } from "@/components/browse-by-city-section";
 import { getCitiesByState, getTotalListingCount, getFeaturedListings } from "@/lib/supabase/queries";
 import { HomeHero } from "@/components/home-hero";
 import { ListingCard } from "@/components/listing-card";
-import { PremiumPlaceholderCard } from "@/components/premium-placeholder-card";
 import { PromoFindGroomers } from "@/components/promo-find-groomers";
 import { HomeGuidesSection } from "@/components/home-guides-section";
 import { PromoClaimListing } from "@/components/promo-claim-listing";
@@ -19,7 +18,7 @@ import { jsonLd } from "@/lib/json-ld";
 
 export const revalidate = 300;
 
-/** Sponsored cards in the home page featured row (placeholders fill any empty ones). */
+/** Sponsored cards in the home page featured row. An empty seat shows nothing (Sponsored is closed to new businesses). */
 const HOME_FEATURED_SPOTS = 4;
 
 const fallbackMetadata: Metadata = {
@@ -98,9 +97,6 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 xl:gap-6">
             {featuredListings.slice(0, HOME_FEATURED_SPOTS).map((listing, index) => (
               <ListingCard key={listing.slug} listing={listing} index={index} compact />
-            ))}
-            {Array.from({ length: Math.max(0, HOME_FEATURED_SPOTS - featuredListings.length) }).map((_, i) => (
-              <PremiumPlaceholderCard key={`placeholder-${i}`} index={featuredListings.length + i} />
             ))}
           </div>
         </div>
