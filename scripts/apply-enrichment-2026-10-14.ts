@@ -1,7 +1,8 @@
 // Apply the verified 2026-10-14 website enrichment to business_listings.
 //
-//   npx tsx scripts/apply-enrichment-2026-10-14.ts              dry run (default): reads only, writes the report and backup SQL
-//   npx tsx scripts/apply-enrichment-2026-10-14.ts --apply      writes, after the backup table holds every affected row
+//   npx tsx scripts/apply-enrichment-2026-10-14.ts                  dry run (default): reads only, writes the report and backup SQL
+//   npx tsx scripts/apply-enrichment-2026-10-14.ts --apply          saves every affected row to backup-rows-<time>.json, then writes
+//   npx tsx scripts/apply-enrichment-2026-10-14.ts --restore <file> puts the five fields back from a backup-rows file
 //
 // Rules:
 // - Only verified evidence: list fields use `verified_value`, scalars need `verified: true`.
@@ -215,10 +216,28 @@ function shuffle<T>(items: T[], seed: number): T[] {
   return out;
 }
 
+async function restore(db: SupabaseClient, file: string) {
+  const rows = JSON.parse(readFileSync(file, "utf8")) as (ListingRow & Record<string, unknown>)[];
+  let restored = 0;
+  for (const row of rows) {
+    const patch = Object.fromEntries(FIELDS.map((f) => [f, row[f]]));
+    const { error } = await db.from("business_listings").update(patch).eq("id", row.id);
+    if (error) console.error(`fail ${row.slug}: ${error.message}`);
+    else restored++;
+  }
+  console.log(`Restored ${restored} of ${rows.length} rows from ${file}`);
+}
+
 async function main() {
   config({ path: join(__dirname, "..", ".env.local"), quiet: true });
   const apply = process.argv.includes("--apply");
   const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false } });
+  const restoreAt = process.argv.indexOf("--restore");
+  if (restoreAt !== -1) {
+    const file = process.argv[restoreAt + 1];
+    if (!file || !existsSync(file)) throw new Error("--restore needs the path of a backup-rows-*.json file.");
+    return restore(db, file);
+  }
 
   const proposals: Proposal[] = readFileSync(SOURCE, "utf8").split("\n").filter(Boolean).map((l) => JSON.parse(l));
   const listings = await readListings(db);
@@ -284,15 +303,18 @@ async function main() {
 
   if (!apply) return;
 
+  // Full-row backup on disk before any write. The SQL backup needs dashboard access; this needs only the service key.
   const ids = changing.map((p) => p.listing.id);
-  const backedUp = new Set<string>();
+  const backupRows: Record<string, unknown>[] = [];
   for (let i = 0; i < ids.length; i += 200) {
-    const { data, error } = await db.from(BACKUP_TABLE).select("id").in("id", ids.slice(i, i + 200));
-    if (error) throw new Error(`Backup table check failed (${error.message}). Run ${join(OUT_DIR, "backup.sql")} first.`);
-    for (const r of data ?? []) backedUp.add(r.id as string);
+    const { data, error } = await db.from("business_listings").select("*").in("id", ids.slice(i, i + 200));
+    if (error) throw new Error(`Backup read failed (${error.message}). Nothing was written.`);
+    backupRows.push(...((data ?? []) as Record<string, unknown>[]));
   }
-  const notBackedUp = ids.filter((id) => !backedUp.has(id));
-  if (notBackedUp.length) throw new Error(`${notBackedUp.length} affected rows are not in ${BACKUP_TABLE}. Run backup.sql first.`);
+  if (backupRows.length !== ids.length) throw new Error(`Backup holds ${backupRows.length} of ${ids.length} rows. Nothing was written.`);
+  const backupFile = join(OUT_DIR, `backup-rows-${new Date().toISOString().replace(/[:.]/g, "-")}.json`);
+  writeFileSync(backupFile, JSON.stringify(backupRows, null, 1));
+  console.log(`Backed up ${backupRows.length} rows to ${backupFile}`);
 
   const log: string[] = [];
   let applied = 0;
