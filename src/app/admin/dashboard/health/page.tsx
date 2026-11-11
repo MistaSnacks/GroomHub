@@ -39,7 +39,7 @@ function Row({ tone, title, detail, meta }: { tone: Tone; title: string; detail?
   );
 }
 
-const toTone = (level: CheckLevel): Tone => level;
+const toTone = (level: CheckLevel): Tone => level === "unknown" ? "warn" : level;
 
 /** "0 15 * * *" (UTC) as a Pacific time of day. Handles the daily schedules this app uses. */
 function cronToPacific(schedule: string): string {
@@ -77,6 +77,7 @@ export default async function HealthPage() {
   const remindersEnabled = process.env.PROFILE_REMINDERS_ENABLED === "true";
 
   const problems = dns.checks.filter((c) => c.level === "fail").length + (gsc.state === "error" ? 1 : 0) + (outreach.state === "unavailable" ? 1 : 0) + env.missingRequired.length;
+  const unavailable = dns.checks.filter((c) => c.level === "unknown").length;
 
   return (
     <>
@@ -84,11 +85,11 @@ export default async function HealthPage() {
         eyebrow="Keep it running"
         title="Health"
         description="The things that fail quietly: mail authentication, Google, the outreach Mac, scheduled jobs, tracking and configuration."
-        actions={problems ? <Pill tone="fail" icon>{problems} need fixing</Pill> : <Pill tone="ok" icon>All systems answering</Pill>}
+        actions={problems ? <Pill tone="fail" icon>{problems} need fixing</Pill> : unavailable ? <Pill tone="warn" icon>{unavailable} checks unavailable</Pill> : <Pill tone="ok" icon>All systems answering</Pill>}
       />
       <PageBody>
         <div className="grid gap-6 xl:grid-cols-2">
-          <Panel id="mail" title={`Mail authentication for ${dns.domain}`} description="Whether inbox providers can verify mail from this domain. Failing checks send outreach and owner emails to spam or bounce them.">
+          <Panel id="mail" title={`Mail authentication for ${dns.domain}`} description="Checks whether the domain publishes SPF, DKIM and DMARC records. Published records alone do not confirm message signing or delivery.">
             <ul className="divide-y divide-adm-line/70">
               {dns.checks.map((c) => (
                 <Row key={c.name} tone={toTone(c.level)} title={c.name} detail={<span className="font-mono text-[11px]">{c.detail}</span>} meta={<span className="font-mono text-[10px]">{c.host}</span>} />

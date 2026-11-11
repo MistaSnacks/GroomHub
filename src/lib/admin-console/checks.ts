@@ -1,6 +1,7 @@
 import { googleAccessToken, searchAnalytics, searchConsoleConfigured, searchWindow } from "@/lib/search-console";
-import { resolveTxt } from "node:dns/promises";
+import { Resolver } from "node:dns/promises";
 import { emailFrom } from "@/lib/email/send";
+import { errorFields, logEvent } from "@/lib/log";
 
 /**
  * Live checks against services outside the database: the mail DNS records that
@@ -9,7 +10,7 @@ import { emailFrom } from "@/lib/email/send";
  * take a console page down.
  */
 
-export type CheckLevel = "ok" | "warn" | "fail";
+export type CheckLevel = "ok" | "warn" | "fail" | "unknown";
 
 export interface DnsCheck {
   name: string;
@@ -18,10 +19,45 @@ export interface DnsCheck {
   detail: string;
 }
 
+const dnsResolver = new Resolver({ timeout: 2_000, tries: 1 });
+const DNS_UNAVAILABLE = "DNS lookup unavailable. Record status is unknown. Retry this check.";
+
 async function txt(host: string): Promise<string[] | null> {
   try {
-    return (await resolveTxt(host)).map((chunks) => chunks.join(""));
-  } catch {
+    return (await dnsResolver.resolveTxt(host)).map((chunks) => chunks.join(""));
+  } catch (error) {
+    logEvent("warn", "mail-dns", "native_lookup_failed", { host, ...errorFields(error) });
+  }
+
+  try {
+    const response = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(host)}&type=TXT`, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(3_000),
+    });
+    if (!response.ok) throw new Error(`DNS provider returned HTTP ${response.status}`);
+    const body: unknown = await response.json();
+    if (!body || typeof body !== "object" || !("Status" in body) || typeof body.Status !== "number") {
+      throw new Error("Invalid DNS response");
+    }
+    if ("TC" in body && body.TC === true) throw new Error("Truncated DNS response");
+    if (body.Status === 3) return [];
+    if (body.Status !== 0) throw new Error(`DNS provider returned status ${body.Status}`);
+    if (!("Answer" in body)) return [];
+    if (!Array.isArray(body.Answer)) throw new Error("Invalid DNS answers");
+
+    const records: string[] = [];
+    const answers: unknown[] = body.Answer;
+    for (const answer of answers) {
+      if (!answer || typeof answer !== "object" || !("type" in answer) || typeof answer.type !== "number") {
+        throw new Error("Invalid DNS answer");
+      }
+      if (answer.type !== 16) continue;
+      if (!("data" in answer) || typeof answer.data !== "string") throw new Error("Invalid TXT record");
+      records.push(answer.data);
+    }
+    return records;
+  } catch (error) {
+    logEvent("warn", "mail-dns", "https_lookup_failed", { host, ...errorFields(error) });
     return null;
   }
 }
@@ -37,8 +73,8 @@ let dnsMemo: { at: number; result: { domain: string; checks: DnsCheck[] } } | nu
 
 /** SPF, DKIM (Google Workspace and Resend selectors) and DMARC for the sending domain. */
 export async function checkMailDns(): Promise<{ domain: string; checks: DnsCheck[] }> {
-  if (dnsMemo && Date.now() - dnsMemo.at < 10 * 60_000) return dnsMemo.result;
   const domain = senderDomain();
+  if (dnsMemo?.result.domain === domain && Date.now() - dnsMemo.at < 10 * 60_000) return dnsMemo.result;
   const [root, dmarc, googleDkim, resendDkim] = await Promise.all([
     txt(domain),
     txt(`_dmarc.${domain}`),
@@ -54,26 +90,28 @@ export async function checkMailDns(): Promise<{ domain: string; checks: DnsCheck
     {
       name: "SPF",
       host: domain,
-      level: !spf ? "fail" : spf.includes("_spf.google.com") ? "ok" : "warn",
-      detail: !spf ? "No SPF record. Mail from this domain fails authentication." : spf.includes("_spf.google.com") ? spf : `${spf} (Google Workspace is not included)`,
+      level: root === null ? "unknown" : !spf ? "fail" : spf.includes("_spf.google.com") ? "ok" : "warn",
+      detail: root === null ? DNS_UNAVAILABLE : !spf ? "No SPF record found for this domain." : spf.includes("_spf.google.com") ? spf : `${spf} (Google Workspace is not included)`,
     },
     {
       name: "DKIM, Google Workspace",
       host: `google._domainkey.${domain}`,
-      level: googleDkim?.length ? "ok" : "fail",
-      detail: googleDkim?.length ? "Signing key published. Outreach sent from the mailbox is signed." : "No key published. Turn on DKIM in Google Admin and add the record.",
+      level: googleDkim === null ? "unknown" : googleDkim.length ? "ok" : "fail",
+      detail: googleDkim === null ? DNS_UNAVAILABLE : googleDkim.length ? "Signing key published. Check a received message to confirm Google Workspace signing." : "No key published. Turn on DKIM in Google Admin and add the record.",
     },
     {
       name: "DKIM, Resend",
       host: `resend._domainkey.${domain}`,
-      level: resendDkim?.length ? "ok" : "fail",
-      detail: resendDkim?.length ? "Signing key published. Site emails (claims, reminders, quotes) are signed." : "No key published. Verify the domain in Resend.",
+      level: resendDkim === null ? "unknown" : resendDkim.length ? "ok" : "fail",
+      detail: resendDkim === null ? DNS_UNAVAILABLE : resendDkim.length ? "Signing key published. Check a received message to confirm Resend signing." : "No key published. Verify the domain in Resend.",
     },
     {
       name: "DMARC",
       host: `_dmarc.${domain}`,
-      level: !dmarcRecord ? "fail" : policy === "none" ? "warn" : "ok",
-      detail: !dmarcRecord
+      level: dmarc === null ? "unknown" : !dmarcRecord ? "fail" : policy === "none" ? "warn" : "ok",
+      detail: dmarc === null
+        ? DNS_UNAVAILABLE
+        : !dmarcRecord
         ? "No DMARC record."
         : policy === "none"
           ? `${dmarcRecord} Monitoring only: spoofed mail is not rejected. Move to quarantine once SPF and DKIM have passed for a few weeks.`
@@ -81,7 +119,9 @@ export async function checkMailDns(): Promise<{ domain: string; checks: DnsCheck
     },
   ];
   const result = { domain, checks };
-  dnsMemo = { at: Date.now(), result };
+  if ([root, dmarc, googleDkim, resendDkim].every((records) => records !== null)) {
+    dnsMemo = { at: Date.now(), result };
+  }
   return result;
 }
 
