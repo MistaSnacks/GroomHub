@@ -30,7 +30,8 @@ import { usableListingImages } from "@/lib/images";
 import { localBusinessSchema, breadcrumbSchema } from "@/lib/schema";
 import { stateSlugFromAbbr, stateNameFromAbbr } from "@/lib/geography";
 import { PageViewTracker } from "@/components/page-view-tracker";
-import { clampDescription, clampTitle } from "@/lib/seo-utils";
+import { clampTitle } from "@/lib/seo-utils";
+import { profileMetaDescription } from "@/lib/profile-description";
 import { jsonLd } from "@/lib/json-ld";
 import { TrackedLink } from "@/components/tracked-website-link";
 import { GuideLinkSentence } from "@/components/guide-link";
@@ -57,33 +58,13 @@ export async function generateMetadata({
 
   if (!listing) return { title: "Groomer Not Found" };
 
-  const unsanitized = listing.short_description || listing.description;
-  // Strip URLs, image refs, markdown artifacts, and excessive whitespace from scraped data
-  const rawDesc = unsanitized
-    .replace(/\(?\bhttps?:\/\/[^\s)]+\)?/gi, "")
-    .replace(/!\[.*?\]\(.*?\)/g, "")
-    .replace(/\[([^\]]*)\]\(.*?\)/g, "$1")
-    .replace(/[#*_~`]+/g, "")
-    .replace(/\s{2,}/g, " ")
-    .trim();
-  // Build a description that lands in the 120-155 char sweet spot
-  // If rawDesc is empty after sanitization, use a constructed fallback
-  let truncatedDesc: string;
-  if (!rawDesc || rawDesc.length < 20) {
-    truncatedDesc = clampDescription(
-      `${listing.name} offers professional dog grooming in ${listing.city}, ${listing.state}. View services, pricing, hours, and contact info on GroomLocal.`
-    );
-  } else if (rawDesc.length < 120) {
-    // Pad short descriptions with location and service context
-    let padded = `${rawDesc} View services, pricing, and contact info for ${listing.name} in ${listing.city}, ${listing.state}. Compare on GroomLocal.`;
-    // If still too short, use a fully constructed fallback
-    if (padded.length < 120) {
-      padded = `${listing.name} is a dog groomer in ${listing.city}, ${listing.state}. ${rawDesc} View services, pricing, and hours on GroomLocal.`;
-    }
-    truncatedDesc = clampDescription(padded);
-  } else {
-    truncatedDesc = clampDescription(rawDesc);
-  }
+  const truncatedDesc = profileMetaDescription({
+    name: listing.name,
+    city: listing.city,
+    state: listing.state,
+    text: listing.short_description || listing.description,
+    showsPrices: false,
+  });
   // Build SEO title: try full format, then drop "Groomer", then truncate name
   const suffix = ` | ${listing.city}, ${listing.state}`;
   const fullTitle = `${listing.name}${suffix} Groomer`;
