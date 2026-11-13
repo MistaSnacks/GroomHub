@@ -8,15 +8,22 @@ export interface ProfileDescriptionInput {
   showsPrices: boolean;
 }
 
-export function profileMetaDescription({ name, city, state, text, showsPrices }: ProfileDescriptionInput): string {
-  // Strip URLs, image refs, markdown artifacts, and excessive whitespace from scraped data
-  const rawDesc = text
+/** What the About section shows when a listing has no description. */
+export const ABOUT_FALLBACK = "Contact this groomer to confirm services, availability, and pricing.";
+
+/** Strip URLs, image refs, markdown artifacts, and excessive whitespace from scraped data. */
+export function sanitizeProfileText(text: string): string {
+  return text
     .replace(/\(?\bhttps?:\/\/[^\s)]+\)?/gi, "")
     .replace(/!\[.*?\]\(.*?\)/g, "")
     .replace(/\[([^\]]*)\]\(.*?\)/g, "$1")
     .replace(/[#*_~`]+/g, "")
     .replace(/\s{2,}/g, " ")
     .trim();
+}
+
+export function profileMetaDescription({ name, city, state, text, showsPrices }: ProfileDescriptionInput): string {
+  const rawDesc = sanitizeProfileText(text);
   // Every profile shows its location; only some show prices. Same length either way keeps short text out of the fallback.
   const detail = showsPrices ? "pricing" : "location";
   if (!rawDesc || rawDesc.length < 20) {

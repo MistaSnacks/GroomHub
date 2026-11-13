@@ -41,11 +41,11 @@ function withTags(listing: BusinessListing): NormalizedListing {
   };
 }
 
-function withTagsAll(listings: BusinessListing[]): NormalizedListing[] {
+export function withTagsAll(listings: BusinessListing[]): NormalizedListing[] {
   return listings.map(withTags);
 }
 
-function hasKnownCity(listing: { city?: string | null }): boolean {
+export function hasKnownCity(listing: { city?: string | null }): boolean {
   return Boolean(listing.city && listing.city.trim() && listing.city !== "Unknown");
 }
 
@@ -158,7 +158,7 @@ async function getListingBySlugUncached(
   return withTags(data as BusinessListing);
 }
 
-async function fetchAllListingRows(): Promise<BusinessListing[]> {
+export async function fetchAllListingRows(): Promise<BusinessListing[]> {
   const allListings: BusinessListing[] = [];
   const pageSize = 1000;
   let page = 0;

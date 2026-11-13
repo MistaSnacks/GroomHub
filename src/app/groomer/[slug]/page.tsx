@@ -31,7 +31,8 @@ import { localBusinessSchema, breadcrumbSchema } from "@/lib/schema";
 import { stateSlugFromAbbr, stateNameFromAbbr } from "@/lib/geography";
 import { PageViewTracker } from "@/components/page-view-tracker";
 import { clampTitle } from "@/lib/seo-utils";
-import { profileMetaDescription } from "@/lib/profile-description";
+import { ABOUT_FALLBACK, profileMetaDescription } from "@/lib/profile-description";
+import { profileIndexing, SEARCH_KEEP_SLUGS } from "@/lib/profile-indexing";
 import { jsonLd } from "@/lib/json-ld";
 import { TrackedLink } from "@/components/tracked-website-link";
 import { GuideLinkSentence } from "@/components/guide-link";
@@ -77,10 +78,12 @@ export async function generateMetadata({
     title = clampTitle(`${listing.name}${suffix}`);
   }
   const ogImage = `/api/og/groomer?slug=${encodeURIComponent(slug)}`;
+  const { index } = profileIndexing(listing, harvestedPricesFor(listing.id), SEARCH_KEEP_SLUGS);
 
   return {
     title,
     description: truncatedDesc,
+    robots: index ? undefined : { index: false, follow: true },
     alternates: { canonical: `/groomer/${slug}` },
     openGraph: {
       title,
@@ -354,7 +357,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
                 About {listing.name}
               </h2>
               <p className="text-sm text-text-muted leading-relaxed mb-4 [overflow-wrap:anywhere]">
-                {listing.description || "Contact this groomer to confirm services, availability, and pricing."}
+                {listing.description || ABOUT_FALLBACK}
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {listing.year_established > 0 && (

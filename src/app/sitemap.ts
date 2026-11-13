@@ -4,6 +4,8 @@ import { getCities, getAllListings, canonicalCitySlug } from "@/lib/supabase/que
 import { SERVICE_TAGS, SPECIALTY_TAGS } from "@/lib/tags";
 import { STATES, stateSlugFromAbbr } from "@/lib/geography";
 import { getBlogPosts } from "@/lib/blog";
+import { harvestedPricesFor } from "@/lib/harvested-prices";
+import { profileIndexing, SEARCH_KEEP_SLUGS } from "@/lib/profile-indexing";
 
 const BASE_URL = "https://groomlocal.com";
 const STATIC_LASTMOD = new Date("2026-09-02T00:00:00.000Z");
@@ -107,12 +109,14 @@ export default async function sitemap(args: {
 
     const listings = await getAllListings();
 
-    return listings.map((listing) => ({
-      url: `${BASE_URL}/groomer/${listing.slug}`,
-      lastModified: lastModFrom(listing.updated_at),
-      changeFrequency: "weekly" as const,
-      priority: 0.6,
-    }));
+    return listings
+      .filter((listing) => profileIndexing(listing, harvestedPricesFor(listing.id), SEARCH_KEEP_SLUGS).index)
+      .map((listing) => ({
+        url: `${BASE_URL}/groomer/${listing.slug}`,
+        lastModified: lastModFrom(listing.updated_at),
+        changeFrequency: "weekly" as const,
+        priority: 0.6,
+      }));
   }
 
   // ── Chunk 2: City pages (dog-grooming, cat-grooming, mobile-grooming) ──
