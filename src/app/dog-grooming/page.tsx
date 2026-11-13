@@ -10,11 +10,11 @@ export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Dog Groomers | Browse All Cities",
-  description: "Browse dog groomers across Washington and Oregon. Find verified groomers in every PNW city.",
+  description: "Browse dog groomers across Washington and Oregon. Find local groomers in every PNW city.",
   alternates: { canonical: "/dog-grooming" },
   openGraph: {
     title: "Dog Groomers | Browse All Cities",
-    description: "Browse dog groomers across Washington and Oregon. Find verified groomers in every PNW city.",
+    description: "Browse dog groomers across Washington and Oregon. Find local groomers in every PNW city.",
     type: "website",
     url: "/dog-grooming",
     siteName: "GroomLocal",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Dog Groomers | Browse All Cities",
-    description: "Browse dog groomers across Washington and Oregon. Find verified groomers in every PNW city.",
+    description: "Browse dog groomers across Washington and Oregon. Find local groomers in every PNW city.",
     images: ["/og-image.png"],
   },
 };

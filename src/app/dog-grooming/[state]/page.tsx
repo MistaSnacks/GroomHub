@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: StatePageProps): Promise<Meta
 
   const stateName = stateNameFromSlug(state);
   const title = `Dog Groomers in ${stateName} | Browse by City`;
-  const description = `Browse dog groomers across ${stateName}. Find verified groomers in every city with services, pricing, and contact info.`;
+  const description = `Browse dog groomers across ${stateName}. Find groomers in every city with services and contact info.`;
 
   return {
     title,

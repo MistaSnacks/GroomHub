@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const cityName = cityData?.name ?? city.charAt(0).toUpperCase() + city.slice(1);
   const ogImage = `/api/og/city?city=${encodeURIComponent(city)}&state=${encodeURIComponent(state)}&service=cat`;
   const title = clampTitle(`Cat Groomers in ${cityName}, ${stateAbbr}`);
-  const description = clampDescription(`Find cat groomers in ${cityName}, ${stateAbbr}. Browse feline-friendly salons with gentle handling and stress-free grooming. Compare services and book on GroomLocal.`);
+  const description = clampDescription(`Find cat groomers in ${cityName}, ${stateAbbr}. Browse feline-friendly salons with gentle handling and stress-free grooming. Compare services on GroomLocal.`);
   const shouldIndex = listings.length >= 3;
 
   return {
