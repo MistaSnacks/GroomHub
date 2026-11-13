@@ -19,7 +19,7 @@ export function CityPublishedPricesSection({ cityName, prices }: CityPublishedPr
         </h2>
         <p className="text-sm text-text-muted mb-6">
           These are starting prices published on {prices.groomerCount} {cityName} groomer websites, collected{" "}
-          {formatCollectedOn(prices.collectedOn)}. They are not quotes. Read how we collected them in the{" "}
+          {formatCollectedOn(prices.collectedOn)}. They are not quotes. Half of the groomers fall inside the middle range. Read how we collected them in the{" "}
           <Link
             href={PUBLISHED_PRICES_ARTICLE_PATH}
             className="text-brand-accent underline hover:text-brand-primary"
@@ -32,19 +32,19 @@ export function CityPublishedPricesSection({ cityName, prices }: CityPublishedPr
           <table className="w-full text-left text-sm">
             <thead>
               <tr className="border-b border-border text-xs uppercase tracking-wide text-text-muted">
-                <th scope="col" className="px-4 py-3 font-semibold">Service</th>
-                <th scope="col" className="px-4 py-3 font-semibold">Median starting price</th>
-                <th scope="col" className="px-4 py-3 font-semibold">Middle range (25th to 75th percentile)</th>
-                <th scope="col" className="px-4 py-3 font-semibold">Groomers</th>
+                <th scope="col" className="px-3 py-3 sm:px-4 font-semibold">Service</th>
+                <th scope="col" className="px-3 py-3 sm:px-4 font-semibold">Median</th>
+                <th scope="col" className="px-3 py-3 sm:px-4 font-semibold">Middle range</th>
+                <th scope="col" className="px-3 py-3 sm:px-4 font-semibold">Groomers</th>
               </tr>
             </thead>
             <tbody>
               {prices.rows.map((row) => (
                 <tr key={row.service} className="border-b border-border last:border-b-0">
-                  <th scope="row" className="px-4 py-3 font-medium text-brand-primary">{row.label}</th>
-                  <td className="px-4 py-3 font-heading text-lg font-semibold text-brand-primary">${row.median}</td>
-                  <td className="px-4 py-3 text-text-muted">${row.p25} to ${row.p75}</td>
-                  <td className="px-4 py-3 text-text-muted">{row.groomers}</td>
+                  <th scope="row" className="px-3 py-3 sm:px-4 font-medium text-brand-primary">{row.label}</th>
+                  <td className="px-3 py-3 sm:px-4 font-heading text-lg font-semibold text-brand-primary">${row.median}</td>
+                  <td className="px-3 py-3 sm:px-4 text-text-muted">${row.p25} to ${row.p75}</td>
+                  <td className="px-3 py-3 sm:px-4 text-text-muted">{row.groomers}</td>
                 </tr>
               ))}
             </tbody>
