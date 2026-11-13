@@ -93,6 +93,10 @@ export function shouldShowHarvestedPrices(listing: { price_min?: number | null }
   return !!set && set.prices.length > 0 && !(typeof listing.price_min === "number" && listing.price_min > 0);
 }
 
+export function listingShowsPrices(listing: { price_min?: number | null }, set: HarvestedPriceSet | null): boolean {
+  return (listing.price_min ?? 0) > 0 || shouldShowHarvestedPrices(listing, set);
+}
+
 const seenFormat = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
 
 /** "$40" or "$22.50" */

@@ -37,7 +37,7 @@ import { TrackedLink } from "@/components/tracked-website-link";
 import { GuideLinkSentence } from "@/components/guide-link";
 import { getLinkableBlogSlugs } from "@/lib/blog";
 import { guideLinksFor } from "@/lib/internal-links";
-import { harvestedPricesFor, shouldShowHarvestedPrices } from "@/lib/harvested-prices";
+import { harvestedPricesFor, listingShowsPrices, shouldShowHarvestedPrices } from "@/lib/harvested-prices";
 import { HarvestedPricesSection, HoursSection, ServicesSection } from "@/components/profile/profile-sections";
 
 export const revalidate = 300;
@@ -63,7 +63,7 @@ export async function generateMetadata({
     city: listing.city,
     state: listing.state,
     text: listing.short_description || listing.description,
-    showsPrices: false,
+    showsPrices: listingShowsPrices(listing, harvestedPricesFor(listing.id)),
   });
   // Build SEO title: try full format, then drop "Groomer", then truncate name
   const suffix = ` | ${listing.city}, ${listing.state}`;

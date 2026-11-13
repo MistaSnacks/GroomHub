@@ -66,7 +66,7 @@ export async function generateMetadata({ params }: CityPageProps): Promise<Metad
     : titleShort.length <= 47
       ? titleShort
       : clampTitle(titleShort);
-  const basePart = `Compare ${groomerText} in ${cityName}, ${stateName} with prices, reviews, and services.`;
+  const basePart = `Compare ${groomerText} in ${cityName}, ${stateName} with typical prices and services.`;
   const withCta = `${basePart} Find your next groomer on GroomLocal.`;
   const parkCount = content?.dogParks?.length ?? 0;
   const withParks = parkCount > 0

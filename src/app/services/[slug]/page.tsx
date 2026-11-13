@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const title = clampTitle(`${tag.label} Groomers in the PNW`);
   const description = clampDescription(
-    `Browse dog groomers offering ${tag.label.toLowerCase()} across Washington and Oregon. Compare services, pricing, and contact details on GroomLocal.`,
+    `Browse dog groomers offering ${tag.label.toLowerCase()} across Washington and Oregon. Compare services and contact details on GroomLocal.`,
   );
 
   return {

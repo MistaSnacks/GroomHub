@@ -9,11 +9,11 @@ export const revalidate = 3600;
 
 const fallbackMetadata: Metadata = {
     title: 'About Us',
-    description: 'GroomLocal is the Pacific Northwest\'s trusted pet grooming directory. Connecting pet parents with verified groomers across Washington and Oregon.',
+    description: 'GroomLocal is the Pacific Northwest\'s trusted pet grooming directory. Connecting pet parents with local groomers across Washington and Oregon.',
     alternates: { canonical: '/about' },
     openGraph: {
         title: 'About GroomLocal',
-        description: 'The Pacific Northwest\'s trusted pet grooming directory. Connecting pet parents with verified groomers across Washington and Oregon.',
+        description: 'The Pacific Northwest\'s trusted pet grooming directory. Connecting pet parents with local groomers across Washington and Oregon.',
         type: 'website',
         url: '/about',
         siteName: 'GroomLocal',
@@ -22,7 +22,7 @@ const fallbackMetadata: Metadata = {
     twitter: {
         card: 'summary_large_image',
         title: 'About GroomLocal',
-        description: 'The Pacific Northwest\'s trusted pet grooming directory. Connecting pet parents with verified groomers across Washington and Oregon.',
+        description: 'The Pacific Northwest\'s trusted pet grooming directory. Connecting pet parents with local groomers across Washington and Oregon.',
         images: ['/og-image.png'],
     },
 };
