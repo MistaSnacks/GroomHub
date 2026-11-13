@@ -8,6 +8,8 @@ interface CityPricingSectionProps {
   pricing: PricingBreakdown;
   serviceLabel: string;
   guideLinks?: GuideLink[];
+  /** True when published prices for the city sit above this block, so the heading says these are estimates. */
+  estimateOnly?: boolean;
 }
 
 const SIZE_CONFIG = [
@@ -16,7 +18,7 @@ const SIZE_CONFIG = [
   { key: "large" as const, label: "Large Dogs", note: "Over 50 lbs", icon: Dog },
 ];
 
-export function CityPricingSection({ cityName, pricing, serviceLabel, guideLinks = [] }: CityPricingSectionProps) {
+export function CityPricingSection({ cityName, pricing, serviceLabel, guideLinks = [], estimateOnly = false }: CityPricingSectionProps) {
   if (serviceLabel.toLowerCase().includes("cat")) {
     return (
       <section className="bg-white py-10">
@@ -34,10 +36,12 @@ export function CityPricingSection({ cityName, pricing, serviceLabel, guideLinks
     <section className="bg-white py-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h2 className="font-heading text-2xl font-semibold text-brand-primary mb-2">
-          {serviceLabel} Prices in {cityName}
+          {estimateOnly ? `Estimated ${serviceLabel} Price Ranges in ${cityName}` : `${serviceLabel} Prices in ${cityName}`}
         </h2>
         <p className="text-sm text-text-muted mb-6">
-          Typical price ranges based on dog size. Actual prices vary by breed, coat condition, and services selected.
+          {estimateOnly
+            ? `These are typical price ranges by dog size for the area, not prices posted by ${cityName} groomers. Actual prices vary by breed, coat condition, and services selected.`
+            : "Typical price ranges based on dog size. Actual prices vary by breed, coat condition, and services selected."}
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {SIZE_CONFIG.map(({ key, label, note, icon: Icon }) => {

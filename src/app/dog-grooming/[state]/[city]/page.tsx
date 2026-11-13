@@ -17,6 +17,8 @@ import { AdSlot, ADS_ENABLED } from "@/components/ad-slot";
 import { clampDescription, clampTitle } from "@/lib/seo-utils";
 import { CityStatsBlock } from "@/components/city-stats-block";
 import { CityPricingSection } from "@/components/city-pricing-section";
+import { CityPublishedPricesSection } from "@/components/city-published-prices";
+import { cityPublishedPrices } from "@/lib/city-price-tables";
 import { getCityPricingBreakdown } from "@/lib/city-pricing";
 import { getLinkableBlogSlugs } from "@/lib/blog";
 import { guideLinksFor } from "@/lib/internal-links";
@@ -126,7 +128,8 @@ export default async function CityPage({ params }: CityPageProps) {
   const hasMobile = visiting.length > 0 || listings.some((l) => l.service_tags.includes("mobile-grooming"));
   const guideLinks = guideLinksFor({ kind: "city", state: stateAbbr, citySlug: city, cityName, hasMobile }, linkableSlugs);
 
-  const faqs = buildDogGroomingFaqs(cityName, stateAbbr, listings, content?.dogParks?.length ?? 0);
+  const publishedPrices = cityPublishedPrices(stateAbbr, city);
+  const faqs = buildDogGroomingFaqs(cityName, stateAbbr, listings, content?.dogParks?.length ?? 0, publishedPrices);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -376,11 +379,13 @@ export default async function CityPage({ params }: CityPageProps) {
       )}
 
       {/* Pricing Guide */}
+      {publishedPrices && <CityPublishedPricesSection cityName={cityName} prices={publishedPrices} />}
       <CityPricingSection
         cityName={cityName}
         pricing={getCityPricingBreakdown(cityName, "dog-grooming")}
         serviceLabel="Dog Grooming"
         guideLinks={guideLinks}
+        estimateOnly={publishedPrices !== null}
       />
 
       {/* FAQ Section */}

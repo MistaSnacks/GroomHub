@@ -1,0 +1,675 @@
+{
+ "collectedOn": "2026-10-01",
+ "cities": {
+  "OR:beaverton": {
+   "groomerCount": 4,
+   "rows": [
+    {
+     "service": "nail_trim",
+     "label": "Nail trim",
+     "groomers": 3,
+     "median": 15,
+     "p25": 15,
+     "p75": 15,
+     "min": 15,
+     "max": 15
+    }
+   ]
+  },
+  "OR:bend": {
+   "groomerCount": 3,
+   "rows": [
+    {
+     "service": "full_groom",
+     "label": "Full groom",
+     "groomers": 3,
+     "median": 80,
+     "p25": 80,
+     "p75": 95,
+     "min": 80,
+     "max": 110
+    },
+    {
+     "service": "bath",
+     "label": "Bath and brush",
+     "groomers": 3,
+     "median": 37,
+     "p25": 36,
+     "p75": 46,
+     "min": 35,
+     "max": 55
+    },
+    {
+     "service": "face_feet_fanny",
+     "label": "Face, feet, fanny",
+     "groomers": 3,
+     "median": 50,
+     "p25": 30,
+     "p75": 68,
+     "min": 10,
+     "max": 85
+    }
+   ]
+  },
+  "OR:eugene": {
+   "groomerCount": 7,
+   "rows": [
+    {
+     "service": "full_groom",
+     "label": "Full groom",
+     "groomers": 6,
+     "median": 70,
+     "p25": 51,
+     "p75": 76,
+     "min": 33,
+     "max": 90
+    },
+    {
+     "service": "bath",
+     "label": "Bath and brush",
+     "groomers": 5,
+     "median": 40,
+     "p25": 40,
+     "p75": 45,
+     "min": 30,
+     "max": 45
+    },
+    {
+     "service": "nail_trim",
+     "label": "Nail trim",
+     "groomers": 5,
+     "median": 20,
+     "p25": 16,
+     "p75": 20,
+     "min": 8,
+     "max": 20
+    },
+    {
+     "service": "add_on",
+     "label": "Add-ons",
+     "groomers": 3,
+     "median": 10,
+     "p25": 8,
+     "p75": 12,
+     "min": 5,
+     "max": 15
+    }
+   ]
+  },
+  "OR:hillsboro": {
+   "groomerCount": 3,
+   "rows": [
+    {
+     "service": "bath",
+     "label": "Bath and brush",
+     "groomers": 3,
+     "median": 25,
+     "p25": 22,
+     "p75": 32,
+     "min": 20,
+     "max": 40
+    }
+   ]
+  },
+  "OR:portland": {
+   "groomerCount": 6,
+   "rows": [
+    {
+     "service": "nail_trim",
+     "label": "Nail trim",
+     "groomers": 5,
+     "median": 15,
+     "p25": 12,
+     "p75": 20,
+     "min": 5,
+     "max": 23
+    },
+    {
+     "service": "face_feet_fanny",
+     "label": "Face, feet, fanny",
+     "groomers": 3,
+     "median": 20,
+     "p25": 18,
+     "p75": 22,
+     "min": 15,
+     "max": 25
+    }
+   ]
+  },
+  "OR:redmond": {
+   "groomerCount": 4,
+   "rows": [
+    {
+     "service": "bath",
+     "label": "Bath and brush",
+     "groomers": 3,
+     "median": 35,
+     "p25": 25,
+     "p75": 45,
+     "min": 15,
+     "max": 55
+    }
+   ]
+  },
+  "WA:bellevue": {
+   "groomerCount": 3,
+   "rows": [
+    {
+     "service": "nail_trim",
+     "label": "Nail trim",
+     "groomers": 3,
+     "median": 10,
+     "p25": 8,
+     "p75": 18,
+     "min": 5,
+     "max": 25
+    },
+    {
+     "service": "add_on",
+     "label": "Add-ons",
+     "groomers": 3,
+     "median": 20,
+     "p25": 15,
+     "p75": 20,
+     "min": 10,
+     "max": 20
+    }
+   ]
+  },
+  "WA:bothell": {
+   "groomerCount": 4,
+   "rows": [
+    {
+     "service": "nail_trim",
+     "label": "Nail trim",
+     "groomers": 3,
+     "median": 15,
+     "p25": 12,
+     "p75": 32,
+     "min": 10,
+     "max": 50
+    },
+    {
+     "service": "face_feet_fanny",
+     "label": "Face, feet, fanny",
+     "groomers": 3,
+     "median": 25,
+     "p25": 20,
+     "p75": 50,
+     "min": 15,
+     "max": 75
+    },
+    {
+     "service": "teeth",
+     "label": "Teeth brushing",
+     "groomers": 3,
+     "median": 15,
+     "p25": 15,
+     "p75": 15,
+     "min": 15,
+     "max": 15
+    },
+    {
+     "service": "add_on",
+     "label": "Add-ons",
+     "groomers": 3,
+     "median": 7,
+     "p25": 6,
+     "p75": 8,
+     "min": 5,
+     "max": 10
+    }
+   ]
+  },
+  "WA:everett": {
+   "groomerCount": 4,
+   "rows": [
+    {
+     "service": "full_groom",
+     "label": "Full groom",
+     "groomers": 4,
+     "median": 92,
+     "p25": 89,
+     "p75": 96,
+     "min": 85,
+     "max": 100
+    },
+    {
+     "service": "bath",
+     "label": "Bath and brush",
+     "groomers": 4,
+     "median": 50,
+     "p25": 49,
+     "p75": 54,
+     "min": 45,
+     "max": 65
+    }
+   ]
+  },
+  "WA:kent": {
+   "groomerCount": 3,
+   "rows": [
+    {
+     "service": "teeth",
+     "label": "Teeth brushing",
+     "groomers": 3,
+     "median": 10,
+     "p25": 10,
+     "p75": 12,
+     "min": 10,
+     "max": 14
+    },
+    {
+     "service": "add_on",
+     "label": "Add-ons",
+     "groomers": 3,
+     "median": 18,
+     "p25": 14,
+     "p75": 19,
+     "min": 10,
+     "max": 20
+    }
+   ]
+  },
+  "WA:monroe": {
+   "groomerCount": 3,
+   "rows": [
+    {
+     "service": "bath",
+     "label": "Bath and brush",
+     "groomers": 3,
+     "median": 40,
+     "p25": 38,
+     "p75": 45,
+     "min": 35,
+     "max": 50
+    }
+   ]
+  },
+  "WA:olympia": {
+   "groomerCount": 3,
+   "rows": [
+    {
+     "service": "nail_trim",
+     "label": "Nail trim",
+     "groomers": 3,
+     "median": 20,
+     "p25": 15,
+     "p75": 22,
+     "min": 10,
+     "max": 25
+    }
+   ]
+  },
+  "WA:port-orchard": {
+   "groomerCount": 3,
+   "rows": [
+    {
+     "service": "add_on",
+     "label": "Add-ons",
+     "groomers": 3,
+     "median": 10,
+     "p25": 8,
+     "p75": 12,
+     "min": 5,
+     "max": 15
+    }
+   ]
+  },
+  "WA:poulsbo": {
+   "groomerCount": 4,
+   "rows": [
+    {
+     "service": "bath",
+     "label": "Bath and brush",
+     "groomers": 3,
+     "median": 45,
+     "p25": 35,
+     "p75": 62,
+     "min": 25,
+     "max": 80
+    },
+    {
+     "service": "nail_trim",
+     "label": "Nail trim",
+     "groomers": 3,
+     "median": 25,
+     "p25": 22,
+     "p75": 25,
+     "min": 20,
+     "max": 25
+    },
+    {
+     "service": "add_on",
+     "label": "Add-ons",
+     "groomers": 3,
+     "median": 8,
+     "p25": 6,
+     "p75": 12,
+     "min": 5,
+     "max": 15
+    }
+   ]
+  },
+  "WA:puyallup": {
+   "groomerCount": 4,
+   "rows": [
+    {
+     "service": "full_groom",
+     "label": "Full groom",
+     "groomers": 4,
+     "median": 75,
+     "p25": 75,
+     "p75": 81,
+     "min": 75,
+     "max": 100
+    },
+    {
+     "service": "bath",
+     "label": "Bath and brush",
+     "groomers": 3,
+     "median": 50,
+     "p25": 38,
+     "p75": 50,
+     "min": 25,
+     "max": 50
+    },
+    {
+     "service": "nail_trim",
+     "label": "Nail trim",
+     "groomers": 3,
+     "median": 15,
+     "p25": 12,
+     "p75": 18,
+     "min": 10,
+     "max": 20
+    },
+    {
+     "service": "teeth",
+     "label": "Teeth brushing",
+     "groomers": 3,
+     "median": 10,
+     "p25": 8,
+     "p75": 18,
+     "min": 5,
+     "max": 25
+    },
+    {
+     "service": "add_on",
+     "label": "Add-ons",
+     "groomers": 3,
+     "median": 5,
+     "p25": 5,
+     "p75": 5,
+     "min": 5,
+     "max": 5
+    }
+   ]
+  },
+  "WA:seattle": {
+   "groomerCount": 8,
+   "rows": [
+    {
+     "service": "bath",
+     "label": "Bath and brush",
+     "groomers": 4,
+     "median": 41,
+     "p25": 25,
+     "p75": 55,
+     "min": 20,
+     "max": 55
+    },
+    {
+     "service": "puppy_groom",
+     "label": "Puppy groom",
+     "groomers": 4,
+     "median": 58,
+     "p25": 39,
+     "p75": 76,
+     "min": 22,
+     "max": 95
+    },
+    {
+     "service": "deshed",
+     "label": "Deshed",
+     "groomers": 4,
+     "median": 21,
+     "p25": 19,
+     "p75": 23,
+     "min": 15,
+     "max": 25
+    },
+    {
+     "service": "nail_trim",
+     "label": "Nail trim",
+     "groomers": 7,
+     "median": 18,
+     "p25": 10,
+     "p75": 21,
+     "min": 10,
+     "max": 30
+    },
+    {
+     "service": "face_feet_fanny",
+     "label": "Face, feet, fanny",
+     "groomers": 5,
+     "median": 30,
+     "p25": 25,
+     "p75": 35,
+     "min": 14,
+     "max": 40
+    },
+    {
+     "service": "teeth",
+     "label": "Teeth brushing",
+     "groomers": 6,
+     "median": 16,
+     "p25": 13,
+     "p75": 18,
+     "min": 10,
+     "max": 20
+    },
+    {
+     "service": "add_on",
+     "label": "Add-ons",
+     "groomers": 7,
+     "median": 18,
+     "p25": 12,
+     "p75": 22,
+     "min": 5,
+     "max": 105
+    }
+   ]
+  },
+  "WA:spokane": {
+   "groomerCount": 4,
+   "rows": [
+    {
+     "service": "full_groom",
+     "label": "Full groom",
+     "groomers": 3,
+     "median": 64,
+     "p25": 54,
+     "p75": 67,
+     "min": 44,
+     "max": 70
+    },
+    {
+     "service": "deshed",
+     "label": "Deshed",
+     "groomers": 3,
+     "median": 10,
+     "p25": 10,
+     "p75": 15,
+     "min": 10,
+     "max": 20
+    },
+    {
+     "service": "nail_trim",
+     "label": "Nail trim",
+     "groomers": 3,
+     "median": 10,
+     "p25": 8,
+     "p75": 11,
+     "min": 5,
+     "max": 12
+    },
+    {
+     "service": "add_on",
+     "label": "Add-ons",
+     "groomers": 3,
+     "median": 10,
+     "p25": 8,
+     "p75": 16,
+     "min": 5,
+     "max": 22
+    }
+   ]
+  },
+  "WA:tacoma": {
+   "groomerCount": 6,
+   "rows": [
+    {
+     "service": "bath",
+     "label": "Bath and brush",
+     "groomers": 5,
+     "median": 50,
+     "p25": 35,
+     "p75": 50,
+     "min": 30,
+     "max": 140
+    },
+    {
+     "service": "nail_trim",
+     "label": "Nail trim",
+     "groomers": 3,
+     "median": 12,
+     "p25": 10,
+     "p75": 24,
+     "min": 8,
+     "max": 35
+    },
+    {
+     "service": "face_feet_fanny",
+     "label": "Face, feet, fanny",
+     "groomers": 3,
+     "median": 25,
+     "p25": 22,
+     "p75": 25,
+     "min": 20,
+     "max": 25
+    },
+    {
+     "service": "add_on",
+     "label": "Add-ons",
+     "groomers": 4,
+     "median": 12,
+     "p25": 9,
+     "p75": 16,
+     "min": 5,
+     "max": 20
+    }
+   ]
+  },
+  "WA:vancouver": {
+   "groomerCount": 9,
+   "rows": [
+    {
+     "service": "full_groom",
+     "label": "Full groom",
+     "groomers": 4,
+     "median": 78,
+     "p25": 68,
+     "p75": 95,
+     "min": 45,
+     "max": 140
+    },
+    {
+     "service": "bath",
+     "label": "Bath and brush",
+     "groomers": 7,
+     "median": 35,
+     "p25": 34,
+     "p75": 78,
+     "min": 30,
+     "max": 130
+    },
+    {
+     "service": "nail_trim",
+     "label": "Nail trim",
+     "groomers": 5,
+     "median": 16,
+     "p25": 10,
+     "p75": 20,
+     "min": 5,
+     "max": 20
+    },
+    {
+     "service": "add_on",
+     "label": "Add-ons",
+     "groomers": 5,
+     "median": 5,
+     "p25": 5,
+     "p75": 5,
+     "min": 4,
+     "max": 15
+    }
+   ]
+  },
+  "WA:woodinville": {
+   "groomerCount": 4,
+   "rows": [
+    {
+     "service": "deshed",
+     "label": "Deshed",
+     "groomers": 3,
+     "median": 20,
+     "p25": 18,
+     "p75": 22,
+     "min": 15,
+     "max": 25
+    },
+    {
+     "service": "nail_trim",
+     "label": "Nail trim",
+     "groomers": 4,
+     "median": 20,
+     "p25": 12,
+     "p75": 25,
+     "min": 5,
+     "max": 25
+    },
+    {
+     "service": "face_feet_fanny",
+     "label": "Face, feet, fanny",
+     "groomers": 3,
+     "median": 8,
+     "p25": 6,
+     "p75": 11,
+     "min": 5,
+     "max": 15
+    },
+    {
+     "service": "teeth",
+     "label": "Teeth brushing",
+     "groomers": 3,
+     "median": 10,
+     "p25": 8,
+     "p75": 15,
+     "min": 5,
+     "max": 20
+    },
+    {
+     "service": "add_on",
+     "label": "Add-ons",
+     "groomers": 4,
+     "median": 5,
+     "p25": 5,
+     "p75": 6,
+     "min": 5,
+     "max": 10
+    }
+   ]
+  }
+ }
+}

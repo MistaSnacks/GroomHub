@@ -1,5 +1,7 @@
 // Shared FAQ builders for city pages (dog grooming, cat grooming, mobile grooming).
 
+import { formatCollectedOn, type CityPublishedPrices, type PublishedService } from "./city-price-tables";
+
 const SEATTLE_METRO = new Set([
   "seattle", "bellevue", "redmond", "kirkland", "renton", "bothell",
   "lynnwood", "shoreline", "burien", "edmonds", "sammamish",
@@ -63,11 +65,33 @@ function groomerCountPhrase(cityName: string, count: number): string {
   return `While ${cityName} has ${count} ${label} listed, nearby cities offer additional options to consider.`;
 }
 
+const FAQ_PRICE_SERVICES: Partial<Record<PublishedService, string>> = {
+  full_groom: "a full groom",
+  bath: "a bath and brush",
+  nail_trim: "a nail trim",
+};
+
+function groomerLabel(count: number): string {
+  return `${count} ${count === 1 ? "groomer" : "groomers"}`;
+}
+
+/** Leads the cost answer with up to two published medians, or "" when the city has none for a core service. */
+function publishedPriceLead(cityName: string, published: CityPublishedPrices | null): string {
+  if (!published) return "";
+  const figures = published.rows
+    .filter((row) => row.service in FAQ_PRICE_SERVICES)
+    .slice(0, 2)
+    .map((row) => `$${row.median} for ${FAQ_PRICE_SERVICES[row.service]} (${groomerLabel(row.groomers)})`);
+  if (figures.length === 0) return "";
+  return `Groomer websites in ${cityName} list a median starting price of ${figures.join(" and ")}, collected ${formatCollectedOn(published.collectedOn)}. `;
+}
+
 export function buildDogGroomingFaqs(
   cityName: string,
   stateAbbr: string,
   listings: { service_tags?: string[] }[],
-  _parkCount: number
+  _parkCount: number,
+  published: CityPublishedPrices | null = null
 ) {
   const groomerCount = listings.length;
   const mobileCount = listings.filter((l) =>
@@ -84,7 +108,7 @@ export function buildDogGroomingFaqs(
   return [
     {
       question: `How much does dog grooming cost in ${cityName}?`,
-      answer: `Dog grooming in ${cityName}, ${stateName} typically costs ${priceRange} for a standard bath and haircut, depending on your dog's size, breed, and coat condition. Prices may be higher for large breeds or dogs with matted fur. Compare ${groomerCount} groomers on GroomLocal to find the best value.`,
+      answer: `${publishedPriceLead(cityName, published)}Dog grooming in ${cityName}, ${stateName} typically costs ${priceRange} for a standard bath and haircut, depending on your dog's size, breed, and coat condition. Prices may be higher for large breeds or dogs with matted fur. Compare ${groomerCount} groomers on GroomLocal to find the best value.`,
     },
     {
       question: "How often should I groom my dog?",
