@@ -52,10 +52,13 @@ DEFAULT_THRESHOLD = 0.85
 
 GATE_KEYS_MASTER = ["identity", "anatomy", "bandana", "edges", "style", "scene", "clean_text"]
 GATE_KEYS_FINAL = GATE_KEYS_MASTER + ["transparency"]
+# The export only removes the background, so these verdicts cannot change between the master and
+# the final. Judging them twice doubled the false failures (3 of 25 test loops, 2026-11-13).
+EXPORT_INVARIANT = ("bandana", "style", "scene", "clean_text", "acting")
 
 # Text appended to the next generation prompt when a gate fails.
 CORRECTION_HINTS = {
-    "identity": "Match the approved reference's facial features exactly: same rounded fluffy cream-white head, floppy ears, dark burgundy eyes and nose, friendly smile. Do not restyle Maui. The head angle and eye direction may differ from the reference.",
+    "identity": "Match the approved reference's facial features exactly: same rounded fluffy cream-white head, floppy ears and dark burgundy nose. His eyes are solid dark beady ovals with one small white highlight, exactly like the reference: no white around the eye, no iris, no separate pupil. Do not restyle Maui. Only the head angle and the expression may differ from the reference.",
     "anatomy": "Show exactly four canine limbs total with every paw on the ground: a plain four-leg standing pose or a seated pose with both front paws planted. No raised, pointing, waving or holding paw; props rest on the ground near his paws or are held in his mouth. An upright pose on the hind legs is a separate action. Never draw a third front paw.",
     "anatomy_upright": "Upright pose: Maui is on his two short hind legs with both hind paws on the ground, and his two front paws are off the ground as the Body position line says. Exactly two front paws and two hind paws, no third paw anywhere, short compact dog legs, no human torso.",
     "anatomy_free": "Draw exactly four legs, each one clearly separate and traceable from a shoulder or hip to its paw, in the pose the Body position line describes. Never a fifth leg or a third front paw. If a leg is hidden, hide it fully behind the body or the set piece.",
@@ -69,7 +72,7 @@ CORRECTION_HINTS = {
 }
 
 MAUI_STANDARD = {
-    "appearance": "Fluffy cream-white dog with a rounded head, floppy ears, compact canine torso, short rounded paws, dark burgundy eyes and nose, friendly face. Head angle, eye direction, eyelids, mouth and ears act out the scene; the features stay the same. Thick dark burgundy exterior outlines, thinner interior lines, solid cream/ivory fur with warm tan angular cel-shaded shapes. Crisp vector-like raster illustration.",
+    "appearance": "Fluffy cream-white dog with a rounded head, floppy ears, compact canine torso, short rounded paws, dark burgundy nose, and solid dark burgundy beady oval eyes with one white highlight and no white visible around them, friendly face. Head angle, eye direction, eyelids, mouth and ears act out the scene; the features stay the same. Thick dark burgundy exterior outlines, thinner interior lines, solid cream/ivory fur with warm tan angular cel-shaded shapes. Crisp vector-like raster illustration.",
     "anatomy": "Exactly four canine limbs total (two front, two rear). Natural occlusion is fine: depending on the angle a seated or standing dog may show three or all four paws, with a hidden leg tucked behind the body or a prop. Any fifth paw, third front paw, unassignable paw, or human leg proportions is a failure.",
     "bandana": "Red bandana tied around the neck with readable white MAUI text and a small white paw emblem. It may be naturally partly hidden by a towel or tub, but never replaced with a different name.",
     "composition": "Complete character and all props fully inside the canvas. Complete tails, ears, paws, tables, brushes and sleeve cuffs. No edge clipping, faded parts or ghosted objects. Breathing room of 10 to 15 percent is the target, but because the background is removed for site use any measured margin of at least 3 percent with nothing clipped is acceptable.",
@@ -234,7 +237,8 @@ OBSERVATION_SCHEMA = {
     "tail": "one of: complete, partly hidden, fully hidden behind his body or inside a towel or set piece, missing (erased or left out where it should show), clipped by frame",
     "ears_visible": "integer",
     "face_match_notes": "string: compare only the features (eye shape and color, nose, muzzle, head shape, ear shape) to the reference image. Do not mention head angle, eye direction or expression here; they have their own fields and may differ from the reference on purpose",
-    "eyes_look_at": "one of: the viewer, the prop or task he is working on, another prop, nothing in particular, eyes are closed. Decide from where the pupils sit inside the eyes and where the nose points, not from the scene brief. Pupils centered with the face straight on means the viewer",
+    "eye_style": "one of: solid dark beady ovals with a highlight like the reference, white visible around a darker pupil or iris, closed, hidden",
+    "eyes_look_at": "one of: the viewer, the prop or task he is working on, another prop, nothing in particular, eyes are closed. His eyes are solid dark ovals with no pupil to read, so decide from where his head and nose point, not from the scene brief. A face turned straight to the viewer means the viewer",
     "head_angle": "one of: straight on, three-quarter, profile, tipped down",
     "mouth": "one of: open grin with tongue out like the reference, small closed smile, closed with tongue tip showing, small round open mouth, wide open laughing or panting, holding an object, hidden",
     "expression": "string: what the face is doing in plain words, e.g. concentrating with narrowed eyes, blissful with closed eyes, surprised",
@@ -412,20 +416,29 @@ def acting_probability(observations: dict | None, acting: Acting) -> float | Non
         return 0.4  # head turned, but still wearing the reference's grin
     if kind == "prop" or kind in acting.eyes_ok:
         return 1.0
-    return 0.3  # staring at nothing, or eyes shut where the action needs them open
+    # Beady eyes have no pupil to aim, so a head turned away from the viewer with an acted mouth
+    # is engaged even when the observer cannot name a target (head-tilt test, 2026-11-13).
+    if kind == "none" and "straight" not in str(observations.get("head_angle", "straight on")).lower():
+        return 1.0
+    return 0.3  # facing front at nothing, or eyes shut where the action needs them open
 
 
 def decide(answers: dict, stage: str, threshold: float, observations: dict | None = None,
-           pose: Pose = Pose(), acting: Acting | None = None) -> dict:
+           pose: Pose = Pose(), acting: Acting | None = None, master_gates: dict | None = None) -> dict:
     keys = (GATE_KEYS_FINAL if stage == "final" else GATE_KEYS_MASTER) + (["acting"] if acting else [])
     probabilities = {k: float(answers[k]["noul"]) for k in keys if k in answers}
     if acting and (score := acting_probability(observations, acting)) is not None:
         probabilities["acting"] = score
+    if stage == "final" and master_gates:
+        probabilities.update({k: float(master_gates[k]) for k in EXPORT_INVARIANT if k in keys and k in master_gates})
     # Hard rules owned by code, independent of Jev. More than two front paws, two rear paws or
     # four limbs is always a rejection. Planted poses also reject any raised paw (observers
     # misassign planted paws in exactly those images). Upright and free poses raise paws by
     # design, so there the count of paws on the ground decides instead.
     if observations:
+        # Owner 2026-11-13: eyes with white around a pupil "don't match the look of Maui".
+        if "white" in str(observations.get("eye_style", "")).lower() and "identity" in probabilities:
+            probabilities["identity"] = min(probabilities["identity"], 0.05)
         over = any(int(observations.get(k) or 0) > limit for k, limit in
                    (("front_paws_visible", 2), ("rear_paws_visible", 2), ("visible_limbs_total", 4)))
         if pose.mode == "planted":
@@ -490,7 +503,8 @@ def build_review(final_path: Path, reference_path: Path, observations: dict, dec
 # -------------------------------------------------------------------------------- main
 def run_gate(image: Path, reference: Path, scene: str, stage: str, threshold: float,
              project_root: Path | None, vision_model: str, observations: dict | None = None,
-             work_dir: Path | None = None, pose: Pose = Pose(), acting: Acting | None = None) -> dict:
+             work_dir: Path | None = None, pose: Pose = Pose(), acting: Acting | None = None,
+             master_gates: dict | None = None) -> dict:
     openai_key = resolve_key(["OPENAI_API_KEY", "VOICE_TOOLS_OPENAI_KEY"], project_root)
     jev_key = resolve_key(["TYPESAFE_API_KEY"], project_root)
     if observations is None and not openai_key:
@@ -512,7 +526,7 @@ def run_gate(image: Path, reference: Path, scene: str, stage: str, threshold: fl
     observations["measured_smallest_margin_percent"] = margins["smallest_percent"]
     observations["_measured_margins"] = margins
     jev = judge(observations, scene, stage, jev_key, pose)
-    decision = decide(jev["answers"], stage, threshold, observations, pose, acting)
+    decision = decide(jev["answers"], stage, threshold, observations, pose, acting, master_gates)
     if stage == "final" and file_report and not file_report["fileChecksPass"]:
         decision["passed"] = False
         decision["failing"] = sorted(set(decision["failing"]) | {"file_checks"})
@@ -562,6 +576,8 @@ def main() -> int:
                         help="add the acting gate: the face must perform the action, not repeat the reference grin")
     parser.add_argument("--eyes-ok", default="prop",
                         help="comma list of where the eyes may be for this action: prop, closed, viewer")
+    parser.add_argument("--master-gate", type=Path,
+                        help="final stage: the master's gate JSON; its picture-content verdicts are carried over")
     parser.add_argument("--stock-face-ok", action="store_true",
                         help="joy actions only: the reference's open-mouth grin is the right face")
     args = parser.parse_args()
@@ -578,7 +594,9 @@ def main() -> int:
         acting = (Acting(tuple(e.strip() for e in args.eyes_ok.split(",") if e.strip()), args.stock_face_ok)
                   if args.acting else None)
         result = run_gate(args.image, args.reference, args.scene, args.stage, args.threshold,
-                          args.project_root, args.vision_model, observations, pose=pose, acting=acting)
+                          args.project_root, args.vision_model, observations, pose=pose, acting=acting,
+                          master_gates=json.loads(args.master_gate.read_text())["decision"]["gates"]
+                          if args.master_gate else None)
     except (RuntimeError, KeyError, ValueError, json.JSONDecodeError) as error:
         print(json.dumps({"passed": False, "error": str(error)}))
         return 1

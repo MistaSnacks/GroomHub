@@ -54,6 +54,8 @@ POSE_DIR = SCRIPT_DIR.parent / "references" / "maui" / "pose-reference"
 #   paws_down_max  most paws that may touch the ground (None = the mode's default)
 #   eyes_ok        where the eyes may be besides the work itself: closed, viewer
 #   stock_face_ok  joy beats only: the reference's open grin is the right face
+# Face lines never mention pupils or where the eyes point: that wording made the generator draw
+# white around the eye, and the owner rejected it (2026-11-13). Maui's eyes are solid beady ovals.
 # A loop keeps one action for every attempt. The scene names what Maui does ("peeking", "resting"),
 # so switching to a sibling action fails the scene gate (test 2026-11-13: scene 0.49).
 ACTIONS = [
@@ -61,38 +63,40 @@ ACTIONS = [
      "suits": "brushing, combing, trimming, drying, any how-to step",
      "body": "bipedal: standing upright on his two short hind legs, both hind paws planted, his whole body leaning "
              "toward the thing he is grooming, one tool in each front paw, the working tool touching it",
-     "face": "head tipped down and turned to the exact spot where the tool touches, eyes narrowed on that spot, "
-             "mouth closed with the tip of his pink tongue poking out at one corner in concentration, ears swinging forward"},
+     "face": "head tipped down and turned so his nose points at the exact spot where the tool touches, cheeks "
+             "pushed up under his eyes in concentration, mouth closed with the tip of his pink tongue poking "
+             "out at one corner, ears swinging forward"},
     {"id": "hug-carry", "mode": "upright", "ref": "bipedal-hug-jar.png",
      "suits": "bringing, packing, choosing, costs, supplies",
      "body": "bipedal: standing upright on his two short hind legs, both hind paws planted, both front paws wrapped "
              "around one big prop held against his chest, leaning back a little under its weight",
-     "face": "chin resting on top of the prop, cheek fur squashed against it, eyes looking down over it at what he "
+     "face": "chin resting on top of the prop, cheek fur squashed against it, nose pointing down into what he "
              "carries, small proud closed-mouth smile"},
     {"id": "reach-up", "mode": "upright", "ref": None,
      "suits": "catching, reaching, rain, snow, falling leaves, showers, treats",
      "body": "bipedal: stretched tall on his two short hind legs, both hind paws on the ground, both front paws "
              "reaching up together toward the main prop above his head, body in one long curve from tail to nose",
-     "face": "head tipped far back, nose pointing up at the prop, eyes wide and fixed on it, mouth open in a small "
-             "round 'ooh', ears falling back behind his head"},
+     "face": "head tipped far back with his nose pointing straight up at the prop, eyes big and round, mouth "
+             "open in a small round 'ooh', ears falling back behind his head"},
     {"id": "sit-pretty", "mode": "upright", "ref": None,
      "suits": "waiting, asking, treats, first visits, meeting a groomer",
      "body": "sitting up on his haunches in a begging pose, both hind paws on the ground, both front paws tucked up "
              "against his chest, back straight, tail sweeping the floor",
-     "face": "head tipped up toward the main prop, big hopeful eyes locked on it, mouth closed in a tiny smile, "
-             "ears lifted a little at the base"},
+     "face": "head tipped up with his nose pointing at the main prop, eyes big, round and hopeful, mouth "
+             "closed in a tiny smile, ears lifted a little at the base"},
     {"id": "play-bow", "mode": "planted", "ref": "action-play-bow.png",
      "eyes_ok": ("viewer",), "stock_face_ok": True,
      "suits": "play, toys, puppies, energy, happy results",
      "body": "play bow: chest and both front legs flat on the ground stretched forward, rear end high in the air, "
              "tail curled up and wagging, the main prop on the ground just in front of his front paws",
-     "face": "bright open-mouth grin with tongue out, eyes shining and locked on the prop, ears bouncing back"},
+     "face": "bright open-mouth grin with tongue out, nose pointing at the prop, eyes big and shining, ears "
+             "bouncing back"},
     {"id": "nose-down", "mode": "planted", "ref": None,
      "suits": "inspecting, checking, mud, ticks, foxtails, a new product",
      "body": "standing on all four legs in three-quarter view, all four paws planted, front end dipped so his nose "
              "almost touches the main prop on the ground, rear a little higher, tail straight out behind him",
-     "face": "eyes looking down his nose at the prop and slightly crossed, mouth closed, ears hanging forward past "
-             "his cheeks, curious"},
+     "face": "face pointing straight down with his nose almost on the prop, mouth closed, ears hanging forward "
+             "past his cheeks, curious"},
     {"id": "shake-off", "mode": "planted", "ref": None, "eyes_ok": ("closed",),
      "suits": "bath, rain, mud, drying, shedding",
      "body": "standing on all four legs in a wide stance, all four paws planted, whole body twisting in a big shake, "
@@ -104,19 +108,20 @@ ACTIONS = [
      "body": "lying on his belly like a sphinx in three-quarter view, both front legs stretched forward flat on the "
              "ground, hind legs tucked under him, head held just above his paws so the whole bandana shows under his "
              "chin, the main prop on the ground between his front paws",
-     "face": "chin tucked, eyes looking down at the prop between his paws, lids half closed and relaxed, mouth "
-             "closed in a soft smile, ears hanging loose"},
+     "face": "chin tucked with his nose pointing down at the prop between his paws, eyes half closed under "
+             "flat sleepy top lids, mouth closed in a soft smile, ears hanging loose"},
     {"id": "stand-carry", "mode": "planted", "ref": None,
      "suits": "fetching, bringing a leash or towel, getting ready to go",
      "body": "side profile, standing on all four legs with all four paws planted flat on the ground, chest out, "
              "tail high, carrying the main prop in his mouth toward a second prop",
-     "face": "head dipped toward the second prop right in front of his nose, pupils pointed at it, cheeks puffed "
-             "around what he carries, proud"},
+     "face": "head dipped so his nose points at the second prop right in front of him, cheeks puffed around "
+             "what he carries, proud"},
     {"id": "head-tilt", "mode": "planted", "ref": None,
      "suits": "questions, comparisons, how much, how often, choosing",
      "body": "seated in three-quarter view, both front paws planted, turned toward the main prop beside him",
-     "face": "head tilted hard to one side, one ear flopped up over the top of his head, eyes wide and round on the "
-             "prop, mouth closed and pushed to one side in a puzzled look, drawn with no question mark or other symbol"},
+     "face": "head tilted hard to one side with his nose pointing at the prop, one ear flopped up over the top "
+             "of his head, eyes big and round, mouth closed and pushed to one side in a puzzled look, drawn "
+             "with no question mark or other symbol"},
     {"id": "belly-up", "mode": "free", "paws_down_max": 0, "ref": None,
      "eyes_ok": ("closed", "viewer"), "stock_face_ok": True,
      "suits": "happy after a groom, belly brushing, summer, relaxing",
@@ -128,15 +133,16 @@ ACTIONS = [
      "suits": "bath tub, grooming van window, supply box, laundry basket, arriving somewhere new",
      "body": "peeking over the top edge of the set piece: only his head, his bandana and his two front paws show "
              "above the edge, both front paws hooked over it, the rest of his body hidden inside or behind the set piece",
-     "face": "eyes wide and looking down at the main prop below him, one ear flopped over the edge, mouth closed "
-             "in a small mischievous smile"},
+     "face": "face tipped down so his nose points at the main prop below him, one ear flopped over the edge, "
+             "eyes big and round, mouth closed in a small mischievous smile"},
     {"id": "zoomies", "mode": "free", "paws_down_max": 1, "ref": None,
      "eyes_ok": ("viewer",), "stock_face_ok": True,
      "suits": "zoomies after a bath, running in rain or leaves, excitement, exercise",
      "body": "strict side profile, flying gallop in mid-air: both front legs stretched forward and both hind legs "
              "stretched back, exactly four legs clearly separated, ears and tail streaming behind him, three short "
              "speed lines and a few drops or leaves kicked up close behind him",
-     "face": "eyes wide on the prop ahead of him, mouth wide open in a laughing pant, tongue flying back"},
+     "face": "nose pointing at the prop ahead of him, eyes big and round, mouth wide open in a laughing pant, "
+             "tongue flying back"},
     {"id": "towel-wrap", "mode": "planted", "ref": None, "eyes_ok": ("closed",),
      "suits": "after a bath, winter, cold rain, cozy, drying",
      "body": "seated and bundled in a big fluffy towel like a burrito, only his head, his bandana and the tips of "
@@ -160,15 +166,18 @@ LIMB_GUARD = {
 FRESH_COMPOSITION = ("The appearance reference fixes how Maui looks, NOT the picture: do not copy its seated "
                      "front-facing pose, its framing, or its placement on the left.")
 STICKER_COMPOSITION = ("COMPOSITION: one compact cut-out group in the middle of the canvas: Maui, at most one set "
-                       "piece and two small props, all touching or overlapping. The whole group is no wider and no taller than "
-                       "two thirds of the canvas, with empty cream background on every side. Every cord, hose, rug, puddle and motion mark ends well inside the frame. No cast "
-                       "shadow and no ground tint under him: the background is removed later.")
+                       "piece and two small props, all touching or overlapping. The whole group is no wider and no "
+                       "taller than two thirds of the canvas, with empty cream background on every side. Draw every "
+                       "object whole: never part of a van, wall, door or counter. Every cord, hose, rug, puddle and "
+                       "motion mark ends well inside the frame. No cast shadow and no ground tint under him: the "
+                       "background is removed later.")
 POSE_EXAMPLE = ("The second attached image is a POSE EXAMPLE only: copy the body position and energy from it, not "
                 "its drawing style, face direction, props, text or scene. Appearance still comes from the first image.")
-ACTING = ("ACTING: Maui performs the action with his whole body and his face. Keep the reference's features (eye "
-          "shape and color, nose, muzzle, ears, fur shapes, bandana), but draw the head angle, eye direction, "
-          "eyelids, mouth and ears exactly as the Face line says. Do not paste the reference's front-facing open "
-          "grin onto this pose.")
+ACTING = ("ACTING: Maui performs the action with his whole body and his face. Keep the reference's features exactly, "
+          "above all its EYES: solid dark beady ovals, each with one small white highlight, with no white around them, "
+          "no iris and no separate pupil. He shows where he looks by turning his head and pointing his nose. He shows "
+          "how he feels with eyelids, cheeks, mouth and ears, as the Face line says. Do not paste the reference's "
+          "front-facing open grin onto this pose.")
 
 
 def past_actions(run_dir: Path) -> list[str]:
@@ -442,7 +451,9 @@ def main() -> int:
             record["file_checks"] = {k: file_report[k] for k in ("fileChecksPass", "errors", "alphaRange", "marginFractions")}
             review_path = attempt_dir / "image-review.json"
             final_gate = gate(final, args.scene, "final", args.threshold, project_root, args.reference,
-                              attempt_dir / "final.jev-gate.json", pose_flags, review_out=review_path)
+                              attempt_dir / "final.jev-gate.json",
+                              pose_flags + ["--master-gate", attempt_dir / "master.jev-gate.json"],
+                              review_out=review_path)
         except RuntimeError as error:
             record["error"] = str(error)
             status = "needs_export_review"

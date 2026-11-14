@@ -279,6 +279,38 @@ class Helpers(unittest.TestCase):
         self.assertEqual([a["id"] for a in plan[-2:]], ["hug-carry", "shake-off"])
 
 
+    def test_jev_gate_rejects_eyes_with_whites(self):
+        # Owner 2026-11-13: Maui's eyes are beady; white around a pupil is off-model whatever Jev says.
+        answers = self._answers()
+        beady = {"eye_style": "solid dark beady ovals with a highlight like the reference"}
+        self.assertTrue(jev_gate.decide(answers, "master", 0.85, beady)["passed"])
+        whites = {"eye_style": "white visible around a darker pupil or iris"}
+        rejected = jev_gate.decide(answers, "master", 0.85, whites)
+        self.assertEqual(rejected["failing"], ["identity"])
+        self.assertIn("beady", jev_gate.correction_text(["identity"]))
+        for a in art_loop.ACTIONS:
+            self.assertNotRegex(a["face"], r"pupil|eyes (looking|on|locked|fixed|narrowed|wide on|rolled|turned)")
+
+
+    def test_jev_gate_final_carries_picture_verdicts_from_the_master(self):
+        # The export cannot change the scene or the face, so a second opinion on them must not fail a final.
+        master = jev_gate.decide(self._answers(), "master", 0.85)["gates"]
+        flipped = self._answers(scene=0.45, transparency=0.97)
+        self.assertEqual(jev_gate.decide(flipped, "final", 0.85)["failing"], ["scene"])
+        self.assertTrue(jev_gate.decide(flipped, "final", 0.85, master_gates=master)["passed"])
+        # What an export can break is still judged on the final itself.
+        for key in ("identity", "anatomy", "edges", "transparency"):
+            broken = jev_gate.decide(self._answers(**{key: 0.2}), "final", 0.85, master_gates=master)
+            self.assertEqual(broken["failing"], [key])
+
+    def test_jev_gate_acting_accepts_a_turned_head_with_no_named_target(self):
+        work = jev_gate.Acting()
+        turned = {"eyes_look_at": "nothing in particular", "head_angle": "three-quarter", "mouth": "small closed smile",
+                  "copies_reference_camera_grin": False}
+        self.assertEqual(jev_gate.acting_probability(turned, work), 1.0)
+        self.assertEqual(jev_gate.acting_probability(dict(turned, head_angle="straight on"), work), 0.3)
+
+
     def test_export_seeds_never_erase_fur_colored_regions(self):
         # 2026-11-13: the vision pass called a torso (distance 8) and a leg (11) "gap"; both were erased.
         candidates = [{"id": 3, "seed": [0.28, 0.49], "area": 48974, "paperDistance": 8.0},
