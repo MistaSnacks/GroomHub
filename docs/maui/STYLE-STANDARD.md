@@ -15,13 +15,25 @@ generations. This standard supersedes all older Maui prompts and style guidance.
 ## Appearance that stays fixed
 
 - Rounded, fluffy cream-white head; floppy ears; compact canine torso and short paws.
-- Dark burgundy eyes and nose, clean eye highlights, friendly expressive smile and pink tongue.
+- Solid dark burgundy beady oval eyes with one clean white highlight each. No white around the eye, no iris,
+  no separate pupil (owner, November 2026: eyes with whites "don't match the look of Maui").
+- Dark burgundy nose; pink tongue when the mouth is open.
 - Clean thick dark burgundy exterior outlines and thinner interior detail lines.
 - Solid cream and warm tan cel-shaded fur shapes; sculpted fluffy tufts, not sketchy strands.
 - Red neck bandana with readable white `MAUI` and a small white paw emblem.
 - Exactly four canine limbs total, with natural occlusion where a tub or towel hides them.
 - Preserve this face and head/body relationship across poses and clothing. Do not change breed,
   invent a second character, lengthen the torso, or use human leg proportions.
+
+## What changes with the action (owner direction, November 2026)
+
+The owner found Maui uncanny when he did something while wearing the reference's front-facing grin.
+The features above stay fixed, the beady eyes above all. The acting changes with every scene: he shows
+where he looks by turning his head and pointing his nose, and how he feels with eyelids, cheeks, mouth
+and ears. His whole body leans into it. The open grin
+belongs to play and joy. Work gets a concentrating face, rest a sleepy one, a question a head tilt.
+Vary the body too: upright, play bow, shake, leap, belly up, peeking over an edge, not only standing
+or sitting. `scripts/maui-art-loop.py --plan` lists the designed actions.
 
 ## Composition and export
 

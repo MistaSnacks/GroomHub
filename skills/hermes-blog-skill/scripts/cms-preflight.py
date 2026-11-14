@@ -48,7 +48,7 @@ def collect(root):
               "project_root": str(root), "run_directory": str(run), "checked_at": now.isoformat(),
               "articles": articles, "coverage_snapshot": "docs/automation/content-inventory.json",
               "connections_verified": False, "site_connection_verified": False,
-              "instruction": "Query all CMS published/draft coverage and verify required tools. Draft-first; no legacy MDX publisher. SEO, visual image review and end-to-end site readiness are required before CMS publication."}
+              "instruction": "Query all CMS published/draft coverage. Draft-first; no legacy MDX publisher. Review mode never publishes, so a failed site-readiness, GTM or optional research check is reported and the run continues; only the Stop rows in SKILL.md 'When something fails' end a run without a draft."}
     (run / "inventory.json").write_text(json.dumps(result, indent=2) + "\n")
     return result
 
