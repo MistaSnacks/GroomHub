@@ -19,8 +19,9 @@ transparent export, it reports `needs_export_review` so seeds can be reviewed
 without spending another generation.
 
 Usage:
+  maui-art-loop.py --plan --run-dir <run dir>          list the actions, least used first
   maui-art-loop.py --project-root <checkout> --run-dir <run dir> --slug <slug>
-                   --scene "<scene>" [--pose ...] [--mood ...] [--extra ...]
+                   --action <id> --scene "<scene>" [--mood ...] [--extra ...]
                    [--max-attempts 4] [--threshold 0.85] [--provider openai] [--model ID]
                    [--seeds seeds.json] [--reference brushing-v2.png]
 
@@ -32,6 +33,7 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
+import re
 import os
 import shutil
 import subprocess
@@ -42,61 +44,142 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).resolve().parent
 DEFAULT_REFERENCE = SCRIPT_DIR.parent / "references" / "maui" / "approved-reference" / "brushing-v2.png"
 UV = shutil.which("uv") or str(Path.home() / ".local" / "bin" / "uv")
-# gpt-image draws three planted paws whenever a front paw is raised, producing five limbs.
-ANATOMY_GUARD = ("Pose guard: all four paws stay on the ground, either standing on four legs or seated with both front "
-                 "paws planted. No raised, waving, pointing or holding paw; props rest on the ground near his paws or are held in his mouth.")
-
-
 POSE_DIR = SCRIPT_DIR.parent / "references" / "maui" / "pose-reference"
-# Owner feedback 2026-09-28: runs kept redrawing the appearance reference (seated, facing
-# front, props beside him). When no --pose is given the loop rotates through these, least
-# used across earlier runs first, and switches to the next pose halfway through the attempts.
-# Bipedal entries follow the owner's standard that Maui often stands upright like the apron
-# and tip-jar illustrations; they send a pose example as a second reference.
-POSES = [
-    {"id": "bipedal-hug", "bipedal": True, "ref": "bipedal-hug-jar.png",
-     "pose": "bipedal: standing upright on his two short hind legs like a mascot, both hind paws planted, "
-             "both front paws together holding the main prop in front of his chest, head bowed over it and "
-             "eyes reading it, three-quarter view"},
-    {"id": "stand-side", "bipedal": False, "ref": None,
-     "pose": "standing on all four legs in side profile, all four paws planted flat on the ground, tail up, "
-             "carrying the main prop in his mouth, eyes on the other props he is carrying it toward"},
-    {"id": "bipedal-tools", "bipedal": True, "ref": "bipedal-apron-tools.png",
-     "pose": "bipedal: standing upright on his two short hind legs, both hind paws planted, one prop held "
-             "in each front paw at chest height and in use, head turned and tipped down toward the tool he "
-             "is working with, three-quarter view"},
-    {"id": "lying-down", "bipedal": False, "ref": None,
-     "pose": "lying down on his belly with both front legs stretched forward flat on the ground, chin low, "
-             "eyes on the main prop on the floor in front of him, low wide composition"},
-    {"id": "play-bow", "bipedal": False, "ref": None,
-     "pose": "play bow: front legs flat on the ground, rear end up, tail wagging, the main prop on the ground "
-             "between his front paws and his eyes on it, playful"},
-    {"id": "seated-three-quarter", "bipedal": False, "ref": None,
-     "pose": "seated in a three-quarter view turned toward the props, both front paws planted, head tilted "
-             "up at the main prop, placed right of center"},
+
+# An ACTION is one designed beat: what the body does, what the face does, and how the limbs
+# may sit. Body and face are written together because the owner's two complaints came from
+# choosing them apart: a pose picked without the scene (10-28: "lying down" for a dryer on a
+# table) and a face left at the reference's grin whatever Maui was doing (10-05, 11-13).
+#   mode           planted | upright | free, the gate's anatomy rule for this action
+#   paws_down_max  most paws that may touch the ground (None = the mode's default)
+#   eyes_ok        where the eyes may be besides the work itself: closed, viewer
+#   stock_face_ok  joy beats only: the reference's open grin is the right face
+# A loop keeps one action for every attempt. The scene names what Maui does ("peeking", "resting"),
+# so switching to a sibling action fails the scene gate (test 2026-11-13: scene 0.49).
+ACTIONS = [
+    {"id": "groom-at-work", "mode": "upright", "ref": "bipedal-apron-tools.png",
+     "suits": "brushing, combing, trimming, drying, any how-to step",
+     "body": "bipedal: standing upright on his two short hind legs, both hind paws planted, his whole body leaning "
+             "toward the thing he is grooming, one tool in each front paw, the working tool touching it",
+     "face": "head tipped down and turned to the exact spot where the tool touches, eyes narrowed on that spot, "
+             "mouth closed with the tip of his pink tongue poking out at one corner in concentration, ears swinging forward"},
+    {"id": "hug-carry", "mode": "upright", "ref": "bipedal-hug-jar.png",
+     "suits": "bringing, packing, choosing, costs, supplies",
+     "body": "bipedal: standing upright on his two short hind legs, both hind paws planted, both front paws wrapped "
+             "around one big prop held against his chest, leaning back a little under its weight",
+     "face": "chin resting on top of the prop, cheek fur squashed against it, eyes looking down over it at what he "
+             "carries, small proud closed-mouth smile"},
+    {"id": "reach-up", "mode": "upright", "ref": None,
+     "suits": "catching, reaching, rain, snow, falling leaves, showers, treats",
+     "body": "bipedal: stretched tall on his two short hind legs, both hind paws on the ground, both front paws "
+             "reaching up together toward the main prop above his head, body in one long curve from tail to nose",
+     "face": "head tipped far back, nose pointing up at the prop, eyes wide and fixed on it, mouth open in a small "
+             "round 'ooh', ears falling back behind his head"},
+    {"id": "sit-pretty", "mode": "upright", "ref": None,
+     "suits": "waiting, asking, treats, first visits, meeting a groomer",
+     "body": "sitting up on his haunches in a begging pose, both hind paws on the ground, both front paws tucked up "
+             "against his chest, back straight, tail sweeping the floor",
+     "face": "head tipped up toward the main prop, big hopeful eyes locked on it, mouth closed in a tiny smile, "
+             "ears lifted a little at the base"},
+    {"id": "play-bow", "mode": "planted", "ref": "action-play-bow.png",
+     "eyes_ok": ("viewer",), "stock_face_ok": True,
+     "suits": "play, toys, puppies, energy, happy results",
+     "body": "play bow: chest and both front legs flat on the ground stretched forward, rear end high in the air, "
+             "tail curled up and wagging, the main prop on the ground just in front of his front paws",
+     "face": "bright open-mouth grin with tongue out, eyes shining and locked on the prop, ears bouncing back"},
+    {"id": "nose-down", "mode": "planted", "ref": None,
+     "suits": "inspecting, checking, mud, ticks, foxtails, a new product",
+     "body": "standing on all four legs in three-quarter view, all four paws planted, front end dipped so his nose "
+             "almost touches the main prop on the ground, rear a little higher, tail straight out behind him",
+     "face": "eyes looking down his nose at the prop and slightly crossed, mouth closed, ears hanging forward past "
+             "his cheeks, curious"},
+    {"id": "shake-off", "mode": "planted", "ref": None, "eyes_ok": ("closed",),
+     "suits": "bath, rain, mud, drying, shedding",
+     "body": "standing on all four legs in a wide stance, all four paws planted, whole body twisting in a big shake, "
+             "fur fluffed out in spikes, both ears flying out sideways, water drops or loose fur flying off in short "
+             "arcs that stay close to his body",
+     "face": "eyes squeezed shut in happy crescents, mouth in a wide closed grin, cheeks flapping with the shake"},
+    {"id": "lying-low", "mode": "planted", "ref": None,
+     "suits": "calm, anxious or senior dogs, waiting, rest after a groom",
+     "body": "lying on his belly like a sphinx in three-quarter view, both front legs stretched forward flat on the "
+             "ground, hind legs tucked under him, head held just above his paws so the whole bandana shows under his "
+             "chin, the main prop on the ground between his front paws",
+     "face": "chin tucked, eyes looking down at the prop between his paws, lids half closed and relaxed, mouth "
+             "closed in a soft smile, ears hanging loose"},
+    {"id": "stand-carry", "mode": "planted", "ref": None,
+     "suits": "fetching, bringing a leash or towel, getting ready to go",
+     "body": "side profile, standing on all four legs with all four paws planted flat on the ground, chest out, "
+             "tail high, carrying the main prop in his mouth toward a second prop",
+     "face": "head dipped toward the second prop right in front of his nose, pupils pointed at it, cheeks puffed "
+             "around what he carries, proud"},
+    {"id": "head-tilt", "mode": "planted", "ref": None,
+     "suits": "questions, comparisons, how much, how often, choosing",
+     "body": "seated in three-quarter view, both front paws planted, turned toward the main prop beside him",
+     "face": "head tilted hard to one side, one ear flopped up over the top of his head, eyes wide and round on the "
+             "prop, mouth closed and pushed to one side in a puzzled look, drawn with no question mark or other symbol"},
+    {"id": "belly-up", "mode": "free", "paws_down_max": 0, "ref": None,
+     "eyes_ok": ("closed", "viewer"), "stock_face_ok": True,
+     "suits": "happy after a groom, belly brushing, summer, relaxing",
+     "body": "rolled onto his back, belly up, spine curved like a banana, all four paws loose in the air with bent "
+             "wrists, tail flopped on the ground, on a mat barely bigger than he is",
+     "face": "head upside down beside the main prop, tongue lolling out the side of an open happy mouth, eyes "
+             "closed in blissful crescents, ears spread flat on the ground"},
+    {"id": "peek-over", "mode": "free", "paws_down_max": 0, "ref": None,
+     "suits": "bath tub, grooming van window, supply box, laundry basket, arriving somewhere new",
+     "body": "peeking over the top edge of the set piece: only his head, his bandana and his two front paws show "
+             "above the edge, both front paws hooked over it, the rest of his body hidden inside or behind the set piece",
+     "face": "eyes wide and looking down at the main prop below him, one ear flopped over the edge, mouth closed "
+             "in a small mischievous smile"},
+    {"id": "zoomies", "mode": "free", "paws_down_max": 1, "ref": None,
+     "eyes_ok": ("viewer",), "stock_face_ok": True,
+     "suits": "zoomies after a bath, running in rain or leaves, excitement, exercise",
+     "body": "strict side profile, flying gallop in mid-air: both front legs stretched forward and both hind legs "
+             "stretched back, exactly four legs clearly separated, ears and tail streaming behind him, three short "
+             "speed lines and a few drops or leaves kicked up close behind him",
+     "face": "eyes wide on the prop ahead of him, mouth wide open in a laughing pant, tongue flying back"},
+    {"id": "towel-wrap", "mode": "planted", "ref": None, "eyes_ok": ("closed",),
+     "suits": "after a bath, winter, cold rain, cozy, drying",
+     "body": "seated and bundled in a big fluffy towel like a burrito, only his head, his bandana and the tips of "
+             "his front paws showing, a towel hood over the top of his head with both ears poking out",
+     "face": "eyes closed in content crescents, cheeks pushed up by the towel, small sleepy smile"},
 ]
+ACTION_BY_ID = {a["id"]: a for a in ACTIONS}
+# Art loops before 2026-11-13 recorded these pose ids.
+LEGACY_POSE_IDS = {"bipedal-hug": "hug-carry", "bipedal-tools": "groom-at-work", "stand-side": "stand-carry",
+                   "lying-down": "lying-low", "seated-three-quarter": "head-tilt", "play-bow": "play-bow"}
+REPEAT_WINDOW = 3  # an action used by one of the last three loops is refused
+
+LIMB_GUARD = {
+    # gpt-image draws three planted paws whenever a front paw is raised, producing five limbs.
+    "planted": "Limb guard: every paw that shows stays on the ground. No raised, waving, pointing or holding paw; "
+               "props rest on the ground or are held in his mouth.",
+    "upright": "Limb guard: exactly two front paws and two hind paws. No third paw anywhere.",
+    "free": "Limb guard: exactly four legs in total, each one clearly separate and traceable to a shoulder or hip. "
+            "Never a fifth leg or a third front paw. A hidden leg is hidden fully.",
+}
 FRESH_COMPOSITION = ("The appearance reference fixes how Maui looks, NOT the picture: do not copy its seated "
-                     "front-facing pose, its framing, or its placement on the left. Build a fresh composition "
-                     "where Maui is doing something with the props, not just sitting beside them.")
-POSE_EXAMPLE = ("The second attached image is a POSE EXAMPLE only: copy Maui's upright bipedal stance from it, "
-                "not its face direction, expression, apron, props, text, or scene. Appearance still comes from "
-                "the first image.")
-# Owner feedback 2026-10-05: the 09-28 and 10-05 bipedal heroes held their props but kept the
-# reference's camera-facing grin. Every reference faces the viewer and the base prompt says
-# "identical face", so the generator copies the head angle and expression too.
-WORK_GAZE = ("GAZE: Maui looks at his work, not at the viewer. Turn his head toward the prop he is using and "
-             "point his pupils at it, the way a groomer watches the coat he is brushing. Calm, focused "
-             "expression: a small smile, mouth closed or tongue just showing. 'Identical face' means the same "
-             "eyes, nose, muzzle, ears and fur shapes, NOT the reference's head angle or its open-mouth grin at "
-             "the camera.")
+                     "front-facing pose, its framing, or its placement on the left.")
+STICKER_COMPOSITION = ("COMPOSITION: one compact cut-out group in the middle of the canvas: Maui, at most one set "
+                       "piece and two small props, all touching or overlapping. The whole group is no wider and no taller than "
+                       "two thirds of the canvas, with empty cream background on every side. Every cord, hose, rug, puddle and motion mark ends well inside the frame. No cast "
+                       "shadow and no ground tint under him: the background is removed later.")
+POSE_EXAMPLE = ("The second attached image is a POSE EXAMPLE only: copy the body position and energy from it, not "
+                "its drawing style, face direction, props, text or scene. Appearance still comes from the first image.")
+ACTING = ("ACTING: Maui performs the action with his whole body and his face. Keep the reference's features (eye "
+          "shape and color, nose, muzzle, ears, fur shapes, bandana), but draw the head angle, eye direction, "
+          "eyelids, mouth and ears exactly as the Face line says. Do not paste the reference's front-facing open "
+          "grin onto this pose.")
 
 
-def pose_history(run_dir: Path) -> dict[str, int]:
-    """How often each rotation pose was used by earlier art loops next to this run directory."""
-    counts = {p["id"]: 0 for p in POSES}
+def past_actions(run_dir: Path) -> list[str]:
+    """Action of every earlier APPROVED art loop near this run directory, oldest first.
+
+    Exhausted loops never reached a reader, so they do not use up an action.
+    """
     here = run_dir.resolve()
     # Weekly runs live in output/groomlocal-weekly/<ts>; re-runs nest one level deeper.
     base = next((p for p in here.parents if p.name == "groomlocal-weekly"), here.parent)
+    loops = []
     for summary in base.rglob("art/art-loop.json"):
         if here == summary.parent.parent or here in summary.parents:
             continue
@@ -104,16 +187,27 @@ def pose_history(run_dir: Path) -> dict[str, int]:
             data = json.loads(summary.read_text())
         except (OSError, ValueError):
             continue
-        for attempt in data.get("attempts", []):
-            if attempt.get("pose_id") in counts:
-                counts[attempt["pose_id"]] += 1
-    return counts
+        winner = (data.get("approved") or {}).get("attempt")
+        chosen = next((a for a in data.get("attempts") or [] if a.get("attempt") == winner), {})
+        action = chosen.get("action_id") or LEGACY_POSE_IDS.get(chosen.get("pose_id"))
+        if action in ACTION_BY_ID:
+            loops.append((data.get("started_at") or "", str(summary), action))
+    return [action for _, _, action in sorted(loops)]
 
 
-def pose_plan(run_dir: Path) -> list[dict]:
-    """Rotation order for this run: least used first, list order breaking ties."""
-    counts = pose_history(run_dir)
-    return sorted(POSES, key=lambda p: (counts[p["id"]], POSES.index(p)))
+def action_plan(run_dir: Path) -> list[dict]:
+    """Every action with its usage, least used first; recently used ones are marked unavailable."""
+    history = past_actions(run_dir)
+    recent = set(history[-REPEAT_WINDOW:])
+    counts = {a["id"]: history.count(a["id"]) for a in ACTIONS}
+    order = sorted(ACTIONS, key=lambda a: (a["id"] in recent, counts[a["id"]], ACTIONS.index(a)))
+    return [{"id": a["id"], "suits": a["suits"], "used": counts[a["id"]], "available": a["id"] not in recent,
+             "body": a["body"]} for a in order]
+
+
+def acting_flags(action: dict) -> list[str]:
+    flags = ["--acting", "--eyes-ok", ",".join(("prop",) + tuple(action.get("eyes_ok", ())))]
+    return flags + (["--stock-face-ok"] if action.get("stock_face_ok") else [])
 
 
 def _module(name: str):
@@ -208,16 +302,12 @@ def export_transparent(project_root: Path, slug: str, master: Path, out_dir: Pat
 
 
 def gate(image: Path, scene: str, stage: str, threshold: float, project_root: Path, reference: Path,
-         out: Path, review_out: Path | None = None, bipedal: bool = False, look_at_work: bool = False) -> dict:
+         out: Path, pose_flags: list[str], review_out: Path | None = None) -> dict:
     cmd = [sys.executable, SCRIPT_DIR / "maui-jev-gate.py", image, "--scene", scene, "--stage", stage,
            "--threshold", str(threshold), "--project-root", project_root, "--reference", reference, "--out", out]
     if review_out:
         cmd += ["--review-out", review_out]
-    if bipedal:
-        cmd += ["--bipedal"]
-    if look_at_work:
-        cmd += ["--look-at-work"]
-    result = run(cmd, project_root, timeout=600)
+    result = run(cmd + pose_flags, project_root, timeout=600)
     if not out.is_file():
         raise RuntimeError(f"gate produced no output (exit {result.returncode}): {result.stderr[-800:] or result.stdout[-800:]}")
     return json.loads(out.read_text())
@@ -234,17 +324,21 @@ def pick_best(attempts: list[dict]) -> int | None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--project-root", type=Path, required=True)
+    parser.add_argument("--plan", action="store_true", help="print the actions, least used first, and exit")
+    parser.add_argument("--project-root", type=Path)
     parser.add_argument("--run-dir", type=Path, required=True)
-    parser.add_argument("--slug", required=True)
-    parser.add_argument("--scene", required=True)
-    parser.add_argument("--pose")
+    parser.add_argument("--slug")
+    parser.add_argument("--scene")
+    parser.add_argument("--action", choices=sorted(ACTION_BY_ID), help="the designed action for this image; see --plan")
+    parser.add_argument("--allow-repeat-action", action="store_true",
+                        help="use an action one of the last three loops used; explain why in the report")
+    parser.add_argument("--pose", help="custom body position instead of --action; say 'bipedal' in it for an upright pose")
     parser.add_argument("--mood")
     parser.add_argument("--extra", help="scene-specific nudge appended to every attempt")
-    parser.add_argument("--no-anatomy-guard", action="store_true",
-                        help="drop the default pose guard (the generator draws a fifth limb whenever a paw is raised)")
+    parser.add_argument("--allow-repeat-prop", action="store_true",
+                        help="allow a retired main prop (clipboard, checklist, calendar, paperwork); explain why in the report")
     parser.add_argument("--allow-viewer-gaze", action="store_true",
-                        help="portrait shots only: drop the look-at-the-work prompt rule and the gaze gate")
+                        help="portrait shots only: drop the acting rule and the acting gate")
     parser.add_argument("--max-attempts", type=int, default=4)
     parser.add_argument("--threshold", type=float, default=0.85)
     parser.add_argument("--provider", choices=["openai", "openrouter"], default="openai")
@@ -252,6 +346,19 @@ def main() -> int:
     parser.add_argument("--seeds", type=Path, help="reviewed transparency seeds JSON keyed by slug")
     parser.add_argument("--reference", type=Path, default=DEFAULT_REFERENCE)
     args = parser.parse_args()
+
+    plan = action_plan(args.run_dir)
+    if args.plan:
+        print(json.dumps(plan, indent=2))
+        return 0
+    if not (args.project_root and args.slug and args.scene):
+        parser.error("--project-root, --slug and --scene are required")
+    if bool(args.action) == bool(args.pose):
+        parser.error("give exactly one of --action or --pose. Run --plan, pick the first available action whose "
+                     "'suits' fits the article, then write --scene for that action")
+    if args.action and not args.allow_repeat_action and not next(a for a in plan if a["id"] == args.action)["available"]:
+        parser.error(f"action {args.action} was used by one of the last {REPEAT_WINDOW} art loops; pick another "
+                     "from --plan or pass --allow-repeat-action with a reason")
 
     project_root = args.project_root.resolve()
     art_dir = (args.run_dir / "art").resolve()
@@ -264,9 +371,25 @@ def main() -> int:
     correction = ""
     approved: dict | None = None
     started = datetime.now(timezone.utc).isoformat()
-    plan = pose_plan(args.run_dir)
-    print("pose rotation: " + ", ".join(p["id"] for p in plan[:2]) if not args.pose else f"pose (explicit): {args.pose}",
-          flush=True)
+    # Owner direction 2026-10-28: heroes kept repeating clipboard/calendar props. Retired as main props.
+    retired = [w for w in ("clipboard", "checklist", "check list", "calendar", "paperwork", "form")
+               if re.search(r"\b" + w + r"s?\b", args.scene.lower())]
+    if retired and not args.allow_repeat_prop:
+        sys.exit(f"scene uses retired prop(s) {retired}; build the scene around a set piece Maui is using "
+                 "(see SKILL.md 'More unique images') or pass --allow-repeat-prop with a reason")
+    if args.action:
+        action = ACTION_BY_ID[args.action]
+    else:
+        action = {"id": "custom", "mode": "upright" if "bipedal" in args.pose.lower() else "planted", "ref": None,
+                  "body": args.pose, "face": "eyes on the prop he is using, an expression that fits what he is doing"}
+    print(f"action: {action['id']}", flush=True)
+    pose_ref = POSE_DIR / action["ref"] if action["ref"] and (POSE_DIR / action["ref"]).is_file() else None
+    act = not args.allow_viewer_gaze
+    pose_flags = ["--pose-mode", action["mode"], "--pose-note", action["body"]]
+    if action.get("paws_down_max") is not None:
+        pose_flags += ["--paws-down-max", str(action["paws_down_max"])]
+    if act:
+        pose_flags += acting_flags(action)
 
     def save():
         summary_path.write_text(json.dumps({
@@ -281,31 +404,19 @@ def main() -> int:
         attempt_dir.mkdir(exist_ok=True)
         record: dict = {"attempt": number, "dir": str(attempt_dir), "correction_applied": correction}
         attempts.append(record)
-        if args.pose:
-            pose_id, pose_text = "custom", args.pose
-            pose_ref = None
-        else:
-            chosen = plan[0] if number <= (args.max_attempts + 1) // 2 else plan[1 % len(plan)]
-            pose_id, pose_text = chosen["id"], chosen["pose"]
-            pose_ref = POSE_DIR / chosen["ref"] if chosen["ref"] and (POSE_DIR / chosen["ref"]).is_file() else None
-        if record.get("attempt", 0) > 1 and attempts[-2].get("pose_id") != pose_id:
-            correction = ""  # a new pose starts clean; the old pose's fixes do not apply
-        # Bipedal scenes stand on the hind paws by the owner's standard; the four-paws guard would fight the pose.
-        bipedal = "bipedal" in pose_text.lower()
-        record.update({"pose_id": pose_id, "pose": pose_text, "pose_reference": str(pose_ref) if pose_ref else None,
-                       "look_at_work": not args.allow_viewer_gaze})
-        guard = "" if (args.no_anatomy_guard or bipedal) else ANATOMY_GUARD
-        look_at_work = not args.allow_viewer_gaze
-        extra = " ".join(part for part in [args.extra, FRESH_COMPOSITION, POSE_EXAMPLE if pose_ref else "",
-                                            WORK_GAZE if look_at_work else "", guard, correction] if part)
+        record.update({"action_id": action["id"], "pose": action["body"], "face": action["face"],
+                       "pose_mode": action["mode"], "pose_reference": str(pose_ref) if pose_ref else None,
+                       "acting_gate": act})
+        extra = " ".join(part for part in [
+            f"Face: {action['face']}." if act else "", args.extra, ACTING if act else "", FRESH_COMPOSITION,
+            STICKER_COMPOSITION, POSE_EXAMPLE if pose_ref else "", LIMB_GUARD[action["mode"]], correction] if part)
         master = attempt_dir / "master.png"
         try:
-            record["generation"] = generate(project_root, args.slug, args.scene, pose_text, args.mood, extra or None,
+            record["generation"] = generate(project_root, args.slug, args.scene, action["body"], args.mood, extra,
                                             args.provider, args.model, args.reference, master, pose_ref)
             record["master_sha256"] = checker.digest(master)
             master_gate = gate(master, args.scene, "master", args.threshold, project_root, args.reference,
-                               attempt_dir / "master.jev-gate.json", bipedal=bipedal,
-                               look_at_work=look_at_work)
+                               attempt_dir / "master.jev-gate.json", pose_flags)
         except RuntimeError as error:
             record["error"] = str(error)
             print(f"attempt {number}: error: {error}", flush=True)
@@ -331,8 +442,7 @@ def main() -> int:
             record["file_checks"] = {k: file_report[k] for k in ("fileChecksPass", "errors", "alphaRange", "marginFractions")}
             review_path = attempt_dir / "image-review.json"
             final_gate = gate(final, args.scene, "final", args.threshold, project_root, args.reference,
-                              attempt_dir / "final.jev-gate.json", review_out=review_path, bipedal=bipedal,
-                              look_at_work=look_at_work)
+                              attempt_dir / "final.jev-gate.json", pose_flags, review_out=review_path)
         except RuntimeError as error:
             record["error"] = str(error)
             status = "needs_export_review"

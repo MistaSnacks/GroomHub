@@ -28,6 +28,7 @@ uploader = module("upload-cms-image")
 jev_gate = module("maui-jev-gate")
 art_loop = module("maui-art-loop")
 specks = module("maui-fill-specks")
+export_seeds = module("maui-export-seeds")
 
 
 class Helpers(unittest.TestCase):
@@ -175,70 +176,117 @@ class Helpers(unittest.TestCase):
             self.assertEqual(filled.getpixel((620, 620))[3], 0)
             self.assertEqual(filled.getpixel((0, 0))[3], 0)
 
-    def test_jev_gate_raised_paw_rejects_quadruped_but_not_bipedal(self):
+    def test_jev_gate_raised_paw_rejects_planted_poses_only(self):
         answers = self._answers()  # Jev says anatomy 0.97
-        upright = {"raised_paw": True, "front_paws_visible": 2, "rear_paws_visible": 2, "visible_limbs_total": 4,
-                   "paws_on_ground": 2}
-        # Four-legged poses: a raised paw is an automatic rejection (five-limb lesson, 2026-09-21).
-        quad = jev_gate.decide(answers, "master", 0.85, upright)
-        self.assertFalse(quad["passed"])
-        self.assertEqual(quad["gates"]["anatomy"], 0.0)
-        # Bipedal poses (owner standard): raised front paws are expected, limb counts decide.
-        biped = jev_gate.decide(answers, "master", 0.85, upright, bipedal=True)
-        self.assertTrue(biped["passed"])
-        self.assertEqual(biped["gates"]["anatomy"], 0.97)
-        three_down = dict(upright, paws_on_ground=3)
-        self.assertFalse(jev_gate.decide(answers, "master", 0.85, three_down, bipedal=True)["passed"])
-        self.assertIn("hind legs", jev_gate.correction_text(["anatomy"], bipedal=True))
-        # More than four visible limbs is always a rejection, whatever Jev says, in either mode.
+        upright = jev_gate.Pose("upright")
+        raised = {"raised_paw": True, "front_paws_visible": 2, "rear_paws_visible": 2, "visible_limbs_total": 4,
+                  "paws_on_ground": 2}
+        # Planted poses: a raised paw is an automatic rejection (five-limb lesson, 2026-09-21).
+        planted = jev_gate.decide(answers, "master", 0.85, raised)
+        self.assertFalse(planted["passed"])
+        self.assertEqual(planted["gates"]["anatomy"], 0.0)
+        # Upright poses (owner standard): raised front paws are expected, limb counts decide.
+        self.assertEqual(jev_gate.decide(answers, "master", 0.85, raised, upright)["gates"]["anatomy"], 0.97)
+        self.assertFalse(jev_gate.decide(answers, "master", 0.85, dict(raised, paws_on_ground=3), upright)["passed"])
+        self.assertIn("hind legs", jev_gate.correction_text(["anatomy"], upright))
+        # More than four visible limbs is always a rejection, whatever Jev says, in every mode.
         three_front = {"raised_paw": False, "front_paws_visible": 3, "rear_paws_visible": 1, "visible_limbs_total": 4}
-        for mode in (False, True):
-            rejected = jev_gate.decide(answers, "master", 0.85, three_front, bipedal=mode)
-            self.assertFalse(rejected["passed"])
+        for mode in ("planted", "upright", "free"):
+            rejected = jev_gate.decide(answers, "master", 0.85, three_front, jev_gate.Pose(mode))
             self.assertEqual(rejected["failing"], ["anatomy"])
             self.assertEqual(rejected["gates"]["anatomy"], 0.05)
-        five = {"raised_paw": True, "front_paws_visible": 2, "rear_paws_visible": 2, "visible_limbs_total": 5}
-        self.assertFalse(jev_gate.decide(answers, "master", 0.85, five, bipedal=True)["passed"])
         clean = {"raised_paw": False, "front_paws_visible": 2, "rear_paws_visible": 1, "visible_limbs_total": 3}
         self.assertTrue(jev_gate.decide(answers, "master", 0.85, clean)["passed"])
 
-    def test_jev_gate_gaze_rejects_camera_grin_when_work_gaze_required(self):
+    def test_jev_gate_free_poses_count_paws_on_the_ground(self):
         answers = self._answers()
-        limbs = {"raised_paw": True, "front_paws_visible": 2, "rear_paws_visible": 2, "visible_limbs_total": 4,
-                 "paws_on_ground": 2}
-        # Owner feedback 2026-10-05: bipedal heroes held props but grinned at the camera like the reference.
-        grin = dict(limbs, eyes_look_at="the viewer", copies_reference_camera_grin=True)
-        rejected = jev_gate.decide(answers, "master", 0.85, grin, bipedal=True, look_at_work=True)
-        self.assertFalse(rejected["passed"])
-        self.assertEqual(rejected["failing"], ["gaze"])
-        self.assertIn("pupils", jev_gate.correction_text(["gaze"]))
-        copied = dict(limbs, eyes_look_at="the prop or task he is working on", copies_reference_camera_grin=True)
-        self.assertFalse(jev_gate.decide(answers, "master", 0.85, copied, bipedal=True, look_at_work=True)["passed"])
-        working = dict(limbs, eyes_look_at="the prop or task he is working on", copies_reference_camera_grin=False)
-        self.assertTrue(jev_gate.decide(answers, "master", 0.85, working, bipedal=True, look_at_work=True)["passed"])
-        # Missing gaze observation fails closed; the gate is off unless the loop asks for it.
-        self.assertIn("gaze", jev_gate.decide(answers, "master", 0.85, limbs, bipedal=True, look_at_work=True)["failing"])
-        self.assertTrue(jev_gate.decide(answers, "master", 0.85, grin, bipedal=True)["passed"])
-        for p in art_loop.POSES:
-            self.assertNotIn("facing the viewer", p["pose"])
-            self.assertNotIn("head turned to the viewer", p["pose"])
+        leap = {"raised_paw": True, "front_paws_visible": 2, "rear_paws_visible": 2, "visible_limbs_total": 4,
+                "paws_on_ground": 0}
+        belly_up = jev_gate.Pose("free", paws_down_max=0)
+        self.assertTrue(jev_gate.decide(answers, "master", 0.85, leap, belly_up)["passed"])
+        # A "belly up" drawing that still stands on a paw is the wrong pose or hides an extra limb.
+        self.assertFalse(jev_gate.decide(answers, "master", 0.85, dict(leap, paws_on_ground=1), belly_up)["passed"])
+        self.assertIn("four legs", jev_gate.correction_text(["anatomy"], belly_up))
+        peek = {"raised_paw": True, "front_paws_visible": 2, "rear_paws_visible": 0, "visible_limbs_total": 2,
+                "paws_on_ground": 0}
+        self.assertTrue(jev_gate.decide(answers, "master", 0.85, peek, belly_up)["passed"])
 
-    def test_art_loop_pose_rotation_prefers_unused_poses_and_includes_bipedal(self):
-        import json, tempfile
-        from pathlib import Path
-        self.assertTrue(any(p["bipedal"] for p in art_loop.POSES))
-        for p in art_loop.POSES:
-            if p["ref"]:
-                self.assertTrue((art_loop.POSE_DIR / p["ref"]).is_file(), p["ref"])
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            first = art_loop.POSES[0]["id"]
-            old = root / "2026-09-21_000000" / "art"
-            old.mkdir(parents=True)
-            (old / "art-loop.json").write_text(json.dumps({"attempts": [{"pose_id": first}, {"pose_id": first}]}))
-            plan = art_loop.pose_plan(root / "2026-09-28_000000")
-            self.assertNotEqual(plan[0]["id"], first)
-            self.assertEqual(plan[-1]["id"], first)
+    def test_jev_gate_acting_rejects_the_stock_face(self):
+        answers = self._answers()
+        work = jev_gate.Acting()
+        on_work = {"eyes_look_at": "the prop or task he is working on", "copies_reference_camera_grin": False,
+                   "mouth": "closed with tongue tip showing"}
+        self.assertTrue(jev_gate.decide(answers, "master", 0.85, on_work, acting=work)["passed"])
+        # Owner feedback 2026-10-05: heroes held props but grinned at the camera like the reference.
+        grin = dict(on_work, eyes_look_at="the viewer", copies_reference_camera_grin=True)
+        rejected = jev_gate.decide(answers, "master", 0.85, grin, acting=work)
+        self.assertEqual(rejected["failing"], ["acting"])
+        self.assertIn("Face line", jev_gate.correction_text(["acting"]))
+        # Owner feedback 2026-11-13: head turned to the work, face still the reference's grin.
+        stock_mouth = dict(on_work, mouth="open grin with tongue out like the reference")
+        self.assertEqual(jev_gate.decide(answers, "master", 0.85, stock_mouth, acting=work)["failing"], ["acting"])
+        # Joy actions ask for that grin, and may look at the viewer.
+        joy = jev_gate.Acting(eyes_ok=("prop", "viewer"), stock_face_ok=True)
+        self.assertTrue(jev_gate.decide(answers, "master", 0.85, grin, acting=joy)["passed"])
+        # Closed eyes pass only where the action calls for them.
+        shut = dict(on_work, eyes_look_at="eyes are closed", mouth="small closed smile")
+        self.assertFalse(jev_gate.decide(answers, "master", 0.85, shut, acting=work)["passed"])
+        self.assertTrue(jev_gate.decide(answers, "master", 0.85, shut, acting=jev_gate.Acting(("prop", "closed")))["passed"])
+        # A missing face observation fails closed; the gate is off unless the loop asks for it.
+        self.assertIn("acting", jev_gate.decide(answers, "master", 0.85, {"raised_paw": False}, acting=work)["failing"])
+        self.assertTrue(jev_gate.decide(answers, "master", 0.85, grin)["passed"])
+
+    def test_art_loop_actions_are_complete_and_gate_flags_match(self):
+        modes = {a["mode"] for a in art_loop.ACTIONS}
+        self.assertEqual(modes, {"planted", "upright", "free"})
+        for a in art_loop.ACTIONS:
+            self.assertTrue(a["body"] and a["face"] and a["suits"], a["id"])
+            self.assertNotIn("facing the viewer", a["face"])
+            if a["ref"]:
+                self.assertTrue((art_loop.POSE_DIR / a["ref"]).is_file(), a["ref"])
+            self.assertLessEqual(jev_gate.Pose(a["mode"], a.get("paws_down_max")).max_down, 4)
+            if a["mode"] == "upright":
+                self.assertTrue(a["id"] == "sit-pretty" or "bipedal" in a["body"])
+        self.assertEqual(art_loop.acting_flags(art_loop.ACTION_BY_ID["groom-at-work"]), ["--acting", "--eyes-ok", "prop"])
+        self.assertEqual(art_loop.acting_flags(art_loop.ACTION_BY_ID["play-bow"]),
+                         ["--acting", "--eyes-ok", "prop,viewer", "--stock-face-ok"])
+        for legacy in art_loop.LEGACY_POSE_IDS.values():
+            self.assertIn(legacy, art_loop.ACTION_BY_ID)
+
+    def test_art_loop_plan_puts_unused_actions_first_and_blocks_recent_ones(self):
+        root = Path(self.temp.name) / "groomlocal-weekly"
+        def loop(name, started, attempts, approved=None):
+            folder = root / name / "art"
+            folder.mkdir(parents=True)
+            (folder / "art-loop.json").write_text(json.dumps(
+                {"started_at": started, "attempts": attempts, "approved": approved}))
+        # A loop from before 2026-11-13 recorded pose ids; the approved attempt is the one that counts.
+        loop("2026-09-28_000000", "2026-09-28T00:00:00", [{"attempt": 1, "pose_id": "stand-side"},
+                                                           {"attempt": 2, "pose_id": "bipedal-hug"}], {"attempt": 2})
+        loop("2026-11-16_000000", "2026-11-16T00:00:00", [{"attempt": 1, "action_id": "shake-off"}], {"attempt": 1})
+        # An exhausted loop never reached a reader, so it does not use up its action.
+        loop("2026-11-17_000000", "2026-11-17T00:00:00", [{"attempt": 1, "action_id": "zoomies"}])
+        plan = art_loop.action_plan(root / "2026-11-23_000000")
+        by_id = {a["id"]: a for a in plan}
+        self.assertEqual(len(plan), len(art_loop.ACTIONS))
+        self.assertEqual(by_id["hug-carry"]["used"], 1)
+        self.assertEqual(by_id["stand-carry"]["used"], 0)
+        self.assertFalse(by_id["shake-off"]["available"])
+        self.assertFalse(by_id["hug-carry"]["available"])
+        self.assertTrue(by_id["zoomies"]["available"])
+        self.assertEqual(by_id["zoomies"]["used"], 0)
+        self.assertTrue(plan[0]["available"])
+        self.assertEqual([a["id"] for a in plan[-2:]], ["hug-carry", "shake-off"])
+
+
+    def test_export_seeds_never_erase_fur_colored_regions(self):
+        # 2026-11-13: the vision pass called a torso (distance 8) and a leg (11) "gap"; both were erased.
+        candidates = [{"id": 3, "seed": [0.28, 0.49], "area": 48974, "paperDistance": 8.0},
+                      {"id": 29, "seed": [0.62, 0.69], "area": 204, "paperDistance": 2.0},
+                      {"id": 4, "seed": [0.57, 0.51], "area": 36970, "paperDistance": 1.0}]
+        seeds, vetoed = export_seeds.choose_seeds(candidates, {"3": "gap", "29": "gap", "4": "character"})
+        self.assertEqual([c["id"] for c in seeds], [29])
+        self.assertEqual([c["id"] for c in vetoed], [3])
 
 
 if __name__ == "__main__":

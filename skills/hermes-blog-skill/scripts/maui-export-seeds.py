@@ -28,6 +28,19 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).resolve().parent
 
 
+# Leftover paper sits within 3 units of the paper color; Maui's fur sits 6 to 14 away. The vision
+# pass alone called a torso, a leg and an eye highlight "gap" (2026-11-13, distances 8 to 12) and
+# the extractor erased them. Every correct gap that day measured 0 to 2.
+MAX_GAP_PAPER_DISTANCE = 3.0
+
+
+def choose_seeds(candidates: list[dict], regions: dict[str, str]) -> tuple[list[dict], list[dict]]:
+    """Split the regions the vision pass called "gap" into seeds and vetoed fur-colored regions."""
+    gaps = [c for c in candidates if regions.get(str(c["id"])) == "gap"]
+    seeds = [c for c in gaps if c.get("paperDistance", 99) <= MAX_GAP_PAPER_DISTANCE]
+    return seeds, [c for c in gaps if c not in seeds]
+
+
 def _gate_module():
     spec = importlib.util.spec_from_file_location("maui_jev_gate", SCRIPT_DIR / "maui-jev-gate.py")
     module = importlib.util.module_from_spec(spec)
@@ -44,7 +57,9 @@ def classify(diagnostic: Path, candidates: list[dict], model: str, key: str, gat
         "'gap' = leftover cream/white paper that is background showing between or inside objects and should become transparent "
         "(for example the space inside a bag handle, between a leg and the body, or under an arm); "
         "'character' = the dog's fur, face, or body; 'prop' = the surface of an object such as a paper, folder, brush or bag; "
-        "'unsure' if you cannot tell. Reply with one JSON object: {\"regions\": {\"<id>\": \"gap|character|prop|unsure\", ...}, \"notes\": \"...\"}. "
+        "'unsure' if you cannot tell. Anything inside the dog's outline is 'character', including eye whites and eye highlights, teeth, "
+        "paw pads, and a leg or paw that lies on a rug or in front of a prop. "
+        "Reply with one JSON object: {\"regions\": {\"<id>\": \"gap|character|prop|unsure\", ...}, \"notes\": \"...\"}. "
         f"Marker numbers: {ids}"
     )
     body = {
@@ -97,9 +112,10 @@ def main() -> int:
         return 0
     verdict = classify(args.diagnostic, candidates, args.vision_model or gate.DEFAULT_VISION_MODEL, key, gate)
     regions = {str(k): str(v).lower() for k, v in verdict.get("regions", {}).items()}
-    seeds = [c["seed"] for c in candidates if regions.get(str(c["id"])) == "gap"]
-    args.out.write_text(json.dumps({args.slug: {"seeds": seeds}}, indent=2))
-    print(json.dumps({"seeds": len(seeds), "seed_ids": [c["id"] for c in candidates if regions.get(str(c["id"])) == "gap"],
+    seeds, vetoed = choose_seeds(candidates, regions)
+    args.out.write_text(json.dumps({args.slug: {"seeds": [c["seed"] for c in seeds]}}, indent=2))
+    print(json.dumps({"seeds": len(seeds), "seed_ids": [c["id"] for c in seeds],
+                      "vetoed_fur_colored": [{"id": c["id"], "paperDistance": c.get("paperDistance")} for c in vetoed],
                       "classified": regions, "vision_model": verdict.get("_vision_model"), "notes": verdict.get("notes", "")}, indent=2))
     return 0
 

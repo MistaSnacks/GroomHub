@@ -13,7 +13,7 @@ Before creating, editing, or choosing artwork, read:
 
 Inspect `docs/maui/approved-reference/brushing-v2.png` as the fixed appearance reference. The other five approved references support relevant pose checks. These immutable September 2026 references supersede older style guidance. Do not anchor identity to `00-maui-main.png`, add a flat-sticker override, or replace an approved reference with a later generation.
 
-Lock Maui's rounded cream-white head, compact canine body, short paws, burgundy outlines, cream/tan cel shading, and red MAUI bandana with its white paw emblem. Change only the action, pose, and props. Follow the standard for anatomy, margins, complete edges, dimensions, and export checks.
+Lock Maui's rounded cream-white head, compact canine body, short paws, burgundy outlines, cream/tan cel shading, and red MAUI bandana with its white paw emblem. Change the action, pose, expression and props. Follow the standard for anatomy, margins, complete edges, dimensions, and export checks.
 
 ## Input and generation
 
@@ -23,7 +23,7 @@ Invocation:
 /maui-image <slug> "<scene description>"
 ```
 
-Use a kebab-case illustration identifier and a short description of Maui's action and relevant props (what he is doing with them, not just standing beside them); the art loop's pose rotation supplies the body position, including bipedal poses, unless a pose is required. Match the article's subject; choose a simple scene from the supplied article when no scene is specified. Ask only when the subject or intended scene cannot be inferred. Keep appearance rules in the canonical base prompt.
+Use a kebab-case illustration identifier. Pick the action first with `maui-art-loop.py --plan`, then describe in one sentence what Maui is doing, with one set piece and at most two props; the action supplies his body position and his face. Match the article's subject; choose a simple scene from the supplied article when no scene is specified. Ask only when the subject or intended scene cannot be inferred. Keep appearance rules in the canonical base prompt.
 
 From the project root, the existing helper is:
 

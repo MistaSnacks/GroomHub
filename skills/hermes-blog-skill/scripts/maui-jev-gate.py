@@ -8,8 +8,8 @@ It never decides pass/fail.
 Stage B: TypeSafe Jev (text-only System One model) turns those observations plus
 the Maui standard into calibrated yes/no probabilities, one per gate. Code then
 applies a single threshold. Every gate must reach the threshold to pass.
-With --look-at-work, code adds a gaze gate from the observer's `eyes_look_at`:
-Maui must look at the prop or task, not grin at the viewer like the reference.
+With --acting, code adds an acting gate from the observer's face fields: the face
+must perform the action, not repeat the reference's front-facing grin.
 
 Usage:
   maui-jev-gate.py <image.png> --scene "<article scene brief>" [--stage master|final]
@@ -17,7 +17,8 @@ Usage:
                    [--project-root <checkout>] [--out gate.json]
                    [--review-out image-review.json]   (final stage only)
                    [--vision-model gpt-5.4] [--observations existing.json]
-                   [--bipedal] [--look-at-work]
+                   [--pose-mode planted|upright|free] [--paws-down-max N] [--pose-note TEXT]
+                   [--acting] [--eyes-ok prop,closed,viewer] [--stock-face-ok]
 
 Keys: OPENAI_API_KEY (or VOICE_TOOLS_OPENAI_KEY) and TYPESAFE_API_KEY, resolved from
 process env, then <project-root>/.env.local, then ~/.hermes/.env. Values are never
@@ -38,6 +39,7 @@ import urllib.error
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import NamedTuple
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
@@ -54,19 +56,20 @@ GATE_KEYS_FINAL = GATE_KEYS_MASTER + ["transparency"]
 # Text appended to the next generation prompt when a gate fails.
 CORRECTION_HINTS = {
     "identity": "Match the approved reference's facial features exactly: same rounded fluffy cream-white head, floppy ears, dark burgundy eyes and nose, friendly smile. Do not restyle Maui. The head angle and eye direction may differ from the reference.",
-    "anatomy": "Show exactly four canine limbs total with every paw on the ground: a plain four-leg standing pose or a seated pose with both front paws planted. No raised, pointing, waving or holding paw; props rest on the ground near his paws or are held in his mouth. If an upright pose on the hind legs is wanted, that is the separate bipedal mode. Never draw a third front paw.",
-    "anatomy_bipedal": "Bipedal pose: Maui stands upright on his two short hind legs with both hind paws planted, and BOTH front paws together hold one prop against his chest. Exactly two front paws and two hind paws, no third paw anywhere, short compact dog legs, no human torso.",
+    "anatomy": "Show exactly four canine limbs total with every paw on the ground: a plain four-leg standing pose or a seated pose with both front paws planted. No raised, pointing, waving or holding paw; props rest on the ground near his paws or are held in his mouth. An upright pose on the hind legs is a separate action. Never draw a third front paw.",
+    "anatomy_upright": "Upright pose: Maui is on his two short hind legs with both hind paws on the ground, and his two front paws are off the ground as the Body position line says. Exactly two front paws and two hind paws, no third paw anywhere, short compact dog legs, no human torso.",
+    "anatomy_free": "Draw exactly four legs, each one clearly separate and traceable from a shoulder or hip to its paw, in the pose the Body position line describes. Never a fifth leg or a third front paw. If a leg is hidden, hide it fully behind the body or the set piece.",
     "bandana": "Red neck bandana with clearly readable white MAUI text and a small white paw emblem, facing the viewer.",
     "edges": "Keep the whole character, tail, ears, paws and every prop fully inside the frame with 10 to 15 percent empty margin on all sides. Nothing clipped or faded. The previous attempt ran off the frame, so draw the whole scene smaller and centered, and use only small freestanding props: no counter, desk, shelf, table or bench that extends toward the side of the picture. Any furniture must be short, end well inside the frame, and have plain empty background visible beyond it on every side.",
     "style": "Crisp vector-like cel-shaded raster illustration with thick dark burgundy outlines and flat cream/tan shading. Not painterly, sketchy, 3D, photoreal or pixel art.",
     "scene": "Depict the requested article scene with safe grooming props only.",
-    "gaze": "The previous attempt had Maui grinning at the viewer. Turn his head toward the prop he is using and point his pupils at it, as if he is checking his work. Calm focused expression, mouth closed or a small smile. Same facial features as the reference, but NOT its front-facing grin at the camera.",
+    "acting": "The previous attempt's face did not act: it repeated the reference's front-facing grin or looked away from the action. Redraw the head angle, eye direction, eyelids and mouth exactly as the Face line describes. Same features as the reference, a different expression.",
     "clean_text": "No text, letters, labels, captions or watermark anywhere except the word MAUI on the bandana. Checklists and papers must show only blank lines or check marks, never words.",
     "transparency": "Export correction needed, not a new generation: re-run the background extractor with reviewed seeds.",
 }
 
 MAUI_STANDARD = {
-    "appearance": "Fluffy cream-white dog with a rounded head, floppy ears, compact canine torso, short rounded paws, dark burgundy eyes and nose, friendly smile (pink tongue optional). Head angle, eye direction and expression change with the scene; the features stay the same. Thick dark burgundy exterior outlines, thinner interior lines, solid cream/ivory fur with warm tan angular cel-shaded shapes. Crisp vector-like raster illustration.",
+    "appearance": "Fluffy cream-white dog with a rounded head, floppy ears, compact canine torso, short rounded paws, dark burgundy eyes and nose, friendly face. Head angle, eye direction, eyelids, mouth and ears act out the scene; the features stay the same. Thick dark burgundy exterior outlines, thinner interior lines, solid cream/ivory fur with warm tan angular cel-shaded shapes. Crisp vector-like raster illustration.",
     "anatomy": "Exactly four canine limbs total (two front, two rear). Natural occlusion is fine: depending on the angle a seated or standing dog may show three or all four paws, with a hidden leg tucked behind the body or a prop. Any fifth paw, third front paw, unassignable paw, or human leg proportions is a failure.",
     "bandana": "Red bandana tied around the neck with readable white MAUI text and a small white paw emblem. It may be naturally partly hidden by a towel or tub, but never replaced with a different name.",
     "composition": "Complete character and all props fully inside the canvas. Complete tails, ears, paws, tables, brushes and sleeve cuffs. No edge clipping, faded parts or ghosted objects. Breathing room of 10 to 15 percent is the target, but because the background is removed for site use any measured margin of at least 3 percent with nothing clipped is acceptable.",
@@ -175,15 +178,48 @@ def composite_on_teal(image_path: Path, out_path: Path) -> Path:
 
 
 # ------------------------------------------------------------------- stage A: observe
-# Without this the observer labels an upright dog's two standing legs as front paws and
-# reports four front paws (pose test 2026-09-28, attempt 1: four limbs, gate said six).
-BIPEDAL_OBSERVER_NOTE = (
-    "\n\nPose note: this candidate is intentionally BIPEDAL. Maui stands upright on his two hind legs. "
-    "His REAR paws are the two feet he stands on at the bottom of the figure. His FRONT paws are the paws at the "
-    "ends of his two upper limbs (arms), usually holding or hugging a prop at chest height; a front limb reaching "
-    "across the body is still one front limb. Count front and rear by that rule, and trace each arm from the "
-    "shoulder to its paw before counting. Standing upright is the intended pose: report human_proportions true only if the legs, torso or paws themselves look human."
-)
+class Pose(NamedTuple):
+    """How the limbs are meant to sit, so the hard anatomy rules match the pose that was asked for.
+
+    planted: every visible paw on the ground; a raised paw is rejected (the generator adds a fifth limb).
+    upright: on the hind legs, front paws off the ground (owner standard for apron and prop scenes).
+    free:    an action pose whose paws leave the ground by design (leap, belly-up roll, peeking over an edge).
+    """
+    mode: str = "planted"
+    paws_down_max: int | None = None
+    note: str = ""
+
+    @property
+    def max_down(self) -> int:
+        if self.paws_down_max is not None:
+            return self.paws_down_max
+        return {"planted": 4, "upright": 2, "free": 4}[self.mode]
+
+
+class Acting(NamedTuple):
+    """What the face may do for this action. `eyes_ok` holds any of: prop, closed, viewer."""
+    eyes_ok: tuple[str, ...] = ("prop",)
+    stock_face_ok: bool = False
+
+
+# Without the upright note the observer labels an upright dog's two standing legs as front paws
+# and reports four front paws (pose test 2026-09-28, attempt 1: four limbs, gate said six).
+OBSERVER_NOTES = {
+    "planted": "",
+    "upright": (
+        "\n\nPose note: this candidate is intentionally UPRIGHT on the hind legs. His REAR paws are the two feet at "
+        "the bottom of the figure. His FRONT paws are the paws at the ends of his two upper limbs (arms), usually "
+        "holding, hugging or reaching for a prop; a front limb reaching across the body is still one front limb. "
+        "Count front and rear by that rule, and trace each arm from the shoulder to its paw before counting. "
+        "Standing or sitting upright is the intended pose: report human_proportions true only if the legs, torso "
+        "or paws themselves look human."
+    ),
+    "free": (
+        "\n\nPose note: this candidate is an intentional ACTION pose, so paws may be in the air, on a set piece, or "
+        "hidden behind it. Trace every leg from its shoulder or hip to its paw before counting, and count a leg "
+        "only once. A paw resting on a tub edge, window or box is a raised paw, not a paw on the ground."
+    ),
+}
 OBSERVATION_SCHEMA = {
     "character_count": "integer: number of dog characters drawn",
     "front_paws_visible": "integer: every front paw you can see, including a raised, waving or pointing one",
@@ -195,13 +231,14 @@ OBSERVATION_SCHEMA = {
     "paws_on_ground": "integer: paws touching the ground or floor surface",
     "limb_count_certainty": "one of: clear, ambiguous",
     "human_proportions": "boolean: true only for human-like body parts (long human legs, hands with fingers, an elongated human torso); an upright mascot stance on short dog legs is NOT human proportions",
-    "tail": "one of: complete, partly hidden, missing, clipped by frame",
+    "tail": "one of: complete, partly hidden, fully hidden behind his body or inside a towel or set piece, missing (erased or left out where it should show), clipped by frame",
     "ears_visible": "integer",
     "face_match_notes": "string: compare only the features (eye shape and color, nose, muzzle, head shape, ear shape) to the reference image. Do not mention head angle, eye direction or expression here; they have their own fields and may differ from the reference on purpose",
-    "eyes_look_at": "one of: the viewer, the prop or task he is working on, another prop, nothing in particular. Decide from where the pupils sit inside the eyes and where the nose points, not from the scene brief. Pupils centered with the face straight on means the viewer",
+    "eyes_look_at": "one of: the viewer, the prop or task he is working on, another prop, nothing in particular, eyes are closed. Decide from where the pupils sit inside the eyes and where the nose points, not from the scene brief. Pupils centered with the face straight on means the viewer",
     "head_angle": "one of: straight on, three-quarter, profile, tipped down",
-    "expression": "string: e.g. open-mouth grin with tongue out, small closed-mouth smile, concentrating",
-    "copies_reference_camera_grin": "boolean: true when the head angle, eye direction AND expression all repeat the reference image's front-facing grin at the camera; false when any of them changed",
+    "mouth": "one of: open grin with tongue out like the reference, small closed smile, closed with tongue tip showing, small round open mouth, wide open laughing or panting, holding an object, hidden",
+    "expression": "string: what the face is doing in plain words, e.g. concentrating with narrowed eyes, blissful with closed eyes, surprised",
+    "copies_reference_camera_grin": "boolean: true when the head angle, eye direction AND mouth all repeat the reference image's front-facing grin at the camera; false when any of them changed",
     "fur_color": "string",
     "outline_color": "string",
     "outline_matches_reference": "boolean: exterior outline color and thickness look the same as in the reference image",
@@ -211,7 +248,7 @@ OBSERVATION_SCHEMA = {
     "bandana_text_read": "string exactly as read, or 'not visible'",
     "paw_emblem_visible": "boolean",
     "props": "array of strings",
-    "unsafe_items": "array of strings (needles, medicine, blades near the dog, etc.)",
+    "unsafe_items": "array of strings: only real hazards such as needles, medicine, open blades at the dog, fire. Ordinary grooming things (brush, comb, dryer, nail clipper, towel, shampoo, tub) are safe and never belong here",
     "text_elsewhere": "string: any letters or words visible outside the bandana, exactly as read, or ''",
     "paper_contents": "one of: none, blank lines or checkboxes only, symbols or emblems only, readable words (describe what any paper, sign, folder or label shows)",
     "watermark": "boolean",
@@ -228,7 +265,7 @@ OBSERVATION_SCHEMA = {
 
 
 def observe(image_path: Path, reference_path: Path, scene: str, stage: str, model: str, key: str,
-            bipedal: bool = False) -> dict:
+            pose: Pose = Pose()) -> dict:
     def data_url(path: Path) -> str:
         return "data:image/png;base64," + base64.b64encode(Path(path).read_bytes()).decode()
 
@@ -241,7 +278,8 @@ def observe(image_path: Path, reference_path: Path, scene: str, stage: str, mode
         "Do not judge whether the image passes; only observe. Reply with one JSON object using exactly these keys:\n"
         + json.dumps(OBSERVATION_SCHEMA, indent=1)
         + f"\n\nThe article scene brief is: {scene}"
-        + (BIPEDAL_OBSERVER_NOTE if bipedal else "")
+        + OBSERVER_NOTES[pose.mode]
+        + (f"\nThe intended body position is: {pose.note}" if pose.note else "")
     )
     body = {
         "model": model,
@@ -267,28 +305,35 @@ def observe(image_path: Path, reference_path: Path, scene: str, stage: str, mode
 
 
 # --------------------------------------------------------------------- stage B: judge
-def build_questions(stage: str, bipedal: bool = False) -> dict:
+def build_questions(stage: str, pose: Pose = Pose()) -> dict:
     noul = lambda instructions, yes, no: {"type": "noul", "instructions": instructions, "criteria": {"true": yes, "false": no}}
+    if pose.mode == "planted":
+        anatomy = noul(
+            "Using the paw and limb fields in `observations`, does the character have exactly four canine limbs allowing natural occlusion, with no extra paw and no human proportions, per `maui_standard.anatomy`? Count strictly from the numbers: a dog has two front limbs and two rear limbs, so `front_paws_visible` greater than 2, `rear_paws_visible` greater than 2, or `visible_limbs_total` greater than 4 means an extra limb even if the observer did not flag it. `raised_paw` true is an automatic no: the image model reliably draws a fifth limb when a paw is raised and observers misassign the planted paws. A standing dog with `raised_paw` true and `paws_on_ground` of 3 has five limbs.",
+            "`raised_paw` false, `front_paws_visible` at most 2, `rear_paws_visible` at most 2, `visible_limbs_total` at most 4, `extra_limb_suspected` false, and dog proportions",
+            "`raised_paw` true, more than two front paws, more than two rear paws, more than four visible limbs, an unassignable or suspected extra paw, a visibly missing limb, or human leg proportions")
+    else:
+        intent = ("an intentional UPRIGHT pose (owner standard: Maui often stands or sits up on his hind legs with his "
+                  "front paws holding, hugging or reaching for a prop)" if pose.mode == "upright" else
+                  "an intentional ACTION pose in which paws leave the ground or hide behind a set piece by design")
+        anatomy = noul(
+            f"This is {intent}; `intended_pose` describes it. Using the paw and limb fields in `observations`, does the character have exactly four canine limbs allowing natural occlusion, with short compact dog proportions? Count strictly: `front_paws_visible` greater than 2, `rear_paws_visible` greater than 2, `visible_limbs_total` greater than 4, or `paws_on_ground` greater than {pose.max_down} means an extra limb even if the observer did not flag it. `raised_paw` true is expected here and is not a defect by itself. Limbs hidden behind the body or a set piece are natural occlusion.",
+            f"`front_paws_visible` at most 2, `rear_paws_visible` at most 2, `visible_limbs_total` at most 4, `paws_on_ground` at most {pose.max_down}, `extra_limb_suspected` false, short dog legs and compact torso",
+            f"more than two front paws, more than two rear paws, more than four visible limbs, more than {pose.max_down} paws on the ground, an unassignable or suspected extra paw, or an elongated human torso or human legs")
     questions = {
         "identity": noul(
             "Using `observations.face_match_notes`, `observations.fur_color`, `observations.ears_visible` and `observations.character_count`, does the candidate depict the same Maui described in `maui_standard.appearance`, as a single character? A turned head, a different eye direction or a calmer expression is intended and does not count against identity.",
             "Same rounded cream-white dog with floppy ears, dark burgundy eyes and nose, burgundy outlines, cream/tan fur, one character only",
             "Different breed, different face, different colors, generic puppy, or more than one character"),
-        "anatomy": noul(
-            "Using the paw and limb fields in `observations`, does the character have exactly four canine limbs allowing natural occlusion, with no extra paw and no human proportions, per `maui_standard.anatomy`? Count strictly from the numbers: a dog has two front limbs and two rear limbs, so `front_paws_visible` greater than 2, `rear_paws_visible` greater than 2, or `visible_limbs_total` greater than 4 means an extra limb even if the observer did not flag it. `raised_paw` true is an automatic no: the image model reliably draws a fifth limb when a paw is raised and observers misassign the planted paws. A standing dog with `raised_paw` true and `paws_on_ground` of 3 has five limbs.",
-            "`raised_paw` false, `front_paws_visible` at most 2, `rear_paws_visible` at most 2, `visible_limbs_total` at most 4, `extra_limb_suspected` false, and dog proportions",
-            "`raised_paw` true, more than two front paws, more than two rear paws, more than four visible limbs, an unassignable or suspected extra paw, a visibly missing limb, or human leg proportions") if not bipedal else noul(
-            "This is an intentional BIPEDAL pose (owner standard: Maui often stands upright on his hind legs holding a prop, like the apron and van illustrations). Using the paw and limb fields in `observations`, does the character have exactly four canine limbs, two hind paws on the ground and two front paws off the ground holding or hugging a prop, with short compact dog proportions? Count strictly: `front_paws_visible` greater than 2, `rear_paws_visible` greater than 2, `visible_limbs_total` greater than 4, or `paws_on_ground` greater than 2 means an extra limb even if the observer did not flag it. `raised_paw` true is expected here and is not a defect by itself.",
-            "`front_paws_visible` at most 2, `rear_paws_visible` at most 2, `visible_limbs_total` at most 4, `paws_on_ground` at most 2, `extra_limb_suspected` false, short dog legs and compact torso",
-            "more than two front paws, more than two rear paws, more than four visible limbs, three or more paws on the ground, an unassignable or suspected extra paw, a visibly missing limb, or an elongated human torso or human legs"),
+        "anatomy": anatomy,
         "bandana": noul(
             "Using `observations.bandana_color`, `observations.bandana_text_read` and `observations.paw_emblem_visible`, does the bandana meet `maui_standard.bandana`?",
             "Red bandana whose text reads MAUI (or is naturally partly hidden with no other name shown)",
             "No bandana, a different color, a different or misspelled name, or unreadable garbled letters where text should be"),
         "edges": noul(
-            "Using `observations.clipped_elements`, `observations.tail` and the code-measured `observations.measured_smallest_margin_percent`, is the whole character and every prop complete inside the frame, per `maui_standard.composition`? A tail that is merely partly hidden behind the body is natural occlusion, not clipping.",
-            "`clipped_elements` is empty, the tail is not missing or clipped by the frame, and the measured margin is at least 3 percent",
-            "Any element clipped or cut off by the frame edge, a missing or frame-clipped tail, or a measured margin under 3 percent"),
+            "Using `observations.clipped_elements`, `observations.tail` and the code-measured `observations.measured_smallest_margin_percent`, is the whole character and every prop complete inside the frame, per `maui_standard.composition`? A tail that is partly or fully hidden behind the body, a towel or a set piece is natural occlusion, not clipping.",
+            "`clipped_elements` is empty, the tail is complete or hidden by the scene and not erased or clipped by the frame, and the measured margin is at least 3 percent",
+            "Any element clipped or cut off by the frame edge, an erased or frame-clipped tail, or a measured margin under 3 percent"),
         "style": noul(
             "Using `observations.shading_style`, `observations.line_weight` and `observations.outline_matches_reference`, is the candidate rendered in the same crisp cel-shaded vector-like style as the approved reference, per `maui_standard.appearance`? The exact color name used for the outline does not matter as long as it matches the reference.",
             "Flat cel shading with thick clean outlines that match the reference",
@@ -320,13 +365,18 @@ def build_questions(stage: str, bipedal: bool = False) -> dict:
     return questions
 
 
-# Gaze is decided in code (gaze_probability); Jev never sees these fields. With them in its
+# Acting is decided in code (acting_probability); Jev never sees these fields. With them in its
 # state, a turned head read as "not the same face" and identity fell to 0.76-0.80 (test 2026-10-05).
-GAZE_FIELDS = ("eyes_look_at", "head_angle", "expression", "copies_reference_camera_grin")
+ACTING_FIELDS = ("eyes_look_at", "head_angle", "mouth", "expression", "copies_reference_camera_grin")
+INTENDED_POSE = {
+    "planted": "four-legged: standing, seated or lying with every visible paw down",
+    "upright": "upright on the two hind paws, front paws holding, hugging or reaching for a prop",
+    "free": "action pose with paws off the ground or hidden behind a set piece",
+}
 
 
-def judge(observations: dict, scene: str, stage: str, key: str, bipedal: bool = False) -> dict:
-    clean = {k: v for k, v in observations.items() if not k.startswith("_") and k not in GAZE_FIELDS}
+def judge(observations: dict, scene: str, stage: str, key: str, pose: Pose = Pose()) -> dict:
+    clean = {k: v for k, v in observations.items() if not k.startswith("_") and k not in ACTING_FIELDS}
     body = {
         "model": JEV_MODEL,
         "state": {
@@ -334,44 +384,55 @@ def judge(observations: dict, scene: str, stage: str, key: str, bipedal: bool = 
             "article_scene_brief": scene,
             "review_stage": stage,
             "maui_standard": MAUI_STANDARD,
-            "intended_pose": "bipedal: standing upright on two hind paws, front paws holding a prop" if bipedal else "four-legged: standing or seated with all paws down",
+            "intended_pose": pose.note or INTENDED_POSE[pose.mode],
         },
-        "questions": build_questions(stage, bipedal),
+        "questions": build_questions(stage, pose),
     }
     response = _post_json(JEV_URL, body, {"Authorization": f"Bearer {key}"}, timeout=120)
     return response
 
 
-def gaze_probability(observations: dict | None) -> float | None:
-    """Code-owned gaze gate (owner feedback 2026-10-05): Maui looks at his work, not at the camera."""
+def acting_probability(observations: dict | None, acting: Acting) -> float | None:
+    """Code-owned acting gate (owner feedback 2026-10-05 and 2026-11-13): the face performs the action.
+
+    The stock face (the reference's front-facing open grin) fails unless the action is a joy beat
+    that calls for it. Eyes must be on the work, or closed or on the viewer where the action allows.
+    """
     if not observations or "eyes_look_at" not in observations:
         return None
     target = str(observations.get("eyes_look_at", "")).lower()
-    if "viewer" in target or observations.get("copies_reference_camera_grin") is True:
+    kind = ("viewer" if "viewer" in target else "closed" if "closed" in target
+            else "prop" if ("prop" in target or "task" in target) else "none")
+    if observations.get("copies_reference_camera_grin") is True and not acting.stock_face_ok:
         return 0.0
-    if "prop" in target or "task" in target:
+    if kind == "viewer" and "viewer" not in acting.eyes_ok:
+        return 0.0
+    stock_mouth = str(observations.get("mouth", "")).lower().startswith("open grin")
+    if stock_mouth and not acting.stock_face_ok:
+        return 0.4  # head turned, but still wearing the reference's grin
+    if kind == "prop" or kind in acting.eyes_ok:
         return 1.0
-    return 0.3  # looking at nothing in particular reads as a pasted-on face
+    return 0.3  # staring at nothing, or eyes shut where the action needs them open
 
 
 def decide(answers: dict, stage: str, threshold: float, observations: dict | None = None,
-           bipedal: bool = False, look_at_work: bool = False) -> dict:
-    keys = (GATE_KEYS_FINAL if stage == "final" else GATE_KEYS_MASTER) + (["gaze"] if look_at_work else [])
+           pose: Pose = Pose(), acting: Acting | None = None) -> dict:
+    keys = (GATE_KEYS_FINAL if stage == "final" else GATE_KEYS_MASTER) + (["acting"] if acting else [])
     probabilities = {k: float(answers[k]["noul"]) for k in keys if k in answers}
-    if look_at_work and (gaze := gaze_probability(observations)) is not None:
-        probabilities["gaze"] = gaze
-    # Hard rules owned by code, independent of Jev. Four-legged poses: a raised paw or more
-    # than four visible limbs is a rejection (observers misassign planted paws in exactly
-    # these images). Bipedal poses (owner standard 2026-09-15, reaffirmed 2026-09-28): the
-    # raised front paws are the point, so limb counts decide, plus at most two paws down.
+    if acting and (score := acting_probability(observations, acting)) is not None:
+        probabilities["acting"] = score
+    # Hard rules owned by code, independent of Jev. More than two front paws, two rear paws or
+    # four limbs is always a rejection. Planted poses also reject any raised paw (observers
+    # misassign planted paws in exactly those images). Upright and free poses raise paws by
+    # design, so there the count of paws on the ground decides instead.
     if observations:
         over = any(int(observations.get(k) or 0) > limit for k, limit in
                    (("front_paws_visible", 2), ("rear_paws_visible", 2), ("visible_limbs_total", 4)))
-        if bipedal:
-            over = over or int(observations.get("paws_on_ground") or 0) > 2
-            raised = False
-        else:
+        if pose.mode == "planted":
             raised = bool(observations.get("raised_paw"))
+        else:
+            over = over or int(observations.get("paws_on_ground") or 0) > pose.max_down
+            raised = False
         if (raised or over) and "anatomy" in probabilities:
             probabilities["anatomy"] = min(probabilities["anatomy"], 0.0 if raised else 0.05)
     missing = [k for k in keys if k not in probabilities]
@@ -389,8 +450,8 @@ def decide(answers: dict, stage: str, threshold: float, observations: dict | Non
     }
 
 
-def correction_text(failing: list[str], bipedal: bool = False) -> str:
-    hints = [CORRECTION_HINTS["anatomy_bipedal" if (k == "anatomy" and bipedal) else k]
+def correction_text(failing: list[str], pose: Pose = Pose()) -> str:
+    hints = [CORRECTION_HINTS[f"anatomy_{pose.mode}" if (k == "anatomy" and pose.mode != "planted") else k]
              for k in failing if k in CORRECTION_HINTS and k != "transparency"]
     if not hints:
         return ""
@@ -429,7 +490,7 @@ def build_review(final_path: Path, reference_path: Path, observations: dict, dec
 # -------------------------------------------------------------------------------- main
 def run_gate(image: Path, reference: Path, scene: str, stage: str, threshold: float,
              project_root: Path | None, vision_model: str, observations: dict | None = None,
-             work_dir: Path | None = None, bipedal: bool = False, look_at_work: bool = False) -> dict:
+             work_dir: Path | None = None, pose: Pose = Pose(), acting: Acting | None = None) -> dict:
     openai_key = resolve_key(["OPENAI_API_KEY", "VOICE_TOOLS_OPENAI_KEY"], project_root)
     jev_key = resolve_key(["TYPESAFE_API_KEY"], project_root)
     if observations is None and not openai_key:
@@ -446,12 +507,12 @@ def run_gate(image: Path, reference: Path, scene: str, stage: str, threshold: fl
         looked_at = composite_on_teal(image, work_dir / (image.stem + "-on-teal.png"))
 
     if observations is None:
-        observations = observe(looked_at, reference, scene, stage, vision_model, openai_key, bipedal)
+        observations = observe(looked_at, reference, scene, stage, vision_model, openai_key, pose)
     margins = measure_margins(image)
     observations["measured_smallest_margin_percent"] = margins["smallest_percent"]
     observations["_measured_margins"] = margins
-    jev = judge(observations, scene, stage, jev_key, bipedal)
-    decision = decide(jev["answers"], stage, threshold, observations, bipedal, look_at_work)
+    jev = judge(observations, scene, stage, jev_key, pose)
+    decision = decide(jev["answers"], stage, threshold, observations, pose, acting)
     if stage == "final" and file_report and not file_report["fileChecksPass"]:
         decision["passed"] = False
         decision["failing"] = sorted(set(decision["failing"]) | {"file_checks"})
@@ -470,9 +531,10 @@ def run_gate(image: Path, reference: Path, scene: str, stage: str, threshold: fl
         "measured_margins": margins,
         "answers": jev["answers"],
         "decision": decision,
-        "pose_mode": "bipedal" if bipedal else "quadruped",
-        "look_at_work": look_at_work,
-        "correction": correction_text(decision["failing"], bipedal),
+        "pose_mode": pose.mode,
+        "paws_down_max": pose.max_down,
+        "acting": {"eyes_ok": list(acting.eyes_ok), "stock_face_ok": acting.stock_face_ok} if acting else None,
+        "correction": correction_text(decision["failing"], pose),
         "file_checks": file_report,
         "checked_at": datetime.now(timezone.utc).isoformat(),
     }
@@ -491,10 +553,17 @@ def main() -> int:
     parser.add_argument("--observations", type=Path, help="reuse saved observations instead of calling the vision model")
     parser.add_argument("--out", type=Path, help="where to write the gate JSON (default: <image>.jev-gate.json)")
     parser.add_argument("--review-out", type=Path, help="final stage: write image-review.json here when the gate passes")
-    parser.add_argument("--bipedal", action="store_true",
-                        help="intended upright pose on the hind paws: raised front paws are expected, limb counts still enforced")
-    parser.add_argument("--look-at-work", action="store_true",
-                        help="add the gaze gate: Maui must look at the prop or task, not at the viewer")
+    parser.add_argument("--pose-mode", choices=["planted", "upright", "free"], default="planted",
+                        help="planted: every paw down, a raised paw is rejected. upright: on the hind legs. "
+                             "free: action pose with paws off the ground. Limb counts are enforced in every mode")
+    parser.add_argument("--paws-down-max", type=int, help="most paws that may touch the ground in this pose")
+    parser.add_argument("--pose-note", default="", help="the intended body position, shown to the observer and to Jev")
+    parser.add_argument("--acting", action="store_true",
+                        help="add the acting gate: the face must perform the action, not repeat the reference grin")
+    parser.add_argument("--eyes-ok", default="prop",
+                        help="comma list of where the eyes may be for this action: prop, closed, viewer")
+    parser.add_argument("--stock-face-ok", action="store_true",
+                        help="joy actions only: the reference's open-mouth grin is the right face")
     args = parser.parse_args()
 
     if not args.image.is_file():
@@ -505,9 +574,11 @@ def main() -> int:
         return 1
     observations = json.loads(args.observations.read_text()) if args.observations else None
     try:
+        pose = Pose(args.pose_mode, args.paws_down_max, args.pose_note)
+        acting = (Acting(tuple(e.strip() for e in args.eyes_ok.split(",") if e.strip()), args.stock_face_ok)
+                  if args.acting else None)
         result = run_gate(args.image, args.reference, args.scene, args.stage, args.threshold,
-                          args.project_root, args.vision_model, observations, bipedal=args.bipedal,
-                          look_at_work=args.look_at_work)
+                          args.project_root, args.vision_model, observations, pose=pose, acting=acting)
     except (RuntimeError, KeyError, ValueError, json.JSONDecodeError) as error:
         print(json.dumps({"passed": False, "error": str(error)}))
         return 1
