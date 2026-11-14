@@ -27,7 +27,7 @@ The goal of every run is one complete draft in the owner's review queue. From 20
 | The keyword tool returns nothing | Use the live SERP and People Also Ask as demand evidence. Write "no volume data" in the report. Never invent a number. |
 | Search Console is unavailable | Skip it. |
 | A source URL is dead or unreadable | Use another primary source for that claim, or drop the claim. |
-| Hero art loop ends `exhausted`, or an image, vision or Jev credential is down | Save the full text draft (best hero candidate if one exists, `artworkReview.status: "needs-fixes"`), do not call `request_review`, and report "draft saved, needs art". The next run resumes it and reruns only the art. |
+| Hero art loop ends `exhausted`, or an image, vision or Jev credential is down | Finish the text first: table, internal links as real link annotations, and the full humanize pass. Then save the draft (best hero candidate if one exists, `artworkReview.status: "needs-fixes"`), do not call `request_review`, and report "draft saved, needs art". The next run then only reruns the art and requests review. |
 | Inline art loop ends `exhausted` | Ship the article with the hero only. |
 
 ## GTM tracking on every run
@@ -101,7 +101,7 @@ Every new guide includes at least one table in the first third of the article, d
 Before saving the draft, add 3 to 6 internal links and record them in the run report as `{anchor, target, reason}`:
 
 - 1 to 2 links to the closest existing guides (from the coverage inventory), with descriptive anchors, never "click here".
-- 1 to 2 links to city or service pages that match the article's geography or service (for example `/dog-grooming/wa/tacoma`, `/services/mobile-grooming`). Check that each target returns 200 and is not a filter URL with `?services=` or `?specialties=`.
+- 1 to 2 links to city or service pages that match the article's geography or service (for example `/dog-grooming/wa/tacoma`, `/services/mobile-grooming`). Check that each target returns 200 and is not a filter URL with `?services=` or `?specialties=`. Never link to a guide that is not published yet, such as an unfinished topic from an earlier run (the Christmas draft linked to one on 2026-11-13).
 - `/get-quotes` once, where the reader is ready to compare groomers.
 
 Do not edit existing guides to add backlinks to the new one (Codex maintains them); list suggested reverse links in the report so the owner can add them. Use natural internal links to relevant existing guides, service/city pages, and `/get-quotes` where helpful. Call the section **Grooming Guides**, at `/blog`; `/resources` redirects there. Do not imply that every listing offers confirmed prices, availability, credentials, or instant booking.
