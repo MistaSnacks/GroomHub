@@ -2,7 +2,6 @@ import type { MarketingSection } from "@/lib/marketing-copy";
 import Link from "next/link";
 import { ArrowRight, PawPrint } from "@phosphor-icons/react/dist/ssr";
 import { SPECIALTY_TAGS } from "@/lib/tags";
-import { AnimatedSection, AnimatedItem } from "./animated-section";
 
 // Show 6 specialties in a 3x2 grid
 const SHOWN_SPECIALTY_SLUGS = [
@@ -48,11 +47,11 @@ export function BrowseBySpecialtySection({copy}: {copy?: MarketingSection} = {})
           </div>
         </div>
 
-        <AnimatedSection variant="stagger" className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {specialties.map((specialty, index) => {
             const style = getCardStyle(index);
             return (
-              <AnimatedItem key={specialty.slug}>
+              <div key={specialty.slug}>
                 <Link
                   href={`/specialties/${specialty.slug}`}
                   className={`${style.bg} rounded-2xl p-6 min-h-[220px] flex flex-col group transition-all hover:shadow-md`}
@@ -73,10 +72,10 @@ export function BrowseBySpecialtySection({copy}: {copy?: MarketingSection} = {})
                     <ArrowRight weight="bold" className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </span>
                 </Link>
-              </AnimatedItem>
+              </div>
             );
           })}
-        </AnimatedSection>
+        </div>
 
         <div className="text-center mt-10">
           <Link
