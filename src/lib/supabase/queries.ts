@@ -12,7 +12,8 @@ import { LISTING_SLUG_RANGES, SLUG_RANGE_WARN_BYTES, compareByRatingThenId } fro
 
 /**
  * Cache tag for the full-table reads that back search + city browse.
- * getCachedListingRows refreshes hourly and getCities every 5 min. The tag is attached so a future server action can call
+ * These caches refresh daily. Saves expire them at once through
+ * refreshListingPages (src/lib/refresh-listing-pages.ts). The tag is attached so a future server action can call
  * revalidateTag(LISTINGS_CACHE_TAG) for immediate, on-demand invalidation.
  */
 export const LISTINGS_CACHE_TAG = "listings";
@@ -200,10 +201,10 @@ export async function fetchListingRowsInSlugRange(from: string | null, to: strin
 }
 
 // One cache entry per slug range (unstable_cache keys on the arguments).
-// Refreshed hourly: a full refresh downloads the whole table (~2 MB), so every
-// 5 minutes could cost up to ~18 GB of Supabase egress a month.
+// Refreshed daily: a full refresh downloads the whole table (~2 MB). Saves
+// expire it at once through the "listings" tag.
 const getCachedListingRowsInSlugRange = unstable_cache(fetchListingRowsInSlugRange, ["listing-rows-by-slug-range-20261115"], {
-  revalidate: 3600,
+  revalidate: 86400,
   tags: [LISTINGS_CACHE_TAG],
 });
 
@@ -505,7 +506,7 @@ function aggregateCities(rows: CityRow[]): CityWithCount[] {
     .sort((a, b) => b.groomer_count - a.groomer_count);
 }
 
-async function getCityRows(stateAbbr?: string): Promise<CityRow[]> {
+async function fetchCityRows(stateAbbr?: string): Promise<CityRow[]> {
   const allCities: CityRow[] = [];
   const pageSize = 1000;
   let page = 0;
@@ -546,6 +547,13 @@ async function getCityRows(stateAbbr?: string): Promise<CityRow[]> {
   return allCities;
 }
 
+// City lists per state (and all states). Almost every directory page reads one,
+// so cache them like the listing rows: daily, expired by the "listings" tag.
+const getCityRows = unstable_cache(fetchCityRows, ["city-rows-by-state-20261116"], {
+  revalidate: 86400,
+  tags: [LISTINGS_CACHE_TAG],
+});
+
 export async function getCityBrowseSummary(
   stateAbbr: string
 ): Promise<{
@@ -564,11 +572,11 @@ export async function getCityBrowseSummary(
   };
 }
 
-// Cached: hit on every /api/search request. Time-revalidated every 5 min.
+// Cached: hit on every /api/search request. Refreshed daily, expired by saves.
 export const getCities = unstable_cache(
   async (): Promise<CityWithCount[]> => aggregateCities(await getCityRows()),
   ["all-cities-reviewed-20260912"],
-  { revalidate: 300, tags: [LISTINGS_CACHE_TAG] }
+  { revalidate: 86400, tags: [LISTINGS_CACHE_TAG] }
 );
 
 export async function getCitiesByState(

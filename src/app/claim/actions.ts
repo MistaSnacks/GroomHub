@@ -2,7 +2,8 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { revalidatePath, updateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
+import { refreshListingPages } from "@/lib/refresh-listing-pages";
 import { redirect } from "next/navigation";
 import { LISTING_REDIRECTS, PUBLIC_EXCLUDED_SLUGS } from "@/lib/listing-review";
 import { decideClaim } from "@/lib/claims";
@@ -135,7 +136,7 @@ export async function processClaim(formData: FormData) {
 
     await sendClaimApprovedEmail(admin, { listingId: listing.id, userId: user.id, to: user.email });
 
-    updateTag("listings");
+    refreshListingPages();
     revalidatePath(`/groomer/${slug}`);
     revalidatePath(`/claim/${slug}`);
     revalidatePath("/dashboard");

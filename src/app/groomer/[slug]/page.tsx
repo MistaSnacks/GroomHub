@@ -41,7 +41,7 @@ import { guideLinksFor } from "@/lib/internal-links";
 import { harvestedPricesFor, listingShowsPrices, shouldShowHarvestedPrices } from "@/lib/harvested-prices";
 import { HarvestedPricesSection, HoursSection, ServicesSection } from "@/components/profile/profile-sections";
 
-export const revalidate = 300;
+export const revalidate = 86400; // daily; saves refresh pages on demand (src/lib/refresh-listing-pages.ts)
 
 export async function generateStaticParams() {
   return [];

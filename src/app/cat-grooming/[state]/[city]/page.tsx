@@ -18,7 +18,7 @@ import { CityPricingSection } from "@/components/city-pricing-section";
 import { getCityPricingBreakdown } from "@/lib/city-pricing";
 import { jsonLd } from "@/lib/json-ld";
 
-export const revalidate = 300;
+export const revalidate = 86400; // daily; saves refresh pages on demand (src/lib/refresh-listing-pages.ts)
 
 export async function generateStaticParams() {
   return [];

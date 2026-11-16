@@ -11,7 +11,7 @@ import { WaveDivider } from "@/components/wave-divider";
 import { CityPillGrid } from "@/components/city-pill-grid";
 import { jsonLd } from "@/lib/json-ld";
 
-export const revalidate = 300;
+export const revalidate = 86400; // daily; saves refresh pages on demand (src/lib/refresh-listing-pages.ts)
 
 export async function generateStaticParams() {
   return [];

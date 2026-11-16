@@ -1,6 +1,7 @@
 "use server";
 
-import { revalidatePath, updateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
+import { refreshListingPages } from "@/lib/refresh-listing-pages";
 import { invalidateCore } from "@/lib/admin-console/data";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireAdmin } from "@/lib/admin";
@@ -110,7 +111,7 @@ export async function approveClaim(requestId: string): Promise<{ ok: true } | { 
     to: req.user_email as string,
   });
 
-  updateTag("listings");
+  refreshListingPages();
   invalidateCore();
   revalidatePath(`/groomer/${req.listing_slug}`);
   revalidatePath("/dashboard");
@@ -175,7 +176,7 @@ export async function revokeClaim(slug: string, note: string): Promise<{ ok: tru
     .eq("user_id", listing.owner_id)
     .eq("status", "approved");
 
-  updateTag("listings");
+  refreshListingPages();
   invalidateCore();
   revalidatePath(`/groomer/${slug}`);
   revalidatePath("/dashboard");

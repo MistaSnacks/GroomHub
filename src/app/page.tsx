@@ -16,7 +16,7 @@ import { AdSlot, ADS_ENABLED } from "@/components/ad-slot";
 import { WaveDivider } from "@/components/wave-divider";
 import { jsonLd } from "@/lib/json-ld";
 
-export const revalidate = 300;
+export const revalidate = 86400; // daily; saves refresh pages on demand (src/lib/refresh-listing-pages.ts)
 
 /** Sponsored cards in the home page featured row. An empty seat shows nothing (Sponsored is closed to new businesses). */
 const HOME_FEATURED_SPOTS = 4;

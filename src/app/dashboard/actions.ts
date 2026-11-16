@@ -2,7 +2,8 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { revalidatePath, updateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
+import { refreshListingPages } from "@/lib/refresh-listing-pages";
 import { parseListingCommerce } from "@/lib/listing-commerce";
 import { redirect } from "next/navigation";
 import { PASSWORD_MIN_LENGTH } from "@/lib/auth-rules";
@@ -82,7 +83,7 @@ export async function unclaimListing(formData: FormData) {
   }
 
   revalidatePath("/dashboard");
-  updateTag("listings");
+  refreshListingPages();
   revalidatePath(`/groomer/${slug}`);
   redirect("/dashboard");
 }
@@ -306,7 +307,7 @@ export async function updateListing(formData: FormData) {
     return { error: "Failed to update listing" };
   }
 
-  updateTag("listings");
+  refreshListingPages();
   revalidatePath(`/groomer/${slug}`);
   revalidatePath(`/dashboard/listing/${slug}`);
   revalidatePath("/dashboard");
