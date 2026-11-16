@@ -27,7 +27,7 @@ export function BrowseByCitySection({ waCities, orCities, copy }: BrowseByCitySe
             {copy?.heading ?? "Browse by City"}
           </h2>
           <p className="text-text-muted text-base max-w-lg mx-auto">
-            {copy?.intro ?? "Find top-rated groomers in your neighborhood"}
+            {copy?.intro ?? "Browse Washington and Oregon cities to find nearby grooming businesses."}
           </p>
         </div>
 

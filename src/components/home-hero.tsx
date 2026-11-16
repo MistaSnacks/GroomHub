@@ -1,7 +1,4 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { PawPrint, Dog } from "@phosphor-icons/react";
+import { PawPrint, Dog } from "@phosphor-icons/react/dist/ssr";
 import { SearchHero } from "@/components/search-hero";
 import { MauiMascot } from "@/components/maui-mascot";
 
@@ -28,54 +25,42 @@ export function HomeHero({ totalCount, copy }: HomeHeroProps) {
                 <div className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-16">
 
                     {/* Text + search */}
-                    <motion.div
-                        initial={{ opacity: 0, x: -30 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.6, ease: "easeOut" }}
+                    <div
                         className="flex-1 text-center lg:text-left z-10 lg:pl-4 order-2 lg:order-1"
                     >
                         <div className="inline-flex items-center gap-2 bg-brand-accent/15 border border-brand-accent/30 rounded-full px-4 py-1.5 text-sm mb-6 text-brand-accent-ink shadow-sm font-semibold tracking-wide">
-                            <Dog weight="duotone" className="w-5 h-5" /> {copy?.eyebrow ?? "PNW's #1 Pet Grooming Directory"}
+                            <Dog weight="duotone" className="w-5 h-5" /> {copy?.eyebrow ?? "Washington & Oregon Grooming Directory"}
                         </div>
 
                         <h1 {...(copy?._id ? editableField(copy._id,"title") : {})} className="font-heading text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6 text-brand-primary">
-                            <MarketingHeading text={copy?.title ?? "Find the pawfect groomer in your city"} emphasis={copy?.emphasis ?? "pawfect"} breakBefore=" in your city" />
+                            <MarketingHeading text={copy?.title ?? "Find dog groomers in Washington and Oregon"} emphasis={copy?.emphasis ?? "dog groomers"} breakBefore=" in Washington" />
                         </h1>
 
                         <p className="text-text-muted text-lg md:text-xl max-w-xl mb-10 mx-auto lg:mx-0 font-medium">
-                            {fillMarketingCounts(copy?.intro ?? "{groomerCount}+ listed groomers across Washington & Oregon. Search, compare, and book with confidence.",{groomerCount:totalCount})}
+                            {fillMarketingCounts(copy?.intro ?? "{groomerCount} listings across Washington and Oregon. Compare services and published prices, then contact or book directly with the groomer.",{groomerCount:totalCount.toLocaleString()})}
                         </p>
 
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+                        <div
                             className="w-full max-w-2xl mx-auto lg:mx-0"
                         >
                             <SearchHero />
                             {copy?.primaryCta?.href && <a href={copy.primaryCta.href} className="inline-block mt-5 text-brand-primary underline">{copy.primaryCta.label}</a>}
-                        </motion.div>
-                    </motion.div>
+                        </div>
+                    </div>
 
                     {/* Mascot Container */}
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.5, delay: 0.3, type: "spring", stiffness: 100 }}
+                    <div
                         className="shrink-0 flex flex-col items-center justify-end z-0 relative group order-1 lg:order-2"
                     >
                         <MauiMascot src={copy?.heroSrc} alt={copy?.heroAlt} size={320} interactive priority className="drop-shadow-2xl z-10" />
 
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.8, duration: 0.4 }}
+                        <div
                             className="bg-white/95 backdrop-blur-sm rounded-full px-6 py-2.5 shadow-lg border border-brand-secondary/30 flex items-center gap-2 whitespace-nowrap mt-2 z-10 group-hover:-translate-y-1 transition-transform duration-300"
                         >
                             <PawPrint weight="fill" className="w-5 h-5 text-brand-secondary" />
                             <span className="font-heading font-semibold text-lg text-brand-primary">{copy?.greeting ?? "Hi, I'm Maui!"}</span>
-                        </motion.div>
-                    </motion.div>
+                        </div>
+                    </div>
 
                 </div>
             </div>

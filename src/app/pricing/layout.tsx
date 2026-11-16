@@ -3,12 +3,12 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Pricing | Free Listings for Groomers",
   description:
-    "Every grooming business on GroomLocal is listed for free. Claim your listing to add photos, hours, services and a booking link. No credit card.",
+    "Free $0 listings for grooming businesses in Washington and Oregon. Add your hours, services, photos and booking link. No credit card or trial period.",
   alternates: { canonical: "/pricing" },
   openGraph: {
     title: "Pricing | Free Listings for Groomers",
     description:
-      "Every grooming business on GroomLocal is listed for free. Claim your listing to add photos, hours, services and a booking link. No credit card.",
+      "Free $0 listings for grooming businesses in Washington and Oregon. Add your hours, services, photos and booking link. No credit card or trial period.",
     type: "website",
     url: "/pricing",
     siteName: "GroomLocal",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Pricing | Free Listings for Groomers",
     description:
-      "Every grooming business on GroomLocal is listed for free. Claim your listing to add photos, hours, services and a booking link. No credit card.",
+      "Free $0 listings for grooming businesses in Washington and Oregon. Add your hours, services, photos and booking link. No credit card or trial period.",
     images: ["/og-image.png"],
   },
 };

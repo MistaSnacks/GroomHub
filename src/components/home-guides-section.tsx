@@ -6,6 +6,7 @@ import { homeGuideSlugs } from "@/lib/internal-links";
 
 export async function HomeGuidesSection() {
   const [posts, linkable] = await Promise.all([getBlogPosts(undefined, true), getLinkableBlogSlugs()]);
+  const priceIndexSlug = "dog-grooming-prices-pnw-price-index-2026";
   const bySlug = new Map(posts.map((post) => [post.slug, post]));
   const guides = homeGuideSlugs(linkable)
     .map((slug) => bySlug.get(slug))
@@ -22,6 +23,20 @@ export async function HomeGuidesSection() {
           <p className="text-text-muted text-lg max-w-2xl mx-auto">
             Read our price guides and tips so you know what to expect before you book.
           </p>
+          {linkable.has(priceIndexSlug) && (
+            <p className="text-text-muted text-base max-w-2xl mx-auto mt-4">
+              Our Washington and Oregon price index covers published starting prices
+              from 174 groomer websites, collected October 1, 2026. These are starting
+              prices, not final quotes for your pet.{" "}
+              <Link
+                href={"/blog/" + priceIndexSlug}
+                data-link-src="home-price-index"
+                className="font-semibold text-brand-accent-ink underline underline-offset-2 hover:text-brand-primary"
+              >
+                See the source data, method, and sample counts
+              </Link>.
+            </p>
+          )}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
           {guides.map((post) => (

@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { SERVICE_TAGS } from "@/lib/tags";
 import { ServiceTagIcon } from "./service-tag-icon";
-import { AnimatedSection, AnimatedItem } from "./animated-section";
 
 interface BrowseByServiceSectionProps {
   serviceCounts?: Record<string, number>;
@@ -52,9 +51,9 @@ export function BrowseByServiceSection({ serviceCounts, copy }: BrowseByServiceS
           </p>
         </div>
 
-        <AnimatedSection variant="stagger" className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-4">
           {services.map((tag, index) => (
-            <AnimatedItem key={tag.slug}>
+            <div key={tag.slug}>
               <Link
                 href={`/services/${tag.slug}`}
                 className="inline-flex items-center gap-3 bg-white rounded-full px-5 py-3 border border-border hover:border-brand-accent/40 hover:shadow-sm transition-all group"
@@ -71,11 +70,11 @@ export function BrowseByServiceSection({ serviceCounts, copy }: BrowseByServiceS
                   </span>
                 )}
               </Link>
-            </AnimatedItem>
+            </div>
           ))}
 
           {/* View all services pill */}
-          <AnimatedItem>
+          <div>
             <Link
               href={copy?.cta?.href || "/services"}
               className="inline-flex items-center gap-3 rounded-full px-5 py-3 border-2 border-dashed border-border hover:border-brand-accent/40 transition-all group"
@@ -85,8 +84,8 @@ export function BrowseByServiceSection({ serviceCounts, copy }: BrowseByServiceS
               </span>
               <ArrowRight weight="bold" className="w-4 h-4 text-text-muted group-hover:text-brand-accent-ink transition-colors" />
             </Link>
-          </AnimatedItem>
-        </AnimatedSection>
+          </div>
+        </div>
       </div>
     </section>
   );

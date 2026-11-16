@@ -24,7 +24,7 @@ const faqs = [
   },
   {
     q: "Can pet parents book through GroomLocal?",
-    a: "Add your booking link to your free listing and pet parents book through your existing scheduling software, straight from your profile.",
+    a: "Pet parents contact your business or follow your booking link to your existing scheduling software. GroomLocal does not schedule appointments or collect grooming payments.",
   },
 ];
 
@@ -46,7 +46,13 @@ export default function PricingPage() {
             <h1 className="font-heading text-4xl md:text-5xl font-bold text-brand-primary mb-3">
               Your listing is <span className="text-brand-secondary">free</span>
             </h1>
-            <p className="text-text-muted text-lg">Every grooming business on GroomLocal is listed for free. Claim yours to keep the details right.</p>
+            <p className="text-text-muted text-lg">GroomLocal lists grooming businesses in Washington and Oregon. A business listing costs $0, with no credit card or trial period.</p>
+            <p className="text-text-muted text-sm mt-4">
+              Looking for the cost of a grooming appointment?{" "}
+              <Link href="/blog/dog-grooming-cost-seattle-portland-2026" className="text-brand-accent-ink underline underline-offset-2 hover:text-brand-primary">
+                Read our Seattle and Portland grooming price guide
+              </Link>.
+            </p>
           </div>
         </div>
       </section>

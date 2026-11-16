@@ -27,7 +27,7 @@ export function PromoClaimListing({copy}: {copy?: MarketingSection} = {}) {
               {copy?.heading ?? "Get more clients. Claim your free listing today."}
             </h2>
             <p className="text-lg text-brand-primary/80 mb-8 max-w-xl mx-auto md:mx-0">
-              {copy?.intro ?? "Join the PNW's fastest growing grooming directory. Manage your profile, showcase your services, and connect with local pet parents."}
+              {copy?.intro ?? "Claim your free listing to update your hours, services, photos, and contact details for local pet owners."}
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 justify-center md:justify-start">
