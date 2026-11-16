@@ -2,7 +2,8 @@
 
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireAdmin } from "@/lib/admin";
-import { revalidatePath, updateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
+import { refreshListingPages } from "@/lib/refresh-listing-pages";
 import { invalidateCore } from "@/lib/admin-console/data";
 import { freePromoPlacement, NO_PLACEMENT } from "@/lib/listing-rules";
 
@@ -43,7 +44,7 @@ export async function toggleFeatured(
     console.error(JSON.stringify({ scope: "admin", event: "toggleFeatured_failed", slug, code: error.code, message: error.message }));
     return { success: false, error: error.message };
   }
-  updateTag("listings");
+  refreshListingPages();
   invalidateCore();
   revalidatePath(`/groomer/${slug}`);
   return {

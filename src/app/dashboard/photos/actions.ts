@@ -2,7 +2,8 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { revalidatePath, updateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
+import { refreshListingPages } from "@/lib/refresh-listing-pages";
 import { logEvent } from "@/lib/log";
 import { getLimits } from "@/lib/tiers";
 
@@ -91,7 +92,7 @@ export async function uploadPhoto(formData: FormData) {
     return { error: "Failed to save photo." };
   }
 
-  updateTag("listings");
+  refreshListingPages();
   revalidatePath(`/groomer/${listing.slug}`);
   revalidatePath(`/dashboard/listing/${listing.slug}`);
   return { success: true, url: urlData.publicUrl };
@@ -135,7 +136,7 @@ export async function deletePhoto(formData: FormData) {
     return { error: "Failed to delete photo." };
   }
 
-  updateTag("listings");
+  refreshListingPages();
   revalidatePath(`/groomer/${listing.slug}`);
   revalidatePath(`/dashboard/listing/${listing.slug}`);
   return { success: true };
@@ -184,7 +185,7 @@ export async function deletePhotos(listingId: string, imageUrls: string[]) {
     return { error: "Failed to delete photos." };
   }
 
-  updateTag("listings");
+  refreshListingPages();
   revalidatePath(`/groomer/${listing.slug}`);
   revalidatePath(`/dashboard/listing/${listing.slug}`);
   return { success: true, deleted: verified.length };
@@ -243,7 +244,7 @@ export async function uploadLogo(formData: FormData) {
     }
   }
 
-  updateTag("listings");
+  refreshListingPages();
   revalidatePath(`/groomer/${listing.slug}`);
   revalidatePath(`/dashboard/listing/${listing.slug}`);
   return { success: true, url: urlData.publicUrl };
@@ -281,7 +282,7 @@ export async function deleteLogo(formData: FormData) {
     return { error: "Failed to remove logo." };
   }
 
-  updateTag("listings");
+  refreshListingPages();
   revalidatePath(`/groomer/${listing.slug}`);
   revalidatePath(`/dashboard/listing/${listing.slug}`);
   return { success: true };

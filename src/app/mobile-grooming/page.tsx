@@ -8,7 +8,7 @@ import { GuideLinkSentence } from "@/components/guide-link";
 import { getLinkableBlogSlugs } from "@/lib/blog";
 import { guideLinksFor } from "@/lib/internal-links";
 
-export const revalidate = 300;
+export const revalidate = 86400; // daily; saves refresh pages on demand (src/lib/refresh-listing-pages.ts)
 
 export const metadata: Metadata = {
   title: "Mobile Dog Groomers | Grooming at Your Door",

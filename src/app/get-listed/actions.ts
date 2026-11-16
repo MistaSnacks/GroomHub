@@ -7,7 +7,8 @@ import { rateLimit, clientKey } from "@/lib/rate-limit";
 import { verifyTurnstile, TURNSTILE_FIELD, TURNSTILE_FAILED } from "@/lib/turnstile";
 import { createListingFromSubmission } from "@/lib/listing-create";
 import { isDisposableEmail } from "@/lib/claims";
-import { revalidatePath, updateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
+import { refreshListingPages } from "@/lib/refresh-listing-pages";
 
 interface SubmitResult {
   ok: boolean;
@@ -151,7 +152,7 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
 
   await supabase.from("listing_submissions").update({ status: "handled" }).eq("id", submissionId);
   if (created.created) {
-    updateTag("listings");
+    refreshListingPages();
     revalidatePath(`/groomer/${created.slug}`);
   }
   await notify(row, submissionId, created);

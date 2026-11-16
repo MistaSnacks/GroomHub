@@ -6,7 +6,7 @@ import { getCitiesByState } from "@/lib/supabase/queries";
 import { isValidStateSlug, stateNameFromSlug, stateAbbrFromSlug } from "@/lib/geography";
 import { WaveDivider } from "@/components/wave-divider";
 
-export const revalidate = 300;
+export const revalidate = 86400; // daily; saves refresh pages on demand (src/lib/refresh-listing-pages.ts)
 
 export async function generateStaticParams() {
   return [];
