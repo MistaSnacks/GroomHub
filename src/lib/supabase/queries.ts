@@ -8,11 +8,11 @@ import { listedServiceTags } from "../listing-facts";
 import type { BusinessListing, NormalizedListing, CityWithCount } from "../types";
 import { getMetroNeighbors, getMetroNeighborSlugs, FEATURED_SPOTS_PER_CITY, getMetroClusterForCity, visitsCityViaMetro } from "../metro-clusters";
 import { pickNearbyGroomers, type NearbyGroomers } from "../nearby-groomers";
+import { LISTING_SLUG_RANGES, SLUG_RANGE_WARN_BYTES, compareByRatingThenId } from "../listing-row-buckets";
 
 /**
  * Cache tag for the full-table reads that back search + city browse.
- * These caches are time-revalidated every 5 min (see getCachedListingRows /
- * getCities). The tag is attached so a future server action can call
+ * getCachedListingRows refreshes hourly and getCities every 5 min. The tag is attached so a future server action can call
  * revalidateTag(LISTINGS_CACHE_TAG) for immediate, on-demand invalidation.
  */
 export const LISTINGS_CACHE_TAG = "listings";
@@ -158,31 +158,32 @@ async function getListingBySlugUncached(
   return withTags(data as BusinessListing);
 }
 
-export async function fetchAllListingRows(): Promise<BusinessListing[]> {
-  const allListings: BusinessListing[] = [];
+export async function fetchListingRowsInSlugRange(from: string | null, to: string | null): Promise<BusinessListing[]> {
+  const rows: BusinessListing[] = [];
   const pageSize = 1000;
   let page = 0;
   let hasMore = true;
 
   while (hasMore) {
-    const from = page * pageSize;
-    const to = from + pageSize - 1;
-
-    const { data, error } = await supabase
+    let query = supabase
       .from("business_listings")
       .select("*")
-      .not("slug", "in", PUBLIC_EXCLUDED_FILTER)
-      .order("rating", { ascending: false })
+      .not("slug", "in", PUBLIC_EXCLUDED_FILTER);
+    if (from !== null) query = query.gte("slug", from);
+    if (to !== null) query = query.lt("slug", to);
+
+    const { data, error } = await query
+      .order("slug", { ascending: true })
       .order("id", { ascending: true })
-      .range(from, to);
+      .range(page * pageSize, page * pageSize + pageSize - 1);
 
     if (error) {
-      console.error("fetchAllListingRows error:", error.message);
+      console.error("fetchListingRowsInSlugRange error:", error.message);
       throw new Error("The directory is temporarily unavailable. Please try again.");
     }
 
     if (data) {
-      allListings.push(...(data as BusinessListing[]));
+      rows.push(...(data as BusinessListing[]));
       hasMore = data.length === pageSize;
     } else {
       hasMore = false;
@@ -191,13 +192,33 @@ export async function fetchAllListingRows(): Promise<BusinessListing[]> {
     page++;
   }
 
-  return allListings;
+  const bytes = Buffer.byteLength(JSON.stringify(rows));
+  if (bytes > SLUG_RANGE_WARN_BYTES) {
+    console.error(JSON.stringify({ scope: "queries", event: "listing_cache_range_near_2mb", from, to, bytes, rows: rows.length }));
+  }
+  return rows;
 }
 
-const getCachedListingRows = unstable_cache(fetchAllListingRows, ["all-listing-rows-reviewed-20260916"], {
-  revalidate: 300,
+// One cache entry per slug range (unstable_cache keys on the arguments).
+// Refreshed hourly: a full refresh downloads the whole table (~2 MB), so every
+// 5 minutes could cost up to ~18 GB of Supabase egress a month.
+const getCachedListingRowsInSlugRange = unstable_cache(fetchListingRowsInSlugRange, ["listing-rows-by-slug-range-20261115"], {
+  revalidate: 3600,
   tags: [LISTINGS_CACHE_TAG],
 });
+
+/** Uncached full read, for scripts. Pages use getCachedListingRows. */
+export async function fetchAllListingRows(): Promise<BusinessListing[]> {
+  const ranges = await Promise.all(LISTING_SLUG_RANGES.map(([from, to]) => fetchListingRowsInSlugRange(from, to)));
+  return ranges.flat().sort(compareByRatingThenId);
+}
+
+async function getCachedListingRows(): Promise<BusinessListing[]> {
+  const ranges = await Promise.all(
+    LISTING_SLUG_RANGES.map(([from, to]) => getCachedListingRowsInSlugRange(from, to)),
+  );
+  return ranges.flat().sort(compareByRatingThenId);
+}
 
 /** Groomers to show on a profile: same city first, then same-state metro neighbors, in a fixed order. */
 export async function getNearbyGroomers(listing: NormalizedListing): Promise<NearbyGroomers<NormalizedListing>> {
