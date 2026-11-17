@@ -1019,7 +1019,7 @@ export function EditListingClient(props: EditListingClientProps) {
       </div>
 
       {/* ─── Save Bar ─── */}
-      <div className="sticky bottom-4 z-10">
+      <div className="sticky bottom-20 z-10 lg:bottom-4">
         <div className="rounded-2xl border border-border bg-white/95 backdrop-blur-sm p-4 shadow-lg flex items-center justify-between gap-4">
           {saveResult === "success" && (
             <div className="flex items-center gap-2 text-sm text-brand-primary">
