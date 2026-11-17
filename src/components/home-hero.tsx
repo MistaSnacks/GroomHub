@@ -10,7 +10,7 @@ import { MarketingHeading } from "./marketing-heading";
 import { editableField } from "@/lib/cms/sdk";
 
 const MAUI_WAVING = "/maui-assets/00-maui-main.png?v=maui-20260904-alpha1";
-const MAUI_BATH = "/maui-assets/01-maui-bath.png?v=maui-20260904-alpha1";
+const MAUI_BLOW_DRY = "/maui-assets/07-maui-blow-dry.png?v=maui-20260904-alpha1";
 
 const CREAM = "#FDF8F0";
 const WHITE = "#FFFFFF";
@@ -68,7 +68,7 @@ export function HomeHero({ totalCount, cityCount, copy }: HomeHeroProps) {
                 </div>
 
                 <div className="maui-pop maui-wiggle absolute bottom-4 left-[max(1.5%,calc(50%-700px))] hidden w-[clamp(140px,15vw,230px)] lg:block">
-                    <Image src={MAUI_BATH} alt="Maui in a bubble bath" width={460} height={460} sizes="230px" className="aspect-square w-full select-none object-contain" />
+                    <Image src={MAUI_BLOW_DRY} alt="Maui getting a blow dry" width={460} height={460} sizes="230px" className="aspect-square w-full select-none object-contain" />
                 </div>
                 <div className="maui-pop maui-wiggle absolute bottom-4 right-[max(1.5%,calc(50%-700px))] hidden w-[clamp(140px,15vw,230px)] lg:block" style={{ animationDelay: "120ms" }}>
                     <Image src={mauiSrc} alt={mauiAlt} width={460} height={460} sizes="230px" className="aspect-square w-full select-none object-contain" />
