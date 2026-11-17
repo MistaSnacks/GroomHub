@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Storefront, EnvelopeSimple, CheckCircle, CaretRight } from "@phosphor-icons/react/dist/ssr";
+import { BandMaui } from "@/components/band-maui";
 import { WaveDivider } from "@/components/wave-divider";
 import { GetListedForm } from "./get-listed-form";
 import { ListingSearch } from "./listing-search";
@@ -30,93 +31,101 @@ export default function GetListedPage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero */}
-      <section className="bg-bg py-12 md:py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="page-band relative overflow-hidden">
+        <BandMaui pose="groomers" />
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <nav className="flex items-center gap-1.5 text-xs text-brand-accent mb-5 font-semibold tracking-wide">
             <Link href="/" className="hover:text-brand-primary transition-colors">Home</Link>
             <CaretRight weight="bold" className="w-3 h-3 text-text-muted" />
             <span className="text-brand-primary">Get Listed</span>
           </nav>
 
-          <div className="flex items-center gap-3 mb-3">
-            <Storefront weight="duotone" className="w-8 h-8 text-brand-secondary" />
-            <h1 className="font-heading text-4xl md:text-5xl font-bold text-brand-primary">
-              Get Your Business <span className="text-brand-secondary">Listed</span>
-            </h1>
-          </div>
+          <h1 className="lg:max-w-[min(62rem,calc(100%-9rem))] font-heading text-4xl md:text-5xl font-bold text-brand-primary mb-3">
+            Get Your Business <span className="text-brand-secondary">Listed</span>
+          </h1>
           <p className="text-text-muted text-lg max-w-2xl">
             Not in our directory yet? We&apos;d love to add you. Search for your business first. If you&apos;re not here, add yourself below and your free listing goes live right away.
           </p>
+          <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-brand-primary">
+            {["Free to list", "No credit card", "Live as soon as you submit"].map((fact) => (
+              <li key={fact} className="flex items-center gap-1.5">
+                <CheckCircle weight="fill" className="h-4 w-4" />
+                {fact}
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
-      <WaveDivider variant="gentle" fromColor="#FDF8F0" toColor="#FFFFFF" />
+      <WaveDivider variant="gentle" fromColor="#4ECDC4" toColor="#FFFFFF" />
 
       {/* Form + Info */}
-      <section className="bg-white py-12 flex-1">
+      <section className="bg-white py-10 md:py-12 flex-1">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-10 items-start">
 
             {/* Search + Form */}
             <div className="lg:col-span-3 space-y-6">
-              <div id="claim">
+              <div id="claim" className="scroll-mt-24">
                 <ListingSearch />
               </div>
               <GetListedForm />
             </div>
 
             {/* Info sidebar */}
-            <div className="lg:col-span-2 space-y-4">
-              <div className="bg-white rounded-2xl border border-border p-5">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-brand-accent/10">
-                    <CheckCircle weight="fill" className="w-5 h-5 text-brand-accent" />
-                  </div>
-                  <h3 className="font-heading font-bold text-brand-primary">100% Free</h3>
-                </div>
-                <p className="text-sm text-text-muted">
-                  Basic listings are always free. No credit card required, no hidden fees.
-                </p>
+            <div className="lg:col-span-2 space-y-4 lg:sticky lg:top-24">
+              <div className="paws rounded-2xl bg-brand-accent p-6 text-brand-primary">
+                <h2 className="font-heading text-xl font-bold mb-4">What you get</h2>
+                <ul className="space-y-4">
+                  <li className="flex items-start gap-3">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/35">
+                      <CheckCircle weight="fill" className="h-5 w-5" />
+                    </span>
+                    <div>
+                      <h3 className="font-heading font-bold">100% Free</h3>
+                      <p className="text-sm text-brand-primary/85">
+                        Basic listings are always free. No credit card required, no hidden fees.
+                      </p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/35">
+                      <Storefront weight="fill" className="h-5 w-5" />
+                    </span>
+                    <div>
+                      <h3 className="font-heading font-bold">Quick Setup</h3>
+                      <p className="text-sm text-brand-primary/85">
+                        Your listing goes live as soon as you submit. Make an account to add photos and hours.
+                      </p>
+                    </div>
+                  </li>
+                </ul>
               </div>
 
-              <div className="bg-white rounded-2xl border border-border p-5">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-brand-secondary/15">
-                    <Storefront weight="fill" className="w-5 h-5 text-brand-secondary" />
-                  </div>
-                  <h3 className="font-heading font-bold text-brand-primary">Quick Setup</h3>
-                </div>
-                <p className="text-sm text-text-muted">
-                  Your listing goes live as soon as you submit. Make an account to add photos and hours.
-                </p>
-              </div>
-
-              <div className="bg-white rounded-2xl border border-border p-5">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-brand-accent/10">
-                    <EnvelopeSimple weight="fill" className="w-5 h-5 text-brand-accent" />
-                  </div>
-                  <h3 className="font-heading font-bold text-brand-primary">Questions?</h3>
-                </div>
-                <p className="text-sm text-text-muted mb-2">
-                  Reach us anytime at:
-                </p>
-                <a href="mailto:hello@groomlocal.com" className="text-sm text-brand-accent hover:underline">
-                  hello@groomlocal.com
-                </a>
-              </div>
-
-              <div className="rounded-2xl p-5 bg-brand-secondary">
-                <h3 className="font-heading font-bold mb-2 text-slate-900">Already listed?</h3>
-                <p className="text-sm mb-3 text-slate-700">
+              <div className="paws rounded-2xl p-6 bg-brand-secondary">
+                <h2 className="font-heading text-lg font-bold mb-2 text-brand-primary">Already listed?</h2>
+                <p className="text-sm mb-3 text-brand-primary/85">
                   Use the search above to find your business and claim it. Claiming unlocks editing and photo uploads.
                 </p>
                 <Link
                   href="/pricing"
-                  className="text-sm font-semibold text-slate-900 hover:text-brand-primary transition-colors underline underline-offset-2"
+                  className="text-sm font-semibold text-brand-primary underline underline-offset-2"
                 >
                   Learn about groomer tools
                 </Link>
+              </div>
+
+              <div className="paws-coral rounded-2xl border border-brand-accent/25 bg-brand-accent/10 p-5">
+                <div className="flex items-center gap-3 mb-2">
+                  <EnvelopeSimple weight="fill" className="w-5 h-5 text-brand-accent-ink" />
+                  <h2 className="font-heading font-bold text-brand-primary">Questions?</h2>
+                </div>
+                <p className="text-sm text-text">
+                  Reach us anytime at{" "}
+                  <a href="mailto:hello@groomlocal.com" className="font-semibold text-brand-accent-ink underline underline-offset-2 hover:text-brand-primary">
+                    hello@groomlocal.com
+                  </a>
+                </p>
               </div>
             </div>
 

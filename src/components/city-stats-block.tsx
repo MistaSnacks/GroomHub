@@ -32,8 +32,8 @@ export function CityStatsBlock({
   };
 
   return (
-    <div className="relative mt-5">
-      {pose && <BandMaui pose={pose} className="bottom-[calc(100%-10px)] right-3 w-[clamp(104px,9vw,140px)]" />}
+    <div className={`relative ${pose ? "mt-[4.25rem] lg:mt-5" : "mt-5"}`}>
+      {pose && <BandMaui pose={pose} className="bottom-[calc(100%-8px)] right-3 w-20 lg:bottom-[calc(100%-10px)] lg:w-[clamp(104px,9vw,140px)]" />}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {stats.map(({ key, icon: Icon, label }) => (
           <div

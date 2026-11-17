@@ -1,18 +1,23 @@
+import { WaveDivider } from "@/components/wave-divider";
+
 export default function SearchLoading() {
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-      {/* Refiner skeleton */}
-      <div className="max-w-2xl mb-8 flex gap-2">
-        <div className="h-11 flex-1 rounded-xl bg-surface animate-pulse" />
-        <div className="h-11 w-24 rounded-xl bg-surface animate-pulse" />
-      </div>
+    <>
+      {/* Band skeleton: the same band as the loaded page, so the header does not change colour. */}
+      <section className="page-band relative">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="h-4 w-40 rounded-full bg-white/40 animate-pulse mb-5" />
+          <div className="h-11 w-72 max-w-full rounded-full bg-white/40 animate-pulse mb-3" />
+          <div className="h-5 w-36 rounded-full bg-white/40 animate-pulse" />
+          <div className="mt-5 max-w-2xl flex gap-2">
+            <div className="h-11 flex-1 rounded-xl bg-white/60 animate-pulse" />
+            <div className="h-11 w-24 rounded-xl bg-white/60 animate-pulse" />
+          </div>
+        </div>
+      </section>
+      <WaveDivider variant="gentle" fromColor="#4ECDC4" toColor="#FDF8F0" />
 
-      {/* Heading skeleton */}
-      <div className="mb-6">
-        <div className="h-7 w-64 rounded-full bg-surface animate-pulse mb-2" />
-        <div className="h-4 w-36 rounded-full bg-surface animate-pulse" />
-      </div>
-
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
       {/* Result card skeletons */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {Array.from({ length: 6 }).map((_, i) => (
@@ -34,6 +39,7 @@ export default function SearchLoading() {
           </div>
         ))}
       </div>
-    </div>
+      </div>
+    </>
   );
 }

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BookOpen } from "@phosphor-icons/react/dist/ssr";
 import { getBlogPosts, getCategoryLabel, getGuideTopics } from "@/lib/blog";
 import { getGuideListing } from "@/lib/grooming-guides";
 import { blogListingSchema } from "@/lib/schema";
@@ -53,10 +52,6 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       <section className="page-band bg-bg py-14 md:py-20 relative overflow-hidden">
         <BandMaui pose="guides" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <div className="inline-flex items-center gap-2 bg-brand-accent/15 border border-brand-accent/30 rounded-full px-4 py-1.5 text-sm text-brand-accent font-semibold mb-6">
-            <BookOpen weight="fill" className="w-4 h-4 text-brand-secondary" />
-            Pet Care & Grooming
-          </div>
           <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4 text-brand-primary">
             Grooming <span className="text-brand-secondary">Guides</span>
           </h1>

@@ -60,7 +60,7 @@ export function SearchRefiner({ initialQuery }: { initialQuery: string }) {
         </div>
         <button
           type="submit"
-          className="flex items-center justify-center bg-brand-secondary text-brand-primary font-bold rounded-xl hover:bg-brand-secondary/90 transition-colors h-11 px-5 shrink-0 text-sm"
+          className="band-button flex items-center justify-center bg-brand-secondary text-brand-primary font-bold rounded-xl hover:bg-brand-secondary/90 transition-colors h-11 px-5 shrink-0 text-sm"
         >
           Search
         </button>

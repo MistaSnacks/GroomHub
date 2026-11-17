@@ -23,6 +23,8 @@ export function SiteHeader({ cities = [] }: SiteHeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
   const isHome = pathname === "/";
+  /** The header is solid after a scroll and while the phone menu is open. */
+  const solid = scrolled || mobileOpen;
 
   useEffect(() => {
     const supabase = createClient();
@@ -63,10 +65,12 @@ export function SiteHeader({ cities = [] }: SiteHeaderProps) {
           menuButton.current?.focus();
         }
       }}
-      data-on-band={isHome && !scrolled ? "" : undefined}
-      data-at-top={scrolled ? undefined : ""}
+      data-on-band={isHome && !solid ? "" : undefined}
+      data-at-top={solid ? undefined : ""}
       className={`sticky top-0 z-50 transition-all duration-300 ${scrolled
         ? "bg-bg/95 backdrop-blur-md shadow-sm py-0"
+        : mobileOpen
+          ? "bg-bg py-1"
         : isHome
           ? "bg-transparent py-1"
           : "bg-bg py-1"

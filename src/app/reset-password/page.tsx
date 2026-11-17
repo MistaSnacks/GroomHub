@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowRight, CheckCircle } from "@phosphor-icons/react/dist/ssr";
+import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import { AuthShell, AUTH_BUTTON, AUTH_ERROR, AUTH_INPUT, AUTH_LABEL, Required } from "@/components/auth-shell";
 import { safeRedirectPath } from "@/lib/safe-redirect";
 import { createClient } from "@/lib/supabase/server";
 
@@ -51,92 +52,64 @@ export default async function ResetPasswordPage({
 
     if (success) {
         return (
-            <div className="flex-1 flex flex-col bg-bg min-h-screen items-center justify-center px-4">
-                <div className="w-full max-w-sm text-center">
-                    <CheckCircle weight="fill" className="w-16 h-16 text-brand-secondary mx-auto mb-4" />
-                    <h1 className="font-heading text-2xl font-bold text-brand-primary mb-2">
-                        Password updated
-                    </h1>
-                    <p className="text-text-muted text-sm mb-6">
-                        Your password has been reset. You can now use it to sign in.
-                    </p>
-                    <Link
-                        href={nextPath}
-                        className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-6 py-3 text-sm font-bold text-white hover:bg-brand-primary/90 transition-all"
-                    >
-                        Continue
-                        <ArrowRight weight="bold" className="w-4 h-4" />
-                    </Link>
-                </div>
-            </div>
+            <AuthShell title="Password updated" lead="Your password has been reset. You can now use it to sign in.">
+                <Link href={nextPath} className={AUTH_BUTTON}>
+                    Continue
+                    <ArrowRight weight="bold" className="w-4 h-4" />
+                </Link>
+            </AuthShell>
         );
     }
 
     const errorMessage = resetErrorMessage(error);
 
     return (
-        <div className="flex-1 flex flex-col bg-bg min-h-screen items-center justify-center px-4">
-            <div className="w-full max-w-sm">
-                <div className="text-center mb-8">
-                    <h1 className="font-heading text-2xl font-bold text-brand-primary mb-2">
-                        Set a new password
-                    </h1>
-                    <p className="text-text-muted text-sm">
-                        Choose a new password for your account.
-                    </p>
+        <AuthShell title="Set a new password" lead="Choose a new password for your account.">
+            <form action={updatePassword} className="space-y-5">
+                <input type="hidden" name="next" value={nextPath} />
+                {errorMessage && (
+                    <div role="alert" className={AUTH_ERROR}>
+                        {errorMessage}
+                    </div>
+                )}
+
+                <div>
+                    <label className={AUTH_LABEL} htmlFor="new-password">
+                        New password<Required />
+                    </label>
+                    <input
+                        type="password"
+                        id="new-password"
+                        name="password"
+                        autoComplete="new-password"
+                        className={AUTH_INPUT}
+                        placeholder="At least 8 characters"
+                        required
+                        minLength={8}
+                    />
                 </div>
 
-                <div className="bg-white rounded-2xl border border-border p-8 shadow-sm">
-                    <form action={updatePassword} className="space-y-4">
-                        <input type="hidden" name="next" value={nextPath} />
-                        {errorMessage && (
-                            <div className="p-3 text-sm text-[#C2185B] bg-[#FCE4EC] rounded-xl border border-[#F48FB1]">
-                                {errorMessage}
-                            </div>
-                        )}
-
-                        <div>
-                            <label className="block text-sm font-medium text-text mb-1.5" htmlFor="new-password">
-                                New Password
-                            </label>
-                            <input
-                                type="password"
-                                id="new-password"
-                                name="password"
-                                className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm shadow-sm transition-colors focus:border-brand-primary focus:ring-1 focus:ring-brand-primary outline-none"
-                                placeholder="At least 8 characters"
-                                required
-                                minLength={8}
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-text mb-1.5" htmlFor="confirm-password">
-                                Confirm Password
-                            </label>
-                            <input
-                                type="password"
-                                id="confirm-password"
-                                name="confirm"
-                                className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm shadow-sm transition-colors focus:border-brand-primary focus:ring-1 focus:ring-brand-primary outline-none"
-                                placeholder="Type it again"
-                                required
-                                minLength={8}
-                            />
-                        </div>
-
-                        <div className="pt-2">
-                            <button
-                                type="submit"
-                                className="flex items-center justify-center gap-2 w-full rounded-full bg-brand-primary px-6 py-3.5 text-sm font-bold text-white transition-all hover:bg-brand-primary/90 hover:scale-[1.02] shadow-md"
-                            >
-                                Update Password
-                                <ArrowRight weight="bold" className="w-4 h-4" />
-                            </button>
-                        </div>
-                    </form>
+                <div>
+                    <label className={AUTH_LABEL} htmlFor="confirm-password">
+                        Confirm password<Required />
+                    </label>
+                    <input
+                        type="password"
+                        id="confirm-password"
+                        name="confirm"
+                        autoComplete="new-password"
+                        className={AUTH_INPUT}
+                        placeholder="Type it again"
+                        required
+                        minLength={8}
+                    />
                 </div>
-            </div>
-        </div>
+
+                <button type="submit" className={AUTH_BUTTON}>
+                    Update password
+                    <ArrowRight weight="bold" className="w-4 h-4" />
+                </button>
+            </form>
+        </AuthShell>
     );
 }

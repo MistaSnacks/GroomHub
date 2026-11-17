@@ -74,7 +74,7 @@ export default async function DogGroomingHub() {
             stateSlug={stateSlugFromAbbr("WA")}
             stateAbbr="WA"
             stateName="Washington"
-            cardBg="bg-brand-secondary/10"
+            cardBg="paws-teal bg-brand-secondary/10"
             badgeBg="bg-brand-primary text-white"
             totalGroomers={waSummary.totalListings}
             uncategorizedGroomers={waSummary.uncategorizedListings}
@@ -89,7 +89,7 @@ export default async function DogGroomingHub() {
             stateSlug={stateSlugFromAbbr("OR")}
             stateAbbr="OR"
             stateName="Oregon"
-            cardBg="bg-brand-accent/10"
+            cardBg="paws-coral bg-brand-accent/10"
             badgeBg="bg-brand-accent text-white"
             totalGroomers={orSummary.totalListings}
             uncategorizedGroomers={orSummary.uncategorizedListings}

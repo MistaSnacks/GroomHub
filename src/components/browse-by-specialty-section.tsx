@@ -16,9 +16,9 @@ const SHOWN_SPECIALTY_SLUGS = [
 // Indices that get colored backgrounds: 1=teal, 3=amber, 4=teal
 function getCardStyle(index: number) {
   if (index === 1 || index === 4)
-    return { bg: "bg-brand-accent text-brand-primary", iconBg: "bg-brand-primary/10", link: "text-brand-primary/70 hover:text-brand-primary" };
+    return { bg: "paws bg-brand-accent text-brand-primary", iconBg: "bg-brand-primary/10", link: "text-brand-primary/70 hover:text-brand-primary" };
   if (index === 3)
-    return { bg: "bg-brand-secondary text-brand-primary", iconBg: "bg-brand-primary/10", link: "text-brand-primary/70 hover:text-brand-primary" };
+    return { bg: "paws bg-brand-secondary text-brand-primary", iconBg: "bg-brand-primary/10", link: "text-brand-primary/70 hover:text-brand-primary" };
   return { bg: "bg-white text-brand-primary border border-border", iconBg: "bg-brand-accent/10 text-brand-accent-ink", link: "text-brand-accent-ink hover:text-brand-accent-ink" };
 }
 

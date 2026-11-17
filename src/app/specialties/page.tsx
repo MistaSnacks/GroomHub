@@ -30,9 +30,9 @@ export const metadata: Metadata = {
 // Colored backgrounds: 1=teal, 3=amber, 6=amber
 function getSpecialtyCardStyle(index: number) {
   if (index === 1)
-    return { bg: "bg-brand-accent text-white", iconBg: "bg-white/20", link: "text-white/80 hover:text-white" };
+    return { bg: "paws bg-brand-accent text-brand-primary", iconBg: "bg-white/30 text-brand-primary", link: "text-brand-primary hover:text-brand-primary" };
   if (index === 3 || index === 6)
-    return { bg: "bg-brand-secondary text-brand-primary", iconBg: "bg-brand-primary/10", link: "text-brand-primary/70 hover:text-brand-primary" };
+    return { bg: "paws bg-brand-secondary text-brand-primary", iconBg: "bg-white/30 text-brand-primary", link: "text-brand-primary hover:text-brand-primary" };
   return { bg: "bg-white border border-border text-brand-primary", iconBg: "bg-brand-accent/10 text-brand-accent", link: "text-brand-accent hover:text-brand-accent" };
 }
 
@@ -84,7 +84,7 @@ export default function SpecialtiesHub() {
                         {specialty.label}
                       </h3>
                       {specialty.description && (
-                        <p className="text-sm opacity-70 leading-relaxed mb-4 flex-1">
+                        <p className="text-sm opacity-85 leading-relaxed mb-4 flex-1">
                           {specialty.description}
                         </p>
                       )}
@@ -116,7 +116,7 @@ export default function SpecialtiesHub() {
                         {specialty.label}
                       </h3>
                       {specialty.description && (
-                        <p className="text-sm opacity-70 leading-relaxed mb-4 flex-1">
+                        <p className="text-sm opacity-85 leading-relaxed mb-4 flex-1">
                           {specialty.description}
                         </p>
                       )}

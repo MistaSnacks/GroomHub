@@ -13,7 +13,7 @@ import {
 import { STATES, stateSlugFromAbbr, buildCityPath, buildSpecialtyPath } from "@/lib/geography";
 import { servicePageSchema } from "@/lib/schema";
 import { getServiceContent } from "@/lib/service-content";
-import { BandMaui } from "@/components/band-maui";
+import { BandMaui, serviceMaui } from "@/components/band-maui";
 import { WaveDivider } from "@/components/wave-divider";
 import { clampDescription, clampTitle } from "@/lib/seo-utils";
 import { AnimatedSection, AnimatedItem } from "@/components/animated-section";
@@ -108,7 +108,7 @@ export default async function ServiceLandingPage({ params }: Props) {
 
       {/* Hero */}
       <section className="page-band page-band-coral bg-bg py-12 md:py-16 relative overflow-hidden">
-        <BandMaui pose="services" />
+        <BandMaui art={serviceMaui(slug)} />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <nav className="flex items-center gap-1.5 text-xs text-brand-accent mb-5 font-semibold tracking-wide">
             <Link href="/" className="hover:text-brand-primary transition-colors">Home</Link>
@@ -131,9 +131,11 @@ export default async function ServiceLandingPage({ params }: Props) {
         </div>
       </section>
 
+      {serviceContent && <WaveDivider variant="gentle" fromColor="#FF7E67" toColor="#FDF8F0" />}
+
       {/* Editorial Content */}
       {serviceContent && (
-        <section className="bg-bg pb-10 pt-2">
+        <section className="bg-bg pb-10 pt-6">
           <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
             <p className="text-lg text-text-muted leading-relaxed mb-8">
               {serviceContent.intro}

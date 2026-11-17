@@ -183,21 +183,21 @@ export function ContactContent() {
               </div>
 
               {/* Are you a groomer? */}
-              <div className="bg-brand-secondary rounded-2xl p-5 text-slate-900">
+              <div className="paws bg-brand-secondary rounded-2xl p-5 text-slate-900">
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-white/20">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-white/35">
                     <Storefront weight="fill" className="w-5 h-5" />
                   </div>
                   <h3 className="font-heading font-bold">Are you a groomer?</h3>
                 </div>
-                <p className="text-sm text-slate-700 mb-3">Claim your free listing and start connecting with local pet parents.</p>
+                <p className="text-sm text-slate-800 mb-3">Claim your free listing and start connecting with local pet parents.</p>
                 <Link href="/for-groomers" className="inline-flex items-center px-4 py-2 rounded-full bg-brand-primary text-white text-sm font-semibold hover:bg-brand-primary/90 transition-colors">
                   Learn More
                 </Link>
               </div>
 
               {/* Maui fun fact */}
-              <div className="bg-brand-accent/10 rounded-2xl p-5">
+              <div className="paws-coral bg-brand-accent/10 rounded-2xl p-5">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-brand-accent/15 text-brand-accent">
                     <PawPrint weight="fill" className="w-5 h-5" />
