@@ -261,11 +261,11 @@ export function SearchHero() {
   ];
 
   return (
-    <div className="w-full max-w-2xl mx-auto lg:mx-0 relative" ref={wrapperRef}>
+    <div className="w-full max-w-2xl mx-auto relative" ref={wrapperRef}>
       {/* Search box */}
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-2xl p-2 shadow-xl border border-border/60 flex flex-col sm:flex-row gap-2 relative"
+        className="search-form bg-white rounded-2xl p-2 shadow-xl border border-border/60 flex flex-col sm:flex-row gap-2 relative"
       >
         <div className="relative flex-1">
           <MagnifyingGlass
@@ -303,7 +303,7 @@ export function SearchHero() {
         </div>
         <button
           type="submit"
-          className="flex items-center justify-center bg-brand-secondary text-brand-primary font-bold rounded-xl hover:bg-brand-secondary/90 transition-colors h-12 px-6 shrink-0"
+          className="search-submit flex items-center justify-center bg-brand-secondary text-brand-primary font-bold rounded-xl hover:bg-brand-secondary/90 transition-colors h-12 px-6 shrink-0"
         >
           <MagnifyingGlass weight="bold" className="w-4 h-4 mr-2" />
           Search
@@ -395,14 +395,14 @@ export function SearchHero() {
       )}
 
       {/* Popular cities */}
-      <div className="flex flex-wrap gap-2 mt-4 justify-center lg:justify-start items-center">
-        <span className="text-text-muted text-sm font-medium">Popular:</span>
+      <div className="flex flex-wrap gap-2 mt-4 justify-center items-center">
+        <span className="search-label text-text-muted text-sm font-medium">Popular:</span>
         {popularCities.map((c) => (
           <button
             type="button"
             key={c.slug}
             onClick={() => router.push(`/dog-grooming/${c.state}/${c.slug}`)}
-            className="text-sm px-3.5 py-1.5 rounded-full border border-border text-text-muted hover:border-brand-accent/40 hover:text-brand-accent-ink transition-all font-medium"
+            className="search-chip text-sm px-3.5 py-1.5 rounded-full border border-border text-text-muted hover:border-brand-accent/40 hover:text-brand-accent-ink transition-all font-medium"
           >
             {c.name}
           </button>

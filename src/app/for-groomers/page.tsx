@@ -129,7 +129,7 @@ export default async function ForGroomersPage() {
             </div>
 
             <div className="flex-1 flex justify-center">
-              <MauiMascot src={copy?.heroSrc || "/maui-assets/14-maui-sitting-pretty-alt.png?v=maui-20260904-alpha1"} alt={copy?.heroAlt} size={360} animation="float" priority />
+              <MauiMascot src={copy?.heroSrc || "/maui-assets/14-maui-sitting-pretty-alt.png?v=maui-20260904-alpha1"} alt={copy?.heroAlt} size={360} priority />
             </div>
           </div>
         </div>
@@ -213,13 +213,13 @@ export default async function ForGroomersPage() {
       </section>
 
       {/* Final CTA - Coral */}
-      <WaveDivider variant="steep" fromColor="#FDF8F0" toColor="#FA8072" />
+      <WaveDivider variant="steep" fromColor="#FDF8F0" toColor="#FF7E67" />
 
-      <section className="bg-brand-accent py-16 md:py-20 relative overflow-hidden">
+      <section className="band bg-brand-accent py-16 md:py-20 overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col md:flex-row items-center gap-12">
             <div className="flex-1 flex justify-center -mb-8">
-              <MauiMascot src={section("closing").imageSrc || "/maui-assets/14-maui-sitting-pretty-alt.png?v=maui-20260904-alpha1"} alt={section("closing").imageAlt} size={320} animation="float" />
+              <MauiMascot src={section("closing").imageSrc || "/maui-assets/14-maui-sitting-pretty-alt.png?v=maui-20260904-alpha1"} alt={section("closing").imageAlt} size={320} />
             </div>
             <div className="flex-[1.5] text-center md:text-left text-white">
               <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4">
@@ -240,7 +240,7 @@ export default async function ForGroomersPage() {
       </section>
 
       <MarketingBody copy={copy} />
-      <WaveDivider variant="footer" fromColor="#FA8072" toColor="#FA8072" />
+      <WaveDivider variant="footer" fromColor="#FF7E67" toColor="#FF7E67" />
     </>
   );
 }

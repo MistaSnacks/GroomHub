@@ -77,7 +77,7 @@ export function AboutContent({ metrics, copy }: AboutContentProps) {
             <motion.div variants={itemVariants} className="w-full md:w-2/5 flex justify-center">
               <div className="relative">
                 <div className="absolute inset-0 bg-brand-accent/20 rounded-full blur-3xl -z-10" />
-                <MauiMascot src={section("story").imageSrc || "/maui-assets/08-maui-playing-ball.png?v=maui-20260904-alpha1"} alt={section("story").imageAlt} size={320} animation="float" priority />
+                <MauiMascot src={section("story").imageSrc || "/maui-assets/08-maui-playing-ball.png?v=maui-20260904-alpha1"} alt={section("story").imageAlt} size={320} priority />
               </div>
             </motion.div>
 
@@ -216,7 +216,7 @@ export function AboutContent({ metrics, copy }: AboutContentProps) {
             <motion.div variants={itemVariants} className="w-full md:w-1/2 flex justify-center">
               <div className="relative">
                 <div className="absolute inset-0 bg-brand-secondary/20 rounded-full blur-3xl -z-10" />
-                <MauiMascot src={section("maui").imageSrc || "/maui-assets/05-maui-sitting-pretty.png?v=maui-20260904-alpha1"} alt={section("maui").imageAlt} size={320} animation="bounce" />
+                <MauiMascot src={section("maui").imageSrc || "/maui-assets/05-maui-sitting-pretty.png?v=maui-20260904-alpha1"} alt={section("maui").imageAlt} size={320} />
               </div>
             </motion.div>
           </motion.div>

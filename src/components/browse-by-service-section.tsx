@@ -43,7 +43,7 @@ export function BrowseByServiceSection({ serviceCounts, copy }: BrowseByServiceS
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-accent-ink mb-2">
             {copy?.eyebrow ?? "Our Services"}
           </p>
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-brand-primary mb-2">
+          <h2 className="display-h2 font-heading text-brand-primary mb-2">
             {copy?.heading ?? "Browse by Service"}
           </h2>
           <p className="text-text-muted text-base max-w-lg">

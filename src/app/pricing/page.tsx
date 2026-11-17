@@ -107,7 +107,7 @@ export default function PricingPage() {
 
       <WaveDivider variant="steep" fromColor="#FDF8F0" toColor="#4ECDC4" />
 
-      <section className="bg-brand-secondary py-16 md:py-20">
+      <section className="band bg-brand-secondary py-16 md:py-20">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-brand-primary mb-4">Claim your free listing</h2>
           <p className="text-lg text-brand-primary/70 mb-8 max-w-md mx-auto">No credit card. It takes a few minutes.</p>

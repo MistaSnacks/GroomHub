@@ -118,7 +118,7 @@ export default async function BlogArticlePage({ params }: Props) {
       )}
 
       {/* Hero */}
-      <section className="bg-brand-secondary py-12 md:py-16 md:pb-0 relative overflow-hidden">
+      <section className="band bg-brand-secondary py-12 md:py-16 md:pb-0 overflow-hidden">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             {/* Text Content */}

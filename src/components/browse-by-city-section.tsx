@@ -23,7 +23,7 @@ export function BrowseByCitySection({ waCities, orCities, copy }: BrowseByCitySe
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-accent-ink mb-2">
             {copy?.eyebrow ?? "Explore the PNW"}
           </p>
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-brand-primary mb-2">
+          <h2 className="display-h2 font-heading text-brand-primary mb-2">
             {copy?.heading ?? "Browse by City"}
           </h2>
           <p className="text-text-muted text-base max-w-lg mx-auto">

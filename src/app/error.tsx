@@ -22,7 +22,6 @@ export default function Error({
         <MauiMascot
           src="/maui-assets/05-maui-sitting-pretty.png?v=maui-20260904-alpha1"
           size={160}
-          animation="float"
           interactive={false}
           priority
         />

@@ -1,69 +1,93 @@
-import { PawPrint, Dog } from "@phosphor-icons/react/dist/ssr";
+import Image from "next/image";
+import type { ReactNode } from "react";
+import { PawPrint, MapPin, Scissors, MagnifyingGlass } from "@phosphor-icons/react/dist/ssr";
 import { SearchHero } from "@/components/search-hero";
-import { MauiMascot } from "@/components/maui-mascot";
+import { WaveDivider } from "@/components/wave-divider";
 
 import type { MarketingCopy } from "@/lib/marketing-copy";
 import { fillMarketingCounts } from "@/lib/marketing-copy";
 import { MarketingHeading } from "./marketing-heading";
 import { editableField } from "@/lib/cms/sdk";
 
+const MAUI_WAVING = "/maui-assets/00-maui-main.png?v=maui-20260904-alpha1";
+const MAUI_BATH = "/maui-assets/01-maui-bath.png?v=maui-20260904-alpha1";
+
+const CREAM = "#FDF8F0";
+const WHITE = "#FFFFFF";
+const TEAL = "#4ECDC4";
+const CORAL = "#FF7E67";
+
 interface HomeHeroProps {
     copy?: MarketingCopy;
     totalCount: number;
+    cityCount: number;
 }
 
-export function HomeHero({ totalCount, copy }: HomeHeroProps) {
+/**
+ * One hero, two looks. Phones and tablets get a cream page with Maui on a coral circle and a coral ribbon of facts.
+ * From 1024px it becomes a teal band with Maui on both sides. The heading and the search box exist once.
+ */
+export function HomeHero({ totalCount, cityCount, copy }: HomeHeroProps) {
+    const groomerCount = totalCount.toLocaleString();
+    const mauiSrc = copy?.heroSrc || MAUI_WAVING;
+    const mauiAlt = copy?.heroAlt || "Maui, the GroomLocal puppy, waving hello";
+    const facts: { icon: ReactNode; text: string }[] = [
+        { icon: <Scissors weight="fill" className="h-5 w-5" />, text: `${groomerCount} groomers` },
+        { icon: <MapPin weight="fill" className="h-5 w-5" />, text: `${cityCount} cities` },
+        { icon: <PawPrint weight="fill" className="h-5 w-5" />, text: "Washington and Oregon" },
+        { icon: <MagnifyingGlass weight="bold" className="h-5 w-5" />, text: "Free to search" },
+    ];
+
     return (
-        <section className="bg-bg pt-[136px] md:pt-[168px] pb-20 md:pb-28 -mt-[72px] relative overflow-hidden border-none">
-            {/* Decorative paw prints */}
-            <div className="absolute inset-0 opacity-[0.04] pointer-events-none select-none text-brand-primary">
-                <PawPrint weight="fill" className="w-[300px] h-[300px] absolute -top-16 -right-16 rotate-12" />
-                <PawPrint weight="fill" className="w-[180px] h-[180px] absolute bottom-10 left-10 -rotate-12" />
-            </div>
-
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
-                <div className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-16">
-
-                    {/* Text + search */}
-                    <div
-                        className="flex-1 text-center lg:text-left z-10 lg:pl-4 order-2 lg:order-1"
-                    >
-                        <div className="inline-flex items-center gap-2 bg-brand-accent/15 border border-brand-accent/30 rounded-full px-4 py-1.5 text-sm mb-6 text-brand-accent-ink shadow-sm font-semibold tracking-wide">
-                            <Dog weight="duotone" className="w-5 h-5" /> {copy?.eyebrow ?? "Washington & Oregon Grooming Directory"}
-                        </div>
-
-                        <h1 {...(copy?._id ? editableField(copy._id,"title") : {})} className="font-heading text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6 text-brand-primary">
-                            <MarketingHeading text={copy?.title ?? "Find dog groomers in Washington and Oregon"} emphasis={copy?.emphasis ?? "dog groomers"} breakBefore=" in Washington" />
-                        </h1>
-
-                        <p className="text-text-muted text-lg md:text-xl max-w-xl mb-10 mx-auto lg:mx-0 font-medium">
-                            {fillMarketingCounts(copy?.intro ?? "{groomerCount} listings across Washington and Oregon. Compare services and published prices, then contact or book directly with the groomer.",{groomerCount:totalCount.toLocaleString()})}
-                        </p>
-
-                        <div
-                            className="w-full max-w-2xl mx-auto lg:mx-0"
-                        >
-                            <SearchHero />
-                            {copy?.primaryCta?.href && <a href={copy.primaryCta.href} className="inline-block mt-5 text-brand-primary underline">{copy.primaryCta.label}</a>}
-                        </div>
-                    </div>
-
-                    {/* Mascot Container */}
-                    <div
-                        className="shrink-0 flex flex-col items-center justify-end z-0 relative group order-1 lg:order-2"
-                    >
-                        <MauiMascot src={copy?.heroSrc} alt={copy?.heroAlt} size={320} interactive priority className="drop-shadow-2xl z-10" />
-
-                        <div
-                            className="bg-white/95 backdrop-blur-sm rounded-full px-6 py-2.5 shadow-lg border border-brand-secondary/30 flex items-center gap-2 whitespace-nowrap mt-2 z-10 group-hover:-translate-y-1 transition-transform duration-300"
-                        >
-                            <PawPrint weight="fill" className="w-5 h-5 text-brand-secondary" />
-                            <span className="font-heading font-semibold text-lg text-brand-primary">{copy?.greeting ?? "Hi, I'm Maui!"}</span>
-                        </div>
-                    </div>
-
+        <>
+            <section className="hero-home relative isolate -mt-[72px] overflow-x-clip bg-bg pb-10 pt-[104px] lg:bg-brand-secondary lg:pb-20 lg:pt-[148px]">
+                <div aria-hidden className="hero-backdrop absolute inset-0 -z-10 overflow-hidden lg:hidden">
+                    <div className="ledger absolute inset-0" />
+                    <div className="absolute -right-40 top-10 h-[620px] w-[620px] rounded-full bg-brand-accent/25 blur-3xl" />
+                    <div className="absolute -left-48 top-[380px] h-[460px] w-[460px] rounded-full bg-brand-secondary/20 blur-3xl" />
                 </div>
+
+                <div className="mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
+                    <div className="maui-pop relative mx-auto mb-6 w-[min(48%,180px)] lg:hidden">
+                        <div aria-hidden className="paw-blob absolute left-1/2 top-1/2 aspect-square w-[104%] -translate-x-1/2 -translate-y-[47%] rounded-full bg-brand-accent" />
+                        <Image src={mauiSrc} alt={mauiAlt} width={360} height={360} sizes="180px" loading="eager" fetchPriority="high" className="relative aspect-square w-full select-none object-contain" />
+                    </div>
+
+                    <h1 {...(copy?._id ? editableField(copy._id, "title") : {})} className="hero-title font-heading font-semibold text-brand-primary">
+                        <MarketingHeading text={copy?.title ?? "Find dog groomers in Washington and Oregon"} emphasis={copy?.emphasis ?? "dog groomers"} className="hero-stroke" />
+                    </h1>
+
+                    <p className="mx-auto mt-6 max-w-2xl text-lg font-medium text-slate-600 md:text-xl lg:text-brand-primary/85">
+                        {fillMarketingCounts(copy?.intro ?? "{groomerCount} listings across Washington and Oregon. Compare services and published prices, then contact or book directly with the groomer.", { groomerCount })}
+                    </p>
+
+                    <div className="mx-auto mt-8 max-w-2xl">
+                        <SearchHero />
+                        {copy?.primaryCta?.href && <a href={copy.primaryCta.href} className="inline-block mt-5 text-brand-primary underline">{copy.primaryCta.label}</a>}
+                    </div>
+                </div>
+
+                <div className="maui-pop maui-wiggle absolute bottom-4 left-[max(1.5%,calc(50%-700px))] hidden w-[clamp(140px,15vw,230px)] lg:block">
+                    <Image src={MAUI_BATH} alt="Maui in a bubble bath" width={460} height={460} sizes="230px" className="aspect-square w-full select-none object-contain" />
+                </div>
+                <div className="maui-pop maui-wiggle absolute bottom-4 right-[max(1.5%,calc(50%-700px))] hidden w-[clamp(140px,15vw,230px)] lg:block" style={{ animationDelay: "120ms" }}>
+                    <Image src={mauiSrc} alt={mauiAlt} width={460} height={460} sizes="230px" className="aspect-square w-full select-none object-contain" />
+                </div>
+            </section>
+
+            <div className="lg:hidden">
+                <WaveDivider variant="double" fromColor={CREAM} toColor={CORAL} height={44} />
+                <ul className="paw-ribbon flex flex-wrap items-center justify-center gap-x-8 gap-y-2 bg-brand-accent px-4 py-3 font-heading text-base font-semibold text-brand-primary sm:text-lg md:gap-x-12">
+                    {facts.map((fact) => (
+                        <li key={fact.text} className="flex items-center gap-2">
+                            {fact.icon}
+                            {fact.text}
+                        </li>
+                    ))}
+                </ul>
+                <WaveDivider variant="gentle" fromColor={CORAL} toColor={WHITE} height={44} />
             </div>
-        </section>
+            <WaveDivider variant="gentle" fromColor={TEAL} toColor={WHITE} className="hidden lg:block" />
+        </>
     );
 }

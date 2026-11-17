@@ -1,14 +1,11 @@
-"use client";
-
 import Image from "next/image";
-import { motion } from "framer-motion";
 
 interface MauiMascotProps {
   size?: number;
   className?: string;
   src?: string;
   alt?: string;
-  animation?: "bounce" | "float" | "none";
+  /** Maui wiggles once when the pointer is on him. */
   interactive?: boolean;
   priority?: boolean;
 }
@@ -18,34 +15,13 @@ export function MauiMascot({
   className,
   src = "/maui-assets/00-maui-main.png?v=maui-20260904-alpha1",
   alt = "Maui Mascot",
-  animation = "float",
   interactive = true,
   priority = false,
 }: MauiMascotProps) {
-
-  const getAnimationProps = () => {
-    if (animation === "float") {
-      return {
-        animate: { y: [0, -10, 0] },
-        transition: { repeat: Infinity, duration: 4, ease: "easeInOut" as const }
-      };
-    }
-    if (animation === "bounce") {
-      return {
-        animate: { y: [0, -20, 0] },
-        transition: { repeat: Infinity, duration: 2, ease: "easeInOut" as const }
-      };
-    }
-    return {};
-  };
-
   return (
-    <motion.div
-      className={`inline-flex items-end justify-center select-none ${className ?? ""}`}
-      aria-label={alt}
+    <div
+      className={`inline-flex items-end justify-center select-none ${interactive ? "maui-wiggle" : ""} ${className ?? ""}`}
       style={{ width: size, height: size }}
-      {...getAnimationProps()}
-      whileHover={interactive ? { scale: 1.05, rotate: [-2, 2, -2, 0] } : undefined}
     >
       <Image
         src={src}
@@ -55,6 +31,6 @@ export function MauiMascot({
         className="w-full h-full object-contain drop-shadow-md"
         priority={priority}
       />
-    </motion.div>
+    </div>
   );
 }

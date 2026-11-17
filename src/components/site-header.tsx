@@ -63,6 +63,7 @@ export function SiteHeader({ cities = [] }: SiteHeaderProps) {
           menuButton.current?.focus();
         }
       }}
+      data-on-band={isHome && !scrolled ? "" : undefined}
       className={`sticky top-0 z-50 transition-all duration-300 ${scrolled
         ? "bg-bg/95 backdrop-blur-md shadow-sm py-0"
         : isHome
@@ -74,14 +75,14 @@ export function SiteHeader({ cities = [] }: SiteHeaderProps) {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full overflow-hidden border-[2.5px] border-brand-secondary flex-shrink-0 transition-transform group-hover:scale-105">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full overflow-hidden header-logo-ring border-[2.5px] border-brand-secondary flex-shrink-0 transition-transform group-hover:scale-105">
               <Image src="/maui-logo-circle.svg" alt="GroomLocal mascot Maui" width={40} height={40} className="h-full w-full object-cover" />
             </div>
             <div className="flex flex-col">
               <span className="font-heading text-xl font-bold text-brand-primary leading-tight" style={{ letterSpacing: "-0.02em" }}>
                 GroomLocal
               </span>
-              <span className="text-[9px] leading-none tracking-[2px] uppercase font-medium" style={{ color: "#956A46" }}>
+              <span className="brand-tagline text-[9px] leading-none tracking-[2px] uppercase font-medium">
                 Pet Grooming Directory
               </span>
             </div>
@@ -94,19 +95,19 @@ export function SiteHeader({ cities = [] }: SiteHeaderProps) {
             <NavDropdown label="Specialties" type="specialties" />
             <Link
               href="/blog"
-              className="text-sm font-medium text-text-muted hover:text-brand-primary transition-colors"
+              className="header-link text-sm font-medium text-text-muted hover:text-brand-primary transition-colors"
             >
               Grooming Guides
             </Link>
             <Link
               href="/about"
-              className="text-sm font-medium text-text-muted hover:text-brand-primary transition-colors"
+              className="header-link text-sm font-medium text-text-muted hover:text-brand-primary transition-colors"
             >
               About
             </Link>
             <Link
               href="/contact"
-              className="text-sm font-medium text-text-muted hover:text-brand-primary transition-colors"
+              className="header-link text-sm font-medium text-text-muted hover:text-brand-primary transition-colors"
             >
               Contact
             </Link>
@@ -128,7 +129,7 @@ export function SiteHeader({ cities = [] }: SiteHeaderProps) {
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="text-sm font-medium text-text-muted hover:text-brand-primary transition-colors mr-2"
+                    className="header-link text-sm font-medium text-text-muted hover:text-brand-primary transition-colors mr-2"
                   >
                     Log out
                   </button>
@@ -137,13 +138,13 @@ export function SiteHeader({ cities = [] }: SiteHeaderProps) {
                 <>
                   <Link
                     href="/login"
-                    className="text-sm font-medium text-text-muted hover:text-brand-primary transition-colors mr-2"
+                    className="header-link text-sm font-medium text-text-muted hover:text-brand-primary transition-colors mr-2"
                   >
                     Log in
                   </Link>
                   <Link
                     href="/signup"
-                    className="text-sm font-medium text-text-muted hover:text-brand-primary transition-colors mr-2"
+                    className="header-link text-sm font-medium text-text-muted hover:text-brand-primary transition-colors mr-2"
                   >
                     Sign up
                   </Link>
@@ -152,8 +153,7 @@ export function SiteHeader({ cities = [] }: SiteHeaderProps) {
             </div>
             <Link
               href="/for-groomers"
-              className="rounded-full border-[1.5px] border-brand-primary/15 px-5 py-2.5 text-sm font-medium hover:border-brand-primary/30 hover:bg-brand-primary/5 transition-all"
-              style={{ color: "#956A46" }}
+              className="header-cta rounded-full border-[1.5px] border-brand-primary/15 px-5 py-2.5 text-sm font-medium text-[#956A46] hover:border-brand-primary/30 hover:bg-brand-primary/5 transition-all"
             >
               List Your Business
             </Link>
