@@ -205,8 +205,7 @@ export function SiteHeader({ cities = [] }: SiteHeaderProps) {
             </nav>
 
             <div className="ml-auto hidden items-center gap-2 lg:flex xl:gap-3">
-              {/* The home hero has its own search box, so the field waits until the visitor scrolls past it. */}
-              <SearchField id="header-search-wide" placeholder="City or ZIP" className={`h-10 w-44 bg-bg xl:w-60 ${isHome && !scrolled ? "invisible" : ""}`} />
+              <SearchField id="header-search-wide" placeholder="City or ZIP" className="h-10 w-44 bg-bg xl:w-60" />
               <div className="flex min-w-[4.25rem] justify-center">
                 {!authReady ? null : user ? (
                   <button type="button" onClick={handleLogout} className={`${NAV_LINK} ${NAV_IDLE}`}>
