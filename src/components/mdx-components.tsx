@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 
 function Callout({ children }: { children: ReactNode }) {
   return (
-    <div className="rounded-2xl bg-brand-accent/5 border border-brand-accent/20 p-5 md:p-6 my-6">
+    <div className="paws-coral rounded-2xl bg-brand-accent/5 border border-brand-accent/20 p-5 md:p-6 my-6">
       <div className="text-sm text-brand-primary leading-relaxed font-medium">
         {children}
       </div>

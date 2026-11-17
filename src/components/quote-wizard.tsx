@@ -176,7 +176,7 @@ export function QuoteWizard() {
           <div key={s} className="flex items-center gap-2">
             <div
               className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition-colors ${i === step
-                  ? "bg-brand-secondary text-white"
+                  ? "bg-brand-secondary text-brand-primary"
                   : i < step
                     ? "bg-success text-white"
                     : "bg-surface text-text-muted"

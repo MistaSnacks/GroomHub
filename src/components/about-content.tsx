@@ -38,10 +38,10 @@ const itemVariants: Variants = {
 export function AboutContent({ metrics, copy }: AboutContentProps) {
   const section=(key:string)=>marketingSection(copy,key);
   return (
-    <div className="min-h-screen text-brand-primary overflow-hidden">
+    <div className="min-h-screen text-brand-primary overflow-x-clip">
 
       {/* Hero */}
-      <section className="relative pt-20 pb-16 md:pt-28 md:pb-20 bg-bg">
+      <section className="page-band page-band-coral relative pt-20 pb-16 md:pt-28 md:pb-20 bg-bg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial="hidden"
@@ -162,18 +162,18 @@ export function AboutContent({ metrics, copy }: AboutContentProps) {
             </motion.div>
 
             {/* Free Forever - teal bg */}
-            <motion.div variants={itemVariants} className="bg-brand-accent text-white rounded-2xl p-6">
-              <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/20 mb-4">
+            <motion.div variants={itemVariants} className="paws bg-brand-accent text-brand-primary rounded-2xl p-6">
+              <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/30 mb-4">
                 <Leaf weight="fill" className="w-6 h-6" />
               </div>
               <h3 className="font-heading text-lg font-bold mb-2">{section("free-forever").heading ?? "Free Forever"}</h3>
-              <p className="text-sm text-white/70 leading-relaxed">
+              <p className="text-sm text-brand-primary/85 leading-relaxed">
                 {section("free-forever").intro ?? "Searching for a groomer should never cost a thing. Our directory is free for pet parents, always."}
               </p>
             </motion.div>
 
             {/* Community - cream bg */}
-            <motion.div variants={itemVariants} className="md:col-span-2 bg-brand-secondary/10 rounded-2xl p-6">
+            <motion.div variants={itemVariants} className="paws-teal md:col-span-2 bg-brand-secondary/10 rounded-2xl p-6">
               <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-brand-primary/10 text-brand-primary mb-4">
                 <Users weight="fill" className="w-6 h-6" />
               </div>

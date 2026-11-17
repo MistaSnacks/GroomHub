@@ -4,6 +4,7 @@ import { CaretRight, ArrowRight, PawPrint } from "@phosphor-icons/react/dist/ssr
 import { SERVICE_TAGS, SPECIALTY_TAGS } from "@/lib/tags";
 import { getTotalListingCount } from "@/lib/supabase/queries";
 import { ServiceTagIcon } from "@/components/service-tag-icon";
+import { BandMaui } from "@/components/band-maui";
 import { WaveDivider } from "@/components/wave-divider";
 import { AnimatedSection, AnimatedItem } from "@/components/animated-section";
 
@@ -27,12 +28,12 @@ export const metadata: Metadata = {
   },
 };
 
-// Colored card pattern: indices 3=teal, 4=amber, 7=amber
+// Coloured cards with paw prints: a diagonal of coral and teal through the three-column grid.
 function getServiceCardStyle(index: number) {
-  if (index === 3)
-    return { bg: "bg-brand-accent text-white", iconBg: "bg-white/20", link: "text-white/80 hover:text-white", count: "text-white/70" };
-  if (index === 4 || index === 7)
-    return { bg: "bg-brand-secondary text-brand-primary", iconBg: "bg-brand-primary/10", link: "text-brand-primary/70 hover:text-brand-primary", count: "text-brand-primary/60" };
+  if (index === 3 || index === 11)
+    return { bg: "paws bg-brand-accent text-brand-primary", iconBg: "bg-white/30", link: "text-brand-primary hover:text-brand-primary", count: "text-brand-primary/70" };
+  if (index === 1 || index === 7 || index === 14)
+    return { bg: "paws bg-brand-secondary text-brand-primary", iconBg: "bg-white/30", link: "text-brand-primary hover:text-brand-primary", count: "text-brand-primary/70" };
   return { bg: "bg-white border border-border text-brand-primary", iconBg: "bg-brand-secondary/15 text-brand-secondary", link: "text-brand-accent hover:text-brand-accent", count: "text-brand-secondary" };
 }
 
@@ -42,7 +43,8 @@ export default async function ServicesHub() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero */}
-      <section className="bg-bg py-12 md:py-16 relative overflow-hidden">
+      <section className="page-band page-band-coral bg-bg py-12 md:py-16 relative overflow-hidden">
+        <BandMaui pose="services" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <nav className="flex items-center gap-1.5 text-xs text-brand-accent mb-5 font-semibold tracking-wide">
             <Link href="/" className="hover:text-brand-primary transition-colors">Home</Link>
@@ -53,7 +55,7 @@ export default async function ServicesHub() {
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-accent mb-2">
             All Grooming Services
           </p>
-          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-3 text-brand-primary">
+          <h1 className="lg:max-w-[min(62rem,calc(100%-9rem))] font-heading text-4xl md:text-5xl font-bold mb-3 text-brand-primary">
             Grooming <span className="text-brand-secondary">Services</span> & Specialties
           </h1>
           <p className="text-text-muted text-lg max-w-2xl">
@@ -90,7 +92,7 @@ export default async function ServicesHub() {
                       {service.label}
                     </h3>
                     {service.description && (
-                      <p className="text-sm opacity-70 leading-relaxed mb-4 flex-1">
+                      <p className="text-sm opacity-85 leading-relaxed mb-4 flex-1">
                         {service.description}
                       </p>
                     )}

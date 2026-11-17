@@ -37,7 +37,7 @@ export function BrowseByCitySection({ waCities, orCities, copy }: BrowseByCitySe
             stateSlug={stateSlugFromAbbr("WA")}
             stateAbbr="WA"
             stateName="Washington"
-            cardBg="bg-brand-secondary/10"
+            cardBg="paws-teal bg-brand-secondary/10"
             badgeBg="bg-brand-primary text-white"
             totalGroomers={waTotal}
             initialLimit={WA_SHOW_COUNT}
@@ -50,7 +50,7 @@ export function BrowseByCitySection({ waCities, orCities, copy }: BrowseByCitySe
             stateSlug={stateSlugFromAbbr("OR")}
             stateAbbr="OR"
             stateName="Oregon"
-            cardBg="bg-brand-accent/10"
+            cardBg="paws-coral bg-brand-accent/10"
             badgeBg="bg-brand-accent text-brand-primary"
             totalGroomers={orTotal}
             initialLimit={OR_SHOW_COUNT}

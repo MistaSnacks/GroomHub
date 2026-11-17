@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CaretRight, Van } from "@phosphor-icons/react/dist/ssr";
 import { getAllCitiesWithCounts } from "@/lib/supabase/queries";
 import { stateSlugFromAbbr } from "@/lib/geography";
+import { BandMaui } from "@/components/band-maui";
 import { WaveDivider } from "@/components/wave-divider";
 import { GuideLinkSentence } from "@/components/guide-link";
 import { getLinkableBlogSlugs } from "@/lib/blog";
@@ -38,7 +39,8 @@ export default async function MobileGroomingHub() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <section className="bg-bg py-10 md:py-14">
+      <section className="page-band bg-bg py-10 md:py-14">
+        <BandMaui pose="mobile" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <nav className="flex items-center gap-1.5 text-xs text-brand-accent mb-5 font-semibold tracking-wide">
             <Link href="/" className="hover:text-brand-primary transition-colors">Home</Link>
@@ -47,7 +49,7 @@ export default async function MobileGroomingHub() {
           </nav>
           <div className="flex items-center gap-3 mb-2">
             <Van weight="duotone" className="w-8 h-8 text-brand-secondary" />
-            <h1 className="font-heading text-3xl md:text-4xl font-bold text-brand-primary">
+            <h1 className="lg:max-w-[min(62rem,calc(100%-9rem))] font-heading text-3xl md:text-4xl font-bold text-brand-primary">
               Mobile Dog Groomers in the <span className="text-brand-secondary">Pacific Northwest</span>
             </h1>
           </div>

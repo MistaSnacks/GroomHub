@@ -134,8 +134,8 @@ export default async function CityPage({ params }: CityPageProps) {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero */}
-      <section className="bg-bg py-12 md:py-16 relative overflow-hidden">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+      <section className="page-band bg-bg py-12 md:py-16 relative overflow-hidden">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <nav className="flex flex-wrap items-center gap-1.5 text-xs text-brand-accent mb-5 font-semibold tracking-wide">
             <Link href="/" className="hover:text-brand-primary transition-colors">Home</Link>
             <CaretRight weight="bold" className="w-3 h-3 text-text-muted" />
@@ -146,7 +146,7 @@ export default async function CityPage({ params }: CityPageProps) {
             <span className="text-brand-primary">{cityName}</span>
           </nav>
 
-          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-3 text-brand-primary">
+          <h1 className="lg:max-w-[min(62rem,calc(100%-9rem))] font-heading text-4xl md:text-5xl font-bold mb-3 text-brand-primary">
             Dog Grooming in <span className="text-brand-secondary">{cityName}, {stateAbbr}</span>
           </h1>
           <p className="text-text-muted flex items-center gap-1.5 text-lg">
@@ -165,6 +165,7 @@ export default async function CityPage({ params }: CityPageProps) {
             </p>
           )}
           <CityStatsBlock
+            pose="dog"
             groomerCount={listings.length}
             metroCityCount={getMetroNeighbors(city, stateAbbr).length + 1}
             serviceCount={new Set(listings.flatMap((l) => l.service_tags ?? [])).size}

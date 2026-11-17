@@ -423,21 +423,35 @@ body:has([data-admin-shell]) > footer {
     isolation: isolate;
   }
 
+  .band,
+  .hero-home,
+  .page-band {
+    --band-art:
+      radial-gradient(ellipse 60% 55% at 18% 28%, rgba(255, 255, 255, 0.2), transparent 70%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220' fill='%23fff' fill-opacity='.14'%3E%3Cg transform='translate(46 52) rotate(-18)'%3E%3Cellipse cx='0' cy='10' rx='15' ry='12'/%3E%3Cellipse cx='-17' cy='-9' rx='6' ry='8'/%3E%3Cellipse cx='-6' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='7' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='18' cy='-9' rx='6' ry='8'/%3E%3C/g%3E%3Cg transform='translate(160 158) rotate(14) scale(.8)'%3E%3Cellipse cx='0' cy='10' rx='15' ry='12'/%3E%3Cellipse cx='-17' cy='-9' rx='6' ry='8'/%3E%3Cellipse cx='-6' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='7' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='18' cy='-9' rx='6' ry='8'/%3E%3C/g%3E%3C/svg%3E"),
+      linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  }
+
   .band::before,
-  .hero-home::before {
+  .hero-home::before,
+  .page-band::before {
     content: "";
     position: absolute;
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background-image:
-      radial-gradient(ellipse 60% 55% at 18% 28%, rgba(255, 255, 255, 0.2), transparent 70%),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220' fill='%23fff' fill-opacity='.14'%3E%3Cg transform='translate(46 52) rotate(-18)'%3E%3Cellipse cx='0' cy='10' rx='15' ry='12'/%3E%3Cellipse cx='-17' cy='-9' rx='6' ry='8'/%3E%3Cellipse cx='-6' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='7' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='18' cy='-9' rx='6' ry='8'/%3E%3C/g%3E%3Cg transform='translate(160 158) rotate(14) scale(.8)'%3E%3Cellipse cx='0' cy='10' rx='15' ry='12'/%3E%3Cellipse cx='-17' cy='-9' rx='6' ry='8'/%3E%3Cellipse cx='-6' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='7' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='18' cy='-9' rx='6' ry='8'/%3E%3C/g%3E%3C/svg%3E"),
-      linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-image: var(--band-art);
     background-size: auto, 220px 220px, 56px 56px, 56px 56px;
     -webkit-mask-image: linear-gradient(to bottom, transparent, black 16%, black 84%, transparent);
     mask-image: linear-gradient(to bottom, transparent, black 16%, black 84%, transparent);
+  }
+
+  /* The top section of an inner page: a teal or coral band under the header, at every width
+     (see the block at the end of this file). */
+  .page-band {
+    position: relative;
+    isolation: isolate;
   }
 
   .band-quiet::before {
@@ -504,6 +518,22 @@ body:has([data-admin-shell]) > footer {
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 20' preserveAspectRatio='none'%3E%3Cpath d='M4 14 C 70 4, 150 4, 296 11' fill='none' stroke='%23FF7E67' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left 100% / 100% 0.2em;
   }
 
+  /* Paw prints for a coloured block inside a page: a solid teal or coral card (.paws) or a pale tint panel. */
+  .paws {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='132' height='132' viewBox='0 0 220 220' fill='%23fff' fill-opacity='.17'%3E%3Cg transform='translate(46 52) rotate(-18)'%3E%3Cellipse cx='0' cy='10' rx='15' ry='12'/%3E%3Cellipse cx='-17' cy='-9' rx='6' ry='8'/%3E%3Cellipse cx='-6' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='7' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='18' cy='-9' rx='6' ry='8'/%3E%3C/g%3E%3Cg transform='translate(160 158) rotate(14) scale(.8)'%3E%3Cellipse cx='0' cy='10' rx='15' ry='12'/%3E%3Cellipse cx='-17' cy='-9' rx='6' ry='8'/%3E%3Cellipse cx='-6' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='7' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='18' cy='-9' rx='6' ry='8'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 132px 132px;
+  }
+
+  .paws-teal {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 220 220' fill='%234ECDC4' fill-opacity='.14'%3E%3Cg transform='translate(46 52) rotate(-18)'%3E%3Cellipse cx='0' cy='10' rx='15' ry='12'/%3E%3Cellipse cx='-17' cy='-9' rx='6' ry='8'/%3E%3Cellipse cx='-6' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='7' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='18' cy='-9' rx='6' ry='8'/%3E%3C/g%3E%3Cg transform='translate(160 158) rotate(14) scale(.8)'%3E%3Cellipse cx='0' cy='10' rx='15' ry='12'/%3E%3Cellipse cx='-17' cy='-9' rx='6' ry='8'/%3E%3Cellipse cx='-6' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='7' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='18' cy='-9' rx='6' ry='8'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 150px 150px;
+  }
+
+  .paws-coral {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 220 220' fill='%23FF7E67' fill-opacity='.16'%3E%3Cg transform='translate(46 52) rotate(-18)'%3E%3Cellipse cx='0' cy='10' rx='15' ry='12'/%3E%3Cellipse cx='-17' cy='-9' rx='6' ry='8'/%3E%3Cellipse cx='-6' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='7' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='18' cy='-9' rx='6' ry='8'/%3E%3C/g%3E%3Cg transform='translate(160 158) rotate(14) scale(.8)'%3E%3Cellipse cx='0' cy='10' rx='15' ry='12'/%3E%3Cellipse cx='-17' cy='-9' rx='6' ry='8'/%3E%3Cellipse cx='-6' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='7' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='18' cy='-9' rx='6' ry='8'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 150px 150px;
+  }
+
   .brand-tagline {
     color: #956A46;
   }
@@ -540,8 +570,127 @@ body:has([data-admin-shell]) > footer {
   display: none;
 }
 
-/* From 1024px the home hero is a teal band. These rules sit outside a layer on purpose: they must win
-   over the utility classes of the search box and the header, which are written for a cream page. */
+/* Inner page bands. These rules sit outside a layer on purpose: they must win over the utility classes
+   of the page header and the site header, which are written for a cream page.
+   The colour variables turn every teal, coral and grey utility inside the band into dark ink,
+   so the page markup needs no second set of colours. */
+body:has(.page-band) header[data-at-top] {
+  background: transparent;
+}
+
+body:has(.page-band) header[data-at-top] .header-link {
+  color: rgba(30, 41, 59, 0.9);
+}
+
+body:has(.page-band) header[data-at-top] .header-link:hover,
+body:has(.page-band) header[data-at-top] .brand-tagline {
+  color: var(--brand-primary);
+}
+
+body:has(.page-band) header[data-at-top] .header-cta {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: transparent;
+  color: var(--brand-primary);
+}
+
+body:has(.page-band) header[data-at-top] .header-cta:hover {
+  background: #fff;
+}
+
+body:has(.page-band) header[data-at-top] .header-logo-ring {
+  border-color: #fff;
+}
+
+/* The site focus ring is coral, which does not show on a band. */
+body:has(.page-band) header[data-at-top] :focus-visible,
+.page-band :focus-visible {
+  outline-color: var(--brand-primary);
+}
+
+/* The account pages put their two panels under the header. */
+body:has(.auth-split) header[data-at-top] {
+  background: transparent;
+}
+
+.page-band {
+  --brand-secondary: var(--brand-primary);
+  --brand-accent: var(--brand-primary);
+  --brand-accent-ink: var(--brand-primary);
+  --text-muted: rgba(30, 41, 59, 0.86);
+  margin-top: -72px;
+  padding-top: calc(72px + 1.5rem);
+  padding-bottom: 2.75rem;
+  background: #4ECDC4;
+}
+
+.page-band-coral {
+  background: #FF7E67;
+}
+
+.page-band h1 {
+  text-wrap: balance;
+}
+
+.page-band h1 span {
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding-bottom: 0.08em;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 20' preserveAspectRatio='none'%3E%3Cpath d='M4 14 C 70 4, 150 4, 296 11' fill='none' stroke='%23fff' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left 100% / 100% 0.2em;
+}
+
+/* A slim band holds only the breadcrumbs. The first card of the page overlaps its lower part. */
+.page-band.page-band-slim {
+  padding-top: calc(72px + 1rem);
+  padding-bottom: 6.5rem;
+}
+
+/* A guide article: the artwork stands on the lower edge of the band, and the title keeps its own size. */
+@media (min-width: 768px) {
+  .page-band.page-band-article {
+    padding-bottom: 0;
+  }
+}
+
+/* White cards inside a band keep the brand colours. */
+.page-band .band-card {
+  --brand-secondary: #4ECDC4;
+  --brand-accent: #FF7E67;
+  --brand-accent-ink: #C4452E;
+  --text-muted: #7C8A97;
+}
+
+.page-band .band-card :focus-visible {
+  outline-color: var(--brand-accent);
+}
+
+/* A solid button inside a band is dark ink with white text. */
+.page-band .band-button {
+  color: #fff;
+}
+
+/* The wave below the band starts in the band colour. */
+.page-band + [aria-hidden="true"] rect {
+  fill: #4ECDC4;
+}
+
+.page-band-coral + [aria-hidden="true"] rect {
+  fill: #FF7E67;
+}
+
+/* Below 1024px Maui stands in the bottom right corner of the band, under the text. */
+@media (max-width: 1023.98px) {
+  .page-band:has(> .band-maui) {
+    padding-bottom: 5.75rem;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023.98px) {
+  .page-band:has(> .band-maui) {
+    padding-bottom: 7.25rem;
+  }
+}
+
+/* From 1024px the home hero is a teal band too. */
 @media (min-width: 1024px) {
   .hero-home::before {
     display: block;
@@ -564,7 +713,6 @@ body:has([data-admin-shell]) > footer {
     background: var(--fun-pop);
   }
 
-  /* The site focus ring is coral, which does not show on teal. */
   .hero-home :focus-visible,
   header[data-on-band] :focus-visible {
     outline-color: var(--brand-primary);
@@ -605,5 +753,17 @@ body:has([data-admin-shell]) > footer {
 
   header[data-on-band] .header-logo-ring {
     border-color: #fff;
+  }
+
+  .page-band {
+    padding-top: calc(72px + 3.25rem);
+    padding-bottom: 3.5rem;
+  }
+
+  .page-band:not(.page-band-article) h1 {
+    font-size: clamp(2.75rem, 4.3vw, 4rem);
+    line-height: 1.03;
+    letter-spacing: -0.025em;
+    font-weight: 600;
   }
 }

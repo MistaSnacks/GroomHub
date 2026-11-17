@@ -46,7 +46,7 @@ export function ContactForm({ listingId, listingSlug, listingName }: ContactForm
 
     if (status === "success") {
         return (
-            <div className="rounded-2xl border border-brand-secondary bg-brand-secondary/10 p-6 text-center">
+            <div className="paws-teal rounded-2xl border border-brand-secondary bg-brand-secondary/10 p-6 text-center">
                 <CheckCircle weight="fill" className="w-12 h-12 text-brand-primary mx-auto mb-3" />
                 <h3 className="font-heading text-lg font-bold text-brand-primary mb-2">Message Sent!</h3>
                 <p className="text-sm text-text-muted">

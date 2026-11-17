@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CaretDown, CaretRight, Check } from "@phosphor-icons/react/dist/ssr";
+import { BandMaui } from "@/components/band-maui";
 import { WaveDivider } from "@/components/wave-divider";
 import { freePlan, SPONSORED_CLOSED_LINE } from "@/lib/pricing";
 
@@ -31,8 +32,9 @@ const faqs = [
 export default function PricingPage() {
   return (
     <div className="flex flex-col min-h-screen">
-      <section className="bg-bg py-12 md:py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="page-band relative overflow-hidden">
+        <BandMaui pose="pricing" />
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <nav className="flex items-center gap-1.5 text-xs text-brand-accent mb-5 font-semibold tracking-wide">
             <Link href="/" className="hover:text-brand-primary transition-colors">Home</Link>
             <CaretRight weight="bold" className="w-3 h-3 text-text-muted" />
@@ -57,25 +59,25 @@ export default function PricingPage() {
         </div>
       </section>
 
-      <WaveDivider variant="gentle" fromColor="#FDF8F0" toColor="#FFFFFF" />
+      <WaveDivider variant="gentle" fromColor="#4ECDC4" toColor="#FFFFFF" />
 
       <section className="bg-white py-12 md:py-16">
         <div className="mx-auto max-w-md px-4 sm:px-6 lg:px-8">
-          <div className="rounded-2xl border-2 border-brand-accent bg-brand-accent text-white p-6 flex flex-col">
+          <div className="paws rounded-2xl bg-brand-accent text-brand-primary p-6 md:p-8 flex flex-col">
             <div className="mb-5">
               <h2 className="font-heading text-xl font-bold">{freePlan.name}</h2>
-              <p className="text-sm mt-1 opacity-80">{freePlan.description}</p>
+              <p className="text-sm mt-1 text-brand-primary/85">{freePlan.description}</p>
             </div>
             <p className="font-heading text-4xl font-bold mb-6">$0</p>
             <ul className="flex-1 space-y-2.5 mb-6">
               {freePlan.features.map((feature) => (
                 <li key={feature.text} className="flex items-start gap-2">
-                  <Check weight="bold" className="h-4 w-4 mt-0.5 shrink-0 text-white" />
+                  <Check weight="bold" className="h-4 w-4 mt-0.5 shrink-0" />
                   <span className="text-sm">{feature.text}</span>
                 </li>
               ))}
             </ul>
-            <Link href="/get-listed" className="block text-center rounded-full py-3 px-6 text-sm font-bold transition-all bg-white text-brand-accent hover:bg-white/90">
+            <Link href="/get-listed" className="block text-center rounded-full py-3 px-6 text-sm font-bold transition-all bg-brand-primary text-white hover:bg-brand-primary/90">
               {freePlan.ctaText}
             </Link>
           </div>
@@ -105,12 +107,12 @@ export default function PricingPage() {
         </div>
       </section>
 
-      <WaveDivider variant="steep" fromColor="#FDF8F0" toColor="#4ECDC4" />
+      <WaveDivider variant="steep" fromColor="#FDF8F0" toColor="#FF7E67" />
 
-      <section className="band bg-brand-secondary py-16 md:py-20">
+      <section className="band bg-brand-accent py-16 md:py-20">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-brand-primary mb-4">Claim your free listing</h2>
-          <p className="text-lg text-brand-primary/70 mb-8 max-w-md mx-auto">No credit card. It takes a few minutes.</p>
+          <p className="text-lg text-brand-primary/85 mb-8 max-w-md mx-auto">No credit card. It takes a few minutes.</p>
           <Link
             href="/get-listed"
             className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-brand-primary text-white font-bold text-lg hover:bg-brand-primary/90 transition-all"
@@ -120,7 +122,7 @@ export default function PricingPage() {
         </div>
       </section>
 
-      <WaveDivider variant="footer" fromColor="#4ECDC4" toColor="#4ECDC4" />
+      <WaveDivider variant="footer" fromColor="#FF7E67" toColor="#4ECDC4" />
     </div>
   );
 }

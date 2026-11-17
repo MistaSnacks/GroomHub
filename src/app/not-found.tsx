@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { MauiMascot } from "@/components/maui-mascot";
+import { WaveDivider } from "@/components/wave-divider";
 import { MagnifyingGlass, House } from "@phosphor-icons/react/dist/ssr";
 
 export default function NotFound() {
   return (
-    <div className="min-h-[70vh] flex items-center justify-center bg-bg px-4">
+    <>
+    <div className="page-band page-band-coral relative flex min-h-[70vh] flex-1 items-center justify-center px-4">
       <div className="text-center max-w-md">
         <MauiMascot
           src="/maui-assets/05-maui-sitting-pretty.png?v=maui-20260904-alpha1"
@@ -33,7 +35,7 @@ export default function NotFound() {
           </Link>
           <Link
             href="/dog-grooming"
-            className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-bold text-brand-primary transition-all hover:bg-brand-primary/5"
+            className="inline-flex items-center gap-2 rounded-full bg-white/80 px-6 py-3 text-sm font-bold text-brand-primary transition-all hover:bg-white"
           >
             <MagnifyingGlass weight="bold" className="w-4 h-4" />
             Browse Directory
@@ -41,5 +43,7 @@ export default function NotFound() {
         </div>
       </div>
     </div>
+    <WaveDivider variant="footer" fromColor="#FF7E67" toColor="#4ECDC4" />
+    </>
   );
 }

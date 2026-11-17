@@ -25,9 +25,9 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen text-brand-primary overflow-hidden">
+    <div className="min-h-screen text-brand-primary overflow-x-clip">
       {/* Hero */}
-      <section className="relative pt-20 pb-16 md:pt-28 md:pb-20 bg-bg">
+      <section className="page-band relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto">
             <p className="text-xs font-semibold uppercase tracking-widest text-brand-accent mb-3">
@@ -44,7 +44,7 @@ export default function PrivacyPage() {
         </div>
       </section>
 
-      <WaveDivider variant="gentle" fromColor="#FDF8F0" toColor="#FFFFFF" />
+      <WaveDivider variant="gentle" fromColor="#4ECDC4" toColor="#FFFFFF" />
 
       {/* Content */}
       <section className="py-16 md:py-24 bg-white">

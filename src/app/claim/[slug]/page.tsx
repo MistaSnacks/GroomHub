@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { Check, ArrowRight, ShieldCheck, MapPin } from "@phosphor-icons/react/dist/ssr";
 import { getListingBySlug } from "@/lib/supabase/queries";
 import { usableListingImages } from "@/lib/images";
+import { BandMaui } from "@/components/band-maui";
 import { WaveDivider } from "@/components/wave-divider";
 import { ClaimForm } from "./claim-form";
 import { createClient } from "@/lib/supabase/server";
@@ -59,8 +60,9 @@ export default async function ClaimPage({
   return (
     <div className="flex-1 flex flex-col">
       {/* Header section */}
-      <section className="bg-bg py-12">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
+      <section className="page-band relative overflow-hidden">
+        <BandMaui pose="groomers" />
+        <div className="relative z-10 mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-accent mb-3">
             Claim Your Business
           </p>
@@ -71,14 +73,14 @@ export default async function ClaimPage({
             Take control of your business info, add an Owner Confirmed badge on your listing, and start connecting with local pet parents.
           </p>
 
-          <div className="mt-6 inline-flex items-center gap-2 bg-brand-accent/10 border border-brand-accent/20 rounded-full px-5 py-2">
+          <div className="mt-6 inline-flex items-center gap-2 bg-white/70 rounded-full px-5 py-2">
             <span className="text-sm font-semibold text-brand-accent">Free listing</span>
             <span className="text-sm text-text-muted">No credit card required</span>
           </div>
         </div>
       </section>
 
-      <WaveDivider variant="gentle" fromColor="#FDF8F0" toColor="#FFFFFF" />
+      <WaveDivider variant="gentle" fromColor="#4ECDC4" toColor="#FFFFFF" />
 
       {/* Main Content */}
       <section className="bg-white py-12 flex-1">

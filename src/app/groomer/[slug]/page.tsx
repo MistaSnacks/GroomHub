@@ -151,10 +151,10 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
 
       <PageViewTracker listingId={listing.id} />
 
-      {/* Breadcrumbs */}
-      <div className="bg-gradient-to-b from-bg to-white border-b border-border">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3">
-          <nav className="flex flex-wrap items-center gap-1.5 text-xs text-text-muted">
+      {/* Breadcrumbs on a slim band. The business card below overlaps the band. */}
+      <div className="page-band page-band-slim relative">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <nav className="flex flex-wrap items-center gap-1.5 text-xs font-semibold tracking-wide text-text-muted">
             {breadcrumbs.map((crumb, i) => (
               <span key={crumb.href} className="flex items-center gap-1.5">
                 {i > 0 && <CaretRight weight="bold" className="w-3 h-3" />}
@@ -173,7 +173,7 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
         </div>
       </div>
 
-      <div className="mx-auto w-full min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <div className="relative z-10 -mt-20 mx-auto w-full min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8 pb-8">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Main Content */}
           <div className="flex-1 min-w-0 space-y-8">
@@ -587,11 +587,11 @@ export default async function GroomerPage({ params }: GroomerPageProps) {
 
               {/* Claim CTA Card - only show if unclaimed */}
               {!listing.owner_id && (
-                <div className="rounded-2xl bg-brand-secondary p-5">
+                <div className="paws rounded-2xl bg-brand-secondary p-5">
                   <h3 className="font-heading text-base font-bold text-brand-primary mb-2">
                     Is this your business?
                   </h3>
-                  <p className="text-sm text-brand-primary/70 mb-4">
+                  <p className="text-sm text-brand-primary/85 mb-4">
                     Claim your free listing to manage your profile and connect with more pet parents.
                   </p>
                   <Link

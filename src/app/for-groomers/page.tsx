@@ -94,7 +94,7 @@ export default async function ForGroomersPage() {
     <>
       {copy?._id && <SnackboxOverlay documents={[{docId:copy._id,title:"For Groomers"}]} />}
       {/* Hero */}
-      <section className="bg-bg py-16 md:py-24 relative overflow-hidden">
+      <section className="page-band relative overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
             <div className="flex-[1.5] text-center lg:text-left">
@@ -135,7 +135,7 @@ export default async function ForGroomersPage() {
         </div>
       </section>
 
-      <WaveDivider variant="gentle" fromColor="#FDF8F0" toColor="#FFFFFF" />
+      <WaveDivider variant="gentle" fromColor="#4ECDC4" toColor="#FFFFFF" />
 
       {/* Features - 2x2 grid with colored accents */}
       <section className="bg-white py-16 md:py-24">
@@ -153,11 +153,11 @@ export default async function ForGroomersPage() {
             {features.map((feature,index)=>({...feature,title:section(`feature-${index+1}`).heading ?? feature.title,desc:section(`feature-${index+1}`).intro ?? feature.desc})).map(({ icon: Icon, title, desc, colored, color }) => {
               const bgClass = colored
                 ? color === "teal"
-                  ? "bg-brand-accent text-white"
-                  : "bg-brand-secondary text-brand-primary"
+                  ? "paws bg-brand-accent text-brand-primary"
+                  : "paws bg-brand-secondary text-brand-primary"
                 : "bg-white border border-border text-brand-primary";
               const iconBgClass = colored
-                ? "bg-white/20"
+                ? "bg-white/30"
                 : "bg-surface border border-border";
 
               return (
@@ -167,7 +167,7 @@ export default async function ForGroomersPage() {
                       <Icon weight="duotone" className="h-6 w-6" />
                     </div>
                     <h3 className="font-heading font-bold text-lg mb-2">{title}</h3>
-                    <p className={`text-sm leading-relaxed ${colored ? "opacity-80" : "text-text-muted"}`}>{desc}</p>
+                    <p className={`text-sm leading-relaxed ${colored ? "opacity-85" : "text-text-muted"}`}>{desc}</p>
                   </div>
                 </AnimatedItem>
               );
@@ -221,16 +221,16 @@ export default async function ForGroomersPage() {
             <div className="flex-1 flex justify-center -mb-8">
               <MauiMascot src={section("closing").imageSrc || "/maui-assets/14-maui-sitting-pretty-alt.png?v=maui-20260904-alpha1"} alt={section("closing").imageAlt} size={320} />
             </div>
-            <div className="flex-[1.5] text-center md:text-left text-white">
+            <div className="flex-[1.5] text-center md:text-left text-brand-primary">
               <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4">
                 {section("closing").heading ?? "Ready to claim your listing?"}
               </h2>
-              <p className="text-lg text-white/90 mb-8 max-w-xl mx-auto md:mx-0">
+              <p className="text-lg text-brand-primary/85 mb-8 max-w-xl mx-auto md:mx-0">
                 {section("closing").intro ?? "Your listing is free to claim and free to keep."}
               </p>
               <Link
                 href={section("closing").cta?.href || "/get-listed#claim"}
-                className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-white text-brand-accent font-bold text-lg hover:bg-surface transition-all"
+                className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-brand-primary text-white font-bold text-lg hover:bg-brand-primary/90 transition-all"
               >
                 {section("closing").cta?.label ?? "Claim Your Free Listing"}
               </Link>

@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowRight } from "@phosphor-icons/react";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/browser";
 import { safeRedirectPath } from "@/lib/safe-redirect";
 import { useTurnstile, TURNSTILE_NOT_READY } from "@/components/turnstile";
+import { AUTH_BUTTON, AUTH_ERROR, AUTH_INPUT, AUTH_LABEL, AUTH_LINK, AUTH_SUCCESS, Required } from "@/components/auth-shell";
 
 interface LoginFormProps {
   redirectTo?: string;
   authError?: string;
+  signupHref: string;
 }
 
 function mapAuthError(code: string): string {
@@ -22,7 +24,7 @@ function mapAuthError(code: string): string {
   return "That link is invalid or has expired. Request a new one.";
 }
 
-export function LoginForm({ redirectTo, authError }: LoginFormProps) {
+export function LoginForm({ redirectTo, authError, signupHref }: LoginFormProps) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -91,73 +93,71 @@ export function LoginForm({ redirectTo, authError }: LoginFormProps) {
   };
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
-      {error && (
-        <div className="p-3 text-sm text-[#C2185B] bg-[#FCE4EC] rounded-xl border border-[#F48FB1]">
-          {error}
-        </div>
-      )}
+    <>
+      <form onSubmit={onSubmit} className="space-y-5">
+        {error && (
+          <div role="alert" className={AUTH_ERROR}>
+            {error}
+          </div>
+        )}
 
-      {resetSent && (
-        <div className="p-3 text-sm text-[#2E7D32] bg-[#E8F5E9] rounded-xl border border-[#A5D6A7]">
-          Password reset link sent! Check your inbox.
-        </div>
-      )}
+        {resetSent && (
+          <div role="status" className={AUTH_SUCCESS}>
+            Password reset link sent! Check your inbox.
+          </div>
+        )}
 
-      <div>
-        <label className="block text-sm font-medium text-text mb-1.5" htmlFor="login-email">
-          Email Address
-        </label>
-        <input
-          type="email"
-          autoComplete="email"
-          id="login-email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm shadow-sm transition-colors focus:border-brand-primary focus:ring-1 focus:ring-brand-primary outline-none"
-          placeholder="you@example.com"
-          required
-        />
-      </div>
-
-      <div>
-        <div className="flex items-center justify-between mb-1.5">
-          <label className="block text-sm font-medium text-text" htmlFor="login-password">
-            Password
+        <div>
+          <label className={AUTH_LABEL} htmlFor="login-email">
+            Email<Required />
           </label>
-          <button
-            type="button"
-            onClick={handleForgotPassword}
-            className="text-xs text-brand-accent hover:text-brand-primary transition-colors font-medium"
-          >
-            Forgot password?
-          </button>
+          <input
+            type="email"
+            autoComplete="email"
+            id="login-email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={AUTH_INPUT}
+            placeholder="you@example.com"
+            required
+          />
         </div>
-        <input
-          type="password"
-          autoComplete="current-password"
-          id="login-password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm shadow-sm transition-colors focus:border-brand-primary focus:ring-1 focus:ring-brand-primary outline-none"
-          placeholder="Your password"
-          required
-          minLength={8}
-        />
-      </div>
 
-      {captcha.widget}
+        <div>
+          <label className={AUTH_LABEL} htmlFor="login-password">
+            Password<Required />
+          </label>
+          <input
+            type="password"
+            autoComplete="current-password"
+            id="login-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={AUTH_INPUT}
+            placeholder="Your password"
+            required
+            minLength={8}
+          />
+        </div>
 
-      <div className="pt-2">
-        <button
-          type="submit"
-          disabled={loading}
-          className="flex items-center justify-center gap-2 w-full rounded-full bg-brand-primary px-6 py-3.5 text-sm font-bold text-white transition-all hover:bg-brand-primary/90 hover:scale-[1.02] shadow-md disabled:opacity-70 disabled:hover:scale-100"
-        >
-          {loading ? "Signing in..." : "Log in"}
-          {!loading && <ArrowRight weight="bold" className="w-4 h-4" />}
+        {captcha.widget}
+
+        <button type="submit" disabled={loading} className={AUTH_BUTTON}>
+          {loading ? "Signing in..." : "Sign in"}
         </button>
+      </form>
+
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-border pt-6 text-base">
+        <button type="button" onClick={handleForgotPassword} disabled={loading} className={AUTH_LINK}>
+          Forgot your password?
+        </button>
+        <p className="text-slate-600">
+          New here?{" "}
+          <Link href={signupHref} className={AUTH_LINK}>
+            Create an account
+          </Link>
+        </p>
       </div>
-    </form>
+    </>
   );
 }

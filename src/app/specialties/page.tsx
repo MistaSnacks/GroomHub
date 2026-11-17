@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CaretRight, ArrowRight, PawPrint } from "@phosphor-icons/react/dist/ssr";
 import { SPECIALTY_TAGS } from "@/lib/tags";
+import { BandMaui } from "@/components/band-maui";
 import { WaveDivider } from "@/components/wave-divider";
 import { AnimatedSection, AnimatedItem } from "@/components/animated-section";
 
@@ -29,9 +30,9 @@ export const metadata: Metadata = {
 // Colored backgrounds: 1=teal, 3=amber, 6=amber
 function getSpecialtyCardStyle(index: number) {
   if (index === 1)
-    return { bg: "bg-brand-accent text-white", iconBg: "bg-white/20", link: "text-white/80 hover:text-white" };
+    return { bg: "paws bg-brand-accent text-brand-primary", iconBg: "bg-white/30 text-brand-primary", link: "text-brand-primary hover:text-brand-primary" };
   if (index === 3 || index === 6)
-    return { bg: "bg-brand-secondary text-brand-primary", iconBg: "bg-brand-primary/10", link: "text-brand-primary/70 hover:text-brand-primary" };
+    return { bg: "paws bg-brand-secondary text-brand-primary", iconBg: "bg-white/30 text-brand-primary", link: "text-brand-primary hover:text-brand-primary" };
   return { bg: "bg-white border border-border text-brand-primary", iconBg: "bg-brand-accent/10 text-brand-accent", link: "text-brand-accent hover:text-brand-accent" };
 }
 
@@ -39,7 +40,8 @@ export default function SpecialtiesHub() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero */}
-      <section className="bg-bg py-12 md:py-16 relative overflow-hidden">
+      <section className="page-band page-band-coral bg-bg py-12 md:py-16 relative overflow-hidden">
+        <BandMaui pose="specialties" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <nav className="flex items-center gap-1.5 text-xs text-brand-accent mb-5 font-semibold tracking-wide">
             <Link href="/" className="hover:text-brand-primary transition-colors">Home</Link>
@@ -50,7 +52,7 @@ export default function SpecialtiesHub() {
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-accent mb-2">
             Specialized Care
           </p>
-          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-3 text-brand-primary">
+          <h1 className="lg:max-w-[min(62rem,calc(100%-9rem))] font-heading text-4xl md:text-5xl font-bold mb-3 text-brand-primary">
             Grooming <span className="text-brand-accent">Specialties</span>
           </h1>
           <p className="text-text-muted text-lg max-w-2xl">
@@ -82,7 +84,7 @@ export default function SpecialtiesHub() {
                         {specialty.label}
                       </h3>
                       {specialty.description && (
-                        <p className="text-sm opacity-70 leading-relaxed mb-4 flex-1">
+                        <p className="text-sm opacity-85 leading-relaxed mb-4 flex-1">
                           {specialty.description}
                         </p>
                       )}
@@ -114,7 +116,7 @@ export default function SpecialtiesHub() {
                         {specialty.label}
                       </h3>
                       {specialty.description && (
-                        <p className="text-sm opacity-70 leading-relaxed mb-4 flex-1">
+                        <p className="text-sm opacity-85 leading-relaxed mb-4 flex-1">
                           {specialty.description}
                         </p>
                       )}

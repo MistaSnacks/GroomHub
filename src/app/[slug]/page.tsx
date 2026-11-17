@@ -26,7 +26,7 @@ export default async function MarketingPage({params}:Props) {
   const copy = await readPage((await params).slug);
   return <>
     {copy._id && <SnackboxOverlay documents={[{docId:copy._id,title:stegaClean(copy.title || "Page")}]} />}
-    <section className="bg-bg py-16 md:py-24"><div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+    <section className="page-band relative"><div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
       {copy.eyebrow && <p className="font-semibold uppercase tracking-widest text-brand-accent-ink mb-4">{copy.eyebrow}</p>}
       <h1 {...(copy._id ? editableField(copy._id,"title") : {})} className="font-heading text-4xl md:text-6xl font-bold text-brand-primary mb-6"><MarketingHeading text={copy.title || ""} emphasis={copy.emphasis} /></h1>
       {copy.intro && <p className="text-xl text-text-muted">{copy.intro}</p>}
