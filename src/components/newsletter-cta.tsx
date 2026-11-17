@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { EnvelopeSimple, Check, CircleNotch } from "@phosphor-icons/react";
-import { DecorativePaws } from "./decorative-paws";
 import { useTurnstile, TURNSTILE_NOT_READY } from "@/components/turnstile";
 
 export function NewsletterCta() {
@@ -55,8 +54,7 @@ export function NewsletterCta() {
   }
 
   return (
-    <section className="bg-brand-accent py-16 md:py-20 relative overflow-hidden">
-      <DecorativePaws variant="scattered" color="white" />
+    <section className="band bg-brand-accent py-16 md:py-20 overflow-hidden">
       <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 relative z-10 text-center">
         <div className="inline-flex items-center gap-2 bg-brand-primary/10 border border-brand-primary/20 rounded-full px-4 py-1.5 text-sm font-semibold mb-6 text-brand-primary">
           <EnvelopeSimple weight="bold" className="w-4 h-4" />

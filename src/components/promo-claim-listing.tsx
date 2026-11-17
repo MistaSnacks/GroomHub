@@ -4,17 +4,16 @@ import { MauiMascot } from "./maui-mascot";
 
 export function PromoClaimListing({copy}: {copy?: MarketingSection} = {}) {
   return (
-    <section className="bg-brand-accent py-16 md:py-24 relative overflow-hidden">
+    <section className="band bg-brand-accent py-16 md:py-24 overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-16">
 
           {/* Left: Mascot */}
           <div className="flex-1 flex justify-center shrink-0">
             <MauiMascot
-              src={copy?.imageSrc || "/maui-assets/14-maui-sitting-pretty-alt.png?v=maui-20260904-alpha1"}
+              src={copy?.imageSrc || "/maui-assets/08-maui-playing-ball.png?v=maui-20260904-alpha1"}
               alt={copy?.imageAlt}
               size={280}
-              animation="bounce"
             />
           </div>
 
@@ -23,7 +22,7 @@ export function PromoClaimListing({copy}: {copy?: MarketingSection} = {}) {
             <p className="text-xs font-semibold uppercase tracking-widest text-brand-primary/60 mb-3">
               {copy?.eyebrow ?? "For Groomers"}
             </p>
-            <h2 className="font-heading text-3xl md:text-5xl font-bold text-brand-primary mb-6 leading-tight">
+            <h2 className="band-title font-heading text-brand-primary mb-6">
               {copy?.heading ?? "Get more clients. Claim your free listing today."}
             </h2>
             <p className="text-lg text-brand-primary/80 mb-8 max-w-xl mx-auto md:mx-0">

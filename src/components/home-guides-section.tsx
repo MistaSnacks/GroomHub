@@ -17,7 +17,7 @@ export async function HomeGuidesSection() {
     <section className="bg-white py-16 md:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
         <div className="text-center mb-10">
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-brand-primary mb-4">
+          <h2 className="display-h2 font-heading text-brand-primary mb-4">
             What Dog Grooming Costs
           </h2>
           <p className="text-text-muted text-lg max-w-2xl mx-auto">

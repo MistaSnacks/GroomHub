@@ -66,9 +66,7 @@ export default async function HomePage() {
     <div className="min-h-screen flex flex-col">
       {copy?._id && <SnackboxOverlay documents={[{docId:copy._id,title:"Homepage"}]} />}
       {/* HERO SECTION */}
-      <HomeHero totalCount={totalCount} copy={copy} />
-
-      <WaveDivider variant="gentle" fromColor="#FDF8F0" toColor="#FFFFFF" />
+      <HomeHero totalCount={totalCount} cityCount={cityCount} copy={copy} />
 
       {/* SEO Intro */}
       <section className="bg-white pt-8 pb-0">
@@ -83,7 +81,7 @@ export default async function HomePage() {
       <section className="bg-white py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
           <div className="text-center mb-12">
-            <h2 className="font-heading text-3xl md:text-4xl font-bold text-brand-primary mb-4">
+            <h2 className="display-h2 font-heading text-brand-primary mb-4">
               {section("featured").heading ?? "Featured Groomers in the PNW"}
               <span className="ml-3 inline-flex items-center align-middle rounded-full border border-border bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-text-muted">
                 Sponsored

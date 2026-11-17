@@ -5,14 +5,14 @@ import { MauiMascot } from "./maui-mascot";
 
 export function PromoFindGroomers({copy}: {copy?: MarketingSection} = {}) {
   return (
-    <section className="bg-brand-secondary py-20 md:py-28 relative overflow-hidden">
+    <section className="band bg-brand-secondary py-20 md:py-28 overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
 
           {/* Left: Text content */}
           <div className="flex-[1.5] text-center lg:text-left">
-            <h2 className="font-heading text-3xl md:text-5xl font-bold mb-6 leading-tight text-slate-900">
-              <MarketingHeading text={copy?.heading ?? "Your pet deserves the best groomer in town."} emphasis={copy?.emphasis ?? "best groomer"} className="text-brand-primary italic" />
+            <h2 className="band-title font-heading mb-6 text-slate-900">
+              <MarketingHeading text={copy?.heading ?? "Your pet deserves the best groomer in town."} emphasis={copy?.emphasis ?? "best groomer"} className="marker" />
             </h2>
             <p className="text-lg mb-8 max-w-xl mx-auto lg:mx-0 text-slate-700">
               {copy?.intro ?? "Compare services, pricing, and specialties to find groomers who are the right fit for your pet. All in one place."}
@@ -39,7 +39,6 @@ export function PromoFindGroomers({copy}: {copy?: MarketingSection} = {}) {
               src={copy?.imageSrc || "/maui-assets/01-maui-bath.png?v=maui-20260904-alpha1"}
               alt={copy?.imageAlt}
               size={280}
-              animation="float"
             />
           </div>
 

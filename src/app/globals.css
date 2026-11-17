@@ -37,8 +37,8 @@
   --gradient-accent: linear-gradient(135deg, #FF7E67 0%, #E86B55 100%);
 
   /* Shadows */
-  --shadow-card: 0 4px 20px rgba(30, 41, 59, 0.06);
-  --shadow-card-hover: 0 4px 32px rgba(30, 41, 59, 0.08);
+  --shadow-card: 0 4px 20px rgba(120, 62, 42, 0.07);
+  --shadow-card-hover: 0 4px 32px rgba(120, 62, 42, 0.09);
   --shadow-cta: 0 4px 16px rgba(78, 205, 196, 0.3);
 }
 
@@ -411,5 +411,199 @@ body:has([data-admin-shell]) > footer {
 @media (prefers-reduced-motion: reduce) {
   [data-admin-shell] .adm-rise {
     animation: none;
+  }
+}
+
+/* --- Colour bands, paw prints and display type (shared with the GroomingBook marketing site) --- */
+@layer components {
+  /* A teal or coral band. The glow, paw prints and grid fade out at the top and bottom edge,
+     so the wave above and the wave below each meet one flat colour. */
+  .band {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .band::before,
+  .hero-home::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      radial-gradient(ellipse 60% 55% at 18% 28%, rgba(255, 255, 255, 0.2), transparent 70%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220' fill='%23fff' fill-opacity='.14'%3E%3Cg transform='translate(46 52) rotate(-18)'%3E%3Cellipse cx='0' cy='10' rx='15' ry='12'/%3E%3Cellipse cx='-17' cy='-9' rx='6' ry='8'/%3E%3Cellipse cx='-6' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='7' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='18' cy='-9' rx='6' ry='8'/%3E%3C/g%3E%3Cg transform='translate(160 158) rotate(14) scale(.8)'%3E%3Cellipse cx='0' cy='10' rx='15' ry='12'/%3E%3Cellipse cx='-17' cy='-9' rx='6' ry='8'/%3E%3Cellipse cx='-6' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='7' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='18' cy='-9' rx='6' ry='8'/%3E%3C/g%3E%3C/svg%3E"),
+      linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: auto, 220px 220px, 56px 56px, 56px 56px;
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 16%, black 84%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, black 16%, black 84%, transparent);
+  }
+
+  .band-quiet::before {
+    opacity: 0.45;
+  }
+
+  .band-title {
+    font-size: clamp(2.3rem, 4.8vw, 4rem);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    font-weight: 600;
+    text-wrap: balance;
+  }
+
+  .marker {
+    background-image: linear-gradient(transparent 58%, rgba(255, 255, 255, 0.55) 58%, rgba(255, 255, 255, 0.55) 92%, transparent 92%);
+  }
+
+  .display-h2 {
+    font-size: clamp(2rem, 3.3vw, 2.9rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  .paw-blob {
+    background-image:
+      radial-gradient(ellipse 60% 55% at 30% 25%, rgba(255, 255, 255, 0.22), transparent 70%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 220 220' fill='%23fff' fill-opacity='.16'%3E%3Cg transform='translate(46 52) rotate(-18)'%3E%3Cellipse cx='0' cy='10' rx='15' ry='12'/%3E%3Cellipse cx='-17' cy='-9' rx='6' ry='8'/%3E%3Cellipse cx='-6' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='7' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='18' cy='-9' rx='6' ry='8'/%3E%3C/g%3E%3Cg transform='translate(160 158) rotate(14) scale(.8)'%3E%3Cellipse cx='0' cy='10' rx='15' ry='12'/%3E%3Cellipse cx='-17' cy='-9' rx='6' ry='8'/%3E%3Cellipse cx='-6' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='7' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='18' cy='-9' rx='6' ry='8'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: auto, 140px 140px;
+  }
+
+  .paw-ribbon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60' viewBox='0 0 120 60' fill='%23fff' fill-opacity='.16'%3E%3Cg transform='translate(24 32) rotate(-18) scale(.62)'%3E%3Cellipse cx='0' cy='10' rx='15' ry='12'/%3E%3Cellipse cx='-17' cy='-9' rx='6' ry='8'/%3E%3Cellipse cx='-6' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='7' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='18' cy='-9' rx='6' ry='8'/%3E%3C/g%3E%3Cg transform='translate(86 30) rotate(14) scale(.5)'%3E%3Cellipse cx='0' cy='10' rx='15' ry='12'/%3E%3Cellipse cx='-17' cy='-9' rx='6' ry='8'/%3E%3Cellipse cx='-6' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='7' cy='-19' rx='6' ry='8'/%3E%3Cellipse cx='18' cy='-9' rx='6' ry='8'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 120px 60px;
+  }
+
+  .ledger {
+    background-image:
+      linear-gradient(to right, rgba(224, 212, 201, 0.55) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(224, 212, 201, 0.55) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 70% 40%, black, transparent 75%);
+    mask-image: radial-gradient(ellipse 80% 70% at 70% 40%, black, transparent 75%);
+  }
+
+  /* The cream hero backdrop ends before the wave, so its glows leave no hard edge there. */
+  .hero-backdrop {
+    -webkit-mask-image: linear-gradient(to bottom, black 62%, transparent 96%);
+    mask-image: linear-gradient(to bottom, black 62%, transparent 96%);
+  }
+
+  .hero-title {
+    font-size: clamp(2.5rem, 6.4vw, 5.6rem);
+    line-height: 1;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  .hero-stroke {
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    padding-bottom: 0.08em;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 20' preserveAspectRatio='none'%3E%3Cpath d='M4 14 C 70 4, 150 4, 296 11' fill='none' stroke='%23FF7E67' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left 100% / 100% 0.2em;
+  }
+
+  .brand-tagline {
+    color: #956A46;
+  }
+
+  .maui-pop {
+    animation: mauiPop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  /* The wrapper takes the hover and the image moves, so the pointer cannot fall off a turning Maui. */
+  .maui-wiggle > * {
+    transform-origin: 55% 88%;
+  }
+
+  .maui-wiggle:hover > * {
+    animation: mauiWiggle 0.9s ease-in-out;
+  }
+}
+
+/* Maui moves into place without a fade, so the hero is fully visible on the first paint. */
+@keyframes mauiPop {
+  from {
+    transform: translateY(40px) scale(0.88);
+  }
+}
+
+@keyframes mauiWiggle {
+  0%, 100% { transform: rotate(0); }
+  20% { transform: rotate(-7deg); }
+  45% { transform: rotate(6deg); }
+  70% { transform: rotate(-4deg); }
+}
+
+.hero-home::before {
+  display: none;
+}
+
+/* From 1024px the home hero is a teal band. These rules sit outside a layer on purpose: they must win
+   over the utility classes of the search box and the header, which are written for a cream page. */
+@media (min-width: 1024px) {
+  .hero-home::before {
+    display: block;
+  }
+
+  .hero-home .hero-stroke {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 20' preserveAspectRatio='none'%3E%3Cpath d='M4 14 C 70 4, 150 4, 296 11' fill='none' stroke='%23fff' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E");
+  }
+
+  .hero-home .search-form {
+    border-color: transparent;
+    box-shadow: 0 24px 60px -18px rgba(120, 52, 34, 0.32), 0 6px 18px rgba(120, 52, 34, 0.09);
+  }
+
+  .hero-home .search-submit {
+    background: var(--brand-accent);
+  }
+
+  .hero-home .search-submit:hover {
+    background: var(--fun-pop);
+  }
+
+  /* The site focus ring is coral, which does not show on teal. */
+  .hero-home :focus-visible,
+  header[data-on-band] :focus-visible {
+    outline-color: var(--brand-primary);
+  }
+
+  .hero-home .search-label {
+    color: rgba(30, 41, 59, 0.85);
+  }
+
+  .hero-home .search-chip {
+    background: rgba(255, 255, 255, 0.72);
+    border-color: transparent;
+    color: var(--brand-primary);
+  }
+
+  .hero-home .search-chip:hover {
+    background: #fff;
+  }
+
+  header[data-on-band] .header-link {
+    color: rgba(30, 41, 59, 0.9);
+  }
+
+  header[data-on-band] .header-link:hover,
+  header[data-on-band] .brand-tagline {
+    color: var(--brand-primary);
+  }
+
+  header[data-on-band] .header-cta {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: transparent;
+    color: var(--brand-primary);
+  }
+
+  header[data-on-band] .header-cta:hover {
+    background: #fff;
+  }
+
+  header[data-on-band] .header-logo-ring {
+    border-color: #fff;
   }
 }

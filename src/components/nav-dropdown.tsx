@@ -44,7 +44,7 @@ export function NavDropdown({ label, type, cities = [] }: NavDropdownProps) {
         onClick={() => setOpen(!open)}
         aria-expanded={open}
         aria-haspopup="true"
-        className="flex items-center gap-1 text-sm font-medium text-text-muted hover:text-brand-primary transition-colors"
+        className="header-link flex items-center gap-1 text-sm font-medium text-text-muted hover:text-brand-primary transition-colors"
       >
         {label}
         <CaretDown
