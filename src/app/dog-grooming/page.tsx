@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CaretRight } from "@phosphor-icons/react/dist/ssr";
 import { getCityBrowseSummary, getTotalListingCount } from "@/lib/supabase/queries";
 import { stateSlugFromAbbr } from "@/lib/geography";
+import { BandMaui } from "@/components/band-maui";
 import { WaveDivider } from "@/components/wave-divider";
 import { CityPillGrid } from "@/components/city-pill-grid";
 
@@ -42,7 +43,8 @@ export default async function DogGroomingHub() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero */}
-      <section className="bg-bg py-12 md:py-16 relative overflow-hidden">
+      <section className="page-band bg-bg py-12 md:py-16 relative overflow-hidden">
+        <BandMaui pose="dog" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <nav className="flex items-center gap-1.5 text-xs text-brand-accent mb-5 font-semibold tracking-wide">
             <Link href="/" className="hover:text-brand-primary transition-colors">Home</Link>
@@ -53,7 +55,7 @@ export default async function DogGroomingHub() {
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-accent mb-2">
             Explore the Pacific Northwest
           </p>
-          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-3 text-brand-primary">
+          <h1 className="lg:max-w-[min(62rem,calc(100%-9rem))] font-heading text-4xl md:text-5xl font-bold mb-3 text-brand-primary">
             Dog Groomers in the <span className="text-brand-secondary">PNW</span>
           </h1>
           <p className="text-text-muted text-lg">

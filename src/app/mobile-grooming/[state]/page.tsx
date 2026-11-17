@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { CaretRight, Van, MapPin } from "@phosphor-icons/react/dist/ssr";
 import { getCitiesByState } from "@/lib/supabase/queries";
 import { isValidStateSlug, stateNameFromSlug, stateAbbrFromSlug } from "@/lib/geography";
+import { BandMaui } from "@/components/band-maui";
 import { WaveDivider } from "@/components/wave-divider";
 
 export const revalidate = 86400; // daily; saves refresh pages on demand (src/lib/refresh-listing-pages.ts)
@@ -61,7 +62,8 @@ export default async function MobileGroomingStatePage({ params }: StatePageProps
 
   return (
     <div className="flex flex-col min-h-screen">
-      <section className="bg-bg py-12 md:py-16">
+      <section className="page-band bg-bg py-12 md:py-16">
+        <BandMaui pose="mobile" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <nav className="flex items-center gap-1.5 text-xs text-brand-accent mb-5 font-semibold tracking-wide">
             <Link href="/" className="hover:text-brand-primary transition-colors">Home</Link>
@@ -73,7 +75,7 @@ export default async function MobileGroomingStatePage({ params }: StatePageProps
 
           <div className="flex items-center gap-3 mb-3">
             <Van weight="duotone" className="w-8 h-8 text-brand-secondary" />
-            <h1 className="font-heading text-4xl md:text-5xl font-bold text-brand-primary">
+            <h1 className="lg:max-w-[min(62rem,calc(100%-9rem))] font-heading text-4xl md:text-5xl font-bold text-brand-primary">
               Mobile Groomers in <span className="text-brand-secondary">{stateName}</span>
             </h1>
           </div>

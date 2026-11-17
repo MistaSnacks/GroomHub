@@ -64,6 +64,7 @@ export function SiteHeader({ cities = [] }: SiteHeaderProps) {
         }
       }}
       data-on-band={isHome && !scrolled ? "" : undefined}
+      data-at-top={scrolled ? undefined : ""}
       className={`sticky top-0 z-50 transition-all duration-300 ${scrolled
         ? "bg-bg/95 backdrop-blur-md shadow-sm py-0"
         : isHome

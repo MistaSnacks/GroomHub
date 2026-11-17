@@ -38,10 +38,10 @@ const itemVariants: Variants = {
 export function AboutContent({ metrics, copy }: AboutContentProps) {
   const section=(key:string)=>marketingSection(copy,key);
   return (
-    <div className="min-h-screen text-brand-primary overflow-hidden">
+    <div className="min-h-screen text-brand-primary overflow-x-clip">
 
       {/* Hero */}
-      <section className="relative pt-20 pb-16 md:pt-28 md:pb-20 bg-bg">
+      <section className="page-band page-band-coral relative pt-20 pb-16 md:pt-28 md:pb-20 bg-bg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial="hidden"
