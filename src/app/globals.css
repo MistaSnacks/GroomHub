@@ -301,6 +301,16 @@ h6 {
   border-radius: 4px;
 }
 
+/* The search field of the header shows focus on the whole field, not on the text box inside it. */
+.nav-search:focus-within {
+  border-color: #0F766E;
+  box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.4);
+}
+
+.nav-search input:focus-visible {
+  outline: none;
+}
+
 html {
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
@@ -393,6 +403,7 @@ html {
 /* --- Admin console --- */
 /* The console has its own navigation, so the public header and footer step aside. */
 body:has([data-admin-shell]) > header,
+body:has([data-admin-shell]) > .site-tabs,
 body:has([data-admin-shell]) > footer {
   display: none;
 }
@@ -578,33 +589,54 @@ body:has(.page-band) header[data-at-top] {
   background: transparent;
 }
 
-body:has(.page-band) header[data-at-top] .header-link {
-  color: rgba(30, 41, 59, 0.9);
+/* Below 1024px the logo sits on the band. From 1024px it sits in the white pill and keeps its own colours. */
+@media (max-width: 1023.98px) {
+  body:has(.page-band) header[data-at-top] .brand-tagline {
+    color: var(--brand-primary);
+  }
+
+  body:has(.page-band) header[data-at-top] .header-logo-ring {
+    border-color: #fff;
+  }
+
+  /* The site focus ring is coral, which does not show on a band. */
+  body:has(.page-band) header[data-at-top] :focus-visible {
+    outline-color: var(--brand-primary);
+  }
+
+  /* The tab bar covers the bottom of the screen, so the page ends above it. */
+  body:has(> .site-tabs) {
+    padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+  }
+
+  body:has([data-admin-shell]) {
+    padding-bottom: 0;
+  }
 }
 
-body:has(.page-band) header[data-at-top] .header-link:hover,
-body:has(.page-band) header[data-at-top] .brand-tagline {
-  color: var(--brand-primary);
-}
-
-body:has(.page-band) header[data-at-top] .header-cta {
-  background: rgba(255, 255, 255, 0.8);
-  border-color: transparent;
-  color: var(--brand-primary);
-}
-
-body:has(.page-band) header[data-at-top] .header-cta:hover {
-  background: #fff;
-}
-
-body:has(.page-band) header[data-at-top] .header-logo-ring {
-  border-color: #fff;
-}
-
-/* The site focus ring is coral, which does not show on a band. */
-body:has(.page-band) header[data-at-top] :focus-visible,
-.page-band :focus-visible {
+.page-band :focus-visible,
+.nav-sheet :focus-visible {
   outline-color: var(--brand-primary);
+}
+
+/* The phone menu: a full teal screen. The page behind it does not scroll. */
+.nav-sheet[open] {
+  animation: navSheetIn 0.22s ease-out;
+}
+
+.nav-sheet::backdrop {
+  background: #4ECDC4;
+}
+
+body:has(.nav-sheet[open]) {
+  overflow: hidden;
+}
+
+@keyframes navSheetIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
 }
 
 /* The account pages put their two panels under the header. */
@@ -713,8 +745,7 @@ body:has(.auth-split) header[data-at-top] {
     background: var(--fun-pop);
   }
 
-  .hero-home :focus-visible,
-  header[data-on-band] :focus-visible {
+  .hero-home :focus-visible {
     outline-color: var(--brand-primary);
   }
 
@@ -730,29 +761,6 @@ body:has(.auth-split) header[data-at-top] {
 
   .hero-home .search-chip:hover {
     background: #fff;
-  }
-
-  header[data-on-band] .header-link {
-    color: rgba(30, 41, 59, 0.9);
-  }
-
-  header[data-on-band] .header-link:hover,
-  header[data-on-band] .brand-tagline {
-    color: var(--brand-primary);
-  }
-
-  header[data-on-band] .header-cta {
-    background: rgba(255, 255, 255, 0.8);
-    border-color: transparent;
-    color: var(--brand-primary);
-  }
-
-  header[data-on-band] .header-cta:hover {
-    background: #fff;
-  }
-
-  header[data-on-band] .header-logo-ring {
-    border-color: #fff;
   }
 
   .page-band {
