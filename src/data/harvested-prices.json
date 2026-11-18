@@ -149,6 +149,21 @@
    }
   ]
  },
+ "0f9a64c1-241c-47da-9bc0-8cd2b47f8f77": {
+  "seenOn": "2026-11-18",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://pretty-paws-claws.square.site/"
+   },
+   {
+    "service": "teeth",
+    "from": 10,
+    "sourceUrl": "https://pretty-paws-claws.square.site/"
+   }
+  ]
+ },
  "107bf13e-b265-4cc7-a52b-500d3137e2a4": {
   "seenOn": "2026-10-01",
   "prices": [
@@ -161,6 +176,16 @@
     "service": "nail_trim",
     "from": 10,
     "sourceUrl": "https://www.wetnosesdrypaws.com/pricing"
+   }
+  ]
+ },
+ "110a2a19-9c31-40b2-a675-6859863bfe9b": {
+  "seenOn": "2026-11-18",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 45,
+    "sourceUrl": "https://www.ohpawspdx.com/"
    }
   ]
  },
@@ -2449,6 +2474,46 @@
    }
   ]
  },
+ "bce6da97-0a18-42e3-9a22-b39a406cb1f9": {
+  "seenOn": "2026-11-18",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://www.townhousepetcare.com/dog-grooming"
+   },
+   {
+    "service": "deshed",
+    "from": 15,
+    "sourceUrl": "https://www.townhousepetcare.com/dog-grooming"
+   },
+   {
+    "service": "teeth",
+    "from": 5,
+    "sourceUrl": "https://www.townhousepetcare.com/dog-grooming"
+   }
+  ]
+ },
+ "bdb72358-7e38-41db-890c-4ca705fe00a5": {
+  "seenOn": "2026-11-18",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 140,
+    "sourceUrl": "https://portlandcatgrooming.com/"
+   },
+   {
+    "service": "bath",
+    "from": 70,
+    "sourceUrl": "https://portlandcatgrooming.com/"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://portlandcatgrooming.com/"
+   }
+  ]
+ },
  "beast-brush": {
   "seenOn": "2026-10-01",
   "prices": [
@@ -2506,6 +2571,16 @@
     "service": "full_groom",
     "from": 100,
     "sourceUrl": "https://www.bowsandbiscuitsgrooming.com/services"
+   }
+  ]
+ },
+ "bubbles-bows-pet-grooming-tacoma": {
+  "seenOn": "2026-11-18",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 21,
+    "sourceUrl": "https://www.bubblesandbowstacoma.com/services/"
    }
   ]
  },
@@ -2726,6 +2801,26 @@
     "service": "face_feet_fanny",
     "from": 65,
     "sourceUrl": "https://www.ashwaypetspa.com/Services"
+   }
+  ]
+ },
+ "db9191da-b290-4f9c-814c-71fad73ee2ed": {
+  "seenOn": "2026-11-18",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 105,
+    "sourceUrl": "https://www.shaggytochicgrooming.com/s/appointments"
+   },
+   {
+    "service": "bath",
+    "from": 60,
+    "sourceUrl": "https://www.shaggytochicgrooming.com/s/appointments"
+   },
+   {
+    "service": "nail_trim",
+    "from": 20,
+    "sourceUrl": "https://www.shaggytochicgrooming.com/s/appointments"
    }
   ]
  },
@@ -3024,7 +3119,7 @@
   "prices": [
    {
     "service": "nail_trim",
-    "from": 5,
+    "from": 15,
     "sourceUrl": "https://vanityfurpdx.com/"
    },
    {
@@ -3616,6 +3711,31 @@
     "service": "full_groom",
     "from": 190,
     "sourceUrl": "https://www.urbandoggie.net/"
+   }
+  ]
+ },
+ "wet-noses-dry-paws-tacoma": {
+  "seenOn": "2026-11-18",
+  "prices": [
+   {
+    "service": "bath",
+    "from": 22,
+    "sourceUrl": "https://www.wetnosesdrypaws.com/baths"
+   },
+   {
+    "service": "nail_trim",
+    "from": 10,
+    "sourceUrl": "https://www.wetnosesdrypaws.com/baths"
+   },
+   {
+    "service": "deshed",
+    "from": 10,
+    "sourceUrl": "https://www.wetnosesdrypaws.com/baths"
+   },
+   {
+    "service": "teeth",
+    "from": 7,
+    "sourceUrl": "https://www.wetnosesdrypaws.com/baths"
    }
   ]
  },
