@@ -3763,5 +3763,95 @@
     "sourceUrl": "https://www.whatthefluffkentwa.com/"
    }
   ]
+ },
+ "ruff-n-fluff-pet-grooming": {
+  "seenOn": "2026-11-18",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 85,
+    "sourceUrl": "https://www.ruffnfluffpetgrooming.com/pricing"
+   },
+   {
+    "service": "bath",
+    "from": 50,
+    "sourceUrl": "https://www.ruffnfluffpetgrooming.com/pricing"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://www.ruffnfluffpetgrooming.com/pricing"
+   }
+  ]
+ },
+ "df6b0508-1fe7-45a3-8456-6c56a7187885": {
+  "seenOn": "2026-11-18",
+  "prices": [
+   {
+    "service": "full_groom",
+    "from": 55,
+    "sourceUrl": "https://www.prisonpetpartnership.org/grooming"
+   },
+   {
+    "service": "bath",
+    "from": 30,
+    "sourceUrl": "https://www.prisonpetpartnership.org/grooming"
+   },
+   {
+    "service": "nail_trim",
+    "from": 15,
+    "sourceUrl": "https://www.prisonpetpartnership.org/grooming"
+   },
+   {
+    "service": "deshed",
+    "from": 20,
+    "sourceUrl": "https://www.prisonpetpartnership.org/grooming"
+   },
+   {
+    "service": "teeth",
+    "from": 5,
+    "sourceUrl": "https://www.prisonpetpartnership.org/grooming"
+   }
+  ]
+ },
+ "666a8507-7bb5-4b15-9dbd-2b8ed15c9ce5": {
+  "seenOn": "2026-11-18",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 14,
+    "sourceUrl": "https://tikitailsdogsalon.weebly.com/grooming-services.html"
+   },
+   {
+    "service": "teeth",
+    "from": 12,
+    "sourceUrl": "https://tikitailsdogsalon.weebly.com/grooming-services.html"
+   },
+   {
+    "service": "deshed",
+    "from": 15,
+    "sourceUrl": "https://tikitailsdogsalon.weebly.com/grooming-services.html"
+   }
+  ]
+ },
+ "37e7bf3b-bdc9-4b24-80d8-fd61f4fc1519": {
+  "seenOn": "2026-11-18",
+  "prices": [
+   {
+    "service": "deshed",
+    "from": 10,
+    "sourceUrl": "https://www.doghaireverywhere.biz/grooming"
+   }
+  ]
+ },
+ "922a3e3b-4142-4b6f-aafb-0fbe831ef6fb": {
+  "seenOn": "2026-11-18",
+  "prices": [
+   {
+    "service": "nail_trim",
+    "from": 12,
+    "sourceUrl": "https://baysideanimallodgeltd.com/grooming-salon"
+   }
+  ]
  }
 }
