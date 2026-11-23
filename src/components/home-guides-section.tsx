@@ -1,16 +1,11 @@
 import Link from "next/link";
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { BlogCard } from "@/components/blog-card";
-import { getBlogPosts, getLinkableBlogSlugs } from "@/lib/blog";
-import { homeGuideSlugs } from "@/lib/internal-links";
+import { getHomeGuides, getLinkableBlogSlugs } from "@/lib/blog";
 
 export async function HomeGuidesSection() {
-  const [posts, linkable] = await Promise.all([getBlogPosts(undefined, true), getLinkableBlogSlugs()]);
+  const [guides, linkable] = await Promise.all([getHomeGuides(), getLinkableBlogSlugs()]);
   const priceIndexSlug = "dog-grooming-prices-pnw-price-index-2026";
-  const bySlug = new Map(posts.map((post) => [post.slug, post]));
-  const guides = homeGuideSlugs(linkable)
-    .map((slug) => bySlug.get(slug))
-    .filter((post) => post !== undefined);
   if (guides.length === 0) return null;
 
   return (

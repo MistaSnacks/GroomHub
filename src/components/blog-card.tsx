@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CalendarBlank, Clock, ImageSquare } from "@phosphor-icons/react/dist/ssr";
-import type { BlogPostFull } from "@/lib/blog";
+import type { BlogPostMeta } from "@/lib/blog";
 import { formatBlogDate, getCategoryLabel } from "@/lib/blog";
 
 interface BlogCardProps {
-  post: BlogPostFull;
+  post: BlogPostMeta;
   featured?: boolean;
   /** Block name for `data-link-src`; the home page passes its own. */
   linkSrc?: string;

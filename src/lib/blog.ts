@@ -2,6 +2,7 @@ import { cache } from "react";
 import { unstable_cache } from "next/cache";
 import { readCollection, imageUrl, plainText, sectionText, type CmsAsset, type CmsSection, type CmsSeo, type PortableBlock } from "./cms/content";
 import { cacheTags, stegaClean } from "./cms/sdk";
+import { homeGuideSlugs } from "./internal-links";
 
 export interface BlogAuthor { name: string; avatar: string | null; bio: string }
 export interface BlogPostMeta {
@@ -54,23 +55,50 @@ export const getBlogPosts = cache(async (category?: string, publishedOnly = fals
   return category ? posts.filter(p=>p.category===category) : posts;
 });
 
-// About 2,000 ISR pages read this set for their template links. Caching it here
-// keeps the CMS SDK's 15 s fetch TTL from shortening those pages' 300 s window,
-// and a failed refresh keeps serving the last good set.
+// A page rebuilds as often as its shortest cache, so directory pages must not read
+// the CMS SDK's 15 s fetches directly: each rebuild also reads Supabase. These
+// daily entries keep those pages daily. Publishing expires them at once through
+// /api/revalidate, and a failed refresh keeps serving the last good entry.
+const BLOG_POST_CACHE = {
+  revalidate: 86400,
+  tags: [cacheTags.project("groomlocal"), cacheTags.type("groomlocal", "blogPost")],
+};
+
 const getCachedLinkableSlugs = unstable_cache(
   async () => (await getBlogPosts(undefined, true)).filter(post => !post.seo?.noIndex).map(post => post.slug),
-  ["linkable-blog-slugs"],
-  { revalidate: 300, tags: [cacheTags.project("groomlocal"), cacheTags.type("groomlocal", "blogPost")] },
+  ["linkable-blog-slugs-daily"],
+  BLOG_POST_CACHE,
 );
+
+// With no last good set, a page renders without its guide links. Reading this
+// entry gives that page a 5-minute life, so the gap does not last all day.
+const retryInFiveMinutes = unstable_cache(async () => true, ["blog-links-retry"], { revalidate: 300 });
 
 export async function getLinkableBlogSlugs(): Promise<ReadonlySet<string>> {
   try {
     return new Set(await getCachedLinkableSlugs());
   } catch (error) {
     console.error("getLinkableBlogSlugs error:", error);
+    await retryInFiveMinutes();
     return new Set();
   }
 }
+
+/** Card fields for the home page guides, without the article bodies. */
+export const getHomeGuides = unstable_cache(
+  async (): Promise<BlogPostMeta[]> => {
+    const posts = await getBlogPosts(undefined, true);
+    const bySlug = new Map(posts.map(post => [post.slug, post]));
+    return homeGuideSlugs(new Set(posts.filter(post => !post.seo?.noIndex).map(post => post.slug))).flatMap(slug => {
+      const post = bySlug.get(slug);
+      if (!post) return [];
+      const { title, excerpt, category, author, date, dateModified, readTime, image, tags, topic, imageAlt } = post;
+      return [{ slug, title, excerpt, category, author, date, dateModified, readTime, image, tags, topic, imageAlt }];
+    });
+  },
+  ["home-guides-daily"],
+  BLOG_POST_CACHE,
+);
 
 export const getGuideTopics = cache(async (): Promise<GuideTopic[]> => {
   const [topics, posts] = await Promise.all([readCollection<{slug:string;title:string;description:string}>("guideTopic"),getBlogPosts()]);

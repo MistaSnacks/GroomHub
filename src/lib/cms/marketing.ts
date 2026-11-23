@@ -1,8 +1,9 @@
 import { cache } from "react";
 import type { Metadata } from "next";
+import { unstable_cache } from "next/cache";
 import { draftMode } from "next/headers";
 import { readCollection, imageUrl, safeContentHref } from "./content";
-import { stegaClean } from "./sdk";
+import { cacheTags, stegaClean } from "./sdk";
 import type { MarketingCopy, MarketingLink } from "../marketing-copy";
 
 const includes=["heroImage","seo.image","sections.*.image","faqs"];
@@ -12,9 +13,18 @@ function normalize(value:MarketingCopy):MarketingCopy {
     primaryCta:link(value.primaryCta),secondaryCta:link(value.secondaryCta),
     sections:value.sections?.map(section=>({...section,imageSrc:imageUrl(section.image)||undefined,cta:link(section.cta),secondaryCta:link(section.secondaryCta)}))};
 }
-export const getHomeCopy=cache(async(publishedOnly=false)=>{
+async function readHomeCopy(publishedOnly:boolean):Promise<MarketingCopy|null> {
   const docs=await readCollection<MarketingCopy>("homePage",includes,publishedOnly);
-  return docs[0] ? normalize(docs[0]) : undefined;
+  return docs[0] ? normalize(docs[0]) : null;
+}
+// The home page also reads Supabase, so the CMS SDK's 15 s fetches must not set how
+// often it rebuilds. Publishing expires this entry at once through /api/revalidate.
+const getPublishedHomeCopy=unstable_cache(()=>readHomeCopy(true),["home-copy-daily"],
+  {revalidate:86400,tags:[cacheTags.project("groomlocal"),cacheTags.type("groomlocal","homePage")]});
+export const getHomeCopy=cache(async(publishedOnly=false)=>{
+  // An editor's preview reads drafts, which must never come from or enter the cache.
+  if(!publishedOnly && (await draftMode()).isEnabled) return (await readHomeCopy(false)) ?? undefined;
+  return (await getPublishedHomeCopy()) ?? undefined;
 });
 export const getMarketingPages=cache(async(publishedOnly=false)=>(await readCollection<MarketingCopy>("page",includes,publishedOnly))
   .map(normalize).filter(page=>/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(page.slug||"")));

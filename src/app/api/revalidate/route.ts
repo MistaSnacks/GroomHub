@@ -1,6 +1,7 @@
 import { timingSafeEqual } from "node:crypto";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
+import { LISTINGS_CACHE_TAG } from "@/lib/supabase/queries";
 
 function authorized(req: Request) {
   const expected = process.env.REVALIDATION_SECRET;
@@ -19,7 +20,7 @@ export async function POST(req: Request) {
   try { body = await req.json(); } catch { return NextResponse.json({ok:false},{status:400,headers}); }
   if (!body || typeof body !== "object" ||
       (body.paths !== undefined && (!Array.isArray(body.paths) || !body.paths.every(p=>typeof p === "string" && /^\/(?!\/)/.test(p)))) ||
-      (body.tags !== undefined && (!Array.isArray(body.tags) || !body.tags.every(t=>typeof t === "string" && t.startsWith("sbx:groomlocal"))))) {
+      (body.tags !== undefined && (!Array.isArray(body.tags) || !body.tags.every(t=>typeof t === "string" && (t === LISTINGS_CACHE_TAG || t.startsWith("sbx:groomlocal")))))) {
     return NextResponse.json({ok:false},{status:400,headers});
   }
   const paths = [...new Set([...(body.paths as string[] || []), "/blog", "/blog/feed.xml", "/sitemap/0.xml"])];
