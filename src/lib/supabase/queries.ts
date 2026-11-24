@@ -13,8 +13,8 @@ import { LISTING_SLUG_RANGES, SLUG_RANGE_WARN_BYTES, compareByRatingThenId } fro
 /**
  * Cache tag for the full-table reads that back search + city browse.
  * These caches refresh daily. Saves expire them at once through
- * refreshListingPages (src/lib/refresh-listing-pages.ts). The tag is attached so a future server action can call
- * revalidateTag(LISTINGS_CACHE_TAG) for immediate, on-demand invalidation.
+ * refreshListingPages (src/lib/refresh-listing-pages.ts). After a direct database
+ * edit, POST {"tags":["listings"]} to /api/revalidate instead.
  */
 export const LISTINGS_CACHE_TAG = "listings";
 
@@ -99,6 +99,9 @@ function applyHierarchy(listings: NormalizedListing[]): NormalizedListing[] {
 }
 
 // ─── Listing Queries ────────────────────────────────────
+// Page queries throw on a database error. Directory pages are cached for a day, and
+// a throw keeps the last good page, while an empty result would replace it until the
+// next rebuild.
 
 export async function getListingsByCity(
   citySlug: string,
@@ -322,7 +325,7 @@ export async function getFeaturedListings(
 
   if (error) {
     console.error("getFeaturedListings error:", error.message);
-    return [];
+    throw new Error("The directory is temporarily unavailable. Please try again.");
   }
   return withTagsAll((data ?? []) as BusinessListing[]).filter(hasKnownCity);
 }
@@ -358,7 +361,7 @@ export async function getFeaturedByCity(
 
   if (localError) {
     console.error("getFeaturedByCity local error:", localError.message);
-    return [];
+    throw new Error("The directory is temporarily unavailable. Please try again.");
   }
 
   const localListings: FeaturedCityListing[] = withTagsAll(
@@ -405,7 +408,7 @@ export async function getFeaturedByCity(
   const neighborError = results.find((r) => r.error)?.error;
   if (neighborError) {
     console.error("getFeaturedByCity neighbor error:", neighborError.message);
-    return localListings;
+    throw new Error("The directory is temporarily unavailable. Please try again.");
   }
 
   const neighborRows = results
@@ -433,7 +436,7 @@ export async function getMobileGroomersVisitingCity(
   const cluster = getMetroClusterForCity(citySlug, stateAbbr);
   if (!cluster) return [];
 
-  // Direct query (not the 5-minute row cache) so a groomer's new choice shows on the next page render.
+  // Direct query (not the daily row cache) so a groomer's new choice shows on the next page render.
   const { data, error } = await supabase
     .from("business_listings")
     .select("*")
@@ -443,7 +446,7 @@ export async function getMobileGroomersVisitingCity(
 
   if (error) {
     console.error("getMobileGroomersVisitingCity error:", error.message);
-    return [];
+    throw new Error("The directory is temporarily unavailable. Please try again.");
   }
   return applyHierarchy(
     withTagsAll((data ?? []) as BusinessListing[])
@@ -605,7 +608,11 @@ async function getCityBySlugUncached(
 
   const { data, error } = await query;
 
-  if (error || !data || data.length === 0) return null;
+  if (error) {
+    console.error("getCityBySlug error:", error.message);
+    throw new Error("The directory is temporarily unavailable. Please try again.");
+  }
+  if (!data || data.length === 0) return null; // no listings: a real 404
 
   const cities = aggregateCities(data as CityRow[]);
   return cities[0] ?? null;
@@ -619,7 +626,10 @@ export async function getTotalListingCount(): Promise<number> {
     .select("*", { count: "exact", head: true })
     .not("slug", "in", PUBLIC_EXCLUDED_FILTER);
 
-  if (error) return 0;
+  if (error) {
+    console.error("getTotalListingCount error:", error.message);
+    throw new Error("The directory is temporarily unavailable. Please try again.");
+  }
   return count ?? 0;
 }
 
