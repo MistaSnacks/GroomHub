@@ -118,7 +118,7 @@ export async function GET(req: NextRequest) {
                   </div>
                 ))}
                 {listing.listed_service_tags.length > 3 && (
-                  <div style={{ color: "#94A3B8", padding: "8px 12px", fontSize: "18px" }}>
+                  <div style={{ display: "flex", color: "#94A3B8", padding: "8px 12px", fontSize: "18px" }}>
                     +{listing.listed_service_tags.length - 3} more
                   </div>
                 )}
