@@ -31,11 +31,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/", "/claim/", "/dashboard/", "/admin/"],
       },
     ],
-    sitemap: [
-      `${BASE_URL}/sitemap.xml`,
-      `${BASE_URL}/sitemap/0.xml`,
-      `${BASE_URL}/sitemap/1.xml`,
-      `${BASE_URL}/sitemap/2.xml`,
-    ],
+    sitemap: `${BASE_URL}/sitemap.xml`,
   };
 }

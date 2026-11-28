@@ -23,7 +23,7 @@ export async function POST(req: Request) {
       (body.tags !== undefined && (!Array.isArray(body.tags) || !body.tags.every(t=>typeof t === "string" && (t === LISTINGS_CACHE_TAG || t.startsWith("sbx:groomlocal")))))) {
     return NextResponse.json({ok:false},{status:400,headers});
   }
-  const paths = [...new Set([...(body.paths as string[] || []), "/blog", "/blog/feed.xml", "/sitemap/0.xml"])];
+  const paths = [...new Set([...(body.paths as string[] || []), "/blog", "/blog/feed.xml", "/sitemap.xml"])];
   // Referenced author/topic/media changes also affect article cards and metadata.
   const tags = [...new Set([...(body.tags as string[] || []), "sbx:groomlocal"])];
   for (const tag of tags) revalidateTag(tag,{expire:0});

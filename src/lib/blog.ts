@@ -84,6 +84,16 @@ export async function getLinkableBlogSlugs(): Promise<ReadonlySet<string>> {
   }
 }
 
+/** Minimal blog fields for /sitemap.xml, cached daily so bots cannot trigger 15s rebuilds. */
+export const getSitemapBlogPosts = unstable_cache(
+  async (): Promise<Array<{ slug: string; date: string; dateModified: string | null }>> =>
+    (await getBlogPosts(undefined, true))
+      .filter((post) => !post.seo?.noIndex)
+      .map(({ slug, date, dateModified }) => ({ slug, date, dateModified })),
+  ["sitemap-blog-posts-daily"],
+  BLOG_POST_CACHE,
+);
+
 /** Card fields for the home page guides, without the article bodies. */
 export const getHomeGuides = unstable_cache(
   async (): Promise<BlogPostMeta[]> => {
