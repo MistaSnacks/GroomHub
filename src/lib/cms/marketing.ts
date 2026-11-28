@@ -28,6 +28,12 @@ export const getHomeCopy=cache(async(publishedOnly=false)=>{
 });
 export const getMarketingPages=cache(async(publishedOnly=false)=>(await readCollection<MarketingCopy>("page",includes,publishedOnly))
   .map(normalize).filter(page=>/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(page.slug||"")));
+export const getSitemapMarketingPages = unstable_cache(
+  async (): Promise<Array<{ slug: string; noIndex: boolean }>> =>
+    (await getMarketingPages(true)).map((page) => ({ slug: page.slug!, noIndex: Boolean(page.seo?.noIndex) })),
+  ["sitemap-marketing-pages-daily"],
+  { revalidate: 86400, tags: [cacheTags.project("groomlocal"), cacheTags.type("groomlocal", "page")] },
+);
 export const getMarketingPage=cache(async(slug:string)=>(await getMarketingPages()).find(page=>page.slug===slug));
 
 // Application routes retain their purpose even when no route page exists at their root.

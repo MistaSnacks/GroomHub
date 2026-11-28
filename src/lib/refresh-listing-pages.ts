@@ -25,4 +25,5 @@ export const LISTING_ROUTES = [
 export function refreshListingPages(): void {
   updateTag(LISTINGS_CACHE_TAG);
   for (const route of LISTING_ROUTES) revalidatePath(route, "page");
+  revalidatePath("/sitemap.xml");
 }

@@ -1,9 +1,9 @@
-import { getHomeCopy, getMarketingPages, RESERVED_MARKETING_SLUGS } from "@/lib/cms/marketing";
+import { getHomeCopy, getSitemapMarketingPages, RESERVED_MARKETING_SLUGS } from "@/lib/cms/marketing";
 import type { MetadataRoute } from "next";
 import { getCities, getAllListings, canonicalCitySlug } from "@/lib/supabase/queries";
 import { SERVICE_TAGS, SPECIALTY_TAGS } from "@/lib/tags";
 import { STATES, stateSlugFromAbbr } from "@/lib/geography";
-import { getBlogPosts } from "@/lib/blog";
+import { getSitemapBlogPosts } from "@/lib/blog";
 import { harvestedPricesFor } from "@/lib/harvested-prices";
 import { profileIndexing, SEARCH_KEEP_SLUGS } from "@/lib/profile-indexing";
 
@@ -11,13 +11,7 @@ const BASE_URL = "https://groomlocal.com";
 const STATIC_LASTMOD = new Date("2026-09-02T00:00:00.000Z");
 const INDEX_THRESHOLD = 3;
 
-// Split sitemap into chunks to stay well under Google's 50MB / 50k URL limits
-// and the 2MB Googlebot crawl-size limit per response.
-// IDs: 0 = static + taxonomy, 1 = groomer profiles, 2 = city pages (all 3 route types)
-
-export async function generateSitemaps() {
-  return [{ id: 0 }, { id: 1 }, { id: 2 }];
-}
+export const revalidate = 86400;
 
 function lastModFrom(value: unknown): Date {
   if (typeof value === "string" && value) {
@@ -36,92 +30,84 @@ function cityKey(state: string, slug: string): string {
   return `${state.toUpperCase()}:${canonicalCitySlug(slug)}`;
 }
 
-export default async function sitemap(args: {
-  id: Promise<number> | number;
-}): Promise<MetadataRoute.Sitemap> {
-  // Next.js 16 makes id a Promise (like params/searchParams)
-  const chunkId = Number(await args.id);
+// Serve one flat /sitemap.xml (~670 URLs, ~120 KB — well under Google's 50k URL / 50 MB limits).
+// Child sitemaps (/sitemap/0..2.xml) sat pending in Search Console for months without being fetched.
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const staticPages: MetadataRoute.Sitemap = [
+    { url: BASE_URL, lastModified: STATIC_LASTMOD, changeFrequency: "daily", priority: 1.0 },
+    { url: `${BASE_URL}/dog-grooming`, lastModified: STATIC_LASTMOD, changeFrequency: "daily", priority: 0.9 },
+    { url: `${BASE_URL}/services`, lastModified: STATIC_LASTMOD, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE_URL}/specialties`, lastModified: STATIC_LASTMOD, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE_URL}/cat-grooming`, lastModified: STATIC_LASTMOD, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${BASE_URL}/mobile-grooming`, lastModified: STATIC_LASTMOD, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${BASE_URL}/for-groomers`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${BASE_URL}/pricing`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${BASE_URL}/get-listed`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${BASE_URL}/get-quotes`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${BASE_URL}/blog`, lastModified: STATIC_LASTMOD, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${BASE_URL}/about`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.4 },
+    { url: `${BASE_URL}/contact`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.4 },
+    { url: `${BASE_URL}/privacy`, lastModified: STATIC_LASTMOD, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${BASE_URL}/terms`, lastModified: STATIC_LASTMOD, changeFrequency: "yearly", priority: 0.2 },
+  ];
 
-  // ── Chunk 0: Static pages, states, services, specialties, blog ──
-  if (chunkId === 0) {
+  const statePages: MetadataRoute.Sitemap = STATES.map((state) => ({
+    url: `${BASE_URL}/dog-grooming/${state.slug}`,
+    lastModified: STATIC_LASTMOD,
+    changeFrequency: "daily" as const,
+    priority: 0.8,
+  }));
 
-    const staticPages: MetadataRoute.Sitemap = [
-      { url: BASE_URL, lastModified: STATIC_LASTMOD, changeFrequency: "daily", priority: 1.0 },
-      { url: `${BASE_URL}/dog-grooming`, lastModified: STATIC_LASTMOD, changeFrequency: "daily", priority: 0.9 },
-      { url: `${BASE_URL}/services`, lastModified: STATIC_LASTMOD, changeFrequency: "weekly", priority: 0.8 },
-      { url: `${BASE_URL}/specialties`, lastModified: STATIC_LASTMOD, changeFrequency: "weekly", priority: 0.8 },
-      { url: `${BASE_URL}/cat-grooming`, lastModified: STATIC_LASTMOD, changeFrequency: "weekly", priority: 0.7 },
-      { url: `${BASE_URL}/mobile-grooming`, lastModified: STATIC_LASTMOD, changeFrequency: "weekly", priority: 0.7 },
-      { url: `${BASE_URL}/for-groomers`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.6 },
-      { url: `${BASE_URL}/pricing`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.6 },
-      { url: `${BASE_URL}/get-listed`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.5 },
-      { url: `${BASE_URL}/get-quotes`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.5 },
-      { url: `${BASE_URL}/blog`, lastModified: STATIC_LASTMOD, changeFrequency: "weekly", priority: 0.7 },
-      { url: `${BASE_URL}/about`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.4 },
-      { url: `${BASE_URL}/contact`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.4 },
-      { url: `${BASE_URL}/privacy`, lastModified: STATIC_LASTMOD, changeFrequency: "yearly", priority: 0.2 },
-      { url: `${BASE_URL}/terms`, lastModified: STATIC_LASTMOD, changeFrequency: "yearly", priority: 0.2 },
-    ];
+  const servicePages: MetadataRoute.Sitemap = SERVICE_TAGS.map((tag) => ({
+    url: `${BASE_URL}/services/${tag.slug}`,
+    lastModified: STATIC_LASTMOD,
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  }));
 
-    // State pages
-    const statePages: MetadataRoute.Sitemap = STATES.map((state) => ({
-      url: `${BASE_URL}/dog-grooming/${state.slug}`,
-      lastModified: STATIC_LASTMOD,
-      changeFrequency: "daily" as const,
-      priority: 0.8,
+  const specialtyPages: MetadataRoute.Sitemap = SPECIALTY_TAGS.map((tag) => ({
+    url: `${BASE_URL}/specialties/${tag.slug}`,
+    lastModified: STATIC_LASTMOD,
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  }));
+
+  const [posts, marketingPages, home, cities, listings] = await Promise.all([
+    getSitemapBlogPosts(),
+    getSitemapMarketingPages(),
+    getHomeCopy(true),
+    getCities(),
+    getAllListings(),
+  ]);
+
+  const blogPages: MetadataRoute.Sitemap = posts.map((post) => ({
+    url: `${BASE_URL}/blog/${post.slug}`,
+    lastModified: new Date(post.dateModified || post.date),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
+  const hidden = new Set(
+    marketingPages.filter((page) => page.noIndex).map((page) => `${BASE_URL}/${page.slug}`),
+  );
+  if (home?.seo?.noIndex) hidden.add(BASE_URL);
+
+  const extraPages: MetadataRoute.Sitemap = marketingPages
+    .filter((page) => !page.noIndex && !RESERVED_MARKETING_SLUGS.has(page.slug))
+    .map((page) => ({
+      url: `${BASE_URL}/${page.slug}`,
+      changeFrequency: "monthly",
+      priority: 0.5,
     }));
 
-    // Service landing pages
-    const servicePages: MetadataRoute.Sitemap = SERVICE_TAGS.map((tag) => ({
-      url: `${BASE_URL}/services/${tag.slug}`,
-      lastModified: STATIC_LASTMOD,
+  const groomerPages: MetadataRoute.Sitemap = listings
+    .filter((listing) => profileIndexing(listing, harvestedPricesFor(listing.id), SEARCH_KEEP_SLUGS).index)
+    .map((listing) => ({
+      url: `${BASE_URL}/groomer/${listing.slug}`,
+      lastModified: lastModFrom(listing.updated_at),
       changeFrequency: "weekly" as const,
-      priority: 0.7,
-    }));
-
-    // Specialty landing pages
-    const specialtyPages: MetadataRoute.Sitemap = SPECIALTY_TAGS.map((tag) => ({
-      url: `${BASE_URL}/specialties/${tag.slug}`,
-      lastModified: STATIC_LASTMOD,
-      changeFrequency: "weekly" as const,
-      priority: 0.7,
-    }));
-
-    // Blog posts
-    const blogPages: MetadataRoute.Sitemap = (await getBlogPosts(undefined, true)).filter(post=>!post.seo?.noIndex).map((post) => ({
-      url: `${BASE_URL}/blog/${post.slug}`,
-      lastModified: new Date(post.dateModified || post.date),
-      changeFrequency: "monthly" as const,
       priority: 0.6,
     }));
-
-    const [marketingPages, home] = await Promise.all([getMarketingPages(true), getHomeCopy(true)]);
-    const hidden = new Set(marketingPages.filter(page=>page.seo?.noIndex).map(page=>`${BASE_URL}/${page.slug}`));
-    if (home?.seo?.noIndex) hidden.add(BASE_URL);
-    const extraPages: MetadataRoute.Sitemap = marketingPages
-      .filter(page=>!page.seo?.noIndex && !RESERVED_MARKETING_SLUGS.has(page.slug!))
-      .map(page=>({url:`${BASE_URL}/${page.slug}`,changeFrequency:"monthly",priority:0.5}));
-    return [...staticPages.filter(page=>!hidden.has(page.url)), ...statePages, ...servicePages, ...specialtyPages, ...blogPages, ...extraPages];
-  }
-
-  // ── Chunk 1: Individual groomer profiles ──
-  if (chunkId === 1) {
-
-    const listings = await getAllListings();
-
-    return listings
-      .filter((listing) => profileIndexing(listing, harvestedPricesFor(listing.id), SEARCH_KEEP_SLUGS).index)
-      .map((listing) => ({
-        url: `${BASE_URL}/groomer/${listing.slug}`,
-        lastModified: lastModFrom(listing.updated_at),
-        changeFrequency: "weekly" as const,
-        priority: 0.6,
-      }));
-  }
-
-  // ── Chunk 2: City pages (dog-grooming, cat-grooming, mobile-grooming) ──
-
-  const [cities, listings] = await Promise.all([getCities(), getAllListings()]);
 
   const aggs = new Map<string, { cat: number; mobile: number; lastMods: Date[] }>();
   for (const listing of listings) {
@@ -164,5 +150,16 @@ export default async function sitemap(args: {
       priority: 0.5,
     }));
 
-  return [...cityPages, ...catCityPages, ...mobileCityPages];
+  return [
+    ...staticPages.filter((page) => !hidden.has(page.url)),
+    ...statePages,
+    ...servicePages,
+    ...specialtyPages,
+    ...blogPages,
+    ...extraPages,
+    ...groomerPages,
+    ...cityPages,
+    ...catCityPages,
+    ...mobileCityPages,
+  ];
 }
